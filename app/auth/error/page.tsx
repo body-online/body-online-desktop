@@ -1,0 +1,25 @@
+'use client'
+
+import Card from '@/components/ui/card'
+import InfoMessage from '@/components/ui/info'
+import { useRouter } from 'next/navigation'
+import React from 'react'
+
+const AuthErrorPage = () => {
+    const router = useRouter();
+
+    return (
+        <Card>
+            <InfoMessage type='warning' title='Ha ocurrido un error al iniciar' />
+            <button
+                type='button'
+                className='max-w-max group'
+                onClick={() => router.replace('/auth/login')}
+            >
+                <p className="text-center group-hover:underline underline-offset-2">Volver a intentar</p>
+            </button>
+        </Card>
+    )
+}
+
+export default AuthErrorPage
