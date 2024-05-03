@@ -50,7 +50,7 @@ export default function Navbar({ user }: { user?: ExtendedUser }) {
 
     return (
         <>
-            <div className='relative flex justify-center h-[230px] md:h-[300px] overflow-x-hidden'>
+            <div className='relative flex justify-center h-[230px] md:h-[300px]'>
                 <div className="container px-default pt-4 md:pt-6 relative z-50 h-min">
                     <div className="flex-between">
                         {/* User */}

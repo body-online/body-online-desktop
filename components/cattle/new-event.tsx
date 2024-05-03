@@ -98,29 +98,31 @@ export function AddEventButton({ cattle }: NewEventButtonProps) {
                     exit="exit"
                 >
                     <Card headerLabel='Crear evento'>
+                        <form className="mt-2 space-y-4" onSubmit={handleSubmit(onSubmit)}>
 
-                        <form className="mt-6 space-y-8 pr-1" onSubmit={handleSubmit(onSubmit)}>
 
-                            <div className="select-none flex-center max-w-max bg-slate-50 border rounded-xl gap-6">
-                                <p className='text-base text-black font-semibold'>
-                                    {cattle?.caravan}
-                                </p>
-                                <div className='overflow-x-auto w-full py-3 px-4'>
-                                    <div className="flex items-center gap-6 w-max">
-                                        <ChipState state={cattle?.state} />
-                                        <ChipBodyCondition type={cattle?.bodyCondition} />
-                                        <p>{cattle?.geneticName}</p>
-                                        <p>{cattle?.locationName}</p>
+                            <div className="max-h-[75vh] sm:max-h-[100vh] pr-2 overflow-y-auto sm:overflow-visible relative">
+
+                                {/* cattle details */}
+                                <div className="select-none flex-center max-w-max bg-slate-50 border rounded-xl gap-2 mb-3">
+                                    <p className='text-base text-black font-semibold px-4'>
+                                        {cattle?.caravan}
+                                    </p>
+                                    <div className='overflow-x-auto w-full py-2 pr-4'>
+                                        <div className="flex items-center gap-6 w-max">
+                                            <ChipState state={cattle?.state} />
+                                            <ChipBodyCondition type={cattle?.bodyCondition} />
+                                            <p className='text-sm'>{cattle?.geneticName}</p>
+                                            <p className='text-sm'>{cattle?.locationName}</p>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
 
-                            <div className="max-h-[50vh] sm:max-h-[100vh] pr-2 overflow-y-auto sm:overflow-visible relative">
                                 <div className="flex flex-col md:grid md:grid-flow-col md:auto-cols-max w-full gap-3 h-max">
                                     {/* event date */}
                                     <label htmlFor="eventDate">
                                         <p className="input_label bg-white sticky top-0 w-full">Fecha del evento*</p>
-                                        <input type='date' className='input max-w-max' {...register('eventDate')} />
+                                        <input type='date' className='input min-w-[50%] max-w-max' {...register('eventDate')} />
                                         <div className="input_error">
                                             {errors.eventDate && (<p>{`${errors.eventDate.message}`}</p>)}
                                         </div>
@@ -155,7 +157,11 @@ export function AddEventButton({ cattle }: NewEventButtonProps) {
                                         </label>
                                     </div>
                                 </div>
-                                <ResizablePanel changeIndicator={eventType ?? `default`} disableOverflow={eventType == "death" || eventType == "not_pregnant"}>
+
+                                <ResizablePanel
+                                    changeIndicator={eventType ?? `default`}
+                                    disableOverflow={eventType == "death" || eventType == "not_pregnant"}
+                                >
                                     <div className='min-h-1'>
                                         {/* event detail */}
                                         {eventType === "pregnant" ? ( // == service
@@ -188,15 +194,15 @@ export function AddEventButton({ cattle }: NewEventButtonProps) {
                                             />
                                         ) : eventType === "body_measure" ? (
                                             <label htmlFor="measure">
-                                                <p className="input_label bg-white sticky top-0 w-full">Indique el valor del caliper*</p>
-                                                <div className="grid grid-cols-6 md:grid-cols-12 gap-x-2 gap-y-5 py-2 w-full relative">
+                                                <p className="input_label bg-white sticky -top-1 w-full">Indique el valor del caliper*</p>
+                                                <div className="grid grid-cols-6 md:grid-cols-12 gap-x-2 gap-y-5 pt-1 w-full relative">
                                                     {detailsByEvent[eventType].map((measureObj, index) => {
                                                         const selected = measure === measureObj.label;
                                                         return (
                                                             <button
                                                                 key={index}
                                                                 type='button'
-                                                                className={`${selected ? `cgreen border-cgreen` : `slate`} rounded-xl w-10 h-10`}
+                                                                className={`${selected ? `cgreen border-cgreen` : `slate`} rounded-xl w-11 sm:w-12 h-11 sm:h-12`}
                                                                 onClick={() => setValue('measure', measureObj.label)}>
                                                                 <p>{measureObj.label}</p>
                                                             </button>
@@ -226,7 +232,6 @@ export function AddEventButton({ cattle }: NewEventButtonProps) {
                                         <textarea {...register('observations')} className='textarea' placeholder='Observaciones...'></textarea>
                                     </label>
                                 </div>
-
                             </div>
 
                             <div className="flex-end gap-3">
