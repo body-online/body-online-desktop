@@ -66,7 +66,7 @@ const LoginForm = () => {
                             </div>
                         </label>
 
-                        <button disabled={isSubmitting} className='btn black' type='submit'>
+                        <button disabled={isSubmitting} className='login_btn' type='submit'>
                             {isSubmitting ? (
                                 <LoadingIcon />
                             ) : (

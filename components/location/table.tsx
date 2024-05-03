@@ -111,7 +111,7 @@ export function LocationsDataTable<TData, TValue>({
                     <>
                         <div className='realtive max-h-96 overflow-auto'>
                             <Table key={`table-${table.getRowModel().rows?.length ?? 0}`}>
-                                <TableHeader className='sticky top-0 w-full z-20'>
+                                <TableHeader className='sticky top-0 w-full'>
                                     {table.getHeaderGroups().map((headerGroup) => {
                                         return (
                                             <TableRow key={headerGroup.id}>

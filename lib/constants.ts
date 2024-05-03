@@ -92,10 +92,33 @@ export const detailsByEvent = {
 };
 
 // animation keyframes
+export const enterDropdown = {
+ hidden: {
+  //   scale: 0.98,
+  y: 2,
+  opacity: 0,
+ },
+ visible: {
+  opacity: 1,
+  //   scale: 1,
+  y: 0,
+  transition: {
+   duration: 0.1,
+  },
+ },
+ exit: {
+  //   scale: 0.98,
+  y: 2,
+  opacity: 0,
+  transition: {
+   duration: 0.2,
+  },
+ },
+};
 export const enterModal = {
  hidden: {
-  scale: 0.95,
-  // y: "0.2vh",
+  scale: 0.98,
+  y: 3,
   opacity: 0,
  },
  visible: {
@@ -107,9 +130,12 @@ export const enterModal = {
   },
  },
  exit: {
-  scale: 0.95,
-  // y: "0.2vh",
+  scale: 0.98,
+  y: 3,
   opacity: 0,
+  transition: {
+   duration: 0.2,
+  },
  },
 };
 export const modalBackground = {
@@ -120,17 +146,16 @@ export const modalBackground = {
   y: 0,
   opacity: 1,
   transition: {
-   delay: 0,
-   duration: 0.1,
-   type: "ease-in-out",
+   duration: 0.2,
+   type: "ease-in",
   },
  },
  exit: {
   opacity: 0,
   transition: {
    delay: 0,
-   duration: 0.1,
-   type: "ease-in-out",
+   duration: 0.2,
+   type: "ease-out",
   },
  },
 };

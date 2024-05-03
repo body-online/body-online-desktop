@@ -64,7 +64,7 @@ export function AddCattleBtn({ data }: { data: { genetics: GeneticProps[]; locat
             <Modal handleClose={handleClose} isOpen={isOpen}>
                 <motion.div
                     onClick={(e) => e.stopPropagation()}
-                    className="w-full max-w-xl"
+                    className="w-full max-w-md"
                     variants={enterModal}
                     initial="hidden"
                     animate="visible"

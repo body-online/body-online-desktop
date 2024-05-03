@@ -97,7 +97,8 @@
 }
 
 .login_btn {
-  @apply bg-black active:bg-gray-800 md:hover:bg-gray-800;
+  @apply w-full md:max-w-xs bg-gradient-to-r bg-cgreen from-cgreen via-caqua/40 to-cgreen hover:via-caqua/20 
+  h-10 sm:h-12 flex items-center transition-colors flex-center gap-1 md:gap-2 px-2 md:px-4 py-2 md:py-3.5 rounded-lg md:min-w-[100px] disabled:opacity-50 focus:outline-0 focus:ring-[1px] ring-slate-300;
 }
 .login_btn p {
   @apply text-white font-medium;
@@ -265,7 +266,13 @@ table > tbody > tr > td, p {
 }
 
 .dropdown {
-  @apply absolute z-[100] -right-2 -top-5 mt-3 rounded-xl bg-white w-full min-w-[260px] md:min-w-[360px] max-w-max border shadow-lg;
+  @apply mt-3 rounded-xl bg-white w-full min-w-[260px] border shadow-lg
+  overflow-hidden absolute z-50 -top-6 -right-2 md:-top-7 md:-right-3;
+}
+.menu_navigation_item {
+  @apply px-3 py-3 w-full
+  hover:bg-slate-100 bg-white
+  transition-all;
 }
 
 /* Home */

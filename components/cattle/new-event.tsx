@@ -101,12 +101,12 @@ export function AddEventButton({ cattle }: NewEventButtonProps) {
 
                         <form className="mt-6 space-y-8 pr-1" onSubmit={handleSubmit(onSubmit)}>
 
-                            <div className="select-none flex-center max-w-max bg-slate-50 border rounded-xl gap-6 py-2 px-3">
-                                <p className='text-base text-black font-medium'>
+                            <div className="select-none flex-center max-w-max bg-slate-50 border rounded-xl gap-6">
+                                <p className='text-base text-black font-semibold'>
                                     {cattle?.caravan}
                                 </p>
-                                <div className='overflow-x-auto w-full'>
-                                    <div className="flex items-center gap-3 w-max">
+                                <div className='overflow-x-auto w-full py-3 px-4'>
+                                    <div className="flex items-center gap-6 w-max">
                                         <ChipState state={cattle?.state} />
                                         <ChipBodyCondition type={cattle?.bodyCondition} />
                                         <p>{cattle?.geneticName}</p>

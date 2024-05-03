@@ -7,7 +7,7 @@ import { redirect } from 'next/navigation';
 import Cattles from '@/components/cattle/cattles';
 import Genetics from '@/components/genetic/genetics';
 import Locations from '@/components/location/locations';
-import Header from '@/components/header';
+
 
 export default async function Home() {
   const { data: locations, error: errorLoc } = await getAllLocations()
@@ -22,10 +22,16 @@ export default async function Home() {
 
   return (
     <main>
-      {/* Direct Access */}
-      <Header user={user} />
-
       <div className='container pb-12 px-default space-y-8 relative'>
+        {/* Accesos directos */}
+        <div className="card">
+          <div className="px-4 md:px-5 py-5 md:py-6">
+            <h3 className="semititle">
+              Accesos directos
+            </h3>
+          </div>
+        </div>
+
         {/* Mi plantel */}
         {errorLoc || errorGen || errorCattle || errorCattle ?
           <InfoMessage type='warning' title='Sección inaccesible'
