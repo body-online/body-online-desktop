@@ -1,8 +1,11 @@
-import { CattleProps } from '@/lib/types'
+import { useSession } from 'next-auth/react'
 import React from 'react'
 
 const ChipBodyCondition = ({ measure }: { measure?: number }) => {
-    const bodyCondition = !measure || measure == 0 ? undefined : measure > 21 ? 'fat' : measure > 10 ? 'ideal' : "skinny"
+    const { data: session } = useSession()
+    if (!session) return <p>Loading</p>
+
+    const bodyCondition = !measure || measure == 0 ? undefined : measure > Number(session?.user?.maxIdeal) ? 'fat' : Number(session?.user?.minIdeal) > 10 ? 'ideal' : "skinny"
 
     if (bodyCondition == "fat") {
         return (

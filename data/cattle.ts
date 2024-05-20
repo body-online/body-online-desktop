@@ -16,7 +16,7 @@ export async function getAllCattles(): Promise<{
   const { data } = await axios.get(
    `${process.env.API_URL}/api/ranchi/cattle/${farm}`
   );
-  console.log(`getting ${data?.length} cattles for ${farm}`);
+  // console.log(`getting ${data?.length} cattles for ${farm}`);
 
   data.map((obj: CattleProps) => {
    const notDeleted = obj.createdAt == obj.updatedAt;

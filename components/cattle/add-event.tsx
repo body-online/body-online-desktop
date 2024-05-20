@@ -44,12 +44,14 @@ export function AddEventBtn({ cattle, customButtom }: NewEventButtonProps) {
                 >
                     <Card headerLabel={`Crear evento para ${cattle.caravan}`}>
                         <div className="mt-6"></div>
-                        <EventForm
-                            cattles={[cattle]}
-                            defaultValues={{
-                                cattleId: cattle._id,
-                                eventDate: parsedDate,
-                            }} />
+                        <div className="max-h-[60vh] sm:max-h-max overflow-auto">
+                            <EventForm
+                                cattles={[cattle]}
+                                defaultValues={{
+                                    cattleId: cattle._id,
+                                    eventDate: parsedDate,
+                                }} />
+                        </div>
                     </Card>
                 </motion.div >
             </Modal >

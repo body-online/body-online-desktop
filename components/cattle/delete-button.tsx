@@ -32,8 +32,8 @@ const DeleteCattleBtn = ({ id, name }: { id: string, name: string }) => {
             await deleteCattle(id);
 
             handleClose()
-            router.refresh()
             toast.success(`Individuo eliminado exitosamente!`);
+            return router.refresh()
         } catch (error) {
             toast.error('Ha ocurrido un error al eliminar el individuo')
         } finally {

@@ -89,7 +89,7 @@ export function HistoryBtn({ cattle }: { cattle: CattleProps; }) {
 
                                                     return (
                                                         <div key={index}>
-                                                            <EventItem event={event} prevEventDate={prevEvent?.eventDate} />
+                                                            <EventItem event={event} prevEventDate={new Date(prevEvent?.eventDate)} />
                                                         </div>
                                                     )
                                                 })}

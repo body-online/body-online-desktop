@@ -125,7 +125,7 @@ export default function Navbar({ user }: { user?: ExtendedUser }) {
                                         </div>
 
                                         <NavigationItem title='Inicio' href='/' selected={pathname === '/'} />
-                                        <NavigationItem title='Mi organización' href='/organizacion' selected={pathname === '/organizacion'} />
+                                        {/* <NavigationItem title='Mi organización' href='/organizacion' selected={pathname === '/organizacion'} /> */}
 
                                         <div className="px-6">
                                             <Divider />

@@ -17,6 +17,8 @@ export const {
    if (token?.farmId) session.user.farmId = token.farmId;
    if (token?.type) session.user.type = token.type;
    if (token?.id) session.user.id = token.id;
+   if (token?.minIdeal) session.user.minIdeal = token.minIdeal;
+   if (token?.maxIdeal) session.user.maxIdeal = token.maxIdeal;
 
    return session;
   },
@@ -30,7 +32,7 @@ export const {
    token.farmId = existingUser?.farmId;
    token.type = existingUser?.type;
    token.minIdeal = existingUser?.minIdeal;
-   token.maxIdeal = existingUser?.maxIdealId;
+   token.maxIdeal = existingUser?.maxIdeal;
 
    return token;
   },

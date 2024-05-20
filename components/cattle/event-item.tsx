@@ -3,18 +3,18 @@ import { BodyMeasureIcon, CattleBirthIcon, DeathIcon, NotPregnantIcon, PregnantI
 import ChipBodyCondition from './chip-body-condition';
 import { parseDate } from '@/lib/utils';
 
-export default function EventItem({ event, prevEventDate }: { event: EventProps; prevEventDate?: any }) {
-    const lastEventDate = prevEventDate ? parseDate(prevEventDate) : undefined
-    const eventDate = parseDate(event.eventDate)
+export default function EventItem({ event, prevEventDate }: { event: EventProps; prevEventDate?: Date }) {
+    const lastEventDate = prevEventDate ? prevEventDate : undefined
+    const eventDate = new Date(event.eventDate).toLocaleDateString("es-AR", { day: 'numeric', month: 'long', year: 'numeric' });
 
-    const hideEventDate = prevEventDate ? Boolean(eventDate?.toISOString() == lastEventDate?.toISOString()) : false
+    const hideEventDate = lastEventDate?.getDate() === new Date(event.eventDate)?.getDate()
     return (
         <div>
             {!hideEventDate &&
                 <div className="flex gap-1 items-center w-full pt-3 pb-2">
                     <CalendarIcon />
                     <p className='text-sm sm:text-base text-slate-500'>
-                        {parseDate(event.eventDate)?.toLocaleDateString("es-AR", { day: 'numeric', month: 'long', year: 'numeric' })}
+                        {eventDate}
                     </p>
                 </div>
             }
@@ -41,7 +41,7 @@ export default function EventItem({ event, prevEventDate }: { event: EventProps;
                                         </p> : null
                                     }
                                     {event?.eventType != 'cattle_birth' && event?.eventDetail ?
-                                        <p className='chip chip_gray'>
+                                        <p className={`chip ${event.eventType == 'death' ? 'chip_red' : 'chip_gray'}`}>
                                             {event?.eventDetail}
                                         </p> : null
                                     }
@@ -53,7 +53,7 @@ export default function EventItem({ event, prevEventDate }: { event: EventProps;
                                 </div>
 
                                 <div>
-                                    <p className='text-lg leading-5'>
+                                    <p className='font-medium leading-5'>
                                         {
                                             event.eventType == 'pregnant' ? 'Servicio' :
                                                 event.eventType == 'not_pregnant' ? 'No preñez' :

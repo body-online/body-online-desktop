@@ -6,7 +6,7 @@ export type ExtendedUser = DefaultSession["user"] & {
  type: "owner" | "user";
  farmId?: string;
  minIdeal?: string;
- maxIdealId?: string;
+ maxIdeal?: string;
 };
 
 declare module "next-auth" {
@@ -23,6 +23,6 @@ declare module "next-auth/jwt" {
   farmId?: string;
   id?: string;
   minIdeal?: string;
-  maxIdealId?: string;
+  maxIdeal?: string;
  }
 }

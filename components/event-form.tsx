@@ -1,11 +1,10 @@
 'use client'
 
 import toast from 'react-hot-toast';
-import { usePathname, useSearchParams } from 'next/navigation'
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { CattleProps, EventSchema, eventSchema } from '@/lib/types';
-import { BellIcon, BodyMeasureIcon, CattleBirthIcon, DeathIcon, EventIcon, LoadingIcon, NotPregnantIcon, PregnantIcon } from './ui/icons';
+import { BodyMeasureIcon, CattleBirthIcon, DeathIcon, EventIcon, LoadingIcon, NotPregnantIcon, PregnantIcon } from './ui/icons';
 import { detailsByEvent, eventTypesList } from '@/lib/constants';
 import { createEvent } from '@/actions/event';
 import { useRouter } from 'next/navigation';
@@ -13,6 +12,7 @@ import SelectInputSearch from './ui/select-input-search';
 import { SelectOptionProps } from './ui/select-input';
 import { useEffect, useState } from 'react';
 import ResizablePanel from './ui/resizable-panel';
+import { useSession } from 'next-auth/react';
 
 type CustomCattleProps = Pick<
     CattleProps,
@@ -35,6 +35,7 @@ export function EventForm({ cattles, defaultValues }: { cattles: CustomCattlePro
         defaultValues,
         resolver: zodResolver(eventSchema)
     })
+    const { data: session } = useSession()
 
     const onSubmit: SubmitHandler<EventSchema> = async (data: EventSchema) => {
         const toastSavingEvent = toast.loading('Creando evento...');
@@ -99,7 +100,7 @@ export function EventForm({ cattles, defaultValues }: { cattles: CustomCattlePro
                     placeholder='Seleccione una opción'
                     options={cattlesList}
                     value={cattleSelected ? { value: cattleSelected._id, label: cattleSelected?.caravan } : undefined}
-                    isDisabled={cattlesList?.length <= 0}
+                    isDisabled={cattlesList?.length <= 0 || isSubmitting}
                     handleChange={(objSelected: SelectOptionProps) => {
                         unregister('eventType')
                         return setValue('cattleId', objSelected.value);
@@ -213,14 +214,24 @@ export function EventForm({ cattles, defaultValues }: { cattles: CustomCattlePro
                         <p className="input_label bg-white sticky -top-1 w-full">Indique el valor del caliper*</p>
                         <div className="flex flex-wrap gap-x-2 gap-y-5 pt-1 w-full relative">
                             {detailsByEvent[eventType].map((measureObj, index) => {
-                                const selected = measure === measureObj.label;
+                                const selected = measureObj.value === Number(measure)
+                                const minIdeal = Number(session?.user?.minIdeal) ?? 15
+                                const maxIdeal = Number(session?.user?.maxIdeal) ?? 20
+                                const ideal = measureObj.value >= minIdeal && measureObj.value <= maxIdeal
                                 return (
                                     <button
-                                        className={`${selected ? `cgreen border-cgreen` : `slate`} rounded-xl w-11 sm:w-12 h-11 sm:h-12`}
+                                        className={`${selected ? `` : `opacity-65 hover:opacity-100`} 
+                                                ${measureObj.value < minIdeal ? `bg-yellow-200` :
+                                                ideal ? `bg-green-200` : `bg-orange-200`} 
+                                                rounded-xl w-11 sm:w-12 h-11 sm:h-12 flex-center transition-all`}
                                         key={index}
                                         type='button'
-                                        onClick={() => setValue('measure', measureObj.label)}>
-                                        <p>{measureObj.label}</p>
+                                        onClick={() => setValue('measure', measureObj.label)}
+                                    >
+                                        <p className={`${selected ? `` : `opacity-65 hover:opacity-100`} 
+                                            ${measureObj.value < minIdeal ? `text-yellow-600` :
+                                                ideal ? `text-green-600` : `text-orange-600`}
+                                             text-lg font-semibold   `}>{measureObj.label}</p>
                                     </button>
                                 )
                             })}

@@ -7,6 +7,7 @@ export async function GET(request: Request) {
   const farm = await currentFarm();
   const { searchParams } = new URL(request.url);
   const id = searchParams.get("id");
+
   const { data } = await axios.get(
    `${process.env.API_URL}/api/ranchi/event/${id}/${farm}`
   );
@@ -17,8 +18,11 @@ export async function GET(request: Request) {
    return (new Date(b.eventDate) as any) - (new Date(a.eventDate) as any);
   });
 
-  return Response.json(sortedData);
+  return Response.json(sortedData ?? {});
  } catch (error) {
   console.log(error);
+  return Response.json({
+   error: "Ha ocurrido un error al encontrar el historial",
+  });
  }
 }

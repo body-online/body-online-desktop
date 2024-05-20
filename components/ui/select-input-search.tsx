@@ -29,10 +29,12 @@ const SelectInputSearch = ({
             <p className={`${darkMode ? `text-white` : ``} input_label`}>{label}</p>
 
             <Select
+                isDisabled={props.isDisabled}
                 unstyled
                 classNames={{
-                    control: ({ isFocused }: { isFocused: boolean }) => {
-                        return (`select_input_search bg-white disabled:opacity-50 ${error ? `border-red-500` : ``}`)
+                    control: ({ isDisabled }: { isDisabled: boolean }) => {
+                        return (`select_input_search bg-white disabled:opacity-50
+                        ${isDisabled ? `opacity-50` : ``} ${error ? `border-red-500` : ``}`)
                     },
                     placeholder: () => "text-gray-500 truncate",
                     input: () => "",

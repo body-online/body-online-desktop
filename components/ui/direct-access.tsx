@@ -25,7 +25,7 @@ const DirectAccess = ({ cattles, pendingMeasures, error }: DirectAccessProps) =>
                         </h2>
                     </div>
 
-                    <EventForm cattles={cattles} />
+                    <EventForm cattles={cattles?.filter((c) => c.state != 'death')} />
                 </div>
             </div>
 

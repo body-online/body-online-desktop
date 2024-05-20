@@ -27,15 +27,19 @@ export function TakeMeasure({ cattleId, dueDate, cattleCaravan }: NewMeasureButt
     const handleOpen = () => {
         setIsOpen(true)
     }
+
+    const actualMonth = dueDate.getMonth() <= new Date().getMonth() + 1
     return (
         <>
             <button
+                disabled={!actualMonth}
                 className='rounded_btn cgreen max-w-max focus:outline-none disabled:opacity-50'
                 onClick={handleOpen}
             >
-
-                <EventIcon fill='fill-clime' />
-                <p>Carga rápida</p>
+                <div className="flex-center gap-1 px-2 py-1">
+                    <EventIcon fill='fill-clime' />
+                    <p>Carga rápida</p>
+                </div>
 
             </button>
 
@@ -49,15 +53,17 @@ export function TakeMeasure({ cattleId, dueDate, cattleCaravan }: NewMeasureButt
                 >
                     <Card headerLabel={`Cargar medicion para ${cattleCaravan}`}>
                         <div className="mt-6"></div>
-                        <EventForm
-                            cattles={[{
-                                _id: cattleId, caravan: cattleCaravan, state: 'pregnant'
-                            }]}
-                            defaultValues={{
-                                cattleId: cattleId,
-                                eventDate: parsedDate,
-                                eventType: 'body_measure'
-                            }} />
+                        <div className="max-h-[60vh] sm:max-h-max overflow-auto">
+                            <EventForm
+                                cattles={[{
+                                    _id: cattleId, caravan: cattleCaravan, state: 'pregnant'
+                                }]}
+                                defaultValues={{
+                                    cattleId: cattleId,
+                                    eventDate: parsedDate,
+                                    eventType: 'body_measure'
+                                }} />
+                        </div>
                     </Card>
                 </motion.div >
             </Modal >

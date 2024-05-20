@@ -15,7 +15,7 @@ export async function getAllGenetics(): Promise<{
   const { data } = await axios.get(
    `${process.env.API_URL}/api/ranchi/genetic/${farm}`
   );
-  console.log(`getting ${data?.length} genetics for ${farm}`);
+  // console.log(`getting ${data?.length} genetics for ${farm}`);
 
   return { data };
  } catch (error: any) {
