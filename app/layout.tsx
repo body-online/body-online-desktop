@@ -1,11 +1,10 @@
+import { SessionProvider } from 'next-auth/react';
+import { Toaster } from 'react-hot-toast';
+import localFont from 'next/font/local'
 import type { Metadata } from "next";
+import { auth } from '@/auth';
 import "./globals.css";
 
-import localFont from 'next/font/local'
-import { Toaster } from 'react-hot-toast';
-import { SessionProvider } from 'next-auth/react';
-import { auth } from '@/auth';
-import Script from 'next/script';
 const satoshi = localFont({
   src: '../public/fonts/Satoshi-Variable.ttf',
   display: 'swap',
@@ -27,37 +26,40 @@ export default async function RootLayout({
   return (
     <SessionProvider session={session}>
       <html lang="en">
-        <body className={`${satoshi.className} body`}>
-          <Script
-            id='disable-zoom'
+        <head>
+          {/* no scrolling on mobile */}
+          <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+          />
+          <script
             dangerouslySetInnerHTML={{
-              __html: `document.addEventListener('gesturestart', function(e) {
-                        e.preventDefault();
-                        // special hack to prevent zoom-to-tabs gesture in safari
-                        document.body.style.zoom = 0.99;
-                      });
+              __html: `
+              document.addEventListener('gesturestart', function(e) {
+                e.preventDefault();
+                document.body.style.zoom = 0.99;
+              });
+        
+              document.addEventListener('gesturechange', function(e) {
+                  e.preventDefault();
+                  document.body.style.zoom = 0.99;
+              });
+        
+              document.addEventListener('gestureend', function(e) {
+                  e.preventDefault();
+                  document.body.style.zoom = 0.99;
+              });`,
+            }}
+          ></script>
+        </head>
 
-                      document.addEventListener('gesturechange', function(e) {
-                        e.preventDefault();
-                        // special hack to prevent zoom-to-tabs gesture in safari
-                        document.body.style.zoom = 0.99;
-                      });
-
-                      document.addEventListener('gestureend', function(e) {
-                        e.preventDefault();
-                        // special hack to prevent zoom-to-tabs gesture in safari
-                        document.body.style.zoom = 0.99;
-                      });`,
-            }}>
-          </Script>
+        <body className={`${satoshi.className} body`}>
           {children}
           <Toaster
             position="bottom-right"
             reverseOrder={true}
-            toastOptions={{
-              className: 'bg-red-500 rounded-xl',
-              duration: 5000,
-            }} />
+            toastOptions={{ duration: 5000 }}
+          />
         </body>
       </html>
     </SessionProvider>

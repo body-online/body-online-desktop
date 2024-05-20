@@ -12,7 +12,7 @@ const ToastCard = ({ title, children, type, handleClose }: ToastCardProps) => {
     if (!title) return null
 
     return (
-        <div className='rounded-xl bg-white border p-4 shadow'>
+        <div className='rounded-xl bg-white border p-4'>
             <div className="flex gap-2 items-center justify-between">
                 <div className='flex gap-2 items-center justify-start'>
                     <div className="mt-[3px]">

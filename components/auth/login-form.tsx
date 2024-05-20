@@ -72,7 +72,7 @@ const LoginForm = () => {
                             ) : (
                                 <>
                                     <p>Ingresar</p>
-                                    <SendIcon />
+                                    <SendIcon fill='fill-clime' />
                                 </>
                             )
                             }

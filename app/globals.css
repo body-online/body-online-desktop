@@ -17,7 +17,7 @@
 } */
 
 .body {
-  @apply bg-slate-50 overflow-hidden;
+  @apply bg-caqua/10 p-0 w-full h-full overflow-hidden text-sm sm:text-base;
 }
 
 /* Layout */
@@ -53,7 +53,7 @@
 }
 
 .card {
-  @apply rounded-xl border bg-white md:shadow-lg shadow-slate-950/5;
+  @apply rounded-xl bg-white;
 }
 
 .remove_file_btn {
@@ -79,10 +79,11 @@
 }
 
 .rounded_btn {
-  @apply bg-slate-100 hover:bg-slate-200 
-  rounded-full p-2.5 
+  @apply bg-slate-100 md:hover:bg-slate-200 
+  rounded-full p-1.5 sm:p-2 
   disabled:opacity-40
-  transition-all;
+  transition-all
+  outline-none focus:ring-1 focus:ring-slate-200 border-0;
 }
 .rounded_btn p {
   @apply font-semibold text-sm;
@@ -97,11 +98,11 @@
 }
 
 .login_btn {
-  @apply w-full md:max-w-xs bg-gradient-to-r bg-cgreen from-cgreen via-caqua/40 to-cgreen hover:via-caqua/20 
-  h-10 sm:h-12 flex items-center transition-colors flex-center gap-1 md:gap-2 px-2 md:px-4 py-2 md:py-3.5 rounded-lg md:min-w-[100px] disabled:opacity-50 focus:outline-0 focus:ring-[1px] ring-slate-300;
+  @apply w-full bg-cgreen hover:bg-cgreen/90
+  h-12 flex items-center transition-colors flex-center gap-1 md:gap-2 px-2 md:px-4 py-2 md:py-3.5 rounded-lg md:min-w-[100px] disabled:opacity-50 focus:outline-0 focus:ring-[1px] ring-slate-300;
 }
 .login_btn p {
-  @apply text-white font-medium;
+  @apply text-sm md:text-base text-white font-medium;
 }
 
 .black {
@@ -112,7 +113,7 @@
 }
 
 .cgreen {
-  @apply bg-cgreen active:bg-cgreen/80 md:hover:bg-cgreen/80;
+  @apply bg-cgreen active:bg-cgreen/80 md:hover:bg-cgreen/80 disabled:opacity-50;
 }
 .cgreen p {
   @apply text-white font-medium;
@@ -163,19 +164,19 @@ table {
   @apply w-full min-w-max;
 }
 table > thead {
-  @apply h-16 bg-white/90 backdrop-blur-sm to-transparent;
+  @apply h-12 bg-slate-100/90 backdrop-blur-sm to-transparent;
 }
 table > thead > tr > th > p {
-  @apply px-5 py-3 text-start text-sm text-slate-500 font-medium;
+  @apply px-3 text-start text-sm text-slate-500 font-medium;
 }
 table > thead > tr > th > button > p {
-  @apply px-5 py-3 text-start text-sm text-slate-500 font-medium;
+  @apply px-3 text-start text-sm text-slate-500 font-medium;
 }
 table > tbody > tr {
-  @apply transition-all h-16;
+  @apply transition-all h-16 border-t;
 }
 table > tbody > tr > td {
-  @apply px-5 py-2  border-t;
+  @apply px-3 py-2;
 }
 table > tbody > tr > td, p {
   @apply text-black;
@@ -189,28 +190,28 @@ table > tbody > tr > td, p {
 
 /* Forms */
 .input {
-  @apply  h-12 p-3 transition rounded-lg border hover:border-gray-400 focus:outline-0 focus:ring-[1px] ring-slate-300 w-full disabled:opacity-50;
+  @apply h-11 sm:h-12 p-2 sm:p-3 text-sm md:text-base transition rounded-lg border hover:border-gray-400 focus:outline-0 focus:ring-[1px] ring-slate-300 w-full disabled:opacity-50;
 }
 .textarea {
   @apply  min-h-20 max-h-60 p-3 transition rounded-lg border hover:border-gray-400 focus:outline-0 focus:ring-[1px] ring-slate-300 w-full disabled:opacity-50;
 }
 .select_input {
-  @apply  h-12 p-3 cursor-pointer transition rounded-lg border hover:border-gray-400 focus:outline-0 focus:ring-[1px] ring-slate-300 w-full disabled:opacity-50;
+  @apply  h-11 sm:h-12 p-2 sm:p-3 cursor-pointer transition rounded-lg border hover:border-gray-400 focus:outline-0 focus:ring-[1px] ring-slate-300 w-full disabled:opacity-50;
 }
 .select_input_search {
-  @apply  h-12 pl-3 cursor-pointer transition rounded-lg border hover:border-gray-400 focus:outline-0 focus:ring-[1px] ring-slate-300 w-full disabled:opacity-50;
+  @apply  h-11 sm:h-12 p-2 sm:p-3 pl-3 cursor-pointer transition rounded-lg border hover:border-gray-400 focus:outline-0 focus:ring-[1px] ring-slate-300 w-full disabled:opacity-50;
 }
 .search_input {
   @apply px-3 py-2 border rounded-lg  outline-none focus:ring-slate-600 w-full max-w-lg transition-all;
 }
 .input_label {
-  @apply font-medium text-[13px] text-slate-600 tracking-tight;
+  @apply font-medium text-sm tracking-tight;
 }
 .input_error {
   @apply h-5 mt-1;
 }
 .input_error > p { 
-  @apply font-semibold text-xs text-red-500;
+  @apply font-semibold text-xs text-red-500 leading-3;
 }
 .file_input {
   @apply flex justify-center w-full h-36 px-4 transition bg-white border border-gray-300 border-dashed rounded-lg appearance-none cursor-pointer hover:border-gray-400 focus:outline-none;
@@ -227,7 +228,7 @@ table > tbody > tr > td, p {
   @apply text-xl md:text-2xl font-semibold md:font-medium tracking-tight;
 }
 .semititle {
-  @apply text-lg md:text-2xl font-semibold md:font-medium tracking-tight;
+  @apply text-lg md:text-xl font-semibold md:font-medium tracking-tight;
 }
 .subtitle {
   @apply text-sm md:text-base font-semibold tracking-tight;
@@ -241,7 +242,7 @@ table > tbody > tr > td, p {
 }
 
 .chip {
-  @apply rounded-xl h-full min-w-max py-1.5 sm:py-2 px-2 sm:px-3 flex-center max-w-max font-medium text-sm;
+  @apply rounded-xl min-w-max py-1.5 sm:py-2 px-2 sm:px-3 flex-center max-w-max font-medium text-sm h-8 md:h-9;
 }
 .chip_gray{
   @apply bg-gray-200 text-gray-500;
@@ -255,19 +256,25 @@ table > tbody > tr > td, p {
 .chip_rose {
   @apply bg-pink-200 text-pink-500;
 }
+.chip_violet {
+  @apply bg-violet-200 text-violet-500;
+}
 .chip_red {
   @apply bg-red-200 text-red-500;
 }
 .chip_green {
   @apply bg-green-200 text-green-500;
 }
+.chip_yellow {
+  @apply bg-yellow-200 text-yellow-500;
+}
 .chip_orange {
   @apply bg-orange-200 text-orange-500;
 }
 
 .dropdown {
-  @apply mt-3 rounded-xl bg-white w-full min-w-[260px] border shadow-lg
-  overflow-hidden absolute z-50 -top-6 -right-2 md:-top-7 md:-right-3;
+  @apply rounded-xl bg-white w-full min-w-[260px] border shadow-lg
+  overflow-hidden absolute z-50 top-0 right-0;
 }
 .menu_navigation_item {
   @apply px-3 py-3 w-full

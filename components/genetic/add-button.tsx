@@ -29,9 +29,11 @@ export function AddGeneticBtn() {
 
     const handleClose = () => {
         reset();
+        document.body.style.overflow = "auto";
         return setIsOpen(false)
     }
     const handleOpen = () => {
+        document.body.style.overflow = "hidden";
         return setIsOpen(true)
     }
 
@@ -54,27 +56,23 @@ export function AddGeneticBtn() {
     return (
         <>
             <button className="rounded_btn cgreen" onClick={handleOpen}>
-                {/* <p>Nuevo</p> */}
                 <MiniAddIcon fill="fill-clime" />
             </button>
 
             <Modal handleClose={handleClose} isOpen={isOpen}>
                 <motion.div
                     onClick={(e) => e.stopPropagation()}
-                    className="w-full max-w-xl"
+                    className="w-full sm:w-full sm:min-w-96"
                     variants={enterModal}
                     initial="hidden"
                     animate="visible"
                     exit="exit"
                 >
                     <Card headerLabel='Crear genética'>
-                        <form
-                            className='mt-6 space-y-8'
-                            onSubmit={handleSubmit(onSubmit)}
-                        >
-                            <div className='space-y-4 w-full max-w-2xl'>
+                        <form className='mt-6' onSubmit={handleSubmit(onSubmit)}>
 
-                                <label htmlFor='name' className='md:col-span-2'>
+                            <div className='space-y-4 w-full'>
+                                <label htmlFor='name'>
                                     <p className="input_label">Nombre*</p>
                                     <input
                                         {...register("name")}
@@ -89,7 +87,7 @@ export function AddGeneticBtn() {
                                     </div>
                                 </label>
 
-                                <label htmlFor='description' className='md:col-span-2'>
+                                <label htmlFor='description'>
                                     <p className="input_label">Descripción</p>
                                     <textarea
                                         {...register("description")}
@@ -118,6 +116,7 @@ export function AddGeneticBtn() {
                                     </button>
                                 </div>
                             </div>
+
                         </form >
                     </Card>
                 </motion.div>

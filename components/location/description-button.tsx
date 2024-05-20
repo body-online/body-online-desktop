@@ -23,11 +23,11 @@ const DescriptionBtn = ({ location }: { location: LocationProps }) => {
     return (
         <>
             <button
-                className='rounded_btn cgreen'
+                className='rounded_btn'
                 disabled={!location?.description}
                 onClick={handleOpen}
             >
-                <InfoIcon fill='fill-clime' />
+                <InfoIcon fill='fill-black' />
             </button>
 
             <Modal isOpen={isOpen} handleClose={handleClose}>

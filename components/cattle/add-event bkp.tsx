@@ -19,10 +19,9 @@ import { createEvent } from '@/actions/event';
 import ResizablePanel from '../ui/resizable-panel';
 import SelectInputSearch from '../ui/select-input-search';
 import { SelectOptionProps } from '../ui/select-input';
-import ChipState from './chip-state';
-import ChipBodyCondition from './chip-body-condition';
+import CattleResume from './resume';
 
-export function AddEventButton({ cattle }: NewEventButtonProps) {
+export function AddEventBtn({ cattle, customButtom }: NewEventButtonProps) {
     const router = useRouter()
     const {
         register,
@@ -58,13 +57,12 @@ export function AddEventButton({ cattle }: NewEventButtonProps) {
         return setIsOpen(false)
     }
     const handleOpen = () => {
-        return setIsOpen(true)
+        setIsOpen(true)
     }
+
     // event steps states
     const eventType = watch('eventType')
     const measure = watch('measure')
-    // const eventDetail = watch('eventDetail')
-    // const eventDate = watch('eventDate')
 
     useEffect(() => {
         unregister('measure')
@@ -80,49 +78,38 @@ export function AddEventButton({ cattle }: NewEventButtonProps) {
 
     return (
         <>
-            <button
-                disabled={cattle?.state == "death"}
-                className='rounded_btn cgreen'
+            <button disabled={cattle?.state == "death"}
+                className='rounded-full focus:outline-none max-w-max disabled:opacity-50'
                 onClick={handleOpen}
             >
-                <EventIcon fill='fill-clime' />
+                {customButtom ??
+                    <div className='rounded_btn cgreen max-w-max'>
+                        <EventIcon fill='fill-clime' />
+                    </div>}
             </button>
 
             <Modal handleClose={handleClose} isOpen={isOpen}>
                 <motion.div
                     onClick={(e) => e.stopPropagation()}
-                    className="w-full max-w-3xl relative"
                     variants={enterModal}
                     initial="hidden"
                     animate="visible"
                     exit="exit"
                 >
                     <Card headerLabel='Crear evento'>
-                        <form className="mt-2 space-y-4" onSubmit={handleSubmit(onSubmit)}>
-
+                        <form className="space-y-4 w-full pt-4 md:pt-6" onSubmit={handleSubmit(onSubmit)}>
 
                             <div className="max-h-[75vh] sm:max-h-[100vh] pr-2 overflow-y-auto sm:overflow-visible relative">
 
-                                {/* cattle details */}
-                                <div className="select-none flex-center max-w-max bg-slate-50 border rounded-xl gap-2 mb-3">
-                                    <p className='text-base text-black font-semibold px-4'>
-                                        {cattle?.caravan}
-                                    </p>
-                                    <div className='overflow-x-auto w-full py-2 pr-4'>
-                                        <div className="flex items-center gap-6 w-max">
-                                            <ChipState state={cattle?.state} />
-                                            <ChipBodyCondition type={cattle?.bodyCondition} />
-                                            <p className='text-sm'>{cattle?.geneticName}</p>
-                                            <p className='text-sm'>{cattle?.locationName}</p>
-                                        </div>
-                                    </div>
+                                <div className="mb-6">
+                                    <CattleResume cattle={cattle} />
                                 </div>
 
                                 <div className="flex flex-col md:grid md:grid-flow-col md:auto-cols-max w-full gap-3 h-max">
                                     {/* event date */}
                                     <label htmlFor="eventDate">
                                         <p className="input_label bg-white sticky top-0 w-full">Fecha del evento*</p>
-                                        <input type='date' className='input min-w-[50%] max-w-max' {...register('eventDate')} />
+                                        <input type='datetime-local' className='input min-w-[50%] max-w-max' {...register('eventDate')} />
                                         <div className="input_error">
                                             {errors.eventDate && (<p>{`${errors.eventDate.message}`}</p>)}
                                         </div>
@@ -137,7 +124,6 @@ export function AddEventButton({ cattle }: NewEventButtonProps) {
                                                     {eventTypesList.map((event, index) => {
                                                         const selected = Boolean(eventType == event.value);
                                                         const cattleState = (cattle?.state && cattle?.state != '') ? cattle.state : 'not_pregnant'
-
                                                         return (
                                                             <button
                                                                 disabled={event.allowedStates.includes(cattleState) ? false : true}
@@ -259,25 +245,4 @@ export function AddEventButton({ cattle }: NewEventButtonProps) {
     )
 }
 
-export default AddEventButton
-
-
-{/* cattle general state */ }
-{/* <div className="overflow-auto w-full">
-                                <Divider />
-                                <div className="grid grid-cols-3 w-max pb-2">
-                                    <p className='text-sm text-slate-500 font-medium mb-2'>Caravana</p>
-                                    <p className='text-sm text-slate-500 font-medium mb-2'>Estado</p>
-                                    <p className='text-sm text-slate-500 font-medium mb-2'>Condicion Corporal</p>
-                                    <div className='flex items-center'>
-                                        <p className='chip chip_gray'>{cattle?.caravan}</p>
-                                    </div>
-                                    <ChipStatus
-                                        state={"pregnant"}
-                                    />
-                                    <ChipBodyCondition
-                                        type={"skinny"}
-                                    />
-                                </div>
-                                <Divider />
-                            </div> */}
+export default AddEventBtn

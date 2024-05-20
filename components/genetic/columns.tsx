@@ -15,7 +15,7 @@ export const columnsGenetic: ColumnDef<GeneticProps>[] = [
                 <button
                     type="button"
                     onClick={() => column.toggleSorting(column.getIsSorted() == "asc")}
-                    className="flex-center gap-1"
+                    className="flex-center"
                 >
                     <p>Nombre</p>
                     <ArrowsIcon direction={column.getIsSorted()} />
@@ -34,7 +34,7 @@ export const columnsGenetic: ColumnDef<GeneticProps>[] = [
                 <button
                     type="button"
                     onClick={() => column.toggleSorting(column.getIsSorted() == "asc")}
-                    className="flex-center gap-1"
+                    className="flex-center"
                 >
                     <p>Fecha de Creación</p>
                     <ArrowsIcon direction={column.getIsSorted()} />
@@ -45,7 +45,7 @@ export const columnsGenetic: ColumnDef<GeneticProps>[] = [
         accessorKey: "createdAt",
         cell: ({ row }) => {
             const created_at = row.getValue("createdAt");
-            const formatted = new Date(created_at as string).toLocaleDateString("es-MX", { day: 'numeric', month: 'long', year: 'numeric' });
+            const formatted = new Date(created_at as string).toLocaleDateString("es-AR", { day: 'numeric', month: 'long', year: 'numeric' });
 
             return <p> {formatted}</p>;
         },

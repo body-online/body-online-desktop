@@ -15,7 +15,7 @@ const Genetics = ({ genetics, error }: { error?: string; genetics?: GeneticProps
 
         <div className='card overflow-hidden'>
             {/* header */}
-            <div className="px-4 md:px-5 py-5 md:py-6">
+            <div className="px-4 md:px-5 py-6">
                 <div className='flex items-center justify-between h-8'>
                     <h2 className='text-xl font-bold leading-5'>
                         Genéticas <span className='opacity-20 ml-1'>{genetics?.length ?? 0}</span>
@@ -50,10 +50,10 @@ const Genetics = ({ genetics, error }: { error?: string; genetics?: GeneticProps
                                             </td>
                                             <td>
                                                 {new Date(genetic.createdAt)
-                                                    .toLocaleDateString("es-MX", { day: 'numeric', month: 'long', year: 'numeric' })}
+                                                    .toLocaleDateString("es-AR", { day: 'numeric', month: 'long', year: 'numeric' })}
                                             </td>
                                             <td className='flex-end ml-auto gap-2'>
-                                                <DescriptionBtn genetic={genetic} />
+                                                {/* <DescriptionBtn genetic={genetic} /> */}
                                                 <DeleteGeneticBtn id={genetic._id} name={genetic.name} />
                                             </td>
                                         </tr>

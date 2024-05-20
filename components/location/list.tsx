@@ -15,7 +15,7 @@ const Locations = ({ locations, error }: { error?: string; locations?: LocationP
 
         <div className='card overflow-hidden'>
             {/* header */}
-            <div className="px-4 md:px-5 py-5 md:py-6">
+            <div className="px-4 md:px-5 py-6">
                 <div className='flex items-center justify-between h-8'>
                     <h2 className='text-xl font-bold leading-5'>
                         Ubicaciones <span className='opacity-20 ml-1'>{locations?.length ?? 0}</span>
@@ -51,7 +51,7 @@ const Locations = ({ locations, error }: { error?: string; locations?: LocationP
                                             </td>
                                             <td>
                                                 {new Date(location.createdAt)
-                                                    .toLocaleDateString("es-MX", { day: 'numeric', month: 'long', year: 'numeric' })}
+                                                    .toLocaleDateString("es-AR", { day: 'numeric', month: 'long', year: 'numeric' })}
                                             </td>
                                             <td className='flex-end ml-auto gap-2'>
                                                 <DescriptionBtn location={location} />

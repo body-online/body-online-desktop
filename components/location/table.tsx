@@ -67,7 +67,7 @@ export function LocationsDataTable<TData, TValue>({
     useEffect(() => {
         const handler = setTimeout(() => {
             onSearchChange();
-        }, 100);
+        }, 300);
 
         return () => {
             clearTimeout(handler);
@@ -80,23 +80,18 @@ export function LocationsDataTable<TData, TValue>({
 
     return (
         <div>
-            <div className={
-                `${!locations.length ? `hidden` : ``} w-full h-12 sm:h-16
-                bg-gray-50 md:flex border-y border-slate-100`
-            }>
-
+            {locations.length > 0 && (
                 <label className="flex gap-2 items-center px-4 md:px-5 w-full h-full">
                     <SearchIcon fill="fill-slate-500" />
                     <input
-                        className={`text-base sm:text-lg border-none bg-transparent focus:outline-none w-full md:w-[200px]`}
+                        className={`text-base h-12 border-none bg-transparent focus:outline-none w-full md:w-[200px] placeholder:text-slate-500`}
                         disabled={!locations.length}
-                        placeholder="Bucar por nombre..."
+                        placeholder="Buscar por nombre..."
                         value={searchTerm}
                         onChange={({ target }) => setSearchTerm(target.value)}
                     />
                 </label>
-
-            </div>
+            )}
 
             {/* rows number */}
             {/* <div className="px-4 md:px-5 ">
@@ -169,7 +164,7 @@ export function LocationsDataTable<TData, TValue>({
                         </div>
                     </>
                 ) : (
-                    <div className="px-4 md:px-5 py-5 md:py-6">
+                    <div className="px-4 md:px-5 py-6">
                         <InfoMessage
                             type={"censored"}
                             title={`Sin resultados`}

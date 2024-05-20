@@ -4,7 +4,6 @@ import {
     ColumnDef,
     ColumnFiltersState,
     SortingState,
-    VisibilityState,
     flexRender,
     getCoreRowModel,
     getFilteredRowModel,
@@ -24,17 +23,17 @@ import {
 
 import React, { useEffect, useState } from "react";
 import InfoMessage from '../ui/info';
-import { SearchIcon } from '../ui/icons';
 import ResizablePanel from '../ui/resizable-panel';
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[];
-    genetics: TData[];
+    pendingMeasures: TData[];
+    setCattleSelected?: Function;
 }
 
-export function GeneticsDataTable<TData, TValue>({
+export function PendingMeasuresDataTable<TData, TValue>({
     columns,
-    genetics
+    pendingMeasures,
 }: DataTableProps<TData, TValue>) {
     const [searchTerm, setSearchTerm] = useState("")
     const [sorting, setSorting] = React.useState<SortingState>([]);
@@ -43,7 +42,7 @@ export function GeneticsDataTable<TData, TValue>({
     );
 
     const table = useReactTable({
-        data: genetics,
+        data: pendingMeasures,
         columns,
         getCoreRowModel: getCoreRowModel(),
         getPaginationRowModel: getPaginationRowModel(),
@@ -67,7 +66,7 @@ export function GeneticsDataTable<TData, TValue>({
     useEffect(() => {
         const handler = setTimeout(() => {
             onSearchChange();
-        }, 300);
+        }, 100);
 
         return () => {
             clearTimeout(handler);
@@ -75,23 +74,11 @@ export function GeneticsDataTable<TData, TValue>({
     }, [searchTerm]);
 
     const onSearchChange = () => {
-        table.getColumn("name")?.setFilterValue(searchTerm);
+        table.getColumn("cattleId")?.setFilterValue(searchTerm);
     }
 
     return (
         <div>
-            {genetics.length > 0 && (
-                <label className="flex gap-2 items-center px-4 md:px-5 w-full">
-                    <SearchIcon fill="fill-slate-500" />
-                    <input
-                        className={`text-base h-12 border-none bg-transparent focus:outline-none w-full md:w-[200px] placeholder:text-slate-500`}
-                        disabled={!genetics.length}
-                        placeholder="Buscar por nombre..."
-                        value={searchTerm}
-                        onChange={({ target }) => setSearchTerm(target.value)}
-                    />
-                </label>
-            )}
 
             <ResizablePanel changeIndicator={`${table.getRowModel().rows?.length}`}>
                 {table.getRowModel().rows?.length ? (
@@ -170,7 +157,7 @@ export function GeneticsDataTable<TData, TValue>({
     );
 }
 
-export default GeneticsDataTable;
+export default PendingMeasuresDataTable;
 
 const ArrowIcon = ({ direction }: { direction: "left" | "right" }) => {
     return (

@@ -67,7 +67,7 @@ export function CattlesDataTable<TData, TValue>({
     useEffect(() => {
         const handler = setTimeout(() => {
             onSearchChange();
-        }, 100);
+        }, 300);
 
         return () => {
             clearTimeout(handler);
@@ -80,15 +80,12 @@ export function CattlesDataTable<TData, TValue>({
 
     return (
         <div>
-            <div className={
-                `${!cattles.length ? `hidden` : ``} w-full h-12 sm:h-16
-                bg-gray-50 md:flex border-y border-slate-100`
-            }>
+            <div className={`${cattles?.length <= 0 ? `hidden` : ``} w-full h-12 sm:h-14 `}>
 
                 <label className="flex gap-2 items-center px-4 md:px-5 w-full h-full">
                     <SearchIcon fill="fill-slate-500" />
                     <input
-                        className={`text-base sm:text-lg border-none bg-transparent focus:outline-none w-full md:w-[200px]`}
+                        className={`text-base border-none bg-transparent focus:outline-none w-full md:w-[200px] placeholder:text-slate-500`}
                         disabled={!cattles.length}
                         placeholder="Bucar por caravana..."
                         value={searchTerm}
@@ -106,9 +103,9 @@ export function CattlesDataTable<TData, TValue>({
                     </p>
                 </div> */}
 
-            <ResizablePanel changeIndicator={`${table.getRowModel().rows?.length}`}>
+            <ResizablePanel changeIndicator={`${table.getRowModel().rows?.length + 1}`}>
                 {table.getRowModel().rows?.length ? (
-                    <>
+                    <div>
                         <div className='realtive max-h-96 overflow-auto'>
                             <Table key={`table-${table.getRowModel().rows?.length ?? 0}`}>
                                 <TableHeader className='sticky top-0 w-full z-20'>
@@ -167,9 +164,9 @@ export function CattlesDataTable<TData, TValue>({
                                 <ArrowIcon direction="right" />
                             </button>
                         </div>
-                    </>
+                    </div>
                 ) : (
-                    <div className="px-4 md:px-5 py-5 md:py-6">
+                    <div className="">
                         <InfoMessage
                             type={"censored"}
                             title={`Sin resultados`}

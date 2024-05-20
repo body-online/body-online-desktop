@@ -14,9 +14,11 @@ const DescriptionBtn = ({ genetic }: { genetic: GeneticProps }) => {
     const [isOpen, setIsOpen] = useState<boolean>(false);
 
     const handleOpen = () => {
+        document.body.style.overflow = "hidden";
         return setIsOpen(true);
     }
     const handleClose = () => {
+        document.body.style.overflow = "auto";
         return setIsOpen(false);
     }
 
@@ -25,9 +27,9 @@ const DescriptionBtn = ({ genetic }: { genetic: GeneticProps }) => {
             <button
                 disabled={!genetic?.description}
                 onClick={handleOpen}
-                className='rounded_btn cgreen'
+                className='rounded_btn'
             >
-                <InfoIcon fill='fill-clime' />
+                <InfoIcon fill='fill-black' />
             </button>
 
             <Modal isOpen={isOpen} handleClose={handleClose}>

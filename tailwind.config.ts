@@ -9,9 +9,9 @@ const config: Config = {
  theme: {
   extend: {
    colors: {
-    clime: "#ceef01",
+    clime: "#D7FB05",
     caqua: "#189877",
-    cgreen: "#093731",
+    cgreen: "#093631",
    },
    fontFamily: {
     satoshi: ["var(--font-satoshi)"],

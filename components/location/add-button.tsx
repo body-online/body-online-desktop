@@ -28,10 +28,12 @@ export function AddLocationBtn() {
 
 
     const handleClose = () => {
+        document.body.style.overflow = "auto";
         reset();
         return setIsOpen(false)
     }
     const handleOpen = () => {
+        document.body.style.overflow = "hidden";
         return setIsOpen(true)
     }
 
@@ -54,7 +56,6 @@ export function AddLocationBtn() {
     return (
         <>
             <button className="rounded_btn cgreen" onClick={handleOpen}>
-                {/* <p>Nuevo</p> */}
                 <MiniAddIcon fill="fill-clime" />
             </button>
 
@@ -62,18 +63,16 @@ export function AddLocationBtn() {
             <Modal handleClose={handleClose} isOpen={isOpen}>
                 <motion.div
                     onClick={(e) => e.stopPropagation()}
-                    className="w-full max-w-xl"
+                    className="w-full sm:w-full sm:min-w-96"
                     variants={enterModal}
                     initial="hidden"
                     animate="visible"
                     exit="exit"
                 >
                     <Card headerLabel='Crear ubicación'>
-                        <form
-                            className='mt-6 space-y-8'
-                            onSubmit={handleSubmit(onSubmit)}
+                        <form className='mt-6 space-y-8' onSubmit={handleSubmit(onSubmit)}
                         >
-                            <div className='space-y-4 w-full max-w-2xl'>
+                            <div className='space-y-4'>
 
                                 <label htmlFor='name' className='md:col-span-2'>
                                     <p className="input_label">Nombre*</p>

@@ -17,9 +17,11 @@ const DeleteCattleBtn = ({ id, name }: { id: string, name: string }) => {
     const router = useRouter()
 
     const handleOpen = () => {
+        document.body.style.overflow = "hidden";
         setIsOpen(true)
     }
     const handleClose = () => {
+        document.body.style.overflow = "auto";
         setIsOpen(false)
     }
 
@@ -42,10 +44,10 @@ const DeleteCattleBtn = ({ id, name }: { id: string, name: string }) => {
     return (
         <>
             <button
-                className='rounded_btn cgreen'
+                className='rounded_btn'
                 onClick={handleOpen}
             >
-                <TrashIcon fill='fill-clime' />
+                <TrashIcon fill='fill-black' />
             </button>
 
             <Modal handleClose={handleClose} isOpen={isOpen}>

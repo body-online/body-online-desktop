@@ -62,6 +62,8 @@ export async function getUserByEmail(
    method: "get",
    url: `${process.env.API_URL}/api/ranchi/user/email/${email}`,
   });
+  data.minIdeal = data?.bodyRanges?.[0];
+  data.maxIdeal = data?.bodyRanges?.[1];
   data.id = data?._id;
 
   return data;

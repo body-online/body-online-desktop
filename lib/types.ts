@@ -30,7 +30,9 @@ export interface CattleProps extends CattleSchema {
  locationName: string;
  createdAt: string;
  state: string;
+ stateDate?: string;
  bodyCondition: string;
+ bodyConditionDate?: string;
  updatedAt: string;
  deletedAt: string;
 }
@@ -66,9 +68,7 @@ export const eventSchema = z.object({
  cattleId: z
   .string({ required_error: "Caravana requerida!" })
   .refine((value) => value != "", "Caravana requerida!"),
- eventDate: z.coerce.date({
-  errorMap: () => ({ message: "Fecha inválida!" }),
- }),
+ eventDate: z.string().transform((str) => new Date(str)),
  eventType: z
   .string({ required_error: "Tipo de evento requerido!" })
   .refine((value) => value != "", "Tipo de evento requerido!"),
@@ -82,8 +82,24 @@ export const eventSchema = z.object({
   .optional(),
 });
 export type EventSchema = z.infer<typeof eventSchema>;
+export interface EventProps extends EventSchema {
+ _id: string;
+}
 export type NewEventButtonProps = {
- cattle?: CattleProps;
+ cattle: CattleProps;
+ customButtom?: React.ReactNode;
+};
+
+// pending measures
+export type PendingMeasureProps = {
+ _id: string;
+ expiresAt: string;
+ cattleId: { _id: string; caravan: string };
+ eventId: string;
+ farmId: string;
+ month: 1;
+ createdAt: string;
+ updatedAt: string;
 };
 
 // farm
@@ -97,6 +113,15 @@ export const farmSchema = z.object({
  city: z
   .string({ required_error: "Ciudad requerida!" })
   .refine((value) => value != "", "Ciudad requerida!"),
+ cattleAmount: z.string().refine((val) => !Number.isNaN(parseInt(val, 10)), {
+  message: "El campo debe ser numérico",
+ }),
+ minRange: z.string().refine((val) => !Number.isNaN(parseInt(val, 10)), {
+  message: "El campo debe ser numérico",
+ }),
+ maxRange: z.string().refine((val) => !Number.isNaN(parseInt(val, 10)), {
+  message: "El campo debe ser numérico",
+ }),
 });
 export type FarmSchema = z.infer<typeof farmSchema>;
 
@@ -120,5 +145,6 @@ export type NavigationItemProps = {
 export interface SelectInputSearchProps extends Props {
  label: string;
  error?: string;
+ darkMode?: boolean;
  handleChange: Function;
 }

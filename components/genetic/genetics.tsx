@@ -14,14 +14,17 @@ const Genetics = ({ genetics, error }: GeneticPageProps) => {
             {// verify that genetics are not undefined and have data inside
                 <>
                     {/* header */}
-                    <div className="px-4 md:px-5 py-5 md:py-6">
+                    <div className="px-4 md:px-5 pt-6">
                         <div className='flex items-center justify-between h-max'>
                             <h2 className='title'>
                                 Genéticas
                             </h2>
-                            <div className='flex-center gap-3'>
-                                <p className='font-medium text-base sm:text-lg text-black pl-3'>{genetics?.length}</p>
-                                <AddGeneticBtn />
+
+                            <div className="flex-center gap-3">
+                                <div className='flex-center gap-3 border rounded-full p-1'>
+                                    <p className='font-medium text-base text-black pl-4'>{genetics?.length}</p>
+                                    <AddGeneticBtn />
+                                </div>
                             </div>
                         </div>
                     </div>

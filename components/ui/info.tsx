@@ -8,17 +8,19 @@ interface InfoMessageProps {
 
 const InfoMessage = ({ title, subtitle, type }: InfoMessageProps) => {
     return (
-        <div className="px-3 py-12 max-w-max mx-auto flex flex-col items-center justify-center">
-            {type == "warning" ? <WarningIcon /> :
-                type === "info" ? <InfoIcon /> :
-                    type === "success" ? <SuccessIcon /> :
-                        type === "censored" ? <CloseEyeIcon /> :
-                            <></>
-            }
-            <p className="font-medium mt-4">{title}</p>
+        <div className="px-3 py-8 mx-auto flex flex-col items-center justify-center max-w-sm">
+            <div className="p-2 rounded-full bg-caqua/10">
+                {type == "warning" ? <WarningIcon /> :
+                    type === "info" ? <InfoIcon /> :
+                        type === "success" ? <SuccessIcon /> :
+                            type === "censored" ? <CloseEyeIcon /> :
+                                <></>
+                }
+            </div>
+            <p className="font-medium mt-3">{title}</p>
             {subtitle ? (
-                <div className={`rounded-lg py-3 px-2 mt-2 bg-gray-50`}>
-                    <p className="text-black text-center">{subtitle}</p>
+                <div className={`px-2 mt-2 `}>
+                    <p className="text-center text-sm md:text-base text-slate-600">{subtitle}</p>
                 </div>
             ) : (
                 <></>
@@ -37,7 +39,7 @@ const InfoIcon = () => {
                 strokeWidth={1.5}
                 className="h-8 w-8">
                 <path
-                    stroke="#CBD5E1"
+                    stroke="#093731"
                     strokeLinecap="round"
                     strokeLinejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 5.25h.008v.008H12v-.008Z" />
             </svg>
@@ -71,7 +73,7 @@ const CloseEyeIcon = () => {
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none" viewBox="0 0 24 24"
                 strokeWidth="1.5"
-                stroke="#CBD5E1"
+                stroke="#093731"
                 className="w-8 h-8"
             >
                 <path
@@ -94,7 +96,7 @@ const WarningIcon = () => {
             >
                 <path
                     d="m13 13 6 6m0-6-6 6m15-3c0 6.627-5.373 12-12 12S4 22.627 4 16 9.373 4 16 4s12 5.373 12 12Z"
-                    stroke="#CBD5E1"
+                    stroke="#093731"
                     strokeWidth="2"
                     strokeLinecap="round"
                     strokeLinejoin="round"

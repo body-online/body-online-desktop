@@ -4,7 +4,7 @@ import toast from 'react-hot-toast';
 import * as z from "zod";
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { LoadingIcon, SendIcon } from '../ui/icons';
+import { CreateAccountIcon, LoadingIcon, SendIcon } from '../ui/icons';
 import { registerUser } from '@/actions/register';
 import { useRouter } from 'next/navigation';
 import { RegisterSchema } from '@/schemas';
@@ -85,13 +85,13 @@ const RegisterForm = () => {
                             </div>
                         </label>
 
-                        <button disabled={isSubmitting} className='btn black' type='submit'>
+                        <button disabled={isSubmitting} className='login_btn' type='submit'>
                             {isSubmitting ? (
                                 <LoadingIcon />
                             ) :
                                 <>
                                     <p>Crear cuenta</p>
-                                    <SendIcon />
+                                    <CreateAccountIcon fill='fill-clime' />
                                 </>
 
                             }

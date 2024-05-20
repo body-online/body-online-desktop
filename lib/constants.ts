@@ -1,6 +1,7 @@
 // á é í ó ú
 import { ExtendedUser } from "@/next-auth";
 import { NavigationItemProps } from "./types";
+import { BodyMeasureIcon } from "@/components/ui/icons";
 
 // general constants
 export const navigationItems: Array<NavigationItemProps> = [
@@ -9,16 +10,48 @@ export const navigationItems: Array<NavigationItemProps> = [
  //   title: "Home",
  //  },
 ];
-export const countries = ["Argentina"];
+export const provinces = [
+ { label: "Buenos Aires", value: "Buenos Aires" },
+ {
+  label: "Ciudad Autónoma de Buenos Aires",
+  value: "Ciudad Autónoma de Buenos Aires",
+ },
+ { label: "Catamarca", value: "Catamarca" },
+ { label: "Chaco", value: "Chaco" },
+ { label: "Chubut", value: "Chubut" },
+ { label: "Córdoba", value: "Córdoba" },
+ { label: "Corrientes", value: "Corrientes" },
+ { label: "Entre Ríos", value: "Entre Ríos" },
+ { label: "Formosa", value: "Formosa" },
+ { label: "Jujuy", value: "Jujuy" },
+ { label: "La Pampa", value: "La Pampa" },
+ { label: "La Rioja", value: "La Rioja" },
+ { label: "Mendoza", value: "Mendoza" },
+ { label: "Misiones", value: "Misiones" },
+ { label: "Neuquén", value: "Neuquén" },
+ { label: "Río Negro", value: "Río Negro" },
+ { label: "Salta", value: "Salta" },
+ { label: "San Juan", value: "San Juan" },
+ { label: "San Luis", value: "San Luis" },
+ { label: "Santa Cruz", value: "Santa Cruz" },
+ { label: "Santa Fe", value: "Santa Fe" },
+ { label: "Santiago del Estero", value: "Santiago del Estero" },
+ {
+  label: "Tierra del Fuego, Antártida e Islas del Atlántico Sur",
+  value: "Tierra del Fuego, Antártida e Islas del Atlántico Sur",
+ },
+ { label: "Tucumán", value: "Tucumán" },
+];
+export const countries = [{ label: "Argentina", value: "Argentina" }];
 export const eventTypesList = [
  {
   label: "Medición corporal",
-  allowedStates: ["not_pregnant", "pregnant"],
+  allowedStates: ["not_pregnant", "pregnant", "cattle_birth"],
   value: "body_measure",
  },
  {
   label: "Servicio",
-  allowedStates: ["not_pregnant"],
+  allowedStates: ["not_pregnant", "cattle_birth"],
   value: "pregnant",
  },
  {
@@ -33,7 +66,7 @@ export const eventTypesList = [
  },
  {
   label: "Muerte",
-  allowedStates: ["not_pregnant"],
+  allowedStates: ["not_pregnant", "cattle_birth"],
   value: "death",
  },
 ];

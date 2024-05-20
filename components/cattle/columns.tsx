@@ -4,9 +4,10 @@ import { ColumnDef } from "@tanstack/react-table";
 import DeleteCattleBtn from './delete-button';
 import { CattleProps } from '@/lib/types';
 import { ArrowsIcon } from '../ui/icons';
-import AddEventButton from './new-event';
+import { AddEventBtn } from './add-event';
 import ChipBodyCondition from './chip-body-condition';
 import ChipState from './chip-state';
+import HistoryBtn from './history-button';
 
 
 export const columnsCattle: ColumnDef<CattleProps>[] = [
@@ -16,7 +17,7 @@ export const columnsCattle: ColumnDef<CattleProps>[] = [
                 <button
                     type="button"
                     onClick={() => column.toggleSorting(column.getIsSorted() == "asc")}
-                    className="flex-center gap-1"
+                    className="flex-center"
                 >
                     <p>Caravana</p>
                     <ArrowsIcon direction={column.getIsSorted()} />
@@ -28,13 +29,37 @@ export const columnsCattle: ColumnDef<CattleProps>[] = [
             return <div className='text-base font-medium'>{row.getValue("caravan")}</div>;
         },
     },
+
     {
         header: ({ column }) => {
             return (
                 <button
                     type="button"
                     onClick={() => column.toggleSorting(column.getIsSorted() == "asc")}
-                    className="flex-center gap-1"
+                    className="flex-center"
+                >
+                    <p>Fecha de Creación</p>
+                    <ArrowsIcon direction={column.getIsSorted()} />
+                </button>
+            );
+        },
+
+        accessorKey: "createdAt",
+        cell: ({ row }) => {
+            const created_at = row.getValue("createdAt");
+            const formatted = new Date(created_at as string).toLocaleDateString("es-AR", { day: 'numeric', month: 'long', year: 'numeric' });
+
+            return <p> {formatted}</p>;
+        },
+    },
+
+    {
+        header: ({ column }) => {
+            return (
+                <button
+                    type="button"
+                    onClick={() => column.toggleSorting(column.getIsSorted() == "asc")}
+                    className="flex-center"
                 >
                     <p>Ubicación</p>
                     <ArrowsIcon direction={column.getIsSorted()} />
@@ -52,7 +77,7 @@ export const columnsCattle: ColumnDef<CattleProps>[] = [
                 <button
                     type="button"
                     onClick={() => column.toggleSorting(column.getIsSorted() == "asc")}
-                    className="flex-center gap-1"
+                    className="flex-center"
                 >
                     <p>Genética</p>
                     <ArrowsIcon direction={column.getIsSorted()} />
@@ -70,7 +95,7 @@ export const columnsCattle: ColumnDef<CattleProps>[] = [
                 <button
                     type="button"
                     onClick={() => column.toggleSorting(column.getIsSorted() == "asc")}
-                    className="flex-center gap-1"
+                    className="flex-center"
                 >
                     <p>Estado</p>
                     <ArrowsIcon direction={column.getIsSorted()} />
@@ -88,7 +113,32 @@ export const columnsCattle: ColumnDef<CattleProps>[] = [
                 <button
                     type="button"
                     onClick={() => column.toggleSorting(column.getIsSorted() == "asc")}
-                    className="flex-center gap-1"
+                    className="flex-center"
+                >
+                    <p>Fecha último estado</p>
+                    <ArrowsIcon direction={column.getIsSorted()} />
+                </button>
+            );
+        },
+
+        accessorKey: "stateDate",
+        cell: ({ row }) => {
+            const isDeath = row?.original?.state == 'death'
+            const stateDate = row.getValue("stateDate");
+            if (!stateDate || isDeath)
+                return <p>-</p>;
+            const formatted = new Date(stateDate as string).toLocaleDateString("es-AR", { day: 'numeric', month: 'long', year: 'numeric' });
+            return <p>{formatted}</p>;
+        },
+
+    },
+    {
+        header: ({ column }) => {
+            return (
+                <button
+                    type="button"
+                    onClick={() => column.toggleSorting(column.getIsSorted() == "asc")}
+                    className="flex-center"
                 >
                     <p>Condición Corporal</p>
                     <ArrowsIcon direction={column.getIsSorted()} />
@@ -97,14 +147,15 @@ export const columnsCattle: ColumnDef<CattleProps>[] = [
         },
         accessorKey: "bodyCondition",
         cell: ({ row }) => {
-            // check if the cattle is death
-            if (row.getValue('state') == 'death')
-                return <ChipBodyCondition type='death' />
-
-            const bodyMeasure = Number(row.getValue("bodyCondition"))
-
-            const bodyCondition = bodyMeasure == 0 ? undefined : bodyMeasure > 21 ? 'fat' : bodyMeasure > 10 ? 'ideal' : "skinny"
-            return <ChipBodyCondition type={bodyCondition} />
+            return (
+                <div className="h-8">
+                    {row.getValue('state') == 'death' ?
+                        <div><p className='chip chip_red'>Muerta</p></div>
+                        :
+                        <ChipBodyCondition measure={Number(row.original.bodyCondition)} />
+                    }
+                </div>
+            )
         }
     },
     {
@@ -113,7 +164,31 @@ export const columnsCattle: ColumnDef<CattleProps>[] = [
                 <button
                     type="button"
                     onClick={() => column.toggleSorting(column.getIsSorted() == "asc")}
-                    className="flex-center gap-1"
+                    className="flex-center"
+                >
+                    <p>Última medicion</p>
+                    <ArrowsIcon direction={column.getIsSorted()} />
+                </button>
+            );
+        },
+
+        accessorKey: "bodyConditionDate",
+        cell: ({ row }) => {
+            const bodyConditionDate = row.getValue("bodyConditionDate");
+            if (!bodyConditionDate)
+                return <p>-</p>;
+            const formatted = new Date(bodyConditionDate as string).toLocaleDateString("es-AR", { day: 'numeric', month: 'long', year: 'numeric' });
+            return <p>{formatted}</p>;
+        },
+
+    },
+    {
+        header: ({ column }) => {
+            return (
+                <button
+                    type="button"
+                    onClick={() => column.toggleSorting(column.getIsSorted() == "asc")}
+                    className="flex-center"
                 >
                     <p>Ciclos</p>
                     <ArrowsIcon direction={column.getIsSorted()} />
@@ -126,29 +201,6 @@ export const columnsCattle: ColumnDef<CattleProps>[] = [
         },
     },
 
-    {
-        header: ({ column }) => {
-            return (
-                <button
-                    type="button"
-                    onClick={() => column.toggleSorting(column.getIsSorted() == "asc")}
-                    className="flex-center gap-1"
-                >
-                    <p>Fecha de Creación</p>
-                    <ArrowsIcon direction={column.getIsSorted()} />
-                </button>
-            );
-        },
-
-        accessorKey: "createdAt",
-        cell: ({ row }) => {
-            const created_at = row.getValue("createdAt");
-            const formatted = new Date(created_at as string).toLocaleDateString("es-MX", { day: 'numeric', month: 'long', year: 'numeric' });
-
-            return <p> {formatted}</p>;
-        },
-    },
-
     // Actions
     {
         header: () => {
@@ -158,7 +210,10 @@ export const columnsCattle: ColumnDef<CattleProps>[] = [
         cell: ({ row }) => {
             return (
                 <div className="flex-end gap-2">
-                    <AddEventButton
+                    <HistoryBtn
+                        cattle={row.original}
+                    />
+                    <AddEventBtn
                         cattle={row.original}
                     />
                     <DeleteCattleBtn

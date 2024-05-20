@@ -18,7 +18,11 @@ export async function createFarm(farm: FarmSchema): Promise<{
   await axios({
    method: "post",
    url: `${process.env.API_URL}/api/ranchi/farm`,
-   data: { ...farm, userId: user.id },
+   data: {
+    ...farm,
+    userId: user.id,
+    bodyRanges: [farm.minRange, farm.maxRange],
+   },
   });
 
   return { data: "Individuo creado correctamente" };

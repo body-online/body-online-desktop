@@ -9,18 +9,29 @@ export async function getAllCattles(): Promise<{
  data?: CattleProps[];
 }> {
  try {
+  const filteredCattles: CattleProps[] = [];
   const farm = await currentFarm();
   if (!farm) return { error: "No hemos encontrado organización" };
 
   const { data } = await axios.get(
    `${process.env.API_URL}/api/ranchi/cattle/${farm}`
   );
+  console.log(`getting ${data?.length} cattles for ${farm}`);
 
-  return {
-   data: data.filter((obj: CattleProps) => obj.createdAt == obj.updatedAt),
-  };
+  data.map((obj: CattleProps) => {
+   const notDeleted = obj.createdAt == obj.updatedAt;
+
+   if (notDeleted) {
+    filteredCattles.push({
+     ...obj,
+     state: obj.state == "" || obj.state == null ? "not_pregnant" : obj.state,
+    });
+   }
+  });
+
+  return { data: filteredCattles };
  } catch (error: any) {
-  // console.log(error);
+  console.log(error);
   return {
    error:
     error?.response?.data?.message ??

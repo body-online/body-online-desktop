@@ -29,6 +29,8 @@ export const {
    token.id = existingUser?.id;
    token.farmId = existingUser?.farmId;
    token.type = existingUser?.type;
+   token.minIdeal = existingUser?.minIdeal;
+   token.maxIdeal = existingUser?.maxIdealId;
 
    return token;
   },

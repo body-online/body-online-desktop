@@ -1,19 +1,15 @@
 import Navbar from '@/components/ui/navbar';
-import React from 'react'
+import { currentUser } from '@/lib/auth';
 
-const LayoutOnboardingPage = ({ children }: { children: React.ReactNode }) => {
+const DashboardLayout = async ({ children }: { children: React.ReactNode }) => {
+    const user = await currentUser();
     return (
-        <div className='min-h-screen w-full overflow-x-hidden flex flex-col items-center justify-between'>
-            <Navbar />
+        <main className='min-h-screen'>
+            {/* Direct Access */}
+            <Navbar user={user} />
             {children}
-            <div className="h-20 w-full bg-white border-t flex items-center">
-                <div className="container">
-                    <p className='text-slate-500 text-xs'>BodyOnline todos los derechos reservados</p>
-                </div>
-            </div>
-        </div>
+        </main>
     )
-
 }
 
-export default LayoutOnboardingPage
+export default DashboardLayout

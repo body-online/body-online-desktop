@@ -64,16 +64,16 @@ export function AddCattleBtn({ data }: { data: { genetics: GeneticProps[]; locat
             <Modal handleClose={handleClose} isOpen={isOpen}>
                 <motion.div
                     onClick={(e) => e.stopPropagation()}
-                    className="w-full max-w-md"
+                    className="w-full sm:w-full"
                     variants={enterModal}
                     initial="hidden"
                     animate="visible"
                     exit="exit"
                 >
                     <Card headerLabel="Crear individuo">
-                        <form className="mt-6 space-y-8" onSubmit={handleSubmit(onSubmit)}>
+                        <form className="mt-6" onSubmit={handleSubmit(onSubmit)}>
 
-                            <div className="space-y-4 w-full max-w-2xl">
+                            <div className="space-y-4">
                                 <div className="flex gap-2 w-full">
                                     <label htmlFor='caravan' className='w-full'>
                                         <p className="input_label">Caravana*</p>
@@ -145,6 +145,7 @@ export function AddCattleBtn({ data }: { data: { genetics: GeneticProps[]; locat
                                     </button>
                                 </div>
                             </div>
+
                         </form>
                     </Card>
                 </motion.div>
