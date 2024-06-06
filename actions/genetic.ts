@@ -22,6 +22,7 @@ export async function createGenetic(genetic: GeneticSchema): Promise<{
    data: {
     name: genetic.name,
     description: genetic.description,
+    bodyRanges: [genetic.minRange, genetic?.maxRange],
     farmId: user.farmId,
    },
   });

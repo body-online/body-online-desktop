@@ -5,10 +5,11 @@ import { motion } from 'framer-motion';
 import { CattleProps, NewEventButtonProps } from '@/lib/types';
 import { EventIcon } from '../ui/icons';
 import Modal from '../ui/modal';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Card from '../ui/card';
 import { enterModal } from '@/lib/constants';
 import EventForm from '../event-form';
+import BlackOutModal from '../ui/blackout-modal';
 
 type NewMeasureButtonProps = {
     cattleId: string;
@@ -16,57 +17,55 @@ type NewMeasureButtonProps = {
     cattleCaravan: string;
 }
 export function TakeMeasure({ cattleId, dueDate, cattleCaravan }: NewMeasureButtonProps) {
-    const todayDate = new Date()
-    const parsedDate = `${todayDate.getFullYear()}-${String(todayDate.getMonth() + 1).padStart(2, '0')}-${String(todayDate.getDate()).padStart(2, '0')}T${String(todayDate.getHours()).padStart(2, '0')}:${String(todayDate.getMinutes()).padStart(2, '0')}`
+    // export function AddEventBtn({ defaultCattle, customButtom }: NewEventButtonProps) {
 
-    // event modal
+    // state of quick event action
     const [isOpen, setIsOpen] = useState(false)
+    // state of select input search of cattle list
+    const [isOpenCattles, setIsOpenCattles] = useState<boolean>(false)
+
     const handleClose = () => {
+        if (isOpenCattles) return setIsOpenCattles(false)
         return setIsOpen(false)
     }
     const handleOpen = () => {
         setIsOpen(true)
     }
 
-    const actualMonth = dueDate.getMonth() <= new Date().getMonth() + 1
+    useEffect(() => {
+        if (isOpenCattles) {
+            console.log('hidden')
+            document.body.style.overflow = "hidden";
+        }
+        else document.body.style.overflow = "auto";
+    }, [isOpenCattles, isOpen]);
+
     return (
         <>
-            <button
-                disabled={!actualMonth}
-                className='rounded_btn cgreen max-w-max focus:outline-none disabled:opacity-50'
-                onClick={handleOpen}
-            >
-                <div className="flex-center gap-1 px-2 py-1">
-                    <EventIcon fill='fill-clime' />
-                    <p>Carga rápida</p>
-                </div>
 
+            <button className="chip cgreen flex-center gap-1" onClick={handleOpen}>
+                <p>Carga rapida</p>
+                <EventIcon fill="fill-clime" />
             </button>
 
-            <Modal handleClose={handleClose} isOpen={isOpen}>
+
+            <BlackOutModal isOpen={isOpen} handleClose={handleClose}>
                 <motion.div
                     onClick={(e) => e.stopPropagation()}
                     variants={enterModal}
                     initial="hidden"
                     animate="visible"
                     exit="exit"
+
                 >
-                    <Card headerLabel={`Cargar medicion para ${cattleCaravan}`}>
-                        <div className="mt-6"></div>
-                        <div className="max-h-[60vh] sm:max-h-max overflow-auto">
-                            <EventForm
-                                cattles={[{
-                                    _id: cattleId, caravan: cattleCaravan, state: 'pregnant'
-                                }]}
-                                defaultValues={{
-                                    cattleId: cattleId,
-                                    eventDate: parsedDate,
-                                    eventType: 'body_measure'
-                                }} />
-                        </div>
-                    </Card>
+                    <EventForm
+                        // defaultCattle={defaultCattle}
+                        isOpenCattles={isOpenCattles}
+                        setIsOpenCattles={setIsOpenCattles}
+                        handleClose={handleClose}
+                    />
                 </motion.div >
-            </Modal >
+            </BlackOutModal>
         </>
     )
 }

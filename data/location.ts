@@ -4,16 +4,33 @@ import axios from "axios";
 import { LocationProps } from "@/lib/types";
 import { currentUser } from "@/lib/auth";
 
-export async function getAllLocations(): Promise<{
+export async function getLocations({
+ name,
+ page,
+ limit,
+}: {
+ name?: string;
+ page?: string;
+ limit?: string;
+}): Promise<{
  error?: string;
- data?: LocationProps[];
+ data?: {
+  locations: LocationProps[];
+  totalPages: number;
+  totalLocations: number;
+ };
 }> {
  try {
   const user = await currentUser();
 
-  const { data } = await axios.get(
-   `${process.env.API_URL}/api/ranchi/location/${user?.farmId}`
-  );
+  if (!user?.farmId) return { error: "No hemos encontrado su organización" };
+  const params = { page, limit, name };
+
+  const { data } = await axios({
+   method: "GET",
+   url: `${process.env.API_URL}/api/ranchi/location/${user.farmId}`,
+   params,
+  });
 
   return { data };
  } catch (error: any) {
@@ -21,7 +38,7 @@ export async function getAllLocations(): Promise<{
   return {
    error:
     error?.response?.data?.message ??
-    "Ha ocurrido un erorr al buscar las ubicaciones.",
+    "Ha ocurrido un error al buscar las ubicaciones.",
   };
  }
 }

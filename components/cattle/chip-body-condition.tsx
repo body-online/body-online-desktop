@@ -1,11 +1,9 @@
 import { useSession } from 'next-auth/react'
 import React from 'react'
 
-const ChipBodyCondition = ({ measure }: { measure?: number }) => {
-    const { data: session } = useSession()
-    if (!session) return <p>Loading</p>
+const ChipBodyCondition = ({ bodyRanges, measure }: { bodyRanges: number[]; measure?: number }) => {
 
-    const bodyCondition = !measure || measure == 0 ? undefined : measure > Number(session?.user?.maxIdeal) ? 'fat' : Number(session?.user?.minIdeal) > 10 ? 'ideal' : "skinny"
+    const bodyCondition = !measure || measure == 0 ? undefined : measure > Number(bodyRanges[1]) ? 'fat' : Number(bodyRanges[0]) > 10 ? 'ideal' : "skinny"
 
     if (bodyCondition == "fat") {
         return (

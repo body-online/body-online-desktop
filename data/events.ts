@@ -1,0 +1,82 @@
+"use server";
+
+import axios from "axios";
+import { EventProps } from "@/lib/types";
+import { currentFarm } from "@/lib/auth";
+
+export async function getEvents({
+ page,
+ limit,
+}: {
+ page?: string;
+ limit?: string;
+}): Promise<{
+ error?: string;
+ data?: {
+  events: EventProps[];
+  totalPages: number;
+  totalEvents: number;
+ };
+}> {
+ try {
+  const farmId = await currentFarm();
+
+  if (!farmId) return { error: "No hemos encontrado su organización" };
+  const params = { page, limit };
+
+  const { data } = await axios.get(
+   `${process.env.API_URL}/api/ranchi/event/farmId/${farmId}`
+  );
+  //  await axios({
+  //  method: "GET",
+  //  url: `${process.env.API_URL}/api/ranchi/event/farm/${farmId}`,
+  //  params: { page: 1, limit: 1 },
+  // });
+  console.log(data);
+
+  return { data };
+ } catch (error: any) {
+  console.log(error);
+  return {
+   error:
+    error?.response?.data?.message ??
+    "Ha ocurrido un error al buscar los eventos de la organización.",
+  };
+ }
+}
+
+// export async function getAllEvents(): Promise<{
+//  error?: string;
+//  data?: EventProps[];
+// }> {
+//  try {
+//   const filteredEvents: EventProps[] = [];
+//   const farm = await currentFarm();
+//   if (!farm) return { error: "No hemos encontrado organización" };
+
+//   const { data } = await axios.get(
+//    `${process.env.API_URL}/api/ranchi/Event/${farm}`
+//   );
+//   // console.log(`getting ${data?.length} Events for ${farm}`);
+
+//   data.map((obj: EventProps) => {
+//    const notDeleted = obj.createdAt == obj.updatedAt;
+
+//    if (notDeleted) {
+//     filteredEvents.push({
+//      ...obj,
+//      state: obj.state == "" || obj.state == null ? "not_pregnant" : obj.state,
+//     });
+//    }
+//   });
+
+//   return { data: filteredEvents };
+//  } catch (error: any) {
+//   console.log(error);
+//   return {
+//    error:
+//     error?.response?.data?.message ??
+//     "Ha ocurrido un erorr al buscar las genéticas.",
+//   };
+//  }
+// }

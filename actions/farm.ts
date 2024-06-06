@@ -12,16 +12,12 @@ export async function createFarm(farm: FarmSchema): Promise<{
   const user = await currentUser();
   if (!user?.id) return { error: "Sesión inválida" };
 
-  console.log("creating farm...");
-  console.log({ ...farm, userId: user.id });
-
   await axios({
    method: "post",
    url: `${process.env.API_URL}/api/ranchi/farm`,
    data: {
     ...farm,
     userId: user.id,
-    bodyRanges: [farm.minRange, farm.maxRange],
    },
   });
 

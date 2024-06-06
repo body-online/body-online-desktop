@@ -1,5 +1,6 @@
 'use client'
 
+import { useRouter } from 'next/navigation'
 import React, { useState } from 'react'
 import { motion } from 'framer-motion'
 import toast from 'react-hot-toast'
@@ -8,8 +9,7 @@ import Modal from '../ui/modal'
 import { LoadingIcon, TrashIcon } from '../ui/icons'
 import { deleteCattle } from '@/actions/cattle'
 import { enterModal } from '@/lib/constants'
-import { useRouter } from 'next/navigation'
-import Card from '../ui/card'
+import BlackOutModal from '../ui/blackout-modal'
 
 const DeleteCattleBtn = ({ id, name }: { id: string, name: string }) => {
     const [isLoading, setIsLoading] = useState<boolean>(false)
@@ -30,12 +30,11 @@ const DeleteCattleBtn = ({ id, name }: { id: string, name: string }) => {
         setIsLoading(true)
         try {
             await deleteCattle(id);
-
             handleClose()
-            toast.success(`Individuo eliminado exitosamente!`);
-            return router.refresh()
+            toast.success(`Invididuo eliminado`);
+            return router.refresh();
         } catch (error) {
-            toast.error('Ha ocurrido un error al eliminar el individuo')
+            toast.error('Ha ocurrido un error al eliminar la individuo')
         } finally {
             toast.dismiss(toastDeletingCattle)
             setIsLoading(false)
@@ -44,22 +43,31 @@ const DeleteCattleBtn = ({ id, name }: { id: string, name: string }) => {
     return (
         <>
             <button
-                className='rounded_btn'
+                className='group transition-all'
                 onClick={handleOpen}
             >
-                <TrashIcon fill='fill-black' />
+                <TrashIcon fill='fill-slate-500 md:group-hover:fill-slate-900 transition-all' />
             </button>
 
-            <Modal handleClose={handleClose} isOpen={isOpen}>
+            <BlackOutModal isOpen={isOpen} handleClose={handleClose}>
                 <motion.div
                     onClick={(e) => e.stopPropagation()}
-                    className="w-full max-w-xl"
                     variants={enterModal}
                     initial="hidden"
                     animate="visible"
                     exit="exit"
+
                 >
-                    <Card headerLabel='Eliminar individuo'>
+                    <div className='w-[90vw] h-[80vh] overflow-auto pr-1 max-w-md'>
+                        {/* header */}
+                        <div
+                            className="w-full sticky top-0 z-10 mb-3 h-12
+                            bg-gradient-to-b from-white via-white/90 to-transparent"
+                        >
+                            <div className="flex-between gap-3 mb-2">
+                                <h1 className="semititle">Eliminar individuo</h1>
+                            </div>
+                        </div>
                         <div className="mt-6">
                             <p>¿Realmente desea eliminar <b>{name}</b> de su lista de individuos?</p>
                             <p>Esta acción es <b>irreversible</b>.</p>
@@ -67,16 +75,8 @@ const DeleteCattleBtn = ({ id, name }: { id: string, name: string }) => {
 
                         <div className="mt-6 flex-end gap-3">
                             <button
-                                type='button'
-                                onClick={handleClose}
-                                className='btn slate'
-                                disabled={isLoading}
-                            >
-                                <p>Cancelar</p>
-                            </button>
-                            <button
                                 type="button"
-                                className="btn black"
+                                className="btn red"
                                 disabled={isLoading}
                                 onClick={handleDelete}
                             >
@@ -85,14 +85,14 @@ const DeleteCattleBtn = ({ id, name }: { id: string, name: string }) => {
                                 ) :
                                     <>
                                         <p>Eliminar</p>
-                                        {/* <TrashIcon /> */}
+                                        <TrashIcon />
                                     </>
                                 }
                             </button>
                         </div>
-                    </Card>
+                    </div>
                 </motion.div>
-            </Modal>
+            </BlackOutModal>
         </>
     )
 }

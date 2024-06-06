@@ -7,6 +7,8 @@ import EventForm from '../event-form'
 import PendingMeasuresDataTable from '../pending_measures/table'
 import { columnsPendingMeasures } from '../pending_measures/columns'
 import InfoMessage from './info'
+import { SelectOptionProps } from './select-input'
+import Card from './card'
 
 
 type DirectAccessProps = { cattles: CattleProps[]; pendingMeasures?: PendingMeasureProps[]; error?: string; };
@@ -14,29 +16,15 @@ type DirectAccessProps = { cattles: CattleProps[]; pendingMeasures?: PendingMeas
 const DirectAccess = ({ cattles, pendingMeasures, error }: DirectAccessProps) => {
 
     return (
-        <div className="flex flex-col lg:flex-row gap-x-3 gap-y-6">
-            <div className='card w-full h-max'>
-                <div className="px-4 md:px-5 py-6">
+        <div className="flex flex-col lg:flex-row gap-x-3 gap-y-6 mt-6">
 
-                    <div className="flex items-center gap-1 mb-3 max-w-max">
-                        {/* <BoltIcon fill='fill-clime' /> */}
-                        <h2 className='semititle'>
-                            Cargar eventos
-                        </h2>
-                    </div>
-
-                    <EventForm cattles={cattles?.filter((c) => c.state != 'death')} />
-                </div>
-            </div>
+            <Card headerLabel='Crear evento'>
+                <></>
+                {/* <EventForm /> */}
+            </Card>
 
 
-            <div className='card w-full h-max'>
-                <div className="px-4 md:px-5 py-6">
-                    <h2 className='semititle'>
-                        Mediciones pendientes
-                    </h2>
-                </div>
-
+            <Card headerLabel='Mediciones pendientes'>
                 {(pendingMeasures && Array.isArray(pendingMeasures) && !error) ?
                     <PendingMeasuresDataTable
                         pendingMeasures={pendingMeasures}
@@ -48,8 +36,7 @@ const DirectAccess = ({ cattles, pendingMeasures, error }: DirectAccessProps) =>
                         subtitle='Hemos experimentado un contratiempo al obtener su listado de mediciones pendientes.'
                     />
                 }
-
-            </div>
+            </Card>
         </div>
 
     )

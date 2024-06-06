@@ -5,10 +5,22 @@ import { BodyMeasureIcon } from "@/components/ui/icons";
 
 // general constants
 export const navigationItems: Array<NavigationItemProps> = [
- //  {
- //   href: "/",
- //   title: "Home",
- //  },
+ {
+  href: "/",
+  title: "Inicio",
+ },
+ {
+  href: "/individuos",
+  title: "Individuos",
+ },
+ {
+  href: "/ubicaciones",
+  title: "Ubicaciones",
+ },
+ {
+  href: "/geneticas",
+  title: "Genéticas",
+ },
 ];
 export const provinces = [
  { label: "Buenos Aires", value: "Buenos Aires" },

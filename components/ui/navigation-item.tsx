@@ -12,7 +12,7 @@ const NavigationItem = ({ title, href, selected, handleClose }: NavigationItemPr
       <div
         className={`group menu_navigation_item`}
       >
-        <p className={`${selected ? `text-black` : `lg:text-slate-400 lg:group-hover:text-black`} text-sm  transition-all`}>
+        <p className={`${selected ? `text-black` : `lg:text-slate-400 lg:group-hover:text-black`} text-sm transition-all`}>
           {title}
         </p>
       </div>

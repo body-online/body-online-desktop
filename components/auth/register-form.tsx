@@ -98,24 +98,6 @@ const RegisterForm = () => {
                         </button>
                     </div>
 
-                    {/* or... */}
-                    {/* <div className="p-1 relative flex items-center justify-center h-8">
-                        <p className='absolute text-black px-2 bg-white text-center w-8 mx-auto z-10'>O</p>
-                        <div className="border-t border-r-500 absolute top-[18px] w-full -z-5"></div>
-                    </div>
-
-                    <div className="flex flex-col gap-2">
-
-                        <button
-                            className='btn white border w-full'
-                            type='button'
-                            onClick={() => {
-                                signIn('google', { callbackUrl: DEFAULT_LOGIN_REDIRECT })
-                            }}>
-                            <GoogleIcon />
-                        </button>
-                    </div> */}
-
                     {/* register... */}
                     <div className="flex justify-center py-2">
                         <button type='button' className='max-w-max group' onClick={() => router.replace('/auth/login')}>

@@ -81,80 +81,57 @@ export function GeneticsDataTable<TData, TValue>({
     return (
         <div>
             {genetics.length > 0 && (
-                <label className="flex gap-2 items-center px-4 md:px-5 w-full">
-                    <SearchIcon fill="fill-slate-500" />
-                    <input
-                        className={`text-base h-12 border-none bg-transparent focus:outline-none w-full md:w-[200px] placeholder:text-slate-500`}
-                        disabled={!genetics.length}
-                        placeholder="Buscar por nombre..."
-                        value={searchTerm}
-                        onChange={({ target }) => setSearchTerm(target.value)}
-                    />
+                <label className='flex flex-wrap gap-3 mb-3 max-w-sm'>
+                    <div className="flex input gap-3 items-center w-full">
+                        <SearchIcon fill={`${!genetics ? 'fill-slate-300' : 'fill-slate-400'}`} />
+                        <input
+                            className={`text-base h-12 border-none bg-transparent focus:outline-none w-full placeholder:text-slate-400 placeholder:font-normal disabled:opacity-50 md:max-w-sm`}
+                            disabled={!genetics.length}
+                            placeholder="Buscar por nombre..."
+                            value={searchTerm}
+                            onChange={({ target }) => setSearchTerm(target.value)}
+                        />
+                    </div>
                 </label>
             )}
 
-            <ResizablePanel changeIndicator={`${table.getRowModel().rows?.length}`}>
+            <div className='h-[65vh] sm:h-[50vh] overflow-auto'>
                 {table.getRowModel().rows?.length ? (
-                    <>
-                        <div className='realtive max-h-96 overflow-auto'>
-                            <Table key={`table-${table.getRowModel().rows?.length ?? 0}`}>
-                                <TableHeader className='sticky top-0 w-full z-20'>
-                                    {table.getHeaderGroups().map((headerGroup) => {
-                                        return (
-                                            <TableRow key={headerGroup.id}>
-                                                {headerGroup.headers.map((header) => {
-                                                    return (
-                                                        <TableHead key={header.id} className='group'>
-                                                            {flexRender(
-                                                                header.column.columnDef.header,
-                                                                header.getContext(),
-                                                            )}
-                                                        </TableHead>
-                                                    );
-                                                })}
-                                            </TableRow>
-                                        );
-                                    })}
-                                </TableHeader>
-
-                                <TableBody>
-                                    {table.getRowModel().rows.map((row) => (
-                                        <TableRow key={row.id}>
-                                            {row.getVisibleCells().map((cell) => (
-                                                <TableCell key={cell.id}>
+                    <Table>
+                        <TableHeader className='sticky top-0'>
+                            {table.getHeaderGroups().map((headerGroup) => {
+                                return (
+                                    <TableRow key={headerGroup.id} className='w-min'>
+                                        {headerGroup.headers.map((header) => {
+                                            return (
+                                                <TableHead key={header.id} className='w-min'>
                                                     {flexRender(
-                                                        cell.column.columnDef.cell,
-                                                        cell.getContext(),
+                                                        header.column.columnDef.header,
+                                                        header.getContext(),
                                                     )}
-                                                </TableCell>
-                                            ))}
-                                        </TableRow>
-                                    ))}
-                                </TableBody>
-                            </Table>
-                        </div>
+                                                </TableHead>
+                                            );
+                                        })}
+                                    </TableRow>
+                                );
+                            })}
+                        </TableHeader>
 
-                        <div className="flex-end w-full gap-2 mt-4 pb-5 px-5">
-                            <button
-                                className="table_btn_pag"
-                                disabled={!table.getCanPreviousPage()}
-                                onClick={() => {
-                                    table.previousPage();
-                                }}
-                            >
-                                <ArrowIcon direction="left" />
-                            </button>
-                            <button
-                                className="table_btn_pag"
-                                disabled={!table.getCanNextPage()}
-                                onClick={() => {
-                                    table.nextPage();
-                                }}
-                            >
-                                <ArrowIcon direction="right" />
-                            </button>
-                        </div>
-                    </>
+                        <TableBody>
+                            {table.getRowModel().rows.map((row) => (
+                                <TableRow key={row.id}>
+                                    {row.getVisibleCells().map((cell) => (
+                                        <TableCell key={cell.id}>
+                                            {flexRender(
+                                                cell.column.columnDef.cell,
+                                                cell.getContext(),
+                                            )}
+                                        </TableCell>
+                                    ))}
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
                 ) : (
                     <div className="px-4 md:px-5 py-6">
                         <InfoMessage
@@ -164,7 +141,7 @@ export function GeneticsDataTable<TData, TValue>({
                         />
                     </div>
                 )}
-            </ResizablePanel>
+            </div>
 
         </div >
     );

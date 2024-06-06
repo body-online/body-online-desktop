@@ -13,15 +13,17 @@ import { useState } from 'react';
 import Card from '../ui/card';
 import { enterModal } from '@/lib/constants';
 import { useRouter } from 'next/navigation';
+import BlackOutModal from '../ui/blackout-modal';
 
-export function AddGeneticBtn() {
+export function AddGeneticBtn({ chipMode }: { chipMode?: boolean }) {
     const router = useRouter()
     const [isOpen, setIsOpen] = useState(false)
     const {
         register,
         handleSubmit,
+        setError,
         formState: { errors, isSubmitting },
-        reset,
+        reset
     } = useForm<GeneticSchema>({
         resolver: zodResolver(geneticSchema)
     })
@@ -40,6 +42,11 @@ export function AddGeneticBtn() {
     const onSubmit: SubmitHandler<GeneticSchema> = async (data: GeneticSchema) => {
         const toastSavingGenetic = toast.loading('Creando genética...');
         try {
+            if (data?.maxRange < data?.minRange) return setError('minRange', {
+                type: "manual",
+                message: "El mínimo debe ser menor que el máximo",
+            })
+
             const { error, data: createdGenetic } = await createGenetic(data);
             if (error) return toast.error(error)
             toast.success(`Genética creada exitosamente!`);
@@ -55,23 +62,34 @@ export function AddGeneticBtn() {
 
     return (
         <>
-            <button className="rounded_btn cgreen" onClick={handleOpen}>
+            <button className={`${chipMode ? 'chip cgreen flex-center gap-1' : 'btn cgreen'}`} onClick={handleOpen}>
+                <p>Crear {chipMode ? '' : 'nueva'} genética</p>
                 <MiniAddIcon fill="fill-clime" />
             </button>
 
-            <Modal handleClose={handleClose} isOpen={isOpen}>
+            <BlackOutModal isOpen={isOpen} handleClose={handleClose}>
                 <motion.div
                     onClick={(e) => e.stopPropagation()}
-                    className="w-full sm:w-full sm:min-w-96"
                     variants={enterModal}
                     initial="hidden"
                     animate="visible"
                     exit="exit"
+
                 >
-                    <Card headerLabel='Crear genética'>
+                    <div className='w-[90vw] h-[80vh] overflow-auto pr-1 max-w-md'>
+                        {/* header */}
+                        <div
+                            className="w-full sticky top-0 z-10 mb-3
+                            bg-gradient-to-b from-white via-white/80 to-transparent"
+                        >
+                            <div className="flex-between gap-3 mb-2">
+                                <h1 className="semititle">Crear genética</h1>
+                            </div>
+                        </div>
+
                         <form className='mt-6' onSubmit={handleSubmit(onSubmit)}>
 
-                            <div className='space-y-4 w-full'>
+                            <div className='w-full'>
                                 <label htmlFor='name'>
                                     <p className="input_label">Nombre*</p>
                                     <input
@@ -87,6 +105,54 @@ export function AddGeneticBtn() {
                                     </div>
                                 </label>
 
+                                <div className='my-4'>
+                                    <p className='text-base font-medium leading-8'>
+                                        Define el rango donde el individuo que <span className='text-green-500'>pertenezca a esta genética</span> tenga una condicion corporal <span className='text-green-500'>ideal</span></p>
+                                    <div className='bg-green-200 rounded-xl p-3 flex gap-3 mt-2'>
+
+                                        <div className="w-full">
+                                            <label htmlFor='minRange'>
+                                                <p className='text-green-500 font-medium'>
+                                                    Nro. mínimo
+                                                </p>
+                                                <input
+                                                    {...register("minRange")}
+                                                    name='minRange'
+                                                    type="text"
+                                                    placeholder='ej. 10'
+                                                    disabled={isSubmitting}
+                                                    className={`input ${errors.minRange ? 'border-red-500' : ''}`}
+                                                />
+                                                <div className="input_error">
+                                                    {errors.minRange && (<p>{`${errors.minRange.message}`}</p>)}
+                                                </div>
+                                            </label>
+                                        </div>
+
+                                        <div className="w-full">
+                                            <label htmlFor='maxRange'>
+                                                <p className='text-green-500 font-medium'>
+                                                    Nro. máximo
+                                                </p>
+                                                <input
+                                                    {...register("maxRange")}
+
+                                                    name='maxRange'
+                                                    type="text"
+                                                    placeholder='ej. 15'
+                                                    disabled={isSubmitting}
+                                                    className={`input ${errors.maxRange ? 'border-red-500' : ''}`}
+                                                />
+                                                <div className="input_error">
+                                                    {errors.maxRange && (<p>{`${errors.maxRange.message}`}</p>)}
+                                                </div>
+                                            </label>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+
                                 <label htmlFor='description'>
                                     <p className="input_label">Descripción</p>
                                     <textarea
@@ -100,27 +166,23 @@ export function AddGeneticBtn() {
 
                                 <div className="mt-6 flex-end gap-3">
                                     <button
-                                        type='button'
-                                        onClick={handleClose}
-                                        className='btn slate'
-                                        disabled={isSubmitting}
-                                    >
-                                        <p>Cancelar</p>
-                                    </button>
-                                    <button
                                         type="submit"
-                                        className="btn black"
+                                        className="btn cgreen"
                                         disabled={isSubmitting}
                                     >
-                                        {isSubmitting ? <LoadingIcon /> : <p>Crear</p>}
+                                        {isSubmitting ? <LoadingIcon /> : <>
+                                            <p>Crear genética</p>
+                                            <MiniAddIcon fill='fill-clime' />
+                                        </>}
                                     </button>
                                 </div>
+
                             </div>
 
                         </form >
-                    </Card>
+                    </div>
                 </motion.div>
-            </Modal>
+            </BlackOutModal>
         </>
     )
 }

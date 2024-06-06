@@ -101,38 +101,12 @@ export const InfoIcon = ({ fill }: { fill?: string }) => {
 
 export const LoadingIcon = () => {
     return (
-        <div>
-            <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="1em"
-                height="1em"
-                viewBox="0 0 24 24"
-            >
-                <path
-                    fill="none"
-                    strokeDasharray="15"
-                    strokeDashoffset="15"
-                    strokeLinecap="round"
-                    strokeWidth="3"
-                    className='stroke-slate-100/60'
-                    d="M12 3C16.9706 3 21 7.02944 21 12">
-                    <animate
-                        fill="freeze"
-                        attributeName="stroke-dashoffset"
-                        dur="0.3s"
-                        values="15;0" />
-                    <animateTransform
-                        attributeName="transform"
-                        dur="0.5s"
-                        repeatCount="indefinite"
-                        type="rotate"
-                        values="0 12 12;360 12 12" />
-                </path>
-            </svg>
+        <div className='h-full flex-center'>
+            <svg className='animate-spin' xmlns="http://www.w3.org/2000/svg" width="1.2rem" height="1.2rem" viewBox="0 0 24 24">
+                <path className='fill-slate-500 dark:fill-slate-300' d="M12 4V2A10 10 0 0 0 2 12h2a8 8 0 0 1 8-8" /></svg>
         </div>
     )
 }
-
 export const MiniExpandIcon = ({ fill }: { fill?: string }) => {
     return (
         <div>
@@ -151,13 +125,9 @@ export const MiniExpandIcon = ({ fill }: { fill?: string }) => {
 export const ListIcon = ({ fill }: { fill?: string }) => {
     return (
         <div>
-            <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 16 16"
-                className={`w-5 h-5 ${fill ? fill : `fill-white`}`}>
-                <path d="M3 4.75a1 1 0 1 0 0-2 1 1 0 0 0 0 2ZM6.25 3a.75.75 0 0 0 0 1.5h7a.75.75 0 0 0 0-1.5h-7ZM6.25 7.25a.75.75 0 0 0 0 1.5h7a.75.75 0 0 0 0-1.5h-7ZM6.25 11.5a.75.75 0 0 0 0 1.5h7a.75.75 0 0 0 0-1.5h-7ZM4 12.25a1 1 0 1 1-2 0 1 1 0 0 1 2 0ZM3 9a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z" />
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" className={`w-5 h-5 ${fill ? fill : `fill-white`}`}>
+                <path fillRule="evenodd" d="M6 4.75A.75.75 0 0 1 6.75 4h10.5a.75.75 0 0 1 0 1.5H6.75A.75.75 0 0 1 6 4.75ZM6 10a.75.75 0 0 1 .75-.75h10.5a.75.75 0 0 1 0 1.5H6.75A.75.75 0 0 1 6 10Zm0 5.25a.75.75 0 0 1 .75-.75h10.5a.75.75 0 0 1 0 1.5H6.75a.75.75 0 0 1-.75-.75ZM1.99 4.75a1 1 0 0 1 1-1H3a1 1 0 0 1 1 1v.01a1 1 0 0 1-1 1h-.01a1 1 0 0 1-1-1v-.01ZM1.99 15.25a1 1 0 0 1 1-1H3a1 1 0 0 1 1 1v.01a1 1 0 0 1-1 1h-.01a1 1 0 0 1-1-1v-.01ZM1.99 10a1 1 0 0 1 1-1H3a1 1 0 0 1 1 1v.01a1 1 0 0 1-1 1h-.01a1 1 0 0 1-1-1V10Z" clipRule="evenodd" />
             </svg>
-
         </div>
     )
 }
@@ -175,14 +145,15 @@ export const MiniAddIcon = ({ fill }: { fill?: string }) => {
     )
 }
 
-export const ArrowsIcon = ({ direction }: { direction: "asc" | "desc" | false }) => {
-    if (direction === false) return (
+export const ArrowsIcon = ({ direction, stroke }: { stroke?: string; direction: string }) => {
+
+    return (
         <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
             viewBox="0 0 24 24"
             strokeWidth={1.5}
-            className="group-hover:opacity-100 opacity-0 stroke-slate-500 w-4 h-4 transition-all"
+            className={`${stroke ?? `stroke-slate-500`} ${direction ?? ``} w-4 h-4 transition-all`}
         >
             <path
                 strokeLinecap="round"
@@ -190,42 +161,9 @@ export const ArrowsIcon = ({ direction }: { direction: "asc" | "desc" | false })
                 d="M12 4.5v15m0 0l6.75-6.75M12 19.5l-6.75-6.75"
             />
         </svg>
-    );
-    if (direction === "asc")
-        return (
-            <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="currentColor"
-                className="fill-slate-500 w-4 h-4"
-            >
-                <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M12 19.5v-15m0 0l-6.75 6.75M12 4.5l6.75 6.75"
-                />
-            </svg>
-        );
-    if (direction === "desc")
-        return (
-            <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="currentColor"
-                className="fill-slate-500 w-4 h-4"
-            >
-                <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M12 4.5v15m0 0l6.75-6.75M12 19.5l-6.75-6.75"
-                />
-            </svg>
-        );
+    )
 };
+
 
 export const SearchIcon = ({ fill }: { fill?: string }) => {
     return (
@@ -255,7 +193,7 @@ export const EventIcon = ({ fill }: { fill?: string }) => {
     return (
         <div>
             <svg
-                className={`w-5 h-5 ${fill ?? `fill-black`}`}
+                className={`w-4 h-4 ${fill ?? `fill-black`}`}
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 32 32">
                 <path d="M28 6a2 2 0 0 0-2-2h-4V2h-2v2h-8V2h-2v2H6a2 2 0 0 0-2 2v20a2 2 0 0 0 2 2h4v-2H6V6h4v2h2V6h8v2h2V6h4v6h2Z" /><path d="m21 15l2.549 4.938l5.451.791l-4 3.844L26 30l-5-2.562L16 30l1-5.427l-4-3.844l5.6-.791z" /></svg>
@@ -347,6 +285,31 @@ export const SaveIcon = ({ fill }: { fill?: string }) => {
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" className={`w-5 h-5 ${fill ?? `fill-white`}`}>
                 <path fillRule="evenodd" d="M10 1c3.866 0 7 1.79 7 4s-3.134 4-7 4-7-1.79-7-4 3.134-4 7-4Zm5.694 8.13c.464-.264.91-.583 1.306-.952V10c0 2.21-3.134 4-7 4s-7-1.79-7-4V8.178c.396.37.842.688 1.306.953C5.838 10.006 7.854 10.5 10 10.5s4.162-.494 5.694-1.37ZM3 13.179V15c0 2.21 3.134 4 7 4s7-1.79 7-4v-1.822c-.396.37-.842.688-1.306.953-1.532.875-3.548 1.369-5.694 1.369s-4.162-.494-5.694-1.37A7.009 7.009 0 0 1 3 13.179Z" clipRule="evenodd" />
             </svg>
+
+        </div>
+    )
+}
+export const LogoutIcon = ({ fill }: { fill?: string; }) => {
+    return (
+        <div>
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+                className={`w-5 h-5 ${fill ?? `fill-white`}`}
+            >
+                <path fillRule="evenodd" d="M13.75 7h-3V3.66l1.95 2.1a.75.75 0 1 0 1.1-1.02l-3.25-3.5a.75.75 0 0 0-1.1 0L6.2 4.74a.75.75 0 0 0 1.1 1.02l1.95-2.1V7h-3A2.25 2.25 0 0 0 4 9.25v7.5A2.25 2.25 0 0 0 6.25 19h7.5A2.25 2.25 0 0 0 16 16.75v-7.5A2.25 2.25 0 0 0 13.75 7Zm-3 0h-1.5v5.25a.75.75 0 0 0 1.5 0V7Z" clipRule="evenodd" />
+            </svg>
+
+        </div>
+    )
+}
+export const FarmIcon = ({ fill }: { fill?: string; }) => {
+    return (
+        <div>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" className={`w-4 h-4 ${fill ?? `fill-white`}`}>
+                <path d="M10.536 3.444a.75.75 0 0 0-.571-1.387L3.5 4.719V3.75a.75.75 0 0 0-1.5 0v1.586l-.535.22A.75.75 0 0 0 2 6.958V12.5h-.25a.75.75 0 0 0 0 1.5H4a1 1 0 0 0 1-1v-1a1 1 0 1 1 2 0v1a1 1 0 0 0 1 1h1a1 1 0 0 0 1-1V3.664l.536-.22ZM11.829 5.802a.75.75 0 0 0-.333.623V8.5c0 .027.001.053.004.08V13a1 1 0 0 0 1 1h.5a1 1 0 0 0 1-1V7.957a.75.75 0 0 0 .535-1.4l-2.004-.826a.75.75 0 0 0-.703.07Z" />
+            </svg>
+
 
         </div>
     )

@@ -15,10 +15,9 @@ export const {
  callbacks: {
   async session({ token, session }) {
    if (token?.farmId) session.user.farmId = token.farmId;
+   if (token?.name) session.user.name = token.name;
    if (token?.type) session.user.type = token.type;
    if (token?.id) session.user.id = token.id;
-   if (token?.minIdeal) session.user.minIdeal = token.minIdeal;
-   if (token?.maxIdeal) session.user.maxIdeal = token.maxIdeal;
 
    return session;
   },
@@ -31,8 +30,7 @@ export const {
    token.id = existingUser?.id;
    token.farmId = existingUser?.farmId;
    token.type = existingUser?.type;
-   token.minIdeal = existingUser?.minIdeal;
-   token.maxIdeal = existingUser?.maxIdeal;
+   token.name = existingUser?.name;
 
    return token;
   },

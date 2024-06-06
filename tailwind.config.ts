@@ -12,6 +12,7 @@ const config: Config = {
     clime: "#D7FB05",
     caqua: "#189877",
     cgreen: "#093631",
+    clightgreen: "#0d4d4675",
    },
    fontFamily: {
     satoshi: ["var(--font-satoshi)"],

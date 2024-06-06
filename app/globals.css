@@ -10,14 +10,24 @@
 ::selection {
   background:rgba(170, 198, 255, 0.377);
 }
-
+@layer utilities {
+  /* Hide scrollbar for Chrome, Safari and Opera */
+  .no-scrollbar::-webkit-scrollbar {
+      display: none;
+  }
+ /* Hide scrollbar for IE, Edge and Firefox */
+  .no-scrollbar {
+      -ms-overflow-style: none;  /* IE and Edge */
+      scrollbar-width: none;  /* Firefox */
+}
+}
 /* Tailwind Styles */
 /* .app {
   @apply flex justify-center items-center flex-col max-w-7xl mx-auto sm:px-16 px-6;
 } */
 
 .body {
-  @apply bg-caqua/10 p-0 w-full h-full overflow-hidden text-sm sm:text-base;
+  @apply bg-slate-100 p-0 w-full h-full overflow-hidden text-sm sm:text-base;
 }
 
 /* Layout */
@@ -53,7 +63,7 @@
 }
 
 .card {
-  @apply rounded-xl bg-white;
+  @apply rounded-xl bg-white border;
 }
 
 .remove_file_btn {
@@ -65,10 +75,10 @@
 }
 
 .btn {
-  @apply h-10 sm:h-12 w-full md:max-w-max flex items-center transition-all flex-center gap-1 md:gap-2 px-2 md:px-4 py-2 md:py-3.5 rounded-lg md:min-w-[100px] disabled:opacity-50 focus:outline-0 focus:ring-[1px] ring-slate-300;
+  @apply h-11 w-full md:max-w-max flex items-center transition-all flex-center gap-1 md:gap-2 px-2 md:px-5 py-2 md:py-3.5 rounded-lg md:min-w-[100px] focus:outline-0 focus:ring-[1px] ring-slate-300;
 }
 .btn > p {
-  @apply  text-xs md:text-sm;
+  @apply  text-sm;
 }
 
 .sm_btn {
@@ -113,7 +123,7 @@
 }
 
 .cgreen {
-  @apply bg-cgreen active:bg-cgreen/80 md:hover:bg-cgreen/80 disabled:opacity-50;
+  @apply bg-cgreen md:hover:bg-clightgreen disabled:bg-clightgreen transition-all;
 }
 .cgreen p {
   @apply text-white font-medium;
@@ -121,6 +131,9 @@
 
 .red {
   @apply bg-red-500 active:bg-red-600 md:hover:bg-red-600;
+}
+.red p {
+  @apply text-white font-medium;
 }
 
 .slate {
@@ -163,25 +176,48 @@
 table {
   @apply w-full min-w-max;
 }
-table > thead {
+table thead {
+  @apply h-12 rounded-xl overflow-hidden bg-white;
+}
+table thead tr th p {
+  @apply px-3 text-start text-sm leading-6 font-semibold text-slate-500;
+}
+table thead tr th button p {
+  @apply px-3 text-start text-sm leading-6 font-semibold text-slate-500;
+}
+table tbody tr {
+  @apply transition-all h-14
+   border-slate-100/10 odd:bg-slate-100;
+}
+table tbody tr td {
+  @apply px-3 py-2 max-w-sm last:rounded-r-lg first:rounded-l-lg;
+}
+table tbody tr td p {
+  @apply text-black leading-5;
+}
+
+/* table {
+  @apply w-full min-w-max;
+}
+table thead {
   @apply h-12 bg-slate-100/90 backdrop-blur-sm to-transparent;
 }
-table > thead > tr > th > p {
+table thead tr th p {
   @apply px-3 text-start text-sm text-slate-500 font-medium;
 }
-table > thead > tr > th > button > p {
+table thead tr th button p {
   @apply px-3 text-start text-sm text-slate-500 font-medium;
 }
-table > tbody > tr {
+table tbody tr {
   @apply transition-all h-16 border-t;
 }
-table > tbody > tr > td {
+table tbody tr td {
   @apply px-3 py-2;
 }
-table > tbody > tr > td, p {
+table tbody tr td p {
   @apply text-black;
-}
-/* table>tbody>tr>td>p {
+} */
+/* tabltbodttp {
   @apply truncate max-w-[250px] text-sm md:text-base;
 } */
 .table_btn_pag {
@@ -225,7 +261,7 @@ table > tbody > tr > td, p {
   @apply text-xl md:text-3xl font-medium text-black tracking-tight;
 }
 .title {
-  @apply text-xl md:text-2xl font-semibold md:font-medium tracking-tight;
+  @apply text-2xl md:text-3xl font-semibold md:font-medium tracking-tight;
 }
 .semititle {
   @apply text-lg md:text-xl font-semibold md:font-medium tracking-tight;
@@ -274,7 +310,7 @@ table > tbody > tr > td, p {
 
 .dropdown {
   @apply rounded-xl bg-white w-full min-w-[260px] border shadow-lg
-  overflow-hidden absolute z-50 top-0 right-0;
+  overflow-hidden absolute z-50;
 }
 .menu_navigation_item {
   @apply px-3 py-3 w-full

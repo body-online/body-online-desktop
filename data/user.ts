@@ -43,7 +43,6 @@ export async function validateUser(
    user: {
     id: existentUser._id,
     email: existentUser.email,
-    farmId: existentUser?.farmId,
     type: existentUser?.type,
     name: existentUser.name,
    },
@@ -62,9 +61,9 @@ export async function getUserByEmail(
    method: "get",
    url: `${process.env.API_URL}/api/ranchi/user/email/${email}`,
   });
-  data.minIdeal = data?.bodyRanges?.[0];
-  data.maxIdeal = data?.bodyRanges?.[1];
+
   data.id = data?._id;
+  data.name = data?.name;
 
   return data;
  } catch (error) {

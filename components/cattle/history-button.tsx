@@ -7,12 +7,11 @@ import axios from 'axios';
 
 import { CattleProps, EventProps } from "@/lib/types";
 import { enterModal } from "@/lib/constants";
-import { EventIcon, ListIcon, SaveIcon } from '../ui/icons';
-import Modal from '../ui/modal';
-import Card from '../ui/card';
 import ResizablePanel from '../ui/resizable-panel';
 import InfoMessage from '../ui/info';
 import EventItem from './event-item';
+import BlackOutModal from '../ui/blackout-modal';
+import { ListIcon } from '../ui/icons';
 
 export function HistoryBtn({ cattle }: { cattle: CattleProps; }) {
     const [eventsHistory, setEventsHistory] = useState<EventProps[]>([])
@@ -54,25 +53,32 @@ export function HistoryBtn({ cattle }: { cattle: CattleProps; }) {
 
     return (
         <>
-            <button className="rounded_btn cgreen" onClick={handleOpen}>
+            <button className="chip cgreen flex-center gap-1" onClick={handleOpen}>
+                <p>Historial de Eventos</p>
                 <ListIcon fill="fill-clime" />
             </button>
 
-            <Modal handleClose={handleClose} isOpen={isOpen}>
+            <BlackOutModal isOpen={isOpen} handleClose={handleClose}>
                 <motion.div
                     onClick={(e) => e.stopPropagation()}
-                    className="w-[90vw] sm:min-w-full sm:max-w-sm"
                     variants={enterModal}
                     initial="hidden"
                     animate="visible"
                     exit="exit"
+
                 >
-                    <div className='card overflow-hidden relative'>
-                        <div className="py-4 md:py-6 px-3 md:px-5">
-                            <h3 className='font-bold text-xl sm:text-2xl tracking-tight'>Historial</h3>
+                    <div className='w-[90vw] h-[80vh] overflow-auto pr-1 max-w-md'>
+                        {/* header */}
+                        <div
+                            className="w-full sticky top-0 z-10 mb-3 h-12
+                            bg-gradient-to-b from-white via-white/90 to-transparent"
+                        >
+                            <div className="flex-between gap-3 mb-2">
+                                <h1 className="semititle">Historial de caravana {cattle?.caravan}</h1>
+                            </div>
                         </div>
 
-                        <div className="max-h-[60vh] sm:max-h-[65vh] pr-2 overflow-y-auto relative pb-4 md:pb-6 px-3 md:px-5">
+                        <div className="w-full">
                             <ResizablePanel>
                                 {isLoading ?
                                     <LoadingHistorySkeleton /> :
@@ -98,7 +104,7 @@ export function HistoryBtn({ cattle }: { cattle: CattleProps; }) {
                                             <InfoMessage
                                                 type='censored'
                                                 title='No hemos encontrado eventos'
-                                                subtitle='Este individuo no posee eventos registrados'
+                                                subtitle={`El individuo ${cattle.caravan} no posee eventos registrados`}
                                             />
                                 }
                             </ResizablePanel>
@@ -106,7 +112,7 @@ export function HistoryBtn({ cattle }: { cattle: CattleProps; }) {
 
                     </div>
                 </motion.div >
-            </Modal >
+            </BlackOutModal >
         </>
     );
 }
@@ -115,7 +121,15 @@ export default HistoryBtn;
 
 const LoadingHistorySkeleton = () => {
     return (
-        <div className="grid gap-9 h-min max-h-[40vh] animate-pulse">
+        <div className="grid gap-9 h-full animate-pulse">
+            <div className="w-full space-y-2">
+                <div className="w-32 h-6 rounded-full bg-slate-100"></div>
+                <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-full bg-slate-100"></div>
+                    <div className="w-12 h-8 rounded-full bg-slate-100"></div>
+                    <div className="w-32 h-10 rounded-full bg-slate-100"></div>
+                </div>
+            </div>
             <div className="w-full space-y-2">
                 <div className="w-32 h-6 rounded-full bg-slate-100"></div>
                 <div className="flex items-center gap-3">

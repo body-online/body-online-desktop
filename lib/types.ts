@@ -32,6 +32,7 @@ export interface CattleProps extends CattleSchema {
  state: string;
  stateDate?: string;
  bodyCondition: string;
+ bodyRanges: number[];
  bodyConditionDate?: string;
  updatedAt: string;
  deletedAt: string;
@@ -42,19 +43,28 @@ export const geneticSchema = z.object({
  name: z
   .string({ required_error: "Genética requerida!" })
   .refine((value) => value != "", "Genética requerida!"),
+ minRange: z.string().refine((val) => !Number.isNaN(parseInt(val, 10)), {
+  message: "El campo debe ser numérico",
+ }),
+ maxRange: z.string().refine((val) => !Number.isNaN(parseInt(val, 10)), {
+  message: "El campo debe ser numérico",
+ }),
  description: z.string().optional(),
 });
 export type GeneticSchema = z.infer<typeof geneticSchema>;
-export interface GeneticProps extends GeneticSchema {
+export interface GeneticProps {
  _id: string;
+ name: string;
+ description: string;
+ bodyRanges: string[];
  createdAt: string;
 }
 
 // location
 export const locationSchema = z.object({
  name: z
-  .string({ required_error: "Genética requerida!" })
-  .refine((value) => value != "", "Genética requerida!"),
+  .string({ required_error: "Ubicación requerida!" })
+  .refine((value) => value != "", "Ubicación requerida!"),
  description: z.string().optional(),
 });
 export type LocationSchema = z.infer<typeof locationSchema>;
@@ -86,7 +96,7 @@ export interface EventProps extends EventSchema {
  _id: string;
 }
 export type NewEventButtonProps = {
- cattle: CattleProps;
+ defaultCattle?: CattleProps;
  customButtom?: React.ReactNode;
 };
 
@@ -94,10 +104,12 @@ export type NewEventButtonProps = {
 export type PendingMeasureProps = {
  _id: string;
  expiresAt: string;
- cattleId: { _id: string; caravan: string };
+ cattleId: string;
+ caravan: string;
  eventId: string;
  farmId: string;
  month: 1;
+ isExpired: boolean;
  createdAt: string;
  updatedAt: string;
 };
@@ -114,12 +126,6 @@ export const farmSchema = z.object({
   .string({ required_error: "Ciudad requerida!" })
   .refine((value) => value != "", "Ciudad requerida!"),
  cattleAmount: z.string().refine((val) => !Number.isNaN(parseInt(val, 10)), {
-  message: "El campo debe ser numérico",
- }),
- minRange: z.string().refine((val) => !Number.isNaN(parseInt(val, 10)), {
-  message: "El campo debe ser numérico",
- }),
- maxRange: z.string().refine((val) => !Number.isNaN(parseInt(val, 10)), {
   message: "El campo debe ser numérico",
  }),
 });

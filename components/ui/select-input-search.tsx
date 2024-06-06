@@ -3,19 +3,6 @@ import Select, { Props } from 'react-select';
 import React from 'react'
 import { SelectInputSearchProps } from '@/lib/types';
 
-// (
-// {
-//   label,
-//   options,
-//   handleChange,
-//   defaultValue,
-//   value,
-//   placeholder,
-//   error,
-//   disabled,
-//   loading,
-// }: SelectInputSearchProps
-// )
 const SelectInputSearch = ({
     options,
     label,
@@ -43,7 +30,7 @@ const SelectInputSearch = ({
                     // multiValue: () => "bg-gray-100 rounded items-center py-0.5 pl-2 pr-1 gap-1.5",
                     // multiValueLabel: () => "leading-6 py-0.5",
                     // multiValueRemove: () => "border border-gray-200 bg-white hover:bg-red-50 hover:text-red-800 text-gray-500 hover:border-red-300 rounded-md",
-                    indicatorsContainer: () => "mr-3",
+                    indicatorsContainer: () => "",
                     // clearIndicator: () => "text-gray-500 p-1 rounded-md hover:bg-red-50 hover:text-red-800",
                     // indicatorSeparator: () => "bg-gray-300",
                     // dropdownIndicator: () => "rounded flex-center hover:bg-slate-100 h-full",

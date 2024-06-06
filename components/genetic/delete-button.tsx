@@ -1,15 +1,16 @@
 'use client'
 
+import { useRouter } from 'next/navigation'
 import React, { useState } from 'react'
 import { motion } from 'framer-motion'
 import toast from 'react-hot-toast'
 import Modal from '../ui/modal'
 
-import { deleteGenetic } from '@/actions/genetic'
 import { LoadingIcon, TrashIcon } from '../ui/icons'
+import { deleteGenetic } from '@/actions/genetic'
 import { enterModal } from '@/lib/constants'
-import { useRouter } from 'next/navigation'
 import Card from '../ui/card'
+import BlackOutModal from '../ui/blackout-modal'
 
 const DeleteGeneticBtn = ({ id, name }: { id: string, name: string }) => {
     const [isLoading, setIsLoading] = useState<boolean>(false)
@@ -29,11 +30,11 @@ const DeleteGeneticBtn = ({ id, name }: { id: string, name: string }) => {
         const toastDeletingGenetic = toast.loading('Eliminando...');
         setIsLoading(true)
         try {
-            const { error, data: createdGenetic } = await deleteGenetic(id);
+            const { error } = await deleteGenetic(id);
             if (error) return toast.error(error)
             handleClose()
-            router.refresh()
-            toast.success(`Genética eliminada exitosamente!`);
+            toast.success(`Genética eliminada`);
+            return router.refresh();
         } catch (error) {
             toast.error('Ha ocurrido un error al eliminar la genética')
         } finally {
@@ -44,22 +45,31 @@ const DeleteGeneticBtn = ({ id, name }: { id: string, name: string }) => {
     return (
         <>
             <button
-                className='rounded_btn'
+                className='group transition-all'
                 onClick={handleOpen}
             >
-                <TrashIcon fill='fill-black' />
+                <TrashIcon fill='fill-slate-500 md:group-hover:fill-slate-900 transition-all' />
             </button>
 
-            <Modal handleClose={handleClose} isOpen={isOpen}>
+            <BlackOutModal isOpen={isOpen} handleClose={handleClose}>
                 <motion.div
                     onClick={(e) => e.stopPropagation()}
-                    className="w-full max-w-xl"
                     variants={enterModal}
                     initial="hidden"
                     animate="visible"
                     exit="exit"
+
                 >
-                    <Card headerLabel='Eliminar genética'>
+                    <div className='w-[90vw] h-[80vh] overflow-auto pr-1 max-w-md'>
+                        {/* header */}
+                        <div
+                            className="w-full sticky top-0 z-10 mb-3
+                            bg-gradient-to-b from-white via-white/80 to-transparent"
+                        >
+                            <div className="flex-between gap-3 mb-2">
+                                <h1 className="semititle">Eliminar genética</h1>
+                            </div>
+                        </div>
                         <div className="mt-6">
                             <p>¿Realmente desea eliminar <b>{name}</b> de su lista de genéticas?</p>
                             <p>Esta acción es <b>irreversible</b>.</p>
@@ -67,16 +77,8 @@ const DeleteGeneticBtn = ({ id, name }: { id: string, name: string }) => {
 
                         <div className="mt-6 flex-end gap-3">
                             <button
-                                type='button'
-                                onClick={handleClose}
-                                className='btn slate'
-                                disabled={isLoading}
-                            >
-                                <p>Cancelar</p>
-                            </button>
-                            <button
                                 type="button"
-                                className="btn black"
+                                className="btn red"
                                 disabled={isLoading}
                                 onClick={handleDelete}
                             >
@@ -85,36 +87,16 @@ const DeleteGeneticBtn = ({ id, name }: { id: string, name: string }) => {
                                 ) :
                                     <>
                                         <p>Eliminar</p>
-                                        {/* <TrashIcon /> */}
+                                        <TrashIcon />
                                     </>
                                 }
                             </button>
                         </div>
-                    </Card>
+                    </div>
                 </motion.div>
-            </Modal>
+            </BlackOutModal>
         </>
     )
 }
 
 export default DeleteGeneticBtn
-
-const Icon = () => {
-    return (
-        <div>
-            <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-                className="w-5 h-5"
-            >
-                <path
-                    fillRule="evenodd"
-                    d="M8.75 1A2.75 2.75 0 0 0 6 3.75v.443c-.795.077-1.584.176-2.365.298a.75.75 0 1 0 .23 1.482l.149-.022.841 10.518A2.75 2.75 0 0 0 7.596 19h4.807a2.75 2.75 0 0 0 2.742-2.53l.841-10.52.149.023a.75.75 0 0 0 .23-1.482A41.03 41.03 0 0 0 14 4.193V3.75A2.75 2.75 0 0 0 11.25 1h-2.5ZM10 4c.84 0 1.673.025 2.5.075V3.75c0-.69-.56-1.25-1.25-1.25h-2.5c-.69 0-1.25.56-1.25 1.25v.325C8.327 4.025 9.16 4 10 4ZM8.58 7.72a.75.75 0 0 0-1.5.06l.3 7.5a.75.75 0 1 0 1.5-.06l-.3-7.5Zm4.34.06a.75.75 0 1 0-1.5-.06l-.3 7.5a.75.75 0 1 0 1.5.06l.3-7.5Z"
-                    clipRule="evenodd"
-                />
-            </svg>
-        </div>
-
-    )
-}

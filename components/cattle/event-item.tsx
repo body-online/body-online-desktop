@@ -1,7 +1,6 @@
-import { EventProps } from '@/lib/types';
 import { BodyMeasureIcon, CattleBirthIcon, DeathIcon, NotPregnantIcon, PregnantIcon } from '../ui/icons';
 import ChipBodyCondition from './chip-body-condition';
-import { parseDate } from '@/lib/utils';
+import { EventProps } from '@/lib/types';
 
 export default function EventItem({ event, prevEventDate }: { event: EventProps; prevEventDate?: Date }) {
     const lastEventDate = prevEventDate ? prevEventDate : undefined
@@ -27,13 +26,14 @@ export default function EventItem({ event, prevEventDate }: { event: EventProps;
 
                 {/* right */}
                 <div className='w-full h-max'>
-                    <div className="flex items-center gap-2 pb-6">
+                    <div className="flex items-center gap-2 pb-8">
                         {/* event detail */}
                         <div className='w-full'>
                             <div className="flex items-start w-max gap-1">
                                 <div className="min-w-[80px]">
                                     {event?.measure ?
-                                        <ChipBodyCondition measure={Number(event.measure)} /> : null
+                                        <p className='font-semibold'>Sujeto a update</p> : null
+                                        //  <ChipBodyCondition bodyRanges={event.measure} measure={Number(event.measure)} /> : null
                                     }
                                     {event?.eventType == 'cattle_birth' ?
                                         <p className='chip chip_rose'>
@@ -53,7 +53,7 @@ export default function EventItem({ event, prevEventDate }: { event: EventProps;
                                 </div>
 
                                 <div>
-                                    <p className='font-medium leading-5'>
+                                    <p className='text-lg text-black leading-5'>
                                         {
                                             event.eventType == 'pregnant' ? 'Servicio' :
                                                 event.eventType == 'not_pregnant' ? 'No preñez' :
@@ -65,7 +65,7 @@ export default function EventItem({ event, prevEventDate }: { event: EventProps;
 
                                     <div className="flex gap-1 items-center">
                                         <ClockMiniIcon />
-                                        <p className="text-sm text-slate-500">
+                                        <p className="text-sm font-medium text-black">
                                             {String(new Date(event.eventDate)?.getHours()).padStart(2, '0')}:
                                             {String(new Date(event.eventDate)?.getMinutes()).padStart(2, '0')}
                                         </p>
@@ -139,7 +139,7 @@ const EventTypeIcon = ({ event }: { event: EventProps }) => {
 const ClockMiniIcon = () => {
     return (
         <div>
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" className="fill-slate-500 w-4 h-4">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" className="fill-slate-500 w-3.5 h-3.5">
                 <path fillRule="evenodd" d="M1 8a7 7 0 1 1 14 0A7 7 0 0 1 1 8Zm7.75-4.25a.75.75 0 0 0-1.5 0V8c0 .414.336.75.75.75h3.25a.75.75 0 0 0 0-1.5h-2.5v-3.5Z" clipRule="evenodd" />
             </svg>
 

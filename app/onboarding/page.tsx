@@ -6,7 +6,6 @@ import { redirect } from 'next/navigation';
 
 const OnboardingPage = async () => {
     const farm = await currentFarm()
-    const user = await currentUser()
 
     if (farm) {
         return redirect('/')
@@ -14,9 +13,7 @@ const OnboardingPage = async () => {
 
     return (
         <main>
-            <div className='container pb-12 px-default space-y-8 relative mt-4'>
-                <FarmForm />
-            </div>
+            <FarmForm />
         </main>
     )
 }

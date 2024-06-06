@@ -44,21 +44,14 @@ export function FarmForm() {
     }
 
     return (
-        <div className="mt-8 max-w-lg mx-auto">
-            <Card>
-                <div className='mb-8'>
-                    <p className='text-lg font-bold tracking-tight'>
-                        Completar datos de la organización
-                    </p>
-                    {/* <p>Utilizaremos esta información para poder brindarte la mejor experiencia posible.</p> */}
-                </div>
-
+        <div className="max-w-lg mx-auto">
+            <Card headerLabel=''>
                 <form onSubmit={handleSubmit(onSubmit)}>
 
                     <div className='space-y-4'>
                         <div className="flex items-center gap-1">
                             <ClipIcon />
-                            <p className='text-base font-medium text-slate-500'>Datos principales</p>
+                            <p className='text-base font-medium text-slate-500'>Datos de mi organización</p>
                         </div>
                         <div className="grid grid-cols-6 gap-4 w-full">
                             <div className="col-span-2">
@@ -121,55 +114,10 @@ export function FarmForm() {
                             />
                         </div>
 
-                        <div className="flex items-center gap-1">
+                        {/* <div className="flex items-center gap-1">
                             <MeasureIcon />
                             <p className='text-base font-medium text-slate-500'>Mediciones</p>
-                        </div>
-
-
-
-                        <div className='bg-green-100 rounded-lg  p-3'>
-                            <div className='mb-3'>
-                                <p className=''>Defina su rango de condición corporal ideal</p>
-                            </div>
-
-                            <div className="flex gap-3">
-
-                                <div className="w-full">
-                                    <label htmlFor='minRange'>
-                                        <p className="input_label">Nro. mínimo</p>
-                                        <input
-                                            {...register("minRange")}
-                                            name='minRange'
-                                            type="text"
-                                            placeholder='ej. 10'
-                                            disabled={isSubmitting}
-                                            className={`input ${errors.minRange ? 'border-red-500' : ''}`}
-                                        />
-                                        <div className="input_error">
-                                            {errors.minRange && (<p>{`${errors.minRange.message}`}</p>)}
-                                        </div>
-                                    </label>
-                                </div>
-                                <div className="w-full">
-                                    <label htmlFor='maxRange'>
-                                        <p className="input_label">Nro. máximo</p>
-                                        <input
-                                            {...register("maxRange")}
-                                            name='maxRange'
-                                            type="text"
-                                            placeholder='ej. 15'
-                                            disabled={isSubmitting}
-                                            className={`input ${errors.maxRange ? 'border-red-500' : ''}`}
-                                        />
-                                        <div className="input_error">
-                                            {errors.maxRange && (<p>{`${errors.maxRange.message}`}</p>)}
-                                        </div>
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-
+                        </div> */}
 
                         <div className="mt-6 flex-end">
                             <button

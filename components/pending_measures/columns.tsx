@@ -17,13 +17,13 @@ export const columnsPendingMeasures: ColumnDef<PendingMeasureProps>[] = [
                     className="flex-center"
                 >
                     <p>Caravana</p>
-                    <ArrowsIcon direction={column.getIsSorted()} />
+                    <ArrowsIcon direction={column.getIsSorted() == "asc" ? 'dark:rotate-180' : column.getIsSorted() == "desc" ? '' : 'hidden'} />
                 </button>
             );
         },
-        accessorKey: "cattleId",
+        accessorKey: "caravan",
         cell: ({ row }) => {
-            return <div className='text-base font-medium'>{row.original?.cattleId?.caravan}</div>;
+            return <div className='text-base font-medium'>{row.original?.caravan}</div>;
         },
     },
     {
@@ -35,39 +35,35 @@ export const columnsPendingMeasures: ColumnDef<PendingMeasureProps>[] = [
                     className="flex-center gap-1"
                 >
                     <p>Vencimiento</p>
-                    <ArrowsIcon direction={column.getIsSorted()} />
+                    <ArrowsIcon direction={column.getIsSorted() == "asc" ? 'dark:rotate-180' : column.getIsSorted() == "desc" ? '' : 'hidden'} />
                 </button>
             );
         },
-
         accessorKey: "expiresAt",
         cell: ({ row }) => {
-            const notificationDate = new Date(row.original.expiresAt)
+            const today = new Date()
+            const expiresAt = new Date(row.original.expiresAt)
 
-            const isExpired = notificationDate < new Date()
-            const monthsLeft = notificationDate.getMonth() - new Date().getMonth()
-            const daysLeft = new Date().getDate() - notificationDate.getDate() - 1
+            let daysLeft = Math.round((expiresAt - today) / (1000 * 60 * 60 * 24));
+            const isExpired = row?.original?.isExpired || daysLeft <= 0
+
+            // console.log(`
+            //     `)
+            // console.log('carava')
+            // console.log(row.original.caravan)
+            // console.log('today')
+            // console.log(today)
+            // console.log('expiresAt')
+            // console.log(expiresAt)
+
+            const bgColor = isExpired ? 'bg-red-500' : daysLeft >= 90 ? 'bg-green-200' : daysLeft >= 60 ? 'bg-yellow-200' : 'bg-orange-200'
+            const textColor = isExpired ? 'text-white' : daysLeft >= 90 ? 'text-green-500' : daysLeft >= 60 ? 'text-yellow-500' : 'text-orange-500'
 
             return (
-                <div className={`${isExpired ? `bg-red-500` : `bg-yellow-200`} rounded-full px-3 py-2 max-w-max`}>
-                    <p className={`${isExpired ? `text-white` : `text-yellow-600`}  text-sm font-medium`}>
-                        {isExpired ? // expired 
-                            `hace ` : `en `
-                        }
-                        {monthsLeft * 60 + daysLeft} días
-
-                        {/* {monthsLeft > 0 ? (
-                            monthsLeft == 1 ?
-                                '1 mes y ' :
-                                `${monthsLeft} meses y `
-                        ) : (monthsLeft * -1) == 1 ? `1 mes y` : `${monthsLeft * -1} meses y `
-                        }
-                        {daysLeft === 0 ? 'Hoy' :
-                            daysLeft < 0 ?
-                                `hace ${daysLeft * -1} ${daysLeft * -1 ? ' días' : ' día'}` :
-                                `hace ${daysLeft} ${daysLeft > 1 ? ' días' : ' día'}`
-                        } */}
-                    </p>
+                <div className={`${bgColor} rounded-full px-3 py-2 max-w-max`}>
+                    <p className={`${textColor}  text-sm font-medium`}>
+                        {daysLeft == 0 ? `Hoy` : isExpired ? `hace ` : `en `}
+                        {daysLeft == 0 ? `` : `${(daysLeft < 0 ? daysLeft * -1 : daysLeft)} días`} </p>
                 </div>
             );
         },
@@ -82,7 +78,11 @@ export const columnsPendingMeasures: ColumnDef<PendingMeasureProps>[] = [
         cell: ({ row }) => {
 
             return (
-                <TakeMeasureBtn cattleId={row.original.cattleId._id} cattleCaravan={row.original.cattleId.caravan} dueDate={new Date(row.original.expiresAt)} />
+                <TakeMeasureBtn
+                    cattleId={row.original.cattleId}
+                    cattleCaravan={row.original.caravan}
+                    dueDate={new Date(row.original.expiresAt)}
+                />
             )
         },
     },

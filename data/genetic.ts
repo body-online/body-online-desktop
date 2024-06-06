@@ -2,28 +2,28 @@
 
 import axios from "axios";
 import { GeneticProps } from "@/lib/types";
-import { currentFarm, currentUser } from "@/lib/auth";
+import { currentUser } from "@/lib/auth";
 
-export async function getAllGenetics(): Promise<{
+export async function getGenetics(): Promise<{
  error?: string;
  data?: GeneticProps[];
 }> {
  try {
-  const farm = await currentFarm();
-  if (!farm) return { error: "No hemos encontrado organización" };
+  const user = await currentUser();
 
-  const { data } = await axios.get(
-   `${process.env.API_URL}/api/ranchi/genetic/${farm}`
-  );
-  // console.log(`getting ${data?.length} genetics for ${farm}`);
+  if (!user?.farmId) return { error: "No hemos encontrado su organización" };
 
+  const { data } = await axios({
+   method: "GET",
+   url: `${process.env.API_URL}/api/ranchi/genetic/${user.farmId}`,
+  });
   return { data };
  } catch (error: any) {
   // console.log(error);
   return {
    error:
     error?.response?.data?.message ??
-    "Ha ocurrido un erorr al buscar las genéticas.",
+    "Ha ocurrido un error al buscar las genéticas.",
   };
  }
 }

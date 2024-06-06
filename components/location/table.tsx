@@ -22,29 +22,26 @@ import {
     TableRow,
 } from "@/components/ui/table";
 
+import { LoadingIcon, SearchIcon } from '../ui/icons';
 import React, { useEffect, useState } from "react";
-import InfoMessage from '../ui/info';
-import { SearchIcon } from '../ui/icons';
-import ResizablePanel from '../ui/resizable-panel';
+import { columnsLocation } from './columns';
+import axios from 'axios';
+import toast from 'react-hot-toast';
 
-interface DataTableProps<TData, TValue> {
-    columns: ColumnDef<TData, TValue>[];
-    locations: TData[];
-}
-
-export function LocationsDataTable<TData, TValue>({
-    columns,
-    locations
-}: DataTableProps<TData, TValue>) {
-    const [searchTerm, setSearchTerm] = useState("")
+export function LocationsDataTable({ totalAmount }: { totalAmount?: number }) {
+    const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
     const [sorting, setSorting] = React.useState<SortingState>([]);
-    const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-        [],
-    );
+    const [isLoading, setIsLoading] = useState<boolean>(true)
+    const [searchTerm, setSearchTerm] = useState("")
+
+    const [locations, setLocations] = useState([])
+    const [totalPages, setTotalPages] = useState<number>()
+    const [limit, setLimit] = useState<string>('10')
+    const [page, setPage] = useState<number>(1)
 
     const table = useReactTable({
         data: locations,
-        columns,
+        columns: columnsLocation,
         getCoreRowModel: getCoreRowModel(),
         getPaginationRowModel: getPaginationRowModel(),
         getSortedRowModel: getSortedRowModel(),
@@ -55,6 +52,11 @@ export function LocationsDataTable<TData, TValue>({
         // onColumnVisibilityChange: setColumnVisibility,
         // onRowSelectionChange: setRowSelection,
 
+        initialState: {
+            pagination: {
+                pageSize: 50, //custom default page size
+            },
+        },
         state: {
             sorting,
             columnFilters,
@@ -63,118 +65,144 @@ export function LocationsDataTable<TData, TValue>({
         },
     });
 
-    // debounce input filter
-    useEffect(() => {
-        const handler = setTimeout(() => {
-            onSearchChange();
-        }, 300);
+    const searchLocations = async () => {
+        setIsLoading(true)
+        try {
+            const { data } = await axios.get(`api/locations`, { params: { page, limit, name: searchTerm } })
+            if (data?.totalPages) setTotalPages(parseInt(data.totalPages))
+            if (data?.locations) setLocations(data.locations)
 
-        return () => {
-            clearTimeout(handler);
-        };
-    }, [searchTerm]);
-
-    const onSearchChange = () => {
-        table.getColumn("name")?.setFilterValue(searchTerm);
+        } catch (error) {
+            toast.error('Ha ocurrido un error al encontrar los resultados')
+            console.log(error)
+        } finally {
+            setIsLoading(false)
+        }
     }
+
+    useEffect(() => {
+        searchLocations()
+    }, [page, totalAmount, limit])
 
     return (
         <div>
-            {locations.length > 0 && (
-                <label className="flex gap-2 items-center px-4 md:px-5 w-full h-full">
-                    <SearchIcon fill="fill-slate-500" />
-                    <input
-                        className={`text-base h-12 border-none bg-transparent focus:outline-none w-full md:w-[200px] placeholder:text-slate-500`}
-                        disabled={!locations.length}
-                        placeholder="Buscar por nombre..."
-                        value={searchTerm}
-                        onChange={({ target }) => setSearchTerm(target.value)}
-                    />
-                </label>
-            )}
 
-            {/* rows number */}
-            {/* <div className="px-4 md:px-5 ">
-                    <p className='mt-2 ml-1 text-xs text-slate-400'>
-                        {table.getFilteredRowModel().rows.length}  de{" "}
-                        {locations?.length} filas seleccionadas
-                    </p>
-                </div> */}
-
-            <ResizablePanel changeIndicator={`${table.getRowModel().rows?.length}`}>
-                {table.getRowModel().rows?.length ? (
-                    <>
-                        <div className='realtive max-h-96 overflow-auto'>
-                            <Table key={`table-${table.getRowModel().rows?.length ?? 0}`}>
-                                <TableHeader className='sticky top-0 w-full'>
-                                    {table.getHeaderGroups().map((headerGroup) => {
-                                        return (
-                                            <TableRow key={headerGroup.id}>
-                                                {headerGroup.headers.map((header) => {
-                                                    return (
-                                                        <TableHead key={header.id} className='group'>
-                                                            {flexRender(
-                                                                header.column.columnDef.header,
-                                                                header.getContext(),
-                                                            )}
-                                                        </TableHead>
-                                                    );
-                                                })}
-                                            </TableRow>
-                                        );
-                                    })}
-                                </TableHeader>
-
-                                <TableBody>
-                                    {table.getRowModel().rows.map((row) => (
-                                        <TableRow key={row.id}>
-                                            {row.getVisibleCells().map((cell) => (
-                                                <TableCell key={cell.id}>
-                                                    {flexRender(
-                                                        cell.column.columnDef.cell,
-                                                        cell.getContext(),
-                                                    )}
-                                                </TableCell>
-                                            ))}
-                                        </TableRow>
-                                    ))}
-                                </TableBody>
-                            </Table>
-                        </div>
-
-                        <div className="flex-end w-full gap-2 mt-4 pb-5 px-5">
-                            <button
-                                className="table_btn_pag"
-                                disabled={!table.getCanPreviousPage()}
-                                onClick={() => {
-                                    table.previousPage();
-                                }}
-                            >
-                                <ArrowIcon direction="left" />
-                            </button>
-                            <button
-                                className="table_btn_pag"
-                                disabled={!table.getCanNextPage()}
-                                onClick={() => {
-                                    table.nextPage();
-                                }}
-                            >
-                                <ArrowIcon direction="right" />
-                            </button>
-                        </div>
-                    </>
-                ) : (
-                    <div className="px-4 md:px-5 py-6">
-                        <InfoMessage
-                            type={"censored"}
-                            title={`Sin resultados`}
-                            subtitle={searchTerm ? `No hemos econtrado resultados para "${searchTerm}"` : undefined}
+            <form
+                className='flex flex-wrap gap-3 mb-3'
+                onSubmit={(e) => { e.preventDefault(); searchLocations() }}
+            >
+                <label className='w-full max-w-sm'>
+                    <div className="flex input gap-3 items-center w-full">
+                        <SearchIcon fill={`${isLoading ? 'fill-slate-300' : 'fill-slate-400'}`} />
+                        <input
+                            className={`text-base h-12 border-none bg-transparent focus:outline-none w-full placeholder:text-slate-400 placeholder:font-normal disabled:opacity-50 md:max-w-sm`}
+                            disabled={!locations}
+                            placeholder="Buscar por nombre..."
+                            value={searchTerm}
+                            onChange={({ target }) => setSearchTerm(target.value)}
                         />
                     </div>
-                )}
-            </ResizablePanel>
+                </label>
+            </form>
 
+            <div className='h-[65vh] sm:h-[50vh] overflow-auto'>
+                {isLoading ? (
+                    <div className='h-full flex-center gap-2 py-default'>
+                        <LoadingIcon />
+                        <p className='text-base font-medium font-slate-300'>Buscando resultados</p>
+                    </div>
+                ) : (
+                    <div className='relative'>
+                        <Table>
+                            <TableHeader className='sticky top-0'>
+                                {table.getHeaderGroups().map((headerGroup) => {
+                                    return (
+                                        <TableRow key={headerGroup.id} className='w-min'>
+                                            {headerGroup.headers.map((header) => {
+                                                return (
+                                                    <TableHead key={header.id} className='w-min'>
+                                                        {flexRender(
+                                                            header.column.columnDef.header,
+                                                            header.getContext(),
+                                                        )}
+                                                    </TableHead>
+                                                );
+                                            })}
+                                        </TableRow>
+                                    );
+                                })}
+                            </TableHeader>
+
+                            <TableBody>
+                                {table.getRowModel().rows.map((row) => (
+                                    <TableRow key={row.id}>
+                                        {row.getVisibleCells().map((cell) => (
+                                            <TableCell key={cell.id}>
+                                                {flexRender(
+                                                    cell.column.columnDef.cell,
+                                                    cell.getContext(),
+                                                )}
+                                            </TableCell>
+                                        ))}
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                        </Table>
+                    </div>
+                )}
+            </div>
+
+
+            < div className="flex-end flex-wrap gap-6 h-9 mt-3">
+                <label className='flex-center bg-slate-100 gap-2 border rounded-full overflow-hidden h-full'>
+                    <p className='input_label pl-3 text-slate-400'> Cantidad de filas</p>
+                    <select
+                        disabled={isLoading}
+                        className='p-2 disabled:opacity-50 rounded-full focus:outline-none bg-transparent font-medium'
+                        value={limit}
+                        onChange={({ target }) => { setPage(1); setLimit(target.value) }}
+                    >
+                        <option value="10">10</option>
+                        <option value="20">20</option>
+                        <option value="30">30</option>
+                        <option value="40">40</option>
+                        <option value="50">50</option>
+                    </select>
+                </label>
+
+                {totalPages &&
+                    <label className='flex-center bg-slate-100 gap-2 border rounded-full overflow-hidden h-full'>
+
+                        <button
+                            className="rounded-full bg-slate-100 p-2 disabled:opacity-50"
+                            disabled={page == 1}
+                            onClick={() => {
+                                setPage(page ? page - 1 : 1)
+                            }}
+                        >
+                            <ArrowIcon direction="left" />
+                        </button>
+
+                        <p className={`p-2 ${isLoading ? 'opacity-50' : ''}`}>
+                            {page}/{totalPages}
+                        </p>
+
+                        <button
+                            className="rounded-full bg-slate-100 p-2 disabled:opacity-50"
+                            disabled={page == totalPages}
+                            onClick={() => {
+                                setPage(page ? page + 1 : totalPages ?? 1);
+                            }}
+                        >
+                            <ArrowIcon direction="right" />
+                        </button>
+
+                    </label>
+                }
+            </div>
         </div >
+
+
     );
 }
 

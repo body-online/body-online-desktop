@@ -20,7 +20,7 @@ export const columnsCattle: ColumnDef<CattleProps>[] = [
                     className="flex-center"
                 >
                     <p>Caravana</p>
-                    <ArrowsIcon direction={column.getIsSorted()} />
+                    <ArrowsIcon direction={column.getIsSorted() == "asc" ? 'dark:rotate-180' : column.getIsSorted() == "desc" ? '' : 'hidden'} />
                 </button>
             );
         },
@@ -39,7 +39,7 @@ export const columnsCattle: ColumnDef<CattleProps>[] = [
                     className="flex-center"
                 >
                     <p>Fecha de Creación</p>
-                    <ArrowsIcon direction={column.getIsSorted()} />
+                    <ArrowsIcon direction={column.getIsSorted() == "asc" ? 'dark:rotate-180' : column.getIsSorted() == "desc" ? '' : 'hidden'} />
                 </button>
             );
         },
@@ -62,7 +62,7 @@ export const columnsCattle: ColumnDef<CattleProps>[] = [
                     className="flex-center"
                 >
                     <p>Ubicación</p>
-                    <ArrowsIcon direction={column.getIsSorted()} />
+                    <ArrowsIcon direction={column.getIsSorted() == "asc" ? 'dark:rotate-180' : column.getIsSorted() == "desc" ? '' : 'hidden'} />
                 </button>
             );
         },
@@ -80,7 +80,7 @@ export const columnsCattle: ColumnDef<CattleProps>[] = [
                     className="flex-center"
                 >
                     <p>Genética</p>
-                    <ArrowsIcon direction={column.getIsSorted()} />
+                    <ArrowsIcon direction={column.getIsSorted() == "asc" ? 'dark:rotate-180' : column.getIsSorted() == "desc" ? '' : 'hidden'} />
                 </button>
             );
         },
@@ -98,7 +98,7 @@ export const columnsCattle: ColumnDef<CattleProps>[] = [
                     className="flex-center"
                 >
                     <p>Estado</p>
-                    <ArrowsIcon direction={column.getIsSorted()} />
+                    <ArrowsIcon direction={column.getIsSorted() == "asc" ? 'dark:rotate-180' : column.getIsSorted() == "desc" ? '' : 'hidden'} />
                 </button>
             );
         },
@@ -116,7 +116,7 @@ export const columnsCattle: ColumnDef<CattleProps>[] = [
                     className="flex-center"
                 >
                     <p>Fecha último estado</p>
-                    <ArrowsIcon direction={column.getIsSorted()} />
+                    <ArrowsIcon direction={column.getIsSorted() == "asc" ? 'dark:rotate-180' : column.getIsSorted() == "desc" ? '' : 'hidden'} />
                 </button>
             );
         },
@@ -141,7 +141,7 @@ export const columnsCattle: ColumnDef<CattleProps>[] = [
                     className="flex-center"
                 >
                     <p>Condición Corporal</p>
-                    <ArrowsIcon direction={column.getIsSorted()} />
+                    <ArrowsIcon direction={column.getIsSorted() == "asc" ? 'dark:rotate-180' : column.getIsSorted() == "desc" ? '' : 'hidden'} />
                 </button>
             );
         },
@@ -150,9 +150,8 @@ export const columnsCattle: ColumnDef<CattleProps>[] = [
             return (
                 <div className="h-8">
                     {row.getValue('state') == 'death' ?
-                        <div><p className='chip chip_red'>Muerta</p></div>
-                        :
-                        <ChipBodyCondition measure={Number(row.original.bodyCondition)} />
+                        <div><p className='chip chip_red'>Muerta</p></div> :
+                        <ChipBodyCondition bodyRanges={row.original.bodyRanges} measure={Number(row.original.bodyCondition)} />
                     }
                 </div>
             )
@@ -166,8 +165,8 @@ export const columnsCattle: ColumnDef<CattleProps>[] = [
                     onClick={() => column.toggleSorting(column.getIsSorted() == "asc")}
                     className="flex-center"
                 >
-                    <p>Última medicion</p>
-                    <ArrowsIcon direction={column.getIsSorted()} />
+                    <p>Última medición</p>
+                    <ArrowsIcon direction={column.getIsSorted() == "asc" ? 'dark:rotate-180' : column.getIsSorted() == "desc" ? '' : 'hidden'} />
                 </button>
             );
         },
@@ -191,7 +190,7 @@ export const columnsCattle: ColumnDef<CattleProps>[] = [
                     className="flex-center"
                 >
                     <p>Ciclos</p>
-                    <ArrowsIcon direction={column.getIsSorted()} />
+                    <ArrowsIcon direction={column.getIsSorted() == "asc" ? 'dark:rotate-180' : column.getIsSorted() == "desc" ? '' : 'hidden'} />
                 </button>
             );
         },
@@ -209,12 +208,12 @@ export const columnsCattle: ColumnDef<CattleProps>[] = [
         accessorKey: "actions",
         cell: ({ row }) => {
             return (
-                <div className="flex-end gap-2">
+                <div className="flex-end gap-3">
                     <HistoryBtn
                         cattle={row.original}
                     />
                     <AddEventBtn
-                        cattle={row.original}
+                        defaultCattle={row.original}
                     />
                     <DeleteCattleBtn
                         id={row.original._id}
