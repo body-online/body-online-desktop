@@ -18,7 +18,7 @@ const CattleResume = ({ cattle }: { cattle: CattleProps }) => {
                 <div className="flex gap-9 rounded-full w-max h-full">
                     <div className='flex flex-col h-full justify-between'>
                         <span className='text-xs text-slate-400'>Condición Corporal</span>
-                        <ChipBodyCondition measure={Number(cattle.bodyCondition)} />
+                        <ChipBodyCondition bodyRanges={[10, 11]} measure={Number(cattle.bodyCondition)} />
                     </div>
                     <div className='flex flex-col h-full justify-between'>
                         <span className='text-xs text-slate-400'>Estado</span>

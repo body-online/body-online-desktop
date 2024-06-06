@@ -2,7 +2,6 @@
 
 import React from 'react'
 
-import DescriptionBtn from './description-button'
 import DeleteLocationBtn from './delete-button'
 import AddLocationBtn from './add-button'
 import ResizablePanel from '../ui/resizable-panel'
@@ -54,7 +53,7 @@ const Locations = ({ locations, error }: { error?: string; locations?: LocationP
                                                     .toLocaleDateString("es-AR", { day: 'numeric', month: 'long', year: 'numeric' })}
                                             </td>
                                             <td className='flex-end ml-auto gap-2'>
-                                                <DescriptionBtn location={location} />
+                                                {/* <DescriptionBtn location={location} /> */}
                                                 <DeleteLocationBtn id={location._id} name={location.name} />
                                             </td>
                                         </tr>

@@ -41,20 +41,11 @@ export const columnsPendingMeasures: ColumnDef<PendingMeasureProps>[] = [
         },
         accessorKey: "expiresAt",
         cell: ({ row }) => {
-            const today = new Date()
-            const expiresAt = new Date(row.original.expiresAt)
+            const today: any = new Date()
+            const expiresAt: any = new Date(row.original.expiresAt)
 
             let daysLeft = Math.round((expiresAt - today) / (1000 * 60 * 60 * 24));
             const isExpired = row?.original?.isExpired || daysLeft <= 0
-
-            // console.log(`
-            //     `)
-            // console.log('carava')
-            // console.log(row.original.caravan)
-            // console.log('today')
-            // console.log(today)
-            // console.log('expiresAt')
-            // console.log(expiresAt)
 
             const bgColor = isExpired ? 'bg-red-500' : daysLeft >= 90 ? 'bg-green-200' : daysLeft >= 60 ? 'bg-yellow-200' : 'bg-orange-200'
             const textColor = isExpired ? 'text-white' : daysLeft >= 90 ? 'text-green-500' : daysLeft >= 60 ? 'text-yellow-500' : 'text-orange-500'

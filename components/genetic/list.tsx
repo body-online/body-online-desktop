@@ -2,7 +2,6 @@
 
 import React from 'react'
 
-import DescriptionBtn from './description-button'
 import DeleteGeneticBtn from './delete-button'
 import AddGeneticBtn from './add-button'
 import ResizablePanel from '../ui/resizable-panel'
