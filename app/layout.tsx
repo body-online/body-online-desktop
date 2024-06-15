@@ -4,6 +4,7 @@ import localFont from 'next/font/local'
 import type { Metadata } from "next";
 import { auth } from '@/auth';
 import "./globals.css";
+import StatusProvider from './context/status-context';
 
 const satoshi = localFont({
   src: '../public/fonts/Satoshi-Variable.ttf',
@@ -25,16 +26,17 @@ export default async function RootLayout({
 
   return (
     <SessionProvider session={session}>
-      <html lang="en">
-        <head>
-          {/* no scrolling on mobile */}
-          <meta
-            name="viewport"
-            content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
-          />
-          <script
-            dangerouslySetInnerHTML={{
-              __html: `
+      <StatusProvider>
+        <html lang="en">
+          <head>
+            {/* no scrolling on mobile */}
+            <meta
+              name="viewport"
+              content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+            />
+            <script
+              dangerouslySetInnerHTML={{
+                __html: `
               document.addEventListener('gesturestart', function(e) {
                 e.preventDefault();
                 document.body.style.zoom = 0.99;
@@ -49,19 +51,20 @@ export default async function RootLayout({
                   e.preventDefault();
                   document.body.style.zoom = 0.99;
               });`,
-            }}
-          ></script>
-        </head>
+              }}
+            ></script>
+          </head>
 
-        <body className={`${satoshi.className} body`}>
-          {children}
-          <Toaster
-            position="bottom-right"
-            reverseOrder={true}
-            toastOptions={{ duration: 5000 }}
-          />
-        </body>
-      </html>
+          <body className={`${satoshi.className} body`}>
+            {children}
+            <Toaster
+              position="bottom-right"
+              reverseOrder={true}
+              toastOptions={{ duration: 5000 }}
+            />
+          </body>
+        </html>
+      </StatusProvider>
     </SessionProvider>
   );
 }

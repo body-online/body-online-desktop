@@ -1,16 +1,17 @@
 "use client";
 
-import { AnimatePresence, motion } from 'framer-motion'
-import { usePathname, useRouter } from "next/navigation";
 import { MouseEventHandler, useEffect, useRef, useState } from "react";
-import Image from "next/image";
+import { AnimatePresence, motion } from 'framer-motion'
+import { usePathname } from "next/navigation";
 import { ExtendedUser } from '@/next-auth';
-import { enterDropdown, enterModal, navigationItems } from '@/lib/constants';
-import NavigationItem from './navigation-item';
 import { signOut } from 'next-auth/react';
-import Divider from './divider';
+import Image from "next/image";
 import Link from 'next/link';
+
+import { enterDropdown, navigationItems } from '@/lib/constants';
 import { FarmIcon, LogoutIcon } from './icons';
+
+import Divider from './divider';
 
 
 export default function Navbar({ user }: { user?: ExtendedUser }) {
@@ -26,7 +27,6 @@ export default function Navbar({ user }: { user?: ExtendedUser }) {
     const handleClose = () => {
         setIsOpen(false);
     }
-
 
     // onclick outside handler
     const handleClickListener = (event: MouseEvent) => {
@@ -70,7 +70,7 @@ export default function Navbar({ user }: { user?: ExtendedUser }) {
 
                             <div className="flex-center gap-1">
                                 <p className='text-white text-sm font-bold w-max'>{user?.name}</p>
-                                <div className="flex gap-1 items-center px-2 py-1 rounded-full bg-caqua/10">
+                                <div className="flex-center gap-1 rounded-full bg-white/5 px-3 h-7">
                                     <FarmIcon />
                                     <p className='text-white font-medium text-sm'>
                                         San Fernando
@@ -125,22 +125,29 @@ export default function Navbar({ user }: { user?: ExtendedUser }) {
             </div>
 
 
-            <div className="w-full bg-cgreen/95 border-b border-cgreen backdrop-blur-sm z-30 sticky top-0 py-2">
-                <div className="overflow-x-scroll no-scrollbar flex gap-1 items-center h-full px-default">
-                    {navigationItems.map((i, index) => {
-                        var selected: boolean = i.href == pathname;
+            <div className="w-full h-full bg-csemigreen border-b border-cgreen z-30 sticky top-0 py-2">
+                <div className="overflow-x-scroll no-scrollbar flex gap-1 items-center h-full">
+                    <div className="flex-center sticky left-0 bg-gradient-to-r from-csemigreen/90 via-csemigreen/70 to-csemigreen/5 h-full z-20 px-default backdrop-blur-sm">
+                        <p className="font-semibold text-sm text-slate-200 py-2">Navegación</p>
+                    </div>
+                    <div className="flex items-center gap-2 pr-4 snap-x">
+                        {navigationItems.map((i, index) => {
+                            var selected: boolean = i.href == pathname;
 
-                        return (
-                            <Link key={index} href={i.href} className='group'>
-                                <p
-                                    className={`font-medium text-sm text-white md:hover:bg-caqua/15 rounded-md px-3 py-1.5 transition-all
-                                            ${selected ? 'bg-caqua/20' : 'opacity-60 active:opacity-100 md:hover:opacity-100'}`}
-                                >
-                                    {i.title}
-                                </p>
-                            </Link>
-                        )
-                    })}
+                            return (
+                                <div className='snap-center' key={index}>
+                                    <Link href={i.href}>
+                                        <p
+                                            className={`font-medium text-sm text-white active:bg-transparent md:hover:bg-white/5 rounded-md px-3 py-1.5 transition-all
+                                            ${selected ? 'bg-white/10' : 'opacity-50 active:opacity-100 md:hover:opacity-100'}`}
+                                        >
+                                            {i.title}
+                                        </p>
+                                    </Link>
+                                </div>
+                            )
+                        })}
+                    </div>
                 </div>
             </div>
         </>

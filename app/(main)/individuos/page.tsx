@@ -16,7 +16,7 @@ export default async function CattlesPage() {
     return (
         <div>
             <PageHeader>
-                <div className="mb-8 flex md:items-center flex-col md:flex-row justify-between gap-3">
+                <div className="mb-12 flex md:items-center flex-col md:flex-row justify-between gap-3">
                     <div className='space-y-2'>
                         <div className="flex-between">
                             <h1 className='title'>Individuos <span className='opacity-50'>({data?.totalCattles ?? 0})</span></h1>

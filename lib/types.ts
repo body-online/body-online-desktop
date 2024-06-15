@@ -98,6 +98,7 @@ export interface EventProps extends EventSchema {
 export type NewEventButtonProps = {
  defaultCattle?: CattleProps;
  customButtom?: React.ReactNode;
+ children?: React.ReactNode;
 };
 
 // pending measures

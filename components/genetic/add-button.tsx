@@ -15,7 +15,7 @@ import { enterModal } from '@/lib/constants';
 import { useRouter } from 'next/navigation';
 import BlackOutModal from '../ui/blackout-modal';
 
-export function AddGeneticBtn({ chipMode }: { chipMode?: boolean }) {
+export function AddGeneticBtn({ chipMode, children }: { chipMode?: boolean; children?: React.ReactNode }) {
     const router = useRouter()
     const [isOpen, setIsOpen] = useState(false)
     const {
@@ -62,9 +62,13 @@ export function AddGeneticBtn({ chipMode }: { chipMode?: boolean }) {
 
     return (
         <>
-            <button className={`${chipMode ? 'chip cgreen flex-center gap-1' : 'btn cgreen'}`} onClick={handleOpen}>
-                <p>Crear {chipMode ? '' : 'nueva'} genética</p>
-                <MiniAddIcon fill="fill-clime" />
+            <button onClick={handleOpen}>
+                {children ??
+                    <div className={`${chipMode ? 'chip cgreen flex-center gap-1' : 'btn cgreen'}`}>
+                        <p>Crear  {chipMode ? '' : 'nueva'} genética</p>
+                        <MiniAddIcon fill="fill-clime" />
+                    </div>
+                }
             </button>
 
             <BlackOutModal isOpen={isOpen} handleClose={handleClose}>

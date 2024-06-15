@@ -12,6 +12,7 @@ const config: Config = {
     clime: "#D7FB05",
     caqua: "#189877",
     cgreen: "#093631",
+    csemigreen: "#09433c",
     clightgreen: "#0d4d4675",
    },
    fontFamily: {

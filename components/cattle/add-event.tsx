@@ -9,7 +9,7 @@ import { enterModal } from '@/lib/constants';
 import EventForm from '../event-form';
 import BlackOutModal from '../ui/blackout-modal';
 
-export function AddEventBtn({ defaultCattle, customButtom }: NewEventButtonProps) {
+export function AddEventBtn({ defaultCattle, customButtom, children }: NewEventButtonProps) {
     const [isOpenCattles, setIsOpenCattles] = useState<boolean>(false)
     const [isOpen, setIsOpen] = useState(false)
 
@@ -23,12 +23,14 @@ export function AddEventBtn({ defaultCattle, customButtom }: NewEventButtonProps
 
     return (
         <>
-            {customButtom ??
-                <button className="chip cgreen flex-center gap-1" onClick={handleOpen}>
-                    <p>Crear evento</p>
-                    <EventIcon fill="fill-clime" />
-                </button>
-            }
+            <button onClick={handleOpen}>
+                {children ??
+                    <div className={`chip cgreen flex-center gap-1'`}>
+                        <p>Crear evento</p>
+                        <EventIcon fill="fill-clime" />
+                    </div>
+                }
+            </button>
 
             <BlackOutModal isOpen={isOpen} handleClose={handleClose}>
                 <motion.div

@@ -92,7 +92,7 @@ export function EventForm({ defaultCattle, isOpenCattles, setIsOpenCattles, hand
 
 
         <form onSubmit={handleSubmit(onSubmit)}
-            className='w-[90vw] h-[80vh] relative pr-1 max-w-max overflow-auto'
+            className='w-[90vw] h-[80vh] relative pr-1 max-w-xl overflow-auto'
         >
             {/* header */}
             <div
@@ -143,6 +143,7 @@ export function EventForm({ defaultCattle, isOpenCattles, setIsOpenCattles, hand
                                     const buttonColor = selected ? `bg-cgreen cursor-pointer` : `bg-slate-100 active:bg-slate-200 md:hover:bg-slate-200`
                                     const fillIcon = selected ? `fill-clime` : `fill-slate-600`
                                     const strokeIcon = selected ? `stroke-clime` : `stroke-slate-600`
+                                    if (isDisabled) return
                                     return (
                                         <button
                                             key={index}

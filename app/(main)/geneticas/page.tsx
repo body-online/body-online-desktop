@@ -17,7 +17,7 @@ export default async function GeneticsPage() {
     return (
         <div className='h-full'>
             <PageHeader>
-                <div className="mb-8 flex md:items-center flex-col md:flex-row justify-between gap-3">
+                <div className="mb-12 flex md:items-center flex-col md:flex-row justify-between gap-3">
                     <div className='space-y-2'>
                         <div className="flex-between">
                             <h1 className='title'>Genéticas <span className='opacity-50'>({data?.length ?? 0})</span></h1>
