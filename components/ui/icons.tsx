@@ -1,7 +1,7 @@
-export const UserIcon = () => {
+export const UserIcon = ({ fill }: { fill?: string }) => {
     return (
         <div>
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" className="fill-black w-5 h-5">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" className={`w-4 md:w-5 h-4 md:h-5 ${fill ?? `fill-white`}`}>
                 <path d="M10 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6ZM3.465 14.493a1.23 1.23 0 0 0 .41 1.412A9.957 9.957 0 0 0 10 18c2.31 0 4.438-.784 6.131-2.1.43-.333.604-.903.408-1.41a7.002 7.002 0 0 0-13.074.003Z" />
             </svg>
 
@@ -24,19 +24,45 @@ export const EditIcon = () => {
     )
 }
 
-export const CloseIcon = ({ fill }: { fill?: string }) => {
+export const CloseIcon = ({ fill, sizes }: { fill?: string; sizes?: string }) => {
     return (
         <div>
-            <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 16 16"
-                className={`w-4 h-4 rotate-45 ${fill ? fill : `fill-white`}`}>
-                <path d="M8.75 3.75a.75.75 0 0 0-1.5 0v3.5h-3.5a.75.75 0 0 0 0 1.5h3.5v3.5a.75.75 0 0 0 1.5 0v-3.5h3.5a.75.75 0 0 0 0-1.5h-3.5v-3.5Z" />
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" className={`${sizes ?? 'w-4 h-4'} ${fill ? fill : `fill-white`}`}>
+                <path d="M5.28 4.22a.75.75 0 0 0-1.06 1.06L6.94 8l-2.72 2.72a.75.75 0 1 0 1.06 1.06L8 9.06l2.72 2.72a.75.75 0 1 0 1.06-1.06L9.06 8l2.72-2.72a.75.75 0 0 0-1.06-1.06L8 6.94 5.28 4.22Z" />
             </svg>
-
         </div>
     )
 }
+
+
+export const MoonIcon = ({ fill }: { fill?: string }) => {
+    return (
+        <div>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" className={`w-5 h-5 ${fill ?? 'fill-slate-500 dark:fill-slate-100'}`}>
+                <path fillRule="evenodd" d="M7.455 2.004a.75.75 0 0 1 .26.77 7 7 0 0 0 9.958 7.967.75.75 0 0 1 1.067.853A8.5 8.5 0 1 1 6.647 1.921a.75.75 0 0 1 .808.083Z" clipRule="evenodd" />
+            </svg>
+        </div>
+    )
+}
+export const SunIcon = ({ fill }: { fill?: string }) => {
+    return (
+        <div>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" className={`w-5 h-5 ${fill ?? 'fill-slate-700 dark:fill-slate-100'}`}>
+                <path d="M10 2a.75.75 0 0 1 .75.75v1.5a.75.75 0 0 1-1.5 0v-1.5A.75.75 0 0 1 10 2ZM10 15a.75.75 0 0 1 .75.75v1.5a.75.75 0 0 1-1.5 0v-1.5A.75.75 0 0 1 10 15ZM10 7a3 3 0 1 0 0 6 3 3 0 0 0 0-6ZM15.657 5.404a.75.75 0 1 0-1.06-1.06l-1.061 1.06a.75.75 0 0 0 1.06 1.06l1.06-1.06ZM6.464 14.596a.75.75 0 1 0-1.06-1.06l-1.06 1.06a.75.75 0 0 0 1.06 1.06l1.06-1.06ZM18 10a.75.75 0 0 1-.75.75h-1.5a.75.75 0 0 1 0-1.5h1.5A.75.75 0 0 1 18 10ZM5 10a.75.75 0 0 1-.75.75h-1.5a.75.75 0 0 1 0-1.5h1.5A.75.75 0 0 1 5 10ZM14.596 15.657a.75.75 0 0 0 1.06-1.06l-1.06-1.061a.75.75 0 1 0-1.06 1.06l1.06 1.06ZM5.404 6.464a.75.75 0 0 0 1.06-1.06l-1.06-1.06a.75.75 0 1 0-1.061 1.06l1.06 1.06Z" />
+            </svg>
+        </div>
+    )
+}
+export const PCIcon = () => {
+    return (
+        <div>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" className="w-5 h-5 fill-slate-500 dark:fill-slate-100">
+                <path fillRule="evenodd" d="M2 4.25A2.25 2.25 0 0 1 4.25 2h11.5A2.25 2.25 0 0 1 18 4.25v8.5A2.25 2.25 0 0 1 15.75 15h-3.105a3.501 3.501 0 0 0 1.1 1.677A.75.75 0 0 1 13.26 18H6.74a.75.75 0 0 1-.484-1.323A3.501 3.501 0 0 0 7.355 15H4.25A2.25 2.25 0 0 1 2 12.75v-8.5Zm1.5 0a.75.75 0 0 1 .75-.75h11.5a.75.75 0 0 1 .75.75v7.5a.75.75 0 0 1-.75.75H4.25a.75.75 0 0 1-.75-.75v-7.5Z" clipRule="evenodd" />
+            </svg>
+        </div>
+    )
+}
+
 
 export const CreateAccountIcon = ({ fill }: { fill?: string }) => {
     return (
@@ -131,6 +157,15 @@ export const ListIcon = ({ fill }: { fill?: string }) => {
         </div>
     )
 }
+export const MenuIcon = ({ fill, sizes }: { fill?: string; sizes?: string }) => {
+    return (
+        <div>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" className={`${sizes ?? 'w-4 h-4'} ${fill ? fill : `fill-white`}`}>
+                <path fillRule="evenodd" d="M2 4.75A.75.75 0 0 1 2.75 4h10.5a.75.75 0 0 1 0 1.5H2.75A.75.75 0 0 1 2 4.75Zm0 6.5a.75.75 0 0 1 .75-.75h10.5a.75.75 0 0 1 0 1.5H2.75a.75.75 0 0 1-.75-.75Z" clipRule="evenodd" />
+            </svg>
+        </div>
+    )
+}
 export const MiniAddIcon = ({ fill, sizes }: { fill?: string; sizes?: string }) => {
     return (
         <div>
@@ -153,7 +188,7 @@ export const ArrowsIcon = ({ direction, stroke }: { stroke?: string; direction: 
             fill="none"
             viewBox="0 0 24 24"
             strokeWidth={1.5}
-            className={`${stroke ?? `stroke-slate-500`} ${direction ?? ``} w-4 h-4 transition-all`}
+            className={`${stroke ?? `stroke-slate-500 dark:stroke-slate-200`} ${direction ?? ``} w-4 h-4 transition-all`}
         >
             <path
                 strokeLinecap="round"
@@ -306,7 +341,7 @@ export const LogoutIcon = ({ fill }: { fill?: string; }) => {
 export const FarmIcon = ({ fill }: { fill?: string; }) => {
     return (
         <div>
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" className={`w-4 h-4 ${fill ?? `fill-white`}`}>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" className={`w-4 md:w-5 h-4 md:h-5 ${fill ?? `fill-white`}`}>
                 <path d="M10.536 3.444a.75.75 0 0 0-.571-1.387L3.5 4.719V3.75a.75.75 0 0 0-1.5 0v1.586l-.535.22A.75.75 0 0 0 2 6.958V12.5h-.25a.75.75 0 0 0 0 1.5H4a1 1 0 0 0 1-1v-1a1 1 0 1 1 2 0v1a1 1 0 0 0 1 1h1a1 1 0 0 0 1-1V3.664l.536-.22ZM11.829 5.802a.75.75 0 0 0-.333.623V8.5c0 .027.001.053.004.08V13a1 1 0 0 0 1 1h.5a1 1 0 0 0 1-1V7.957a.75.75 0 0 0 .535-1.4l-2.004-.826a.75.75 0 0 0-.703.07Z" />
             </svg>
 

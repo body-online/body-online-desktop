@@ -99,7 +99,7 @@ const SelectInputSearchCattle = ({ selectedCattle, handleSelectCattle, isOpen, s
                             </div>
 
                             <label>
-                                <div className="flex input gap-3 items-center w-full backdrop-blur-sm bg-white/50">
+                                <div className="flex input gap-3 items-center w-full backdrop-blur-sm bg-white dark:bg-slate-950/50">
                                     {isLoading ? <LoadingIcon /> :
                                         <SearchIcon fill={`fill-slate-400`} />
                                     }
@@ -127,7 +127,7 @@ const SelectInputSearchCattle = ({ selectedCattle, handleSelectCattle, isOpen, s
                                             <button
                                                 type='button'
                                                 className='w-full py-4 px-4 transition-all rounded-xl border
-                                                md:opacity-70 md:hover:opacity-100 md:hover:bg-white md:bg-slate-100'
+                                                md:opacity-70 md:hover:opacity-100 md:hover:bg-white dark:bg-slate-950 md:bg-slate-100'
                                                 onClick={() => {
                                                     handleSelectCattle(cattle);
                                                     handleClose();
@@ -141,7 +141,7 @@ const SelectInputSearchCattle = ({ selectedCattle, handleSelectCattle, isOpen, s
                                                         </b>
                                                     </div>
                                                     <div className='flex flex-col h-full items-start justify-between'>
-                                                        <p className='text-xs font-medium'>Genetica</p>
+                                                        <p className='text-xs font-medium'>Genéticas</p>
                                                         <p>{cattle?.geneticName}</p>
                                                     </div>
                                                     <div className='flex flex-col h-full items-start justify-between'>

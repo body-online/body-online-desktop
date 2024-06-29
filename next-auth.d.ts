@@ -4,8 +4,9 @@ import { JWT } from "next-auth/jwt";
 export type ExtendedUser = DefaultSession["user"] & {
  id: string;
  name: string;
- type: "owner" | "user";
+ type: "owner" | "operator";
  farmId?: string;
+ farmName?: string;
 };
 
 declare module "next-auth" {
@@ -18,7 +19,8 @@ export type OriginalJWT = JWT;
 
 declare module "next-auth/jwt" {
  interface JWT extends OriginalJWT {
-  type: "owner" | "user";
+  type: "owner" | "operator";
+  farmName?: string;
   farmId?: string;
   id?: string;
   name?: string;

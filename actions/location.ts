@@ -46,7 +46,6 @@ export async function deleteLocation(
    method: "patch",
    url: `${process.env.API_URL}/api/ranchi/location/delete/${locationId}`,
   });
-  console.log(data);
 
   return { data: "success" };
  } catch (err: any) {

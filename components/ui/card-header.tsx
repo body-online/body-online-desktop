@@ -6,7 +6,9 @@ interface CardHeaderProps {
 
 const CardHeader = ({ label }: CardHeaderProps) => {
     return (
-        <h3 className='font-bold text-base tracking-tight mb-3'>{label}</h3>
+        <h3 className='text-lg font-semibold'>
+            {label}
+        </h3>
     )
 }
 

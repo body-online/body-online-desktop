@@ -9,7 +9,7 @@ interface InfoMessageProps {
 const InfoMessage = ({ title, subtitle, type }: InfoMessageProps) => {
     return (
         <div className="px-3 py-8 mx-auto flex flex-col items-center justify-center max-w-sm">
-            <div className="p-2 rounded-full bg-caqua/10">
+            <div className="p-2 rounded-full bg-caqua/10 dark:bg-csemigreen/10">
                 {type == "warning" ? <WarningIcon /> :
                     type === "info" ? <InfoIcon /> :
                         type === "success" ? <SuccessIcon /> :
@@ -20,7 +20,7 @@ const InfoMessage = ({ title, subtitle, type }: InfoMessageProps) => {
             <p className="font-medium mt-3">{title}</p>
             {subtitle ? (
                 <div className={`px-2 mt-2 `}>
-                    <p className="text-center text-sm md:text-base text-slate-600">{subtitle}</p>
+                    <p className="text-center text-sm md:text-base text-slate-600 dark:text-slate-300">{subtitle}</p>
                 </div>
             ) : (
                 <></>
@@ -37,9 +37,8 @@ const InfoIcon = () => {
                 fill="none"
                 viewBox="0 0 24 24"
                 strokeWidth={1.5}
-                className="h-8 w-8">
+                className="h-8 w-8 stroke-black dark:stroke-white">
                 <path
-                    stroke="#093731"
                     strokeLinecap="round"
                     strokeLinejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 5.25h.008v.008H12v-.008Z" />
             </svg>
@@ -73,8 +72,7 @@ const CloseEyeIcon = () => {
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none" viewBox="0 0 24 24"
                 strokeWidth="1.5"
-                stroke="#093731"
-                className="w-8 h-8"
+                className="h-8 w-8 stroke-black dark:stroke-white"
             >
                 <path
                     strokeLinecap="round"

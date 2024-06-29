@@ -97,7 +97,7 @@ const SelectInput = ({
                         </button>
 
                         <ul
-                            className={`z-10 bg-white rounded-lg w-full  overflow-y-auto border
+                            className={`z-10 bg-white dark:bg-slate-950 rounded-lg w-full  overflow-y-auto border
                         ${isOpen && !listIsEmpty ? `absolute` : `hidden`}`}
                         >
                             {list.map((i, index) => {

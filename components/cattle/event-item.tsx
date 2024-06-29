@@ -1,7 +1,17 @@
 import { BodyMeasureIcon, CattleBirthIcon, DeathIcon, NotPregnantIcon, PregnantIcon } from '../ui/icons';
 import ChipBodyCondition from './chip-body-condition';
-import { EventProps } from '@/lib/types';
 
+type EventProps = {
+    _id: string,
+    caravan: string,
+    eventType: string,
+    eventDetail?: string;
+    eventDate: string,
+    farmId: string,
+    measure: number,
+    observations: string,
+    bodyRanges: number[]
+}
 export default function EventItem({ event, prevEventDate }: { event: EventProps; prevEventDate?: Date }) {
     const lastEventDate = prevEventDate ? prevEventDate : undefined
     const eventDate = new Date(event.eventDate).toLocaleDateString("es-AR", { day: 'numeric', month: 'long', year: 'numeric' });
@@ -30,10 +40,10 @@ export default function EventItem({ event, prevEventDate }: { event: EventProps;
                         {/* event detail */}
                         <div className='w-full'>
                             <div className="flex items-start w-max gap-1">
-                                <div className="min-w-[80px]">
+                                <div className="min-w-[80px] max-w-max">
                                     {event?.measure ?
-                                        <p className='font-semibold'>Sujeto a update</p> : null
-                                        //  <ChipBodyCondition bodyRanges={event.measure} measure={Number(event.measure)} /> : null
+                                        // <p className='font-semibold'>Sujeto a update</p> : null
+                                        <ChipBodyCondition bodyRanges={event.bodyRanges} measure={Number(event.measure)} /> : null
                                     }
                                     {event?.eventType == 'cattle_birth' ?
                                         <p className='chip chip_rose'>
@@ -52,7 +62,7 @@ export default function EventItem({ event, prevEventDate }: { event: EventProps;
                                     }
                                 </div>
 
-                                <div>
+                                <div className='flex justify-between gap-2 w-full'>
                                     <p className='text-lg text-black leading-5'>
                                         {
                                             event.eventType == 'pregnant' ? 'Servicio' :
@@ -94,8 +104,8 @@ export default function EventItem({ event, prevEventDate }: { event: EventProps;
 
 const EventTypeIcon = ({ event }: { event: EventProps }) => {
     const hasMeasure = event?.measure ? Number(event?.measure) : undefined
-    const fillBgColor = hasMeasure ? (hasMeasure > 21 ? 'bg-orange-200' : hasMeasure > 10 ? 'bg-green-200' : 'bg-yellow-200') : 'bg-slate-200'
-    const fillColor = hasMeasure ? (hasMeasure > 21 ? 'fill-orange-500' : hasMeasure > 10 ? 'fill-green-500' : 'fill-yellow-500') : 'fill-slate-500'
+    const fillBgColor = hasMeasure ? (hasMeasure > event?.bodyRanges[1] ? 'bg-orange-200' : hasMeasure > event?.bodyRanges[0] ? 'bg-green-200' : 'bg-yellow-200') : 'bg-slate-200'
+    const fillColor = hasMeasure ? (hasMeasure > event?.bodyRanges[1] ? 'fill-orange-500' : hasMeasure > event?.bodyRanges[0] ? 'fill-green-500' : 'fill-yellow-500') : 'fill-slate-500'
 
     switch (event.eventType) {
         case 'death':

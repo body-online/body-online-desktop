@@ -3,13 +3,22 @@
 @tailwind utilities;
 
 * {
-  @apply text-slate-900 outline-slate-600/50 font-satoshi;
-  -webkit-tap-highlight-color:transparent;
+  @apply 
+  text-cblack dark:text-slate-200 
+  transition-all duration-75 
+  dark:outline-slate-600/50 
+  outline-slate-600
+  font-satoshi font-normal -tracking-[0.1px];
 }
+
+::-webkit-tap-highlight-color {
+  @apply bg-transparent;
+} 
 
 ::selection {
   background:rgba(170, 198, 255, 0.377);
 }
+
 @layer utilities {
   /* Hide scrollbar for Chrome, Safari and Opera */
   .no-scrollbar::-webkit-scrollbar {
@@ -27,7 +36,7 @@
 } */
 
 .body {
-  @apply bg-slate-100 p-0 w-full h-full overflow-hidden text-sm sm:text-base;
+  @apply bg-slate-100 dark:bg-cblack p-0 w-full h-full overflow-hidden text-sm sm:text-base;
 }
 
 /* Layout */
@@ -62,8 +71,14 @@
   @apply m-10 border-[0.5px] border-gray-200;
 }
 
+.custom-gradient {
+  @apply bg-gradient-to-br from-white to-slate-50 dark:from-cgray dark:to-cblack;
+}
+.custom-border {
+  @apply border-slate-200 dark:border-slate-700/50;
+}
 .card {
-  @apply rounded-xl bg-white border;
+  @apply rounded-3xl custom-gradient border custom-border;
 }
 
 .remove_file_btn {
@@ -108,11 +123,11 @@
 }
 
 .login_btn {
-  @apply w-full bg-cgreen hover:bg-cgreen/90
-  h-12 flex items-center transition-colors flex-center gap-1 md:gap-2 px-2 md:px-4 py-2 md:py-3.5 rounded-lg md:min-w-[100px] disabled:opacity-50 focus:outline-0 focus:ring-[1px] ring-slate-300;
+  @apply w-full bg-cgreen dark:bg-white active:bg-opacity-45 dark:active:bg-opacity-50 md:hover:dark:bg-slate-200
+  h-12 flex items-center transition-all flex-center gap-1 md:gap-2 px-2 md:px-4 py-2 md:py-3.5 rounded-lg md:min-w-[100px] disabled:opacity-50 focus:outline-0 focus:ring-[1px] ring-slate-300;
 }
 .login_btn p {
-  @apply text-sm md:text-base text-white font-medium;
+  @apply text-sm md:text-base text-white dark:text-cblack font-semibold;
 }
 
 .black {
@@ -122,6 +137,12 @@
   @apply text-white font-medium;
 }
 
+.csemigreen {
+  @apply bg-csemigreen md:hover:bg-clightgreen disabled:bg-clightgreen transition-all;
+}
+.csemigreen p {
+  @apply text-white font-medium;
+}
 .cgreen {
   @apply bg-cgreen md:hover:bg-csemigreen disabled:bg-clightgreen transition-all;
 }
@@ -174,26 +195,32 @@
 
 /* Table */
 table {
-  @apply w-full min-w-max;
+  @apply w-full min-w-max mb-5;
 }
-table thead {
-  @apply h-12 rounded-xl overflow-hidden bg-white;
+table>thead {
+  @apply h-8;
 }
-table thead tr th p {
-  @apply px-3 text-start text-sm leading-6 font-semibold text-slate-500;
+table>thead>tr>th {
+  @apply px-3 first:rounded-l-lg last:rounded-r-lg text-start text-sm text-slate-800 font-medium;
 }
-table thead tr th button p {
-  @apply px-3 text-start text-sm leading-6 font-semibold text-slate-500;
+table>tbody>tr {
+  @apply even:bg-slate-100 dark:even:bg-cgray md:even:bg-transparent md:hover:bg-slate-100 dark:md:hover:bg-white/5 transition-all h-10 md:h-12;
 }
-table tbody tr {
-  @apply transition-all h-14
-   border-slate-100/10 odd:bg-slate-100;
+table>tbody>tr>td {
+  @apply px-3 first:rounded-l-lg last:rounded-r-lg;
 }
-table tbody tr td {
-  @apply px-3 py-2 max-w-sm last:rounded-r-lg first:rounded-l-lg;
+table>tbody>tr>td>p {
+  @apply truncate w-max max-w-[350px] text-sm md:text-base;
 }
-table tbody tr td p {
-  @apply text-black leading-5;
+.table_title {
+  @apply flex items-center gap-1 text-left h-4 select-none uppercase text-[11px] md:text-xs w-max;
+}
+.table_btn_pag {
+  @apply 
+  bg-slate-100 dark:bg-cgray dark:disabled:hover:bg-none
+  enabled:md:hover:bg-slate-200 enabled:dark:md:hover:bg-cblack 
+  p-1 rounded-full  
+  transition-all disabled:cursor-default disabled:opacity-50;
 }
 
 /* table {
@@ -220,13 +247,14 @@ table tbody tr td p {
 /* tabltbodttp {
   @apply truncate max-w-[250px] text-sm md:text-base;
 } */
-.table_btn_pag {
+/* .table_btn_pag {
   @apply bg-slate-100 p-1 rounded-full hover:bg-slate-200 transition-all disabled:cursor-default disabled:opacity-40;
-}
+} */
 
 /* Forms */
 .input {
-  @apply h-11 sm:h-12 p-2 sm:p-3 text-sm md:text-base transition rounded-lg border hover:border-gray-400 focus:outline-0 focus:ring-[1px] ring-slate-300 w-full disabled:opacity-50;
+  @apply h-11 sm:h-12 py-2 px-4 sm:p-3 text-sm md:text-base transition rounded-lg border hover:border-gray-400 focus:outline-0 focus:ring-[1px] ring-slate-300 dark:ring-slate-600 w-full disabled:opacity-50 bg-white dark:bg-clightgray
+  dark:border-gray-800 dark:md:hover:border-slate-700;
 }
 .textarea {
   @apply  min-h-20 max-h-60 p-3 transition rounded-lg border hover:border-gray-400 focus:outline-0 focus:ring-[1px] ring-slate-300 w-full disabled:opacity-50;
@@ -250,7 +278,7 @@ table tbody tr td p {
   @apply font-semibold text-xs text-red-500 leading-3;
 }
 .file_input {
-  @apply flex justify-center w-full h-36 px-4 transition bg-white border border-gray-300 border-dashed rounded-lg appearance-none cursor-pointer hover:border-gray-400 focus:outline-none;
+  @apply flex justify-center w-full h-36 px-4 transition bg-white dark:bg-slate-950 border border-gray-300 border-dashed rounded-lg appearance-none cursor-pointer hover:border-gray-400 focus:outline-none;
 }
 .success_file {
   @apply relative h-36 w-full flex flex-col justify-between rounded-lg border overflow-hidden;
@@ -274,7 +302,7 @@ table tbody tr td p {
   @apply w-full min-w-[300px] space-y-6;
 }
 .list_item {
-  @apply border border-orange-200 w-full py-5 px-4 bg-white rounded-md;
+  @apply border border-orange-200 w-full py-5 px-4 bg-white dark:bg-slate-950 rounded-md;
 }
 
 .chip {
@@ -309,12 +337,12 @@ table tbody tr td p {
 }
 
 .dropdown {
-  @apply rounded-xl bg-white w-full min-w-[260px] border shadow-lg
+  @apply rounded-xl bg-white dark:bg-slate-950 w-full min-w-[260px] border shadow-lg
   overflow-hidden absolute z-50;
 }
 .menu_navigation_item {
   @apply px-3 py-3 w-full
-  hover:bg-slate-100 bg-white
+  hover:bg-slate-100 bg-white dark:bg-slate-950
   transition-all;
 }
 
@@ -329,14 +357,14 @@ table tbody tr td p {
   md:max-w-3xl
   border-y
   md:bg-transparent
-  bg-white
+  bg-white dark:bg-slate-950
 }
 
 .cul {
   @apply mb-4 h-full max-h-96 cursor-default overflow-y-auto px-1;
 }
 .cli {
-  @apply bg-white border rounded-lg p-2 flex-between items-center transition-all;
+  @apply bg-white dark:bg-slate-950 border rounded-lg p-2 flex-between items-center transition-all;
 }
 
 .cbg {
@@ -351,7 +379,7 @@ table tbody tr td p {
 
 /* Track */
 ::-webkit-scrollbar-track {
-  background:#f1f1f1;
+  @apply bg-cgray dark:bg-slate-600;
 }
 
 /* Handle */

@@ -1,6 +1,6 @@
 import NextAuth from "next-auth";
-import authConfig from "./auth.config";
 import { getUserByEmail } from "./data/user";
+import authConfig from "@/auth.config";
 
 export const {
  handlers: { GET, POST },
@@ -15,6 +15,7 @@ export const {
  callbacks: {
   async session({ token, session }) {
    if (token?.farmId) session.user.farmId = token.farmId;
+   if (token?.farmName) session.user.farmName = token.farmName;
    if (token?.name) session.user.name = token.name;
    if (token?.type) session.user.type = token.type;
    if (token?.id) session.user.id = token.id;
@@ -29,6 +30,7 @@ export const {
 
    token.id = existingUser?.id;
    token.farmId = existingUser?.farmId;
+   token.farmName = existingUser?.farmName;
    token.type = existingUser?.type;
    token.name = existingUser?.name;
 

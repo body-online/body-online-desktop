@@ -42,6 +42,7 @@ const LoginForm = () => {
                             <p className="input_label">Correo*</p>
                             <input
                                 {...register("email")}
+                                placeholder='Ej. juan.perez@gmail.com'
                                 disabled={isSubmitting}
                                 className={`input ${errors.email ? 'border-red-500' : ''}`}
                                 type="text"
@@ -57,6 +58,7 @@ const LoginForm = () => {
                             <input
                                 {...register("password")}
                                 disabled={isSubmitting}
+                                placeholder=''
                                 className={`input ${errors.password ? 'border-red-500' : ''}`}
                                 type="password"
                                 name='password'
@@ -72,7 +74,7 @@ const LoginForm = () => {
                             ) : (
                                 <>
                                     <p>Ingresar</p>
-                                    <SendIcon fill='fill-clime' />
+                                    <SendIcon fill='fill-clime dark:fill-caqua' />
                                 </>
                             )
                             }

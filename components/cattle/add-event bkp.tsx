@@ -119,7 +119,7 @@
 //                                 <div className="flex flex-col md:grid md:grid-flow-col md:auto-cols-max w-full gap-3 h-max">
 //                                     {/* event date */}
 //                                     <label htmlFor="eventDate">
-//                                         <p className="input_label bg-white sticky top-0 w-full">Fecha del evento*</p>
+//                                         <p className="input_label bg-white dark:bg-slate-950 sticky top-0 w-full">Fecha del evento*</p>
 //                                         <input type='datetime-local' className='input min-w-[50%] max-w-max' {...register('eventDate')} />
 //                                         <div className="input_error">
 //                                             {errors.eventDate && (<p>{`${errors.eventDate.message}`}</p>)}
@@ -129,7 +129,7 @@
 //                                     {/* event type */}
 //                                     <div className='w-full space-y-4'>
 //                                         <label htmlFor="eventType">
-//                                             <p className="input_label bg-white sticky -top-1 w-full">Tipo de evento*</p>
+//                                             <p className="input_label bg-white dark:bg-slate-950 sticky -top-1 w-full">Tipo de evento*</p>
 //                                             <div className="overflow-x-auto w-full">
 //                                                 <div className="grid grid-flow-col auto-cols-max gap-2 pb-1 w-max h-full">
 //                                                     {eventTypesList.map((event, index) => {
@@ -191,7 +191,7 @@
 //                                             />
 //                                         ) : eventType === "body_measure" ? (
 //                                             <label htmlFor="measure">
-//                                                 <p className="input_label bg-white sticky -top-1 w-full">Indique el valor del caliper*</p>
+//                                                 <p className="input_label bg-white dark:bg-slate-950 sticky -top-1 w-full">Indique el valor del caliper*</p>
 //                                                 <div className="grid grid-cols-6 md:grid-cols-12 gap-x-2 gap-y-5 pt-1 w-full relative">
 //                                                     {detailsByEvent[eventType].map((measureObj, index) => {
 //                                                         const selected = measure === measureObj.label;
@@ -212,7 +212,7 @@
 //                                             </label>
 //                                         ) : eventType === "cattle_birth" ? (
 //                                             <label htmlFor="eventDetail">
-//                                                 <p className="input_label bg-white sticky top-0 w-full">Cantidad de individuos</p>
+//                                                 <p className="input_label bg-white dark:bg-slate-950 sticky top-0 w-full">Cantidad de individuos</p>
 //                                                 <input type='text' className='input max-w-[120px]' placeholder='Ej. 1' {...register('eventDetail')} />
 //                                                 <div className="input_error">
 //                                                     {errors.eventDetail && (<p>{`${errors.eventDetail.message}`}</p>)}
@@ -225,7 +225,7 @@
 //                                 {/* event observations */}
 //                                 <div className="mt-4">
 //                                     <label htmlFor="eventObservations">
-//                                         <p className="input_label bg-white sticky top-0 w-full">Observaciones*</p>
+//                                         <p className="input_label bg-white dark:bg-slate-950 sticky top-0 w-full">Observaciones*</p>
 //                                         <textarea {...register('observations')} className='textarea' placeholder='Observaciones...'></textarea>
 //                                     </label>
 //                                 </div>

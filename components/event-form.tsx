@@ -216,7 +216,7 @@ export function EventForm({ defaultCattle, isOpenCattles, setIsOpenCattles, hand
                         />
                     ) : eventType === "body_measure" ? (
                         <label htmlFor="measure">
-                            <p className="input_label bg-white sticky -top-1 w-full">Indique el valor del caliper*</p>
+                            <p className="input_label bg-white dark:bg-slate-950 sticky -top-1 w-full">Indique el valor del caliper*</p>
                             <div className="flex flex-wrap gap-x-2 gap-y-5 pt-1 w-full relative">
                                 {detailsByEvent[eventType].map((measureObj, index) => {
                                     const selected = measureObj.value === Number(measure)

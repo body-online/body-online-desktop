@@ -15,10 +15,12 @@ export async function registerUser(values: z.infer<typeof RegisterSchema>) {
  const newUser = {
   email: email,
   name,
-  type: "owner",
+  type: values?.type,
   password: hashedPassword,
  };
 
+ console.log(`creating new ${newUser?.type}`);
+ console.log(newUser);
  try {
   // insert and send the verification token via email
   const { data } = await axios({
@@ -26,9 +28,13 @@ export async function registerUser(values: z.infer<typeof RegisterSchema>) {
    url: `${process.env.API_URL}/api/ranchi/user`,
    data: newUser,
   });
-  if (data.error)
+
+  if (data?.error)
    return { error: "Ha ocurrido un error al registar el usuario" };
+
+  return { data };
  } catch (error: any) {
+  console.log(error);
   return {
    error:
     error?.response?.data?.message ??

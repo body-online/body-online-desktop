@@ -91,7 +91,7 @@ const RegisterForm = () => {
                             ) :
                                 <>
                                     <p>Crear cuenta</p>
-                                    <CreateAccountIcon fill='fill-clime' />
+                                    <CreateAccountIcon fill='fill-clime dark:fill-caqua' />
                                 </>
 
                             }

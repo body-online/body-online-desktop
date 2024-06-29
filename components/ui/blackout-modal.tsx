@@ -49,7 +49,7 @@ const BlackOutModal = ({ handleClose, children, isOpen }: ModalProps) => {
                     initial="hidden"
                     animate="visible"
                     exit="exit"
-                    className="fixed h-screen w-screen inset-0 top-0 z-50 bg-white flex-center overflow-hidden px-2"
+                    className="fixed h-screen w-screen inset-0 top-0 z-50 custom-gradient flex-center overflow-hidden px-2"
                     onClick={(e) => { return e.stopPropagation() }}
                 >
                     {/* close indicator */}
@@ -61,9 +61,9 @@ const BlackOutModal = ({ handleClose, children, isOpen }: ModalProps) => {
                             exit="exit"
                             type='button'
                             onClick={() => handleClose()}
-                            className="px-1 py-1 rounded-md bg-slate-200 absolute top-4 right-4 z-20">
-                            <p className='text-[10px] sm:text-[12px] font-bold text-cgray hidden md:block text-slate-500'>ESC</p>
-                            <CloseIcon fill='fill-cgray md:hidden' />
+                            className="px-1 py-1 rounded-md bg-slate-200 dark:bg-clightgray absolute top-4 right-4 z-20">
+                            <p className='text-[10px] sm:text-[12px] font-bold text-cgray hidden md:block dark:text-slate-400'>ESC</p>
+                            <CloseIcon fill='fill-cgray dark:fill-slate-200 md:hidden' />
                         </motion.button> : null
                     }
                     <div className="relative w-full max-w-max">

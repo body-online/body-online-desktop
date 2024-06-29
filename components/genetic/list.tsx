@@ -34,7 +34,7 @@ const Genetics = ({ genetics, error }: { error?: string; genetics?: GeneticProps
                     <div className='max-h-60 relative w-full overflow-x-auto'>
                         <table>
                             <thead>
-                                <tr className='sticky top-0 z-10 h-max bg-white'>
+                                <tr className='sticky top-0 z-10 h-max bg-white dark:bg-slate-950'>
                                     <th><p>Nombre</p></th>
                                     <th><p>Fecha de creación</p></th>
                                     <th></th>

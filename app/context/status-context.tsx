@@ -1,6 +1,5 @@
 'use client'
 
-import { CattleProps } from '@/lib/types'
 import { createContext, useState } from 'react'
 
 export const StatusContext = createContext({})

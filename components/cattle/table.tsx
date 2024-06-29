@@ -4,7 +4,6 @@ import {
     ColumnDef,
     ColumnFiltersState,
     SortingState,
-    VisibilityState,
     flexRender,
     getCoreRowModel,
     getFilteredRowModel,
@@ -105,7 +104,7 @@ export function CattlesDataTable({ totalAmount }: { totalAmount?: number }) {
                 </label>
             </form>
 
-            <div className='h-[65vh] sm:h-[50vh] overflow-auto'>
+            <div className='h-max overflow-auto'>
                 {isLoading ? (
                     <div className='h-full flex-center gap-2 py-default'>
                         <LoadingIcon />

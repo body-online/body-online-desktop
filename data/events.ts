@@ -8,8 +8,8 @@ export async function getEvents({
  page,
  limit,
 }: {
- page?: string;
- limit?: string;
+ page: number;
+ limit: number;
 }): Promise<{
  error?: string;
  data?: {
@@ -22,17 +22,14 @@ export async function getEvents({
   const farmId = await currentFarm();
 
   if (!farmId) return { error: "No hemos encontrado su organización" };
-  const params = { page, limit };
 
   const { data } = await axios.get(
-   `${process.env.API_URL}/api/ranchi/event/farmId/${farmId}`
+   `${process.env.API_URL}/api/ranchi/event/farm/get/${farmId}`,
+   { params: { page, limit } }
   );
-  //  await axios({
-  //  method: "GET",
-  //  url: `${process.env.API_URL}/api/ranchi/event/farm/${farmId}`,
-  //  params: { page: 1, limit: 1 },
-  // });
-  console.log(data);
+
+  // console.log("eventos:::");
+  // console.log(data);
 
   return { data };
  } catch (error: any) {

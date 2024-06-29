@@ -1,10 +1,9 @@
 import { SessionProvider } from 'next-auth/react';
-import { Toaster } from 'react-hot-toast';
 import localFont from 'next/font/local'
 import type { Metadata } from "next";
 import { auth } from '@/auth';
 import "./globals.css";
-import StatusProvider from './context/status-context';
+import { Providers } from '@/components/ui/providers';
 
 const satoshi = localFont({
   src: '../public/fonts/Satoshi-Variable.ttf',
@@ -19,24 +18,21 @@ export const metadata: Metadata = {
 
 export default async function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: Readonly<{ children: React.ReactNode; }>) {
   const session = await auth()
 
   return (
     <SessionProvider session={session}>
-      <StatusProvider>
-        <html lang="en">
-          <head>
-            {/* no scrolling on mobile */}
-            <meta
-              name="viewport"
-              content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
-            />
-            <script
-              dangerouslySetInnerHTML={{
-                __html: `
+      <html lang="en" className={`${satoshi.className}`} suppressHydrationWarning>
+        <head>
+          {/* no scrolling on mobile */}
+          <meta
+            name="viewport"
+            content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+          />
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `
               document.addEventListener('gesturestart', function(e) {
                 e.preventDefault();
                 document.body.style.zoom = 0.99;
@@ -51,20 +47,15 @@ export default async function RootLayout({
                   e.preventDefault();
                   document.body.style.zoom = 0.99;
               });`,
-              }}
-            ></script>
-          </head>
-
-          <body className={`${satoshi.className} body`}>
+            }}
+          ></script>
+        </head>
+        <body className={`body`}>
+          <Providers>
             {children}
-            <Toaster
-              position="bottom-right"
-              reverseOrder={true}
-              toastOptions={{ duration: 5000 }}
-            />
-          </body>
-        </html>
-      </StatusProvider>
+          </Providers>
+        </body>
+      </html>
     </SessionProvider>
   );
 }

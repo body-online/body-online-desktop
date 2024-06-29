@@ -4,6 +4,7 @@ import { z } from "zod";
 import { LoginSchema } from "@/schemas";
 import { ExtendedUser } from "@/next-auth";
 import axios from "axios";
+import { currentUser } from "@/lib/auth";
 
 export async function getUserById(id: string): Promise<{
  error?: string;

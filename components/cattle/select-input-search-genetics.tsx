@@ -100,7 +100,7 @@ const SelectInputSearchGenetic = ({ handleSelectGenetic, isOpen, setIsOpen, erro
                             </div>
 
                             <label>
-                                <div className="flex input gap-3 items-center w-full backdrop-blur-sm bg-white/50">
+                                <div className="flex input gap-3 items-center w-full backdrop-blur-sm bg-white dark:bg-slate-950/50">
                                     {isLoading ? <LoadingIcon /> :
                                         <SearchIcon fill={`fill-slate-400`} />
                                     }
@@ -128,7 +128,7 @@ const SelectInputSearchGenetic = ({ handleSelectGenetic, isOpen, setIsOpen, erro
                                             <button
                                                 type='button'
                                                 className='w-full py-4 px-4 transition-all rounded-xl border
-                                            md:opacity-70 md:hover:opacity-100 md:hover:bg-white md:bg-slate-100'
+                                            md:opacity-70 md:hover:opacity-100 md:hover:bg-white dark:bg-slate-950 md:bg-slate-100'
                                                 onClick={() => {
                                                     setSelectedGenetics(genetic);
                                                     handleSelectGenetic(genetic._id);

@@ -9,9 +9,10 @@ import Image from "next/image";
 import Link from 'next/link';
 
 import { enterDropdown, navigationItems } from '@/lib/constants';
-import { FarmIcon, LogoutIcon } from './icons';
+import { CloseIcon, FarmIcon, LogoutIcon, MenuIcon, UserIcon } from './icons';
 
 import Divider from './divider';
+import ThemeSwitch from './theme-switch';
 
 
 export default function Navbar({ user }: { user?: ExtendedUser }) {
@@ -29,15 +30,15 @@ export default function Navbar({ user }: { user?: ExtendedUser }) {
     }
 
     // onclick outside handler
-    const handleClickListener = (event: MouseEvent) => {
-        let clickedInside;
+    // const handleClickListener = (event: MouseEvent) => {
+    //     let clickedInside;
 
-        clickedInside =
-            wrapperRef?.current && wrapperRef.current.contains(event.target);
+    //     clickedInside =
+    //         wrapperRef?.current && wrapperRef.current.contains(event.target);
 
-        if (clickedInside && isOpen || !isOpen) return;
-        return handleClose();
-    };
+    //     if (clickedInside && isOpen || !isOpen) return;
+    //     return handleClose();
+    // };
     const handleEsc = (event: KeyboardEvent) => {
         if (event.key === 'Escape') {
             return handleClose();
@@ -47,11 +48,11 @@ export default function Navbar({ user }: { user?: ExtendedUser }) {
     useEffect(() => {
         if (!isOpen) {
             document.removeEventListener('keydown', handleEsc);
-            document.removeEventListener("mousedown", handleClickListener);
+            // document.removeEventListener("mousedown", handleClickListener);
             document.body.style.overflow = "auto";
         } else {
             document.addEventListener('keydown', handleEsc);
-            document.addEventListener("mousedown", handleClickListener);
+            // document.addEventListener("mousedown", handleClickListener);
             document.body.style.overflow = "hidden";
         }
     }, [isOpen])
@@ -62,84 +63,57 @@ export default function Navbar({ user }: { user?: ExtendedUser }) {
         <>
             <div className="bg-cgreen py-3">
                 <div className='flex-between px-default'>
-                    <div>
-                        <div className='flex items-center gap-5'>
-                            <p className='text-white text-base font-bold hidden md:block'>
-                                Body<span className='text-clime'>Online</span>
-                            </p>
 
-                            <div className="flex-center gap-1">
-                                <p className='text-white text-sm font-bold w-max'>{user?.name}</p>
-                                <div className="flex-center gap-1 rounded-full bg-white/5 px-3 h-7">
-                                    <FarmIcon />
-                                    <p className='text-white font-medium text-sm'>
-                                        San Fernando
-                                    </p>
-                                </div>
-                            </div>
-
-                        </div>
+                    <div className='flex items-center gap-2'>
+                        <ProfileImage url={user?.image} />
+                        <p className='text-white font-semibold'>{user?.name}</p>
+                        {/* <p className='text-white text-base font-bold'>
+                            Body<span className='text-clime'>Online</span>
+                        </p> */}
                     </div>
 
 
-                    <div className="relative h-7" ref={wrapperRef}>
-                        <ProfileImage url={user?.image} onClick={() => handleOpen()} />
-
-                        <AnimatePresence
-                            initial={false}
-                            onExitComplete={() => null}
-                        >
-                            {isOpen ? (
-                                <motion.div onClick={(e) => e.stopPropagation()}
-                                    variants={enterDropdown}
-                                    initial="hidden"
-                                    animate="visible"
-                                    exit="exit"
-                                    className='dropdown top-8 right-0'
+                    <button onClick={() => setIsOpen(!isOpen)} className='h-6 md:h-7 w-6 md:w-7 overflow-hidden rounded-full focus:ring-0 focus:outline-none bg-csemigreen border-slate-100/50 flex-center'>
+                        <AnimatePresence mode='wait'>
+                            {isOpen ?
+                                <motion.div
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    exit={{ opacity: 0 }}
+                                    transition={{ duration: 0.1 }}
+                                    key='close'
                                 >
-                                    <div className='w-full px-2 md:px-3 pt-3 md:pt-4 flex-between'>
-                                        <p className="text-start text-sm font-medium text-slate-700">{user?.email}</p>
-                                    </div>
-
-                                    {/* <NavigationItem title='Inicio' href='/' selected={pathname === '/'} /> */}
-
-                                    <div className="px-6">
-                                        <Divider />
-                                    </div>
-
-                                    <button type='button' className='px-4 py-3 hover:bg-slate-100 w-full transition-all group' onClick={() => signOut()}>
-                                        <div className="flex items-center justify-between">
-                                            <p className='text-sm text-start font-medium transition-all text-slate-500 group-hover:text-black'>
-                                                Cerrar sesión
-                                            </p>
-                                            <LogoutIcon fill='fill-slate-500 group-hover:fill-black transition-all rotate-90' />
-                                        </div>
-                                    </button>
-
+                                    <CloseIcon sizes='w-5 md:w-6 h-5 md:h-6' fill='fill-clime' />
                                 </motion.div>
-                            ) : null}
+                                :
+                                <motion.div
+                                    initial={{ opacity: 0 }}
+                                    animate={{ opacity: 1 }}
+                                    exit={{ opacity: 0 }}
+                                    transition={{ duration: 0.1 }}
+                                    key='open'
+                                >
+                                    <MenuIcon fill='fill-clime' />
+                                </motion.div>
+                            }
                         </AnimatePresence>
-
-                    </div>
+                    </button>
                 </div>
             </div>
 
-
-            <div className="w-full h-full bg-csemigreen border-b border-cgreen z-30 sticky top-0 py-2">
-                <div className="overflow-x-scroll no-scrollbar flex gap-1 items-center h-full">
-                    <div className="flex-center sticky left-0 bg-gradient-to-r from-csemigreen/90 via-csemigreen/70 to-csemigreen/5 h-full z-20 px-default backdrop-blur-sm">
-                        <p className="font-semibold text-sm text-slate-200 py-2">Navegación</p>
-                    </div>
-                    <div className="flex items-center gap-2 pr-4 snap-x">
+            {/* navigation */}
+            <div className="w-full bg-csemigreen z-30 sticky top-0">
+                <div className="overflow-x-scroll no-scrollbar flex gap-1 items-center px-default">
+                    <div className="flex items-center pr-4">
                         {navigationItems.map((i, index) => {
                             var selected: boolean = i.href == pathname;
 
                             return (
-                                <div className='snap-center' key={index}>
-                                    <Link href={i.href}>
+                                <div key={index} className={`${selected ? ' border-b-clime' : 'border-transparent'} h-12 flex items-center border-b-2`}>
+                                    <Link href={i.href} onClick={() => setIsOpen(false)}>
                                         <p
-                                            className={`font-medium text-sm text-white active:bg-transparent md:hover:bg-white/5 rounded-md px-3 py-1.5 transition-all
-                                            ${selected ? 'bg-white/10' : 'opacity-50 active:opacity-100 md:hover:opacity-100'}`}
+                                            className={`font-medium text-sm active:bg-transparent rounded-md px-3 py-1.5 transition-all
+                                            ${selected ? 'text-clime dark:text-clime' : 'text-white dark:text-white opacity-50 active:opacity-100 md:hover:opacity-100'}`}
                                         >
                                             {i.title}
                                         </p>
@@ -150,19 +124,61 @@ export default function Navbar({ user }: { user?: ExtendedUser }) {
                     </div>
                 </div>
             </div>
+
+            {/* config modal */}
+            <AnimatePresence
+                initial={false}
+                onExitComplete={() => null}
+            >
+                {isOpen ? (
+                    <motion.div onClick={(e) => e.stopPropagation()}
+                        variants={enterDropdown}
+                        initial="hidden"
+                        animate="visible"
+                        exit="exit"
+                        className='fixed right-0 md:right-6 bottom-0 md:top-12 z-50
+                        w-screen overflow-y-auto h-[calc(100vh-97px)] md:h-max 
+                        md:rounded-2xl md:w-full md:max-w-xs
+                        custom-gradient custom-border md:border'
+                    >
+                        <div className="container h-full flex flex-col">
+
+                            <div className="h-full">
+                                <div className='flex-between gap-1 px-6 py-4'>
+                                    <p className='font-medium'>{user?.email}</p>
+                                    <ProfileImage url={user?.image} />
+                                </div>
+                                <div className='flex-between gap-1 px-6 py-4'>
+                                    <p className='text-sm text-start font-medium transition-all'>Tema</p>
+                                    <ThemeSwitch />
+                                </div>
+                            </div>
+
+                            <button type='button' className='px-6 py-5 border-t custom-border md:hover:bg-slate-100 dark:md:hover:bg-cblack w-full transition-all group' onClick={() => signOut()}>
+                                <div className="flex items-center justify-between">
+                                    <p className='text-sm text-start font-medium transition-all'>
+                                        Cerrar sesión
+                                    </p>
+                                    <LogoutIcon fill='fill-black dark:fill-white transition-all rotate-90' />
+                                </div>
+                            </button>
+                        </div>
+
+                    </motion.div>
+                ) : null}
+            </AnimatePresence>
         </>
     );
 }
 
 
-const ProfileImage = ({ url, onClick }: { url: ExtendedUser['image']; onClick: MouseEventHandler<HTMLButtonElement> }) => {
+export const ProfileImage = ({ url, type }: { url: ExtendedUser['image']; type?: string }) => {
     return (
-        <button
-            className="h-7 w-7 overflow-hidden rounded-full focus:ring-0 focus:outline-none"
-            onClick={onClick}
+        <div
+            className="h-6 md:h-7 w-6 md:w-7 overflow-hidden rounded-full focus:ring-0 focus:outline-none"
         >
             {!url ?
-                <div className="bg-gradient-to-tr from-clime via-emerald-500 to-caqua h-full w-full">
+                <div className={`bg-gradient-to-tr ${type == 'operator' ? 'from-blue-600 via-blue-400 to-blue-300' : 'from-clime via-emerald-500 to-caqua'} h-full w-full`}>
                 </div>
                 :
                 <Image
@@ -172,6 +188,6 @@ const ProfileImage = ({ url, onClick }: { url: ExtendedUser['image']; onClick: M
                     alt="profile"
                 />
             }
-        </button>
+        </div>
     );
 };

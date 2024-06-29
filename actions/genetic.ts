@@ -44,7 +44,6 @@ export async function deleteGenetic(
    method: "patch",
    url: `${process.env.API_URL}/api/ranchi/genetic/delete/${geneticId}`,
   });
-  console.log(data);
 
   return { data: "success" };
  } catch (err: any) {

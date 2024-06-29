@@ -58,7 +58,7 @@
 
 // const ProfileImage = ({ url }: { url: ExtendedUser['image'] }) => {
 //   return (
-//     <div className="relative rounded-full overflow-hidden p-2 bg-white border-2 border-white">
+//     <div className="relative rounded-full overflow-hidden p-2 bg-white dark:bg-slate-950 border-2 border-white">
 //       {!url ?
 //         <div className="flex-center"><UserIcon /></div>
 //         :
