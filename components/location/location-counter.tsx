@@ -6,7 +6,7 @@ const LocationCounter = async () => {
     const { data, error } = await getLocations({ limit: '1' })
 
     return (
-        <div className='custom-gradient border custom-border rounded-xl px-2 py-2'>
+        <div className='px-2'>
             <div>
                 {error ? <ErrorIcon /> :
                     <h3 className='text-xl md:text-2xl font-bold text-cblack dark:text-white text-center'>

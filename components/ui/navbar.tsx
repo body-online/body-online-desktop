@@ -63,7 +63,6 @@ export default function Navbar({ user }: { user?: ExtendedUser }) {
         <>
             <div className="bg-cgreen py-3">
                 <div className='flex-between px-default'>
-
                     <div className='flex items-center gap-2'>
                         <ProfileImage url={user?.image} />
                         <p className='text-white font-semibold'>{user?.name}</p>
@@ -144,6 +143,7 @@ export default function Navbar({ user }: { user?: ExtendedUser }) {
                         <div className="container h-full flex flex-col">
 
                             <div className="h-full">
+                                <p className='text-cblack dark:text-white font-semibold px-6 py-4 text-lg'>Menú</p>
                                 <div className='flex-between gap-1 px-6 py-4'>
                                     <p className='font-medium'>{user?.email}</p>
                                     <ProfileImage url={user?.image} />

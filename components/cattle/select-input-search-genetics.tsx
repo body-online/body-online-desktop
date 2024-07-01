@@ -70,7 +70,7 @@ const SelectInputSearchGenetic = ({ handleSelectGenetic, isOpen, setIsOpen, erro
                     <p className='w-full truncate'>
                         {selectedGenetic ? selectedGenetic?.name : 'Seleccionar genética'}
                     </p>
-                    <SearchIcon />
+                    <SearchIcon fill='fill-cblack dark:fill-white' />
                 </div>
             </button>
             <div className="input_error">
@@ -90,7 +90,7 @@ const SelectInputSearchGenetic = ({ handleSelectGenetic, isOpen, setIsOpen, erro
                         {/* header */}
                         <div
                             className="w-full sticky top-0 z-30 mb-3 h-20
-                            bg-gradient-to-b from-white via-white/90 to-transparent"
+                            bg-gradient-to-b custom-gradient"
                         >
                             <div className="flex-between gap-3 mb-2">
                                 <h1 className="semititle">Seleccionar genética</h1>
@@ -100,9 +100,9 @@ const SelectInputSearchGenetic = ({ handleSelectGenetic, isOpen, setIsOpen, erro
                             </div>
 
                             <label>
-                                <div className="flex input gap-3 items-center w-full backdrop-blur-sm bg-white dark:bg-slate-950/50">
+                                <div className="input text-start w-full disabled:opacity-50">
                                     {isLoading ? <LoadingIcon /> :
-                                        <SearchIcon fill={`fill-slate-400`} />
+                                        <SearchIcon fill='fill-cblack dark:fill-white' />
                                     }
                                     <input
                                         className={`text-base h-12 border-none bg-transparent focus:outline-none w-full placeholder:text-slate-400 placeholder:font-normal disabled:opacity-50`}
@@ -153,7 +153,7 @@ const SelectInputSearchGenetic = ({ handleSelectGenetic, isOpen, setIsOpen, erro
                         }
                         < div
                             className="w-full sticky bottom-0 h-12 z-20
-                        bg-gradient-to-t from-white via-white/90 to-transparent "
+                        bg-gradient-to-t custom-gradient"
                         />
 
                     </div>

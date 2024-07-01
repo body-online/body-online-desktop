@@ -67,7 +67,7 @@ const SelectInputSearchLocation = ({ handleSelectLocation, isOpen, setIsOpen, er
                     <p className='w-full truncate'>
                         {selectedLocation ? selectedLocation?.name : 'Seleccionar ubicación'}
                     </p>
-                    <SearchIcon />
+                    <SearchIcon fill='fill-cblack dark:fill-white' />
                 </div>
             </button>
             <div className="input_error">
@@ -87,7 +87,7 @@ const SelectInputSearchLocation = ({ handleSelectLocation, isOpen, setIsOpen, er
                         {/* header */}
                         <div
                             className="w-full sticky top-0 z-30 mb-3 h-20
-                            bg-gradient-to-b from-white via-white/90 to-transparent"
+                            bg-gradient-to-b custom-gradient"
                         >
                             <div className="flex-between gap-3 mb-2">
                                 <h1 className="semititle">Seleccionar ubicación</h1>
@@ -97,9 +97,9 @@ const SelectInputSearchLocation = ({ handleSelectLocation, isOpen, setIsOpen, er
                             </div>
 
                             <label>
-                                <div className="flex input gap-3 items-center w-full backdrop-blur-sm bg-white dark:bg-slate-950/50">
+                                <div className="flex-center px-3 gap-2 text-sm md:text-base transition rounded-lg border hover:border-gray-400 focus:outline-0 focus:ring-[1px] ring-slate-300 dark:ring-slate-600 w-full disabled:opacity-50 bg-white dark:bg-clightgray dark:border-gray-800 dark:md:hover:border-slate-700">
                                     {isLoading ? <LoadingIcon /> :
-                                        <SearchIcon fill={`fill-slate-400`} />
+                                        <SearchIcon fill='fill-cblack dark:fill-white' />
                                     }
                                     <input
                                         className={`text-base h-12 border-none bg-transparent focus:outline-none w-full placeholder:text-slate-400 placeholder:font-normal disabled:opacity-50`}
@@ -126,8 +126,7 @@ const SelectInputSearchLocation = ({ handleSelectLocation, isOpen, setIsOpen, er
                                         <li key={index}>
                                             <button
                                                 type='button'
-                                                className='w-full py-4 px-4 transition-all rounded-xl border
-                                            md:opacity-70 md:hover:opacity-100 md:hover:bg-white dark:bg-slate-950 md:bg-slate-100'
+                                                className='w-full border custom-border rounded-md bg-slate-100 dark:bg-cgray'
                                                 onClick={() => {
                                                     setSelectedLocations(location);
                                                     handleSelectLocation(location._id);
@@ -152,7 +151,7 @@ const SelectInputSearchLocation = ({ handleSelectLocation, isOpen, setIsOpen, er
                     </div>
                     < div
                         className="w-full sticky bottom-0 h-12 z-20
-                        bg-gradient-to-t from-white via-white/90 to-transparent "
+                        bg-gradient-to-t custom-gradient"
                     />
                 </motion.div>
             </BlackOutModal>

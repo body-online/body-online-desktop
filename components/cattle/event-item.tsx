@@ -10,7 +10,7 @@ type EventProps = {
     farmId: string,
     measure: number,
     observations: string,
-    bodyRanges: number[]
+    bodyRanges: string[]
 }
 export default function EventItem({ event, prevEventDate }: { event: EventProps; prevEventDate?: Date }) {
     const lastEventDate = prevEventDate ? prevEventDate : undefined
@@ -20,7 +20,7 @@ export default function EventItem({ event, prevEventDate }: { event: EventProps;
     return (
         <div>
             {!hideEventDate &&
-                <div className="flex gap-1 items-center w-full pt-3 pb-2">
+                <div className="flex-center w-max gap-1">
                     <CalendarIcon />
                     <p className='text-sm sm:text-base text-slate-500'>
                         {eventDate}
@@ -30,7 +30,7 @@ export default function EventItem({ event, prevEventDate }: { event: EventProps;
 
             <div className="flex gap-1 px-1">
                 {/* left */}
-                <div className="w-max border-l ml-4 md:ml-5">
+                <div className="bg-slate-500 w-[1px]">
                     <EventTypeIcon event={event} />
                 </div>
 
@@ -104,27 +104,27 @@ export default function EventItem({ event, prevEventDate }: { event: EventProps;
 
 const EventTypeIcon = ({ event }: { event: EventProps }) => {
     const hasMeasure = event?.measure ? Number(event?.measure) : undefined
-    const fillBgColor = hasMeasure ? (hasMeasure > event?.bodyRanges[1] ? 'bg-orange-200' : hasMeasure > event?.bodyRanges[0] ? 'bg-green-200' : 'bg-yellow-200') : 'bg-slate-200'
+    const fillBgColor = hasMeasure ? (hasMeasure > event?.bodyRanges[1] ? 'bg-orange-200 dark:bg-orange-500' : hasMeasure > event?.bodyRanges[0] ? 'bg-green-200 dark:bg-green-500' : 'bg-yellow-200 dark:bg-yellow-500') : 'bg-slate-200 dark:bg-slate-500'
     const fillColor = hasMeasure ? (hasMeasure > event?.bodyRanges[1] ? 'fill-orange-500' : hasMeasure > event?.bodyRanges[0] ? 'fill-green-500' : 'fill-yellow-500') : 'fill-slate-500'
 
     switch (event.eventType) {
         case 'death':
             return (
-                <div className={`h-8 md:h-9 w-8 md:w-9 flex-center rounded-full bg-red-200 -ml-4 md:-ml-5`}>
-                    <DeathIcon fill='fill-red-500' />
+                <div className={`h-8 md:h-9 w-8 md:w-9 flex-center rounded-full bg-red-200 dark:bg-red-500 -ml-4 md:-ml-5`}>
+                    <DeathIcon fill='fill-red-500 dark:fill-white' />
                 </div>
             )
         case 'pregnant':
             return (
-                <div className={`h-8 md:h-9 w-8 md:w-9 flex-center rounded-full bg-violet-200 -ml-4 md:-ml-5`}>
-                    <PregnantIcon fill='fill-violet-500' />
+                <div className={`h-8 md:h-9 w-8 md:w-9 flex-center rounded-full bg-violet-200 dark:bg-violet-500 -ml-4 md:-ml-5`}>
+                    <PregnantIcon fill='fill-violet-500 dark:fill-white' />
                 </div>
             )
 
         case 'not_pregnant':
             return (
-                <div className={`h-8 md:h-9 w-8 md:w-9 flex-center rounded-full bg-slate-200 -ml-4 md:-ml-5`}>
-                    <NotPregnantIcon stroke='stroke-slate-500' />
+                <div className={`h-8 md:h-9 w-8 md:w-9 flex-center rounded-full bg-slate-200 dark:bg-slate-500 -ml-4 md:-ml-5`}>
+                    <NotPregnantIcon stroke='stroke-slate-500 dark:fill-white' />
                 </div>
             )
 
@@ -137,7 +137,7 @@ const EventTypeIcon = ({ event }: { event: EventProps }) => {
 
         case 'cattle_birth':
             return (
-                <div className={`h-8 md:h-9 w-8 md:w-9 flex-center rounded-full bg-pink-200 -ml-4 md:-ml-5`}>
+                <div className={`h-8 md:h-9 w-8 md:w-9 flex-center rounded-full bg-pink-200 dark:bg-pink-500 -ml-4 md:-ml-5`}>
                     <CattleBirthIcon stroke='stroke-pink-500' />
                 </div>
             )

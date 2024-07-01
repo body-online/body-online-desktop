@@ -21,7 +21,7 @@ import {
     TableRow,
 } from "@/components/ui/table";
 
-import { LoadingIcon, SearchIcon } from '../ui/icons';
+import { ArrowsIcon, LoadingIcon, SearchIcon } from '../ui/icons';
 import React, { useEffect, useState } from "react";
 import { columnsCattle } from './columns';
 import axios from 'axios';
@@ -153,11 +153,11 @@ export function CattlesDataTable({ totalAmount }: { totalAmount?: number }) {
 
 
             < div className="flex-end flex-wrap gap-6 h-9 mt-3">
-                <label className='flex-center bg-slate-100 gap-2 border rounded-full overflow-hidden h-full'>
-                    <p className='input_label pl-3 text-slate-400'> Cantidad de filas</p>
+                <label className='pagination'>
+                    <p className='text-xs px-2 m-auto '>Cantidad de filas</p>
                     <select
                         disabled={isLoading}
-                        className='p-2 disabled:opacity-50 rounded-full focus:outline-none bg-transparent font-medium'
+                        className='dark:bg-cgray dark:text-white'
                         value={limit}
                         onChange={({ target }) => { setPage(1); setLimit(target.value) }}
                     >
@@ -170,30 +170,29 @@ export function CattlesDataTable({ totalAmount }: { totalAmount?: number }) {
                 </label>
 
                 {totalPages &&
-                    <label className='flex-center bg-slate-100 gap-2 border rounded-full overflow-hidden h-full'>
-
+                    <label className='pagination'>
                         <button
-                            className="rounded-full bg-slate-100 p-2 disabled:opacity-50"
+                            className="table_btn_pag"
                             disabled={page == 1}
                             onClick={() => {
                                 setPage(page ? page - 1 : 1)
                             }}
                         >
-                            <ArrowIcon direction="left" />
+                            <ArrowsIcon direction="rotate-90" />
                         </button>
 
-                        <p className={`p-2 ${isLoading ? 'opacity-50' : ''}`}>
-                            {page}/{totalPages}
+                        <p className={`text-xs px-2 m-auto ${isLoading ? 'opacity-50' : ''}`}>
+                            Pág. {page} de {totalPages}
                         </p>
 
                         <button
-                            className="rounded-full bg-slate-100 p-2 disabled:opacity-50"
+                            className="table_btn_pag"
                             disabled={page == totalPages}
                             onClick={() => {
                                 setPage(page ? page + 1 : totalPages ?? 1);
                             }}
                         >
-                            <ArrowIcon direction="right" />
+                            <ArrowsIcon direction="-rotate-90" />
                         </button>
 
                     </label>

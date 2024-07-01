@@ -69,7 +69,7 @@ const SelectInputSearchCattle = ({ selectedCattle, handleSelectCattle, isOpen, s
                     <p className='w-full truncate'>
                         {selectedCattle ? selectedCattle?.caravan : 'Seleccionar caravana'}
                     </p>
-                    <SearchIcon />
+                    <SearchIcon fill='fill-cblack dark:fill-white' />
                 </div>
             </button>
             <div className="input_error">
@@ -89,7 +89,7 @@ const SelectInputSearchCattle = ({ selectedCattle, handleSelectCattle, isOpen, s
                         {/* header */}
                         <div
                             className="w-full sticky top-0 z-30 mb-3 h-20
-                            bg-gradient-to-b from-white via-white/90 to-transparent"
+                            bg-gradient-to-b custom-gradient"
                         >
                             <div className="flex-between gap-3 mb-2">
                                 <h1 className="semititle">Seleccionar caravana</h1>
@@ -99,12 +99,12 @@ const SelectInputSearchCattle = ({ selectedCattle, handleSelectCattle, isOpen, s
                             </div>
 
                             <label>
-                                <div className="flex input gap-3 items-center w-full backdrop-blur-sm bg-white dark:bg-slate-950/50">
+                                <div className="input text-start w-full disabled:opacity-50">
                                     {isLoading ? <LoadingIcon /> :
-                                        <SearchIcon fill={`fill-slate-400`} />
+                                        <SearchIcon fill='fill-cblack dark:fill-white' />
                                     }
                                     <input
-                                        className={`text-base h-12 border-none bg-transparent focus:outline-none w-full placeholder:text-slate-400 placeholder:font-normal disabled:opacity-50`}
+                                        className={`input`}
                                         disabled={!cattles}
                                         placeholder="Escriba el nombre de la caravana..."
                                         value={searchTerm ?? ''}
@@ -126,8 +126,7 @@ const SelectInputSearchCattle = ({ selectedCattle, handleSelectCattle, isOpen, s
                                         <li key={index}>
                                             <button
                                                 type='button'
-                                                className='w-full py-4 px-4 transition-all rounded-xl border
-                                                md:opacity-70 md:hover:opacity-100 md:hover:bg-white dark:bg-slate-950 md:bg-slate-100'
+                                                className='w-full border custom-border rounded-md bg-slate-100 dark:bg-cgray'
                                                 onClick={() => {
                                                     handleSelectCattle(cattle);
                                                     handleClose();

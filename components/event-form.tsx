@@ -97,7 +97,7 @@ export function EventForm({ defaultCattle, isOpenCattles, setIsOpenCattles, hand
             {/* header */}
             <div
                 className="w-full sticky top-0 z-30 mb-3
-                    bg-gradient-to-b from-white via-white/90 to-transparent"
+                    bg-gradient-to-b custom-gradient"
             >
                 <div className="flex-between gap-3 mb-2">
                     <h1 className="semititle">Crear evento</h1>
@@ -290,7 +290,7 @@ export function EventForm({ defaultCattle, isOpenCattles, setIsOpenCattles, hand
         // <div className='w-[90vw] h-[80vh] overflow-auto pr-1 max-w-lg'>
         //     <div
         //         className="w-full sticky top-0 z-10 mb-3 h-12
-        //                     bg-gradient-to-b from-white via-white/90 to-transparent"
+        //                     bg-gradient-to-b custom-gradient"
         //     >
         //         <div className="flex-between gap-3 mb-2">
         //             <h1 className="semititle">Crear evento</h1>

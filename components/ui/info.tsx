@@ -37,7 +37,8 @@ const InfoIcon = () => {
                 fill="none"
                 viewBox="0 0 24 24"
                 strokeWidth={1.5}
-                className="h-8 w-8 stroke-black dark:stroke-white">
+                className="h-8 w-8 stroke-cgreen dark:stroke-clime"
+            >
                 <path
                     strokeLinecap="round"
                     strokeLinejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 5.25h.008v.008H12v-.008Z" />
@@ -53,7 +54,7 @@ const SuccessIcon = () => {
                 viewBox="0 0 32 32"
                 fill="none"
                 aria-hidden="true"
-                className="h-8 w-8"
+                className="h-8 w-8 stroke-cgreen dark:stroke-clime"
             >
                 <path
                     strokeLinecap="round"
@@ -72,7 +73,7 @@ const CloseEyeIcon = () => {
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none" viewBox="0 0 24 24"
                 strokeWidth="1.5"
-                className="h-8 w-8 stroke-black dark:stroke-white"
+                className="h-8 w-8 stroke-cgreen dark:stroke-clime"
             >
                 <path
                     strokeLinecap="round"
@@ -88,13 +89,13 @@ const WarningIcon = () => {
         <div>
             <svg
                 viewBox="0 0 32 32"
-                fill="none"
                 aria-hidden="true"
+                fill="none"
                 className="h-8 w-8"
-            >
+                >
                 <path
                     d="m13 13 6 6m0-6-6 6m15-3c0 6.627-5.373 12-12 12S4 22.627 4 16 9.373 4 16 4s12 5.373 12 12Z"
-                    stroke="#093731"
+                    className="stroke-cgreen dark:stroke-clime"
                     strokeWidth="2"
                     strokeLinecap="round"
                     strokeLinejoin="round"

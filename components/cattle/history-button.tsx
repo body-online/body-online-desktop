@@ -44,6 +44,7 @@ export function HistoryBtn({ cattle }: { cattle: CattleProps; }) {
             if (data && Array.isArray(data)) {
                 setEventsHistory(data)
             }
+            
         } catch (error) {
             setEventsError(true)
         } finally {
@@ -71,7 +72,7 @@ export function HistoryBtn({ cattle }: { cattle: CattleProps; }) {
                         {/* header */}
                         <div
                             className="w-full sticky top-0 z-10 mb-3 h-12
-                            bg-gradient-to-b from-white via-white/90 to-transparent"
+                            bg-gradient-to-b custom-gradient"
                         >
                             <div className="flex-between gap-3 mb-2">
                                 <h1 className="semititle">Historial de caravana {cattle?.caravan}</h1>
