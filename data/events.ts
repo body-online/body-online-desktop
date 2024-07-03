@@ -2,7 +2,7 @@
 
 import axios from "axios";
 import { EventProps } from "@/lib/types";
-import { currentFarm } from "@/lib/auth";
+import { currentFarm, currentUser } from "@/lib/auth";
 
 export async function getEvents({
  page,
@@ -77,3 +77,41 @@ export async function getEvents({
 //   };
 //  }
 // }
+
+export async function getHistoricalEvents({
+ cattleId,
+}: {
+ cattleId: string;
+}): Promise<{
+ error?: string;
+ data?: {
+  events: EventProps[];
+  totalPages: number;
+  totalEvents: number;
+ };
+}> {
+ try {
+  const user = await currentUser();
+
+  if (!user?.farmId) {
+   return { error: "Error de permisos" };
+  }
+  const { data } = await axios.get(
+   `${process.env.API_URL}/api/ranchi/event/${cattleId}/${user?.farmId}`
+  );
+
+  //   console.log(data);
+
+  const sortedData = data?.sort((a: EventProps, b: EventProps) => {
+   // Turn your strings into dates, and then subtract them
+   // to get a value that is either negative, positive, or zero.
+   return (new Date(b?.eventDate) as any) - (new Date(a?.eventDate) as any);
+  });
+
+  return sortedData;
+ } catch (error) {
+  console.log(error);
+
+  return { error: "Ha ocurrido un error al encontrar el historial" };
+ }
+}

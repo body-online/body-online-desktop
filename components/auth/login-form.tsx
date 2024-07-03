@@ -58,7 +58,7 @@ const LoginForm = () => {
                             <input
                                 {...register("password")}
                                 disabled={isSubmitting}
-                                placeholder=''
+                                placeholder='••••••••'
                                 className={`input ${errors.password ? 'border-red-500' : ''}`}
                                 type="password"
                                 name='password'

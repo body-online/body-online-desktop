@@ -8,6 +8,7 @@ import InfoMessage from '../ui/info'
 import { enterModal } from '@/lib/constants'
 import { motion } from 'framer-motion'
 import Card from '../ui/card'
+import { getGenetics } from '@/data/genetic'
 
 const SelectInputSearchGenetic = ({ handleSelectGenetic, isOpen, setIsOpen, error, isSubmitting }:
     { handleSelectGenetic: Function; isOpen: boolean; setIsOpen: Function; error?: string; isSubmitting?: boolean }) => {
@@ -26,8 +27,8 @@ const SelectInputSearchGenetic = ({ handleSelectGenetic, isOpen, setIsOpen, erro
     const searchGenetics = async () => {
         setIsLoading(true)
         try {
-            const { data } = await axios.get(`api/genetics`)
-            if (data) setGenetics(data)
+            const { data } = await getGenetics()
+            if (data) return setGenetics(data)
 
         } catch (error) {
             toast.error('Ha ocurrido un error al encontrar los resultados')

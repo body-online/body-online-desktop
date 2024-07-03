@@ -4,13 +4,12 @@ import { useRouter } from 'next/navigation'
 import React, { useState } from 'react'
 import { motion } from 'framer-motion'
 import toast from 'react-hot-toast'
-import Modal from '../ui/modal'
 
 import { LoadingIcon, TrashIcon } from '../ui/icons'
 import { deleteGenetic } from '@/actions/genetic'
 import { enterModal } from '@/lib/constants'
-import Card from '../ui/card'
 import BlackOutModal from '../ui/blackout-modal'
+import Card from '../ui/card'
 import { useSession } from 'next-auth/react'
 
 const DeleteGeneticBtn = ({ id, name }: { id: string, name: string }) => {
@@ -29,25 +28,23 @@ const DeleteGeneticBtn = ({ id, name }: { id: string, name: string }) => {
     }
 
     const handleDelete = async () => {
-        const toastDeletingGenetic = toast.loading('Eliminando...');
+        // const toastDeletingGenetic = toast.loading('Eliminando...');
         setIsLoading(true)
         try {
-            const { error } = await deleteGenetic(id);
-            if (error) return toast.error(error)
+            await deleteGenetic(id);
             handleClose()
             toast.success(`Genética eliminada`);
             return router.refresh();
         } catch (error) {
             toast.error('Ha ocurrido un error al eliminar la genética')
         } finally {
-            toast.dismiss(toastDeletingGenetic)
+            // toast.dismiss(toastDeletingGenetic)
             setIsLoading(false)
         }
     }
 
     if (status === 'loading') return <LoadingIcon />
     if (data?.user?.type != 'owner') return null;
-
     return (
         <>
             <button
@@ -64,18 +61,10 @@ const DeleteGeneticBtn = ({ id, name }: { id: string, name: string }) => {
                     initial="hidden"
                     animate="visible"
                     exit="exit"
-
+                    className='m-auto max-w-lg'
                 >
-                    <div className='w-[90vw] h-[74vh] overflow-auto pr-1 max-w-md'>
-                        {/* header */}
-                        <div
-                            className="w-full sticky top-0 z-10 mb-3
-                            bg-gradient-to-b custom-gradient"
-                        >
-                            <div className="flex-between gap-3 mb-2">
-                                <h1 className="semititle">Eliminar genética</h1>
-                            </div>
-                        </div>
+                    <Card headerLabel='Eliminar genética'>
+
                         <div className="mt-6">
                             <p>¿Realmente desea eliminar <b>{name}</b> de su lista de genéticas?</p>
                             <p>Esta acción es <b>irreversible</b>.</p>
@@ -98,7 +87,7 @@ const DeleteGeneticBtn = ({ id, name }: { id: string, name: string }) => {
                                 }
                             </button>
                         </div>
-                    </div>
+                    </Card>
                 </motion.div>
             </BlackOutModal>
         </>
@@ -106,3 +95,4 @@ const DeleteGeneticBtn = ({ id, name }: { id: string, name: string }) => {
 }
 
 export default DeleteGeneticBtn
+

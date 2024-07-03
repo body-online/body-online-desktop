@@ -42,10 +42,6 @@ const SelectInputSearchCattle = ({ selectedCattle, handleSelectCattle, isOpen, s
         }
     }
 
-    useEffect(() => {
-        searchCattles()
-    }, [])
-
     // debounce input filter
     useEffect(() => {
         const handler = setTimeout(() => {

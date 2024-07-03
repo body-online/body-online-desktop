@@ -1,6 +1,5 @@
 "use client";
 
-
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import axios from 'axios';
@@ -12,6 +11,7 @@ import EventItem from './event-item';
 import BlackOutModal from '../ui/blackout-modal';
 import { ListIcon } from '../ui/icons';
 import Card from '../ui/card';
+import { getHistoricalEvents } from '@/data/events';
 
 export function HistoricalBtn({ cattle }: { cattle: CattleProps; }) {
     const [eventsHistorical, setEventsHistorical] = useState<EventProps[]>([])
@@ -40,7 +40,7 @@ export function HistoricalBtn({ cattle }: { cattle: CattleProps; }) {
         setEventsError(false)
         setIsLoading(true)
         try {
-            const { data } = await axios.get(`/api/cattle/historical?id=${cattle._id}`, { signal: controller.signal })
+            const { data } = await getHistoricalEvents({ cattleId: cattle._id })
             if (data && Array.isArray(data)) {
                 setEventsHistorical(data)
             }
