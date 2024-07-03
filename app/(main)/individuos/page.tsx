@@ -14,8 +14,8 @@ export const metadata: Metadata = {
 
 export default async function CattlesPage() {
     const user = await currentUser()
-    const { data } = await getCattles({ limit: '0' })
-    const { data: eventsData } = await getEvents({ limit: 0, page: 1 })
+    const { data } = await getCattles({ limit: 1 })
+    const { data: eventsData } = await getEvents({ limit: 1, page: 1 })
 
     return (
         <div>

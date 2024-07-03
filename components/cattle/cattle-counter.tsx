@@ -3,7 +3,7 @@ import React from 'react'
 import { ErrorIcon } from 'react-hot-toast'
 
 const CattleCounter = async () => {
-    const { data, error } = await getCattles({ limit: '1' })
+    const { data, error } = await getCattles({ limit: 1 })
 
     return (
         <div className='px-2'>

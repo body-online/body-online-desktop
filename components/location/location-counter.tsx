@@ -3,7 +3,7 @@ import React from 'react'
 import { ErrorIcon } from 'react-hot-toast'
 
 const LocationCounter = async () => {
-    const { data, error } = await getLocations({ limit: '1' })
+    const { data, error } = await getLocations({ limit: 1 })
 
     return (
         <div className='px-2'>

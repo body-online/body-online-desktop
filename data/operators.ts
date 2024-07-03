@@ -26,8 +26,8 @@ export async function getOperators({
    params: { page, limit },
   });
 
-  console.log("operators:::");
-  console.log(data?.users?.length);
+  // console.log("operators:::");
+  // console.log(data?.users?.length);
 
   return { data };
  } catch (error: any) {
