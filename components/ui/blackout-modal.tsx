@@ -49,24 +49,34 @@ const BlackOutModal = ({ handleClose, children, isOpen }: ModalProps) => {
                     initial="hidden"
                     animate="visible"
                     exit="exit"
-                    className="fixed h-screen w-screen inset-0 top-0 z-50 custom-gradient flex-center overflow-hidden px-2"
+                    className="fixed h-screen w-screen inset-0 top-0 z-50 bg-cblack/35 dark:bg-cgray/35 backdrop-blur flex-center overflow-hidden px-2"
                     onClick={(e) => { return e.stopPropagation() }}
                 >
                     {/* close indicator */}
                     {handleClose ?
-                        <motion.button
-                            variants={enterModal}
-                            initial="hidden"
-                            animate="visible"
-                            exit="exit"
-                            type='button'
-                            onClick={() => handleClose()}
-                            className="px-1 py-1 rounded-md bg-slate-200 dark:bg-clightgray absolute top-4 right-4 z-20">
-                            <p className='text-[10px] sm:text-[12px] font-bold text-cgray hidden md:block dark:text-slate-400'>ESC</p>
-                            <CloseIcon fill='fill-cgray dark:fill-slate-200 md:hidden' />
-                        </motion.button> : null
+                        <div className="flex gap-2">
+                            <div className="absolute top-4 right-4 z-20">
+                                <div className="flex-center gap-2">
+                                    <p className='text-[10px] sm:text-[12px] font-bold text-white hidden md:block dark:text-white animate-pulse'>
+                                        Pulse ESC para cerrar
+                                    </p>
+                                    <motion.button
+                                        variants={enterModal}
+                                        initial="hidden"
+                                        animate="visible"
+                                        exit="exit"
+                                        type='button'
+                                        onClick={() => handleClose()}
+                                        className="px-1 py-1 rounded-md bg-slate-200 dark:bg-cblack border custom-border">
+                                        <CloseIcon fill='fill-cgray dark:fill-white' />
+                                    </motion.button>
+                                </div>
+
+                            </div>
+                        </div>
+                        : null
                     }
-                    <div className="relative w-full max-w-max">
+                    <div className="relative w-full">
                         {children}
                     </div>
                 </motion.div>

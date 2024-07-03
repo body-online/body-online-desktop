@@ -1,6 +1,6 @@
 "use server";
 
-import { currentFarm } from "@/lib/auth";
+import { currentFarm, currentUser } from "@/lib/auth";
 import { EventSchema } from "../lib/types";
 import axios from "axios";
 
@@ -9,15 +9,17 @@ export async function createEvent(event: EventSchema): Promise<{
  error?: string;
 }> {
  try {
-  const farm = await currentFarm();
-  if (!farm) return { error: "No hemos encontrado organización" };
+  const user = await currentUser();
+
+  if (user?.type != "owner") return { error: "Error de permisos" };
+  if (!user?.farmId) return { error: "No hemos encontrado organización" };
 
   await axios({
    method: "post",
    url: `${process.env.API_URL}/api/ranchi/event`,
    data: {
     ...event,
-    farmId: farm,
+    farmId: user.farmId,
    },
   });
 

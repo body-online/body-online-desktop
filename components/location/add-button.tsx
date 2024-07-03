@@ -12,8 +12,9 @@ import { LoadingIcon, MiniAddIcon } from '../ui/icons';
 import { createLocation } from '@/actions/location';
 import BlackOutModal from '../ui/blackout-modal';
 import { enterModal } from '@/lib/constants';
+import Card from '../ui/card';
 
-export function AddLocationBtn({ chipMode, children }: { chipMode?: boolean; children?: React.ReactNode }) {
+export function AddLocationBtn({ mode }: { mode?: 'chip' | 'mini' }) {
     const router = useRouter()
     const [isOpen, setIsOpen] = useState(false)
     const {
@@ -37,42 +38,35 @@ export function AddLocationBtn({ chipMode, children }: { chipMode?: boolean; chi
     }
 
     const onSubmit: SubmitHandler<LocationSchema> = async (data: LocationSchema) => {
-        const toastSavingLocation = toast.loading('Creando ubicación...');
+        // const toastSavingLocation = toast.loading('Creando ubicación...');
         try {
             const { error, data: createdLocation } = await createLocation(data);
             if (error) return toast.error(error)
-            toast.success(`Ubicación creada exitosamente!`);
+            // toast.success(`Ubicación creada exitosamente!`);
             reset();
             handleClose()
             return router.refresh();
         } catch (error) {
             toast.error('Ha ocurrido un error al crear la ubicación')
         } finally {
-            toast.dismiss(toastSavingLocation)
+            // toast.dismiss(toastSavingLocation)
         }
     }
 
     return (
         <>
-
-            <button onClick={handleOpen}>
-                {children ??
-                    <div className={`${chipMode ? 'chip cgreen flex-center gap-1' : 'btn cgreen'}`}>
-                        <p>Crear  {chipMode ? '' : 'nueva'} ubicación</p>
-                        <MiniAddIcon fill="fill-clime" />
-                    </div>
+            <button
+                onClick={handleOpen}
+                className={`
+                    ${mode == 'chip' ? 'chip cgreen flex-center gap-2' :
+                        mode === 'mini' ? 'rounded-full cgreen dark:bg-csemigreen h-6 sm:h-7 w-6 sm:w-7 flex-center' :
+                            'primary-btn'
+                    }`
                 }
+            >
+                {mode != 'mini' ? <p>Crear ubicación</p> : null}
+                <MiniAddIcon fill='fill-clime' />
             </button>
-            {/* <button onClick={handleOpen}>
-                {children ??
-                    <div className={`${chipMode ? 'chip cgreen flex-center gap-1' : 'btn cgreen'}`}>
-                        <p>Crear  {chipMode ? '' : 'nueva'} ubicación</p>
-                        <MiniAddIcon fill="fill-clime" />
-                    </div>
-                }
-            </button> */}
-
-
 
             <BlackOutModal isOpen={isOpen} handleClose={handleClose}>
                 <motion.div
@@ -81,22 +75,11 @@ export function AddLocationBtn({ chipMode, children }: { chipMode?: boolean; chi
                     initial="hidden"
                     animate="visible"
                     exit="exit"
-
+                    className='m-auto max-w-lg'
                 >
-                    <div className='w-[90vw] h-[80vh] overflow-auto pr-1 max-w-sm'>
-                        {/* header */}
-                        <div
-                            className="w-full sticky top-0 z-10 mb-3
-                            bg-gradient-to-b custom-gradient"
-                        >
-                            <div className="flex-between gap-3 mb-2">
-                                <h1 className="semititle">Crear ubicación</h1>
-
-                            </div>
-                        </div>
-
-                        <form className='mt-6 space-y-8' onSubmit={handleSubmit(onSubmit)}>
-                            <div className='space-y-4'>
+                    <Card headerLabel='Crear ubicación'>
+                        <form className='relative max-h-[90vh] flex flex-col overflow-auto mt-3 space-y-8' onSubmit={handleSubmit(onSubmit)}>
+                            <div>
 
                                 <label htmlFor='name' className='md:col-span-2'>
                                     <p className="input_label">Nombre*</p>
@@ -104,7 +87,7 @@ export function AddLocationBtn({ chipMode, children }: { chipMode?: boolean; chi
                                         {...register("name")}
                                         name='name'
                                         type="text"
-                                        placeholder='ej. Jaula 1'
+                                        placeholder='Ej. Jaula 1'
                                         disabled={isSubmitting}
                                         className={`input ${errors.name ? 'border-red-500' : ''}`}
                                     />
@@ -120,14 +103,14 @@ export function AddLocationBtn({ chipMode, children }: { chipMode?: boolean; chi
                                         name='description'
                                         placeholder='Escriba una descripción de ser necesario'
                                         disabled={isSubmitting}
-                                        className={` p-3 text-start transition rounded-lg border hover:border-gray-400 focus:outline-0 focus:ring-[1px] ring-slate-300 w-full disabled:opacity-50 min-h-14 max-h-28 ${errors.description ? 'border-red-500' : ''}`}
+                                        className={`input min-h-14 max-h-28 ${errors.description ? 'border-red-500' : ''}`}
                                     />
                                 </label>
 
                                 <div className="mt-6 flex-end gap-3">
                                     <button
                                         type="submit"
-                                        className="btn cgreen"
+                                        className="primary-btn"
                                         disabled={isSubmitting}
                                     >
                                         {isSubmitting ? <LoadingIcon /> : <>
@@ -138,7 +121,7 @@ export function AddLocationBtn({ chipMode, children }: { chipMode?: boolean; chi
                                 </div>
                             </div>
                         </form >
-                    </div>
+                    </Card>
                 </motion.div>
             </BlackOutModal>
         </>

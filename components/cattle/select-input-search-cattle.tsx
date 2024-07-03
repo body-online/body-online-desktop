@@ -1,3 +1,5 @@
+'use client'
+
 import { CattleProps } from '@/lib/types'
 import React, { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
@@ -7,12 +9,13 @@ import { LoadingIcon, SearchIcon } from '../ui/icons'
 import InfoMessage from '../ui/info'
 import { enterModal } from '@/lib/constants'
 import { motion } from 'framer-motion'
-import ChipBodyCondition from './chip-body-condition'
+import Card from '../ui/card'
 import ChipState from './chip-state'
+import ChipBodyCondition from './chip-body-condition'
 
 const SelectInputSearchCattle = ({ selectedCattle, handleSelectCattle, isOpen, setIsOpen, error, isSubmitting }:
-    { selectedCattle?: CattleProps; defaultCattle?: CattleProps, handleSelectCattle: Function; isOpen: boolean; setIsOpen: Function; error?: string; isSubmitting?: boolean }) => {
-    // cattles
+    { selectedCattle?: CattleProps; handleSelectCattle: Function; isOpen: boolean; setIsOpen: Function; error?: string; isSubmitting?: boolean }) => {
+    // the list of cattles seached in this component
     const [cattles, setCattles] = useState<CattleProps[]>([])
     const [isLoading, setIsLoading] = useState<boolean>(true)
     const [searchTerm, setSearchTerm] = useState<string>()
@@ -54,10 +57,11 @@ const SelectInputSearchCattle = ({ selectedCattle, handleSelectCattle, isOpen, s
         };
     }, [searchTerm]);
 
+
     return (
-        <div className='w-full'>
+        <div>
             <p className='input_label'>
-                Caravana
+                Individuo
             </p>
             <button
                 type='button'
@@ -67,7 +71,7 @@ const SelectInputSearchCattle = ({ selectedCattle, handleSelectCattle, isOpen, s
             >
                 <div className="flex-between gap-2">
                     <p className='w-full truncate'>
-                        {selectedCattle ? selectedCattle?.caravan : 'Seleccionar caravana'}
+                        {selectedCattle ? selectedCattle?.caravan : 'Seleccionar individuo'}
                     </p>
                     <SearchIcon fill='fill-cblack dark:fill-white' />
                 </div>
@@ -83,90 +87,105 @@ const SelectInputSearchCattle = ({ selectedCattle, handleSelectCattle, isOpen, s
                     initial="hidden"
                     animate="visible"
                     exit="exit"
-
+                    className='m-auto max-w-2xl'
                 >
-                    <div className='w-[90vw] h-[80vh] relative pr-1 max-w-sm overflow-auto'>
-                        {/* header */}
-                        <div
-                            className="w-full sticky top-0 z-30 mb-3 h-20
-                            bg-gradient-to-b custom-gradient"
-                        >
-                            <div className="flex-between gap-3 mb-2">
-                                <h1 className="semititle">Seleccionar caravana</h1>
-                                <p className='text-slate-400 text-sm'>
-                                    {isLoading ? 'buscando' : cattles?.length ?? 0} resultados
-                                </p>
-                            </div>
+                    <Card headerLabel='Seleccionar individuo'>
+                        <div className="relative max-h-[74vh] flex flex-col overflow-auto pr-1 mt-3">
+                            {/* search */}
+                            <div className='w-full sticky top-0 z-30'>
+                                <div className="backdrop-blur-md pb-2 rounded-lg border custom-border overflow-hidden h-max mb-3 bg-slate-200/50 dark:bg-clightgray/50">
+                                    <div className="flex-center px-3 gap-2 outline-0 ring-0 bg-white dark:bg-clightgray border-b custom-border">
+                                        <SearchIcon fill='fill-cblack dark:fill-slate-200' />
 
-                            <label>
-                                <div className="input text-start w-full disabled:opacity-50">
-                                    {isLoading ? <LoadingIcon /> :
-                                        <SearchIcon fill='fill-cblack dark:fill-white' />
-                                    }
-                                    <input
-                                        className={`input`}
-                                        disabled={!cattles}
-                                        placeholder="Escriba el nombre de la caravana..."
-                                        value={searchTerm ?? ''}
-                                        onChange={({ target }) => { return setSearchTerm(target.value) }}
-                                    />
+                                        <input
+                                            className={`text-base h-12 bg-transparent outline-0 ring-0 w-full disabled:opacity-50`}
+                                            disabled={!cattles}
+                                            placeholder="Buscar por caravana..."
+                                            value={searchTerm ?? ''}
+                                            onChange={({ target }) => { return setSearchTerm(target.value) }}
+                                        />
+                                    </div>
+
+                                    <div className='text-sm mx-2 mt-2 flex gap-1 text-slate-600 dark:text-slate-400'>
+                                        {isLoading ? <LoadingIcon /> : cattles?.length ?? 0} resultados
+                                    </div>
                                 </div>
-                            </label>
-                        </div>
-
-                        {isLoading ? (
-                            <div className='flex-center gap-2 py-default'>
-                                <LoadingIcon />
-                                <p className='text-base font-medium font-slate-300'>Buscando resultados</p>
                             </div>
-                        ) : cattles?.length > 0 ? (
-                            <ul className='w-full flex flex-col gap-2 overflow-auto'>
-                                {cattles.map((cattle, index) => {
-                                    return (
-                                        <li key={index}>
-                                            <button
-                                                type='button'
-                                                className='w-full border custom-border rounded-md bg-slate-100 dark:bg-cgray'
-                                                onClick={() => {
-                                                    handleSelectCattle(cattle);
-                                                    handleClose();
-                                                }}
-                                            >
-                                                <div className="flex h-9 gap-4 mb-2">
-                                                    <div className='flex flex-col h-full items-start justify-between'>
-                                                        <p className='text-xs font-medium'>Caravana</p>
-                                                        <b className="text-center text-lg w-full">
-                                                            {cattle.caravan}
-                                                        </b>
-                                                    </div>
-                                                    <div className='flex flex-col h-full items-start justify-between'>
-                                                        <p className='text-xs font-medium'>Genéticas</p>
-                                                        <p>{cattle?.geneticName}</p>
-                                                    </div>
-                                                    <div className='flex flex-col h-full items-start justify-between'>
-                                                        <p className='text-xs font-medium'>Ubicacion</p>
-                                                        <p>
-                                                            {cattle?.locationName}
-                                                        </p>
-                                                    </div>
-                                                </div>
 
-                                                <div className="scale-[0.8] flex -ml-10 gap-3">
-                                                    <ChipState state={cattle?.state} />
-                                                    <ChipBodyCondition bodyRanges={cattle?.bodyRanges} measure={Number(cattle.bodyCondition)} />
-                                                </div>
-                                            </button>
-                                        </li>
-                                    )
-                                })}
-                            </ul>
-                        ) : <InfoMessage type='censored' title='Sin resultados' subtitle='No hemos encontrado ubicaciones' />
-                        }
 
-                        <div className="w-full sticky bottom-0 z-30 mt-3 h-12 bg-gradient-to-t from-white via-white/90 to-transparent"></div>
-                    </div>
+                            {/* results */}
+                            <div className="h-full">
+                                {isLoading ?
+                                    <div className='flex-center gap-2 py-default'>
+                                        <LoadingIcon />
+                                        <p className='text-base font-medium font-slate-300'>Buscando resultados</p>
+                                    </div>
+                                    : cattles?.length > 0 ?
+                                        <ul className='w-full overflow-auto space-y-2'>
+                                            {cattles.map((cattle, index) => {
+                                                return (
+                                                    <li key={index}>
+                                                        <button
+                                                            type='button'
+                                                            onClick={() => {
+                                                                handleSelectCattle(cattle);
+                                                                handleClose();
+                                                            }}
+                                                            className='border custom-border md:hover:bg-salte-100 dark:md:hover:bg-clightgray rounded w-full overflow-auto relative'
+                                                        >
+                                                            <div className='w-max h-20 flex gap-8 items-center mr-4'>
+
+                                                                <div
+                                                                    className='h-full sticky left-0 flex-center z-10 w-full
+                                                                    bg-slate-200/50 dark:bg-clightgray/50 backdrop-blur-md
+                                                                    border-r custom-border min-w-14 px-3
+                                                                    '>
+                                                                    <p className="text-xl font-semibold text-center truncate">
+                                                                        {cattle.caravan}
+                                                                    </p>
+                                                                </div>
+
+                                                                <div className='min-w-max'>
+                                                                    <p className='text-xs opacity-50 text-start'>Genética</p>
+                                                                    <p className="text-base">
+                                                                        {cattle.geneticName}
+                                                                    </p>
+                                                                </div>
+
+                                                                <div className='min-w-max'>
+                                                                    <p className='text-xs opacity-50 text-start'>Ubicación</p>
+                                                                    <p className="text-base">
+                                                                        {cattle.locationName}
+                                                                    </p>
+                                                                </div>
+
+                                                                <div className='min-w-max'>
+                                                                    <p className='text-xs opacity-50 text-start'>Estado</p>
+                                                                    <ChipState state={cattle?.state} />
+                                                                </div>
+
+                                                                <div className='min-w-max'>
+                                                                    <p className='text-xs opacity-50 text-start'>Condición Corporal</p>
+                                                                    <ChipBodyCondition
+                                                                        bodyRanges={cattle?.bodyRanges}
+                                                                        measure={Number(cattle.bodyCondition)}
+                                                                        state={cattle.state}
+                                                                    />
+                                                                </div>
+                                                            </div>
+                                                        </button>
+                                                    </li>
+                                                )
+                                            })}
+                                        </ul>
+                                        : <InfoMessage type='censored' title='Sin resultados' subtitle='No hemos encontrado individuos' />
+                                }
+                            </div>
+                        </div>
+                    </Card>
                 </motion.div>
-            </BlackOutModal>
+            </BlackOutModal >
+
         </div >
     )
 }

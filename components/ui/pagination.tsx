@@ -4,16 +4,18 @@ import { usePathname, useSearchParams, useRouter } from "next/navigation";
 import { ArrowsIcon } from './icons';
 
 
-export default function Pagination({ page, paramName, totalPages }: { page: number; paramName: string; totalPages?: number }) {
+export default function Pagination({ page, paramName, totalPages }: { page: number; paramName?: string; totalPages?: number }) {
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const { replace } = useRouter();
 
   function changePage(newPage: number) {
-    const params = new URLSearchParams(searchParams);
-    params.set(paramName, `${newPage}`);
+    if (paramName) {
+      const params = new URLSearchParams(searchParams);
+      params.set(paramName, `${newPage}`);
 
-    return replace(`${pathname}?${params.toString()}`);
+      return replace(`${pathname}?${params.toString()}`);
+    }
   };
 
   if (!page) return null;
@@ -30,7 +32,7 @@ export default function Pagination({ page, paramName, totalPages }: { page: numb
         </button>
 
         <p className="text-xs px-2 m-auto">Pág. {page} de {totalPages}</p>
-        
+
         <button
           className="table_btn_pag"
           disabled={page === totalPages || totalPages === 1 || !totalPages}

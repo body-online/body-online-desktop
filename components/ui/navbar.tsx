@@ -64,7 +64,7 @@ export default function Navbar({ user }: { user?: ExtendedUser }) {
             <div className="bg-cgreen py-3">
                 <div className='flex-between px-default'>
                     <div className='flex items-center gap-2'>
-                        <ProfileImage url={user?.image} />
+                        <ProfileImage url={user?.image} type={user?.type} />
                         <p className='text-white font-semibold'>{user?.name}</p>
                         {/* <p className='text-white text-base font-bold'>
                             Body<span className='text-clime'>Online</span>
@@ -102,7 +102,7 @@ export default function Navbar({ user }: { user?: ExtendedUser }) {
 
             {/* navigation */}
             <div className="w-full bg-csemigreen z-30 sticky top-0">
-                <div className="overflow-x-scroll no-scrollbar flex gap-1 items-center px-default">
+                <div className="overflow-x-scroll no-scrollbar flex gap-1 items-center px-default border-b custom-border">
                     <div className="flex items-center pr-4">
                         {navigationItems.map((i, index) => {
                             var selected: boolean = i.href == pathname;

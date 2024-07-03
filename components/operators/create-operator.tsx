@@ -15,6 +15,7 @@ import { LoadingIcon, MiniAddIcon } from '../ui/icons';
 import BlackOutModal from '../ui/blackout-modal';
 import { registerUser } from '@/actions/register';
 import CardHeader from '../ui/card-header';
+import Card from '../ui/card';
 
 export function CreateOperator({ mode }: { mode?: 'chip' | 'mini' }) {
     const router = useRouter();
@@ -42,18 +43,20 @@ export function CreateOperator({ mode }: { mode?: 'chip' | 'mini' }) {
     }, [isOpen,]);
 
     const onSubmit = async (values: z.infer<typeof RegisterSchema>) => {
-        const toastSavingOperator = toast.loading("Creando operario...");
+        // const toastSavingOperator = toast.loading("Creando operario...");
         try {
             const { data, error } = await registerUser({ ...values, type: 'operator' });
             if (error) return toast.error(error ?? 'Ha ocurrido un error')
-            console.log(data)
-            toast.success('Operario creado' ?? ' ');
-            reset()
+
+            // toast.success('Operario creado' ?? ' ');
+            reset();
+            handleClose();
+            router.refresh();
         } catch (error) {
             console.log(error)
             toast.error("Ha ocurrido un error al crear el operario");
         } finally {
-            toast.dismiss(toastSavingOperator);
+            // toast.dismiss(toastSavingOperator);
         }
     };
 
@@ -61,10 +64,10 @@ export function CreateOperator({ mode }: { mode?: 'chip' | 'mini' }) {
         <>
             <button
                 onClick={handleOpen}
-                className={`${mode == 'chip' ?
-                    'chip cgreen flex-center gap-2' :
-                    mode === 'mini' ? 'rounded-full cgreen h-6 sm:h-7 w-6 sm:w-7 flex-center' :
-                        'btn cgreen'
+                className={`
+                    ${mode == 'chip' ? 'chip cgreen flex-center gap-2' :
+                        mode === 'mini' ? 'rounded-full cgreen dark:bg-csemigreen h-6 sm:h-7 w-6 sm:w-7 flex-center' :
+                            'primary-btn'
                     }`
                 }
             >
@@ -79,11 +82,9 @@ export function CreateOperator({ mode }: { mode?: 'chip' | 'mini' }) {
                     animate="visible"
                     exit="exit"
                 >
-                    <form className='w-[90vw] h-[80vh] overflow-auto pr-1 max-w-sm' onSubmit={handleSubmit(onSubmit)}>
+                    <form className='max-w-sm mx-auto' onSubmit={handleSubmit(onSubmit)}>
 
-                        <div className='md:card py-4 md:py-6'>
-                            <CardHeader label='Crear operario' />
-
+                        <Card headerLabel='Crear operario'>
                             <div className="flex gap-2 w-full mt-3">
                                 <label htmlFor='name' className='w-full'>
                                     <p className="input_label">Nombre completo*</p>
@@ -129,18 +130,18 @@ export function CreateOperator({ mode }: { mode?: 'chip' | 'mini' }) {
                                 </div>
                             </label>
 
-
                             <div className="mt-6 flex-end gap-3">
-                                <button type="submit" className="btn cgreen" disabled={isSubmitting}>
-                                    {isSubmitting ? <LoadingIcon /> :
+                                <button disabled={isSubmitting} className='primary-btn' type='submit'
+                                >
+                                    {isSubmitting ? <LoadingIcon /> : (
                                         <>
-                                            <p>Crear operario</p>
+                                            <p className='text-white'>Crear operario</p>
                                             <MiniAddIcon fill='fill-clime' />
                                         </>
-                                    }
+                                    )}
                                 </button>
                             </div>
-                        </div>
+                        </Card>
 
                     </form>
 

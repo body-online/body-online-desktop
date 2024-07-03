@@ -23,7 +23,7 @@ const RegisterForm = () => {
 
     const onSubmit = async (values: z.infer<typeof RegisterSchema>) => {
 
-        const response = await registerUser(values);
+        const response = await registerUser({ ...values, type: 'owner' });
         if (response.success) {
             toast.success(response.success);
             reset()
@@ -43,10 +43,11 @@ const RegisterForm = () => {
                     {/* classic login */}
                     <div className="flex flex-col space-y-4">
                         <label htmlFor='name'>
-                            <p className="input_label">Nombre*</p>
+                            <p className="input_label">Nombre completo*</p>
                             <input
                                 {...register("name")}
                                 disabled={isSubmitting}
+                                placeholder='Ej. Pablo Rodriguez'
                                 className={`input ${errors.name ? 'border-red-500' : ''}`}
                                 type="text"
                                 name='name'
@@ -62,6 +63,7 @@ const RegisterForm = () => {
                             <input
                                 {...register("email")}
                                 disabled={isSubmitting}
+                                placeholder='Ej. pablorodriguez@gmail.com'
                                 className={`input ${errors.email ? 'border-red-500' : ''}`}
                                 type="text"
                                 name='email'
@@ -76,6 +78,7 @@ const RegisterForm = () => {
                             <input
                                 {...register("password")}
                                 disabled={isSubmitting}
+                                placeholder='••••••••'
                                 className={`input ${errors.password ? 'border-red-500' : ''}`}
                                 type="password"
                                 name='password'
@@ -85,13 +88,13 @@ const RegisterForm = () => {
                             </div>
                         </label>
 
-                        <button disabled={isSubmitting} className='login_btn' type='submit'>
+                        <button disabled={isSubmitting} className='primary-btn' type='submit'>
                             {isSubmitting ? (
                                 <LoadingIcon />
                             ) :
                                 <>
-                                    <p>Crear cuenta</p>
-                                    <CreateAccountIcon fill='fill-clime dark:fill-caqua' />
+                                    <p className='text-white'>Crear cuenta</p>
+                                    <CreateAccountIcon fill='fill-clime' />
                                 </>
 
                             }

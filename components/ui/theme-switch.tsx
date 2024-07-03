@@ -19,15 +19,15 @@ const ThemeSwitch = () => {
     if (!mounted) return (<div className='h-8 w-8 rounded-full animate-pulse bg-slate-200 dark:bg-slate-700' />)
 
     return (
-        <div className='grid grid-cols-3 gap-1 border rounded-full custom-border p-1 w-max h-max'>
-            <button
+        <div className='grid grid-cols-2 gap-1 border rounded-full custom-border p-1 w-max h-max'>
+            {/* <button
                 onClick={() => changeTheme('system')}
                 className="h-6 md:h-7 w-6 md:w-7 flex-center rounded-full"
             >
                 <div className={resolvedTheme == 'system' ? '' : 'opacity-50 md:group-hover:opacity-100 transition-all'}>
                     <PCIcon />
                 </div>
-            </button>
+            </button> */}
 
             <button
                 onClick={() => changeTheme('dark')}

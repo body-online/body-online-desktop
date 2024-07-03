@@ -84,7 +84,7 @@
 //                 onClick={handleOpen}
 //             >
 //                 {customButtom ??
-//                     <div className='rounded_btn cgreen max-w-max'>
+//                     <div className='rounded_primary-btn max-w-max'>
 //                         <EventIcon fill='fill-clime' />
 //                     </div>}
 //             </button>
@@ -98,7 +98,7 @@
 //                     exit="exit"
 
 //                 >
-//                     <div className='w-[90vw] h-[80vh] overflow-auto pr-1 max-w-md'>
+//                     <div className='w-[90vw] h-[74vh] overflow-auto pr-1 max-w-md'>
 //                         {/* header */}
 //                         <div
 //                             className="w-full sticky top-0 z-10 mb-3

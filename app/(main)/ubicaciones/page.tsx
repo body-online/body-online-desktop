@@ -4,14 +4,22 @@ import Card from '@/components/ui/card';
 import PageHeader from '@/components/ui/header';
 import InfoMessage from '@/components/ui/info';
 import { getLocations } from '@/data/location';
+import { currentUser } from '@/lib/auth';
 import { Metadata } from 'next';
+import { redirect } from 'next/navigation';
 
 export const metadata: Metadata = {
     title: "Ubicaciones - BodyOnline",
 };
 
 export default async function LocationsPage() {
+    const user = await currentUser()
     const { data } = await getLocations({ limit: '0' })
+
+    if (!user?.farmId) {
+        return redirect('/onboarding')
+    }
+
 
     return (
         <div>
@@ -28,7 +36,7 @@ export default async function LocationsPage() {
             </PageHeader>
 
             <div className="container px-default -mt-12 mb-12">
-                <Card>
+                <Card paddings=''>
                     {data?.totalLocations == 0 ?
                         <InfoMessage
                             type='censored'

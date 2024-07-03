@@ -21,7 +21,7 @@ export async function createFarm(farm: FarmSchema): Promise<{
    },
   });
 
-  return { data: "Individuo creado correctamente" };
+  return { data: "Organización creado correctamente" };
  } catch (err: any) {
   console.log(err);
   return {

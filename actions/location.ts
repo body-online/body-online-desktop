@@ -42,6 +42,9 @@ export async function deleteLocation(
  locationId: string
 ): Promise<{ error?: string; data?: string }> {
  try {
+  const user = await currentUser();
+
+  if (user?.type != "owner") return { error: "Error de permisos" };
   const { data } = await axios({
    method: "patch",
    url: `${process.env.API_URL}/api/ranchi/location/delete/${locationId}`,

@@ -11,7 +11,7 @@
 }
 
 ::selection {
-  @apply dark:bg-slate-200 bg-slate-200;
+  @apply bg-caqua/10 dark:bg-clime/10;
 }
 
 /* ::selection {
@@ -91,12 +91,23 @@
   @apply text-red-500 font-semibold text-sm;
 }
 
+.primary-btn {
+  @apply btn bg-cgreen dark:bg-csemigreen;
+}
+.primary-btn > p {
+@apply text-white font-medium;
+}
 .btn {
-  @apply h-11 w-full md:max-w-max flex items-center transition-all flex-center gap-1 md:gap-2 px-2 md:px-5 py-2 md:py-3.5 rounded-lg md:min-w-[100px] focus:outline-0 focus:ring-[1px] ring-slate-300;
+  @apply h-max w-full md:max-w-max px-2 md:px-5 py-3
+  flex-center gap-1 md:gap-2
+  rounded-lg disabled:opacity-50 active:opacity-50
+  ring-slate-300 md:min-w-[100px] focus:outline-0 focus:ring-[2px] transition-all
+  ;
+  
 }
 
-.btn>p {
-  @apply text-sm;
+.btn > p {
+  @apply font-semibold text-sm;
 }
 
 .sm_btn {
@@ -124,7 +135,7 @@
 }
 
 .login_btn {
-  @apply w-full bg-cgreen dark:bg-white active:bg-opacity-45 dark:active:bg-opacity-50 md:hover:dark:bg-slate-200 h-12 flex items-center transition-all flex-center gap-1 md:gap-2 px-2 md:px-4 py-2 md:py-3.5 rounded-lg md:min-w-[100px] disabled:opacity-50 focus:outline-0 focus:ring-[1px] ring-slate-300;
+  @apply w-full bg-cgreen dark:bg-cblack active:bg-opacity-45 dark:active:bg-opacity-50 md:hover:dark:bg-slate-200 h-12 flex items-center transition-all flex-center gap-1 md:gap-2 px-2 md:px-4 py-2 md:py-3.5 rounded-lg md:min-w-[100px] disabled:opacity-50 focus:outline-0 focus:ring-[1px] ring-slate-300;
 }
 
 .login_btn p {
@@ -231,7 +242,7 @@ table>tbody>tr>td>p {
 }
 
 .pagination {
-  @apply gap-2 bg-white dark:bg-cgray border custom-border rounded-full p-1 w-max flex;
+  @apply gap-2 bg-white dark:bg-cgray border custom-border rounded-full p-1 w-max flex min-h-9;
 }
 
 .table_btn_pag {
@@ -240,11 +251,13 @@ table>tbody>tr>td>p {
 
 /* Forms */
 .input {
-  @apply h-11 sm:h-12 py-2 px-4 sm:p-3 text-sm md:text-base transition rounded-lg border hover:border-gray-400 focus:outline-0 focus:ring-[1px] ring-slate-300 dark:ring-slate-600 w-full disabled:opacity-50 bg-white dark:bg-clightgray dark:border-gray-800 dark:md:hover:border-slate-700;
+  @apply h-11 sm:h-12 py-2 px-4 sm:p-3 text-sm md:text-base transition rounded-lg border hover:border-gray-400 focus:outline-0 focus:ring-[2px] 
+  ring-slate-300 dark:ring-slate-300 w-full disabled:opacity-50 bg-white dark:bg-clightgray dark:border-gray-800 dark:md:hover:border-slate-700;
 }
 
 .textarea {
-  @apply min-h-20 max-h-60 p-3 transition rounded-lg border hover:border-gray-400 focus:outline-0 focus:ring-[1px] ring-slate-300 w-full disabled:opacity-50;
+  @apply min-h-20 max-h-60 py-2 px-4 sm:p-3 text-sm md:text-base transition rounded-lg border hover:border-gray-400 focus:outline-0 focus:ring-[2px] 
+  ring-slate-300 dark:ring-slate-300 w-full disabled:opacity-50 bg-white dark:bg-clightgray dark:border-gray-800 dark:md:hover:border-slate-700;
 }
 
 .select_input {
@@ -260,7 +273,7 @@ table>tbody>tr>td>p {
 }
 
 .input_label {
-  @apply font-medium text-sm tracking-tight;
+  @apply font-medium text-sm tracking-tight mb-1;
 }
 
 .input_error {
@@ -305,7 +318,7 @@ table>tbody>tr>td>p {
 }
 
 .chip {
-  @apply rounded-xl min-w-max py-1.5 sm:py-2 px-2 sm:px-3 flex-center max-w-max font-medium text-sm h-8 md:h-9;
+  @apply rounded-lg min-w-max py-1.5 sm:py-2 px-2 sm:px-3 flex-center max-w-max font-medium text-sm h-8 md:h-9;
 }
 
 .chip_gray {
@@ -321,31 +334,35 @@ table>tbody>tr>td>p {
 }
 
 .chip_rose {
-  @apply bg-pink-300 text-pink-500 dark:bg-pink-500 dark:text-white;
-}
-
-.chip_violet {
-  @apply bg-violet-300 text-violet-500 dark:bg-violet-500 dark:text-white;
+  @apply bg-pink-500 text-white dark:bg-pink-500 dark:text-white;
 }
 
 .chip_red {
-  @apply bg-red-300 text-red-500 dark:bg-red-500 dark:text-white;
+  @apply bg-red-500 text-white;
 }
 
+.chip_violet {
+  @apply bg-violet-500 text-white dark:bg-violet-500 dark:text-white;
+}
+
+/* .chip_red {
+  @apply bg-red-500 text-red-500 dark:bg-red-500 dark:text-white;
+} */
+
 .chip_green {
-  @apply bg-green-300 text-green-500 dark:bg-green-500 dark:text-white;
+  @apply bg-green-500 text-white dark:bg-green-500 dark:text-white;
 }
 
 .chip_yellow {
-  @apply bg-yellow-300 text-yellow-500 dark:bg-yellow-500 dark:text-white;
+  @apply bg-yellow-500 text-cblack dark:bg-yellow-500 dark:text-white;
 }
 
 .chip_orange {
-  @apply bg-orange-300 text-orange-500 dark:bg-orange-500 dark:text-white;
+  @apply bg-orange-500 text-white dark:bg-orange-500 dark:text-white;
 }
 
 .chip_blue {
-  @apply bg-blue-300 text-blue-500 dark:bg-blue-500 dark:text-white;
+  @apply bg-blue-500 text-white;
 }
 
 .dropdown {

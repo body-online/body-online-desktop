@@ -24,7 +24,7 @@ export default function ResizablePanel({ children, disableOverflow, changeIndica
             animate={{ height: height || "auto" }}
             className={`relative w-full ${disableOverflow ? `` : `overflow-hidden`}`}
         >
-            <AnimatePresence initial={false}>
+            <AnimatePresence initial={false} mode='wait'>
                 <motion.div
                     key={changeIndicator ?? JSON.stringify(children, ignoreCircularReferences())}
                     initial={{

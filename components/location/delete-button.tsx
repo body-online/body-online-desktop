@@ -4,15 +4,16 @@ import { useRouter } from 'next/navigation'
 import React, { useState } from 'react'
 import { motion } from 'framer-motion'
 import toast from 'react-hot-toast'
-import Modal from '../ui/modal'
 
 import { LoadingIcon, TrashIcon } from '../ui/icons'
 import { deleteLocation } from '@/actions/location'
 import { enterModal } from '@/lib/constants'
-import Card from '../ui/card'
 import BlackOutModal from '../ui/blackout-modal'
+import Card from '../ui/card'
+import { useSession } from 'next-auth/react'
 
 const DeleteLocationBtn = ({ id, name }: { id: string, name: string }) => {
+    const { data, status } = useSession()
     const [isLoading, setIsLoading] = useState<boolean>(false)
     const [isOpen, setIsOpen] = useState<boolean>(false)
     const router = useRouter()
@@ -27,28 +28,30 @@ const DeleteLocationBtn = ({ id, name }: { id: string, name: string }) => {
     }
 
     const handleDelete = async () => {
-        const toastDeletingLocation = toast.loading('Eliminando...');
+        // const toastDeletingLocation = toast.loading('Eliminando...');
         setIsLoading(true)
         try {
-            const { error, data: createdLocation } = await deleteLocation(id);
-            if (error) return toast.error(error)
+            await deleteLocation(id);
             handleClose()
             toast.success(`Ubicación eliminada`);
             return router.refresh();
         } catch (error) {
             toast.error('Ha ocurrido un error al eliminar la ubicación')
         } finally {
-            toast.dismiss(toastDeletingLocation)
+            // toast.dismiss(toastDeletingLocation)
             setIsLoading(false)
         }
     }
+
+    if (status === 'loading') return <LoadingIcon />
+    if (data?.user?.type != 'owner') return null;
     return (
         <>
             <button
-                className='group transition-all'
+                className='rounded-full ring-0 md:hover:opacity-70 active:opacity-50 transition-all'
                 onClick={handleOpen}
             >
-                <TrashIcon fill='fill-slate-500 md:group-hover:fill-slate-900 transition-all' />
+                <TrashIcon fill='fill-cgray dark:fill-white' />
             </button>
 
             <BlackOutModal isOpen={isOpen} handleClose={handleClose}>
@@ -58,18 +61,10 @@ const DeleteLocationBtn = ({ id, name }: { id: string, name: string }) => {
                     initial="hidden"
                     animate="visible"
                     exit="exit"
-
+                    className='m-auto max-w-lg'
                 >
-                    <div className='w-[90vw] h-[80vh] overflow-auto pr-1 max-w-md'>
-                        {/* header */}
-                        <div
-                            className="w-full sticky top-0 z-10 mb-3
-                            bg-gradient-to-b custom-gradient"
-                        >
-                            <div className="flex-between gap-3 mb-2">
-                                <h1 className="semititle">Eliminar ubicación</h1>
-                            </div>
-                        </div>
+                    <Card headerLabel='Eliminar ubicación'>
+
                         <div className="mt-6">
                             <p>¿Realmente desea eliminar <b>{name}</b> de su lista de ubicaciones?</p>
                             <p>Esta acción es <b>irreversible</b>.</p>
@@ -92,7 +87,7 @@ const DeleteLocationBtn = ({ id, name }: { id: string, name: string }) => {
                                 }
                             </button>
                         </div>
-                    </div>
+                    </Card>
                 </motion.div>
             </BlackOutModal>
         </>

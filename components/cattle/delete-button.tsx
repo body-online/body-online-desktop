@@ -10,8 +10,11 @@ import { LoadingIcon, TrashIcon } from '../ui/icons'
 import { deleteCattle } from '@/actions/cattle'
 import { enterModal } from '@/lib/constants'
 import BlackOutModal from '../ui/blackout-modal'
+import Card from '../ui/card'
+import { useSession } from 'next-auth/react'
 
 const DeleteCattleBtn = ({ id, name }: { id: string, name: string }) => {
+    const { data, status } = useSession()
     const [isLoading, setIsLoading] = useState<boolean>(false)
     const [isOpen, setIsOpen] = useState<boolean>(false)
     const router = useRouter()
@@ -40,13 +43,16 @@ const DeleteCattleBtn = ({ id, name }: { id: string, name: string }) => {
             setIsLoading(false)
         }
     }
+
+    if (status === 'loading') return <LoadingIcon />
+    if (data?.user?.type != 'owner') return null;
     return (
         <>
             <button
-                className='group transition-all'
+                className='rounded-full ring-0 md:hover:opacity-70 active:opacity-50 transition-all'
                 onClick={handleOpen}
             >
-                <TrashIcon fill='fill-slate-500 md:group-hover:fill-slate-900 transition-all' />
+                <TrashIcon fill='fill-cgray dark:fill-white' />
             </button>
 
             <BlackOutModal isOpen={isOpen} handleClose={handleClose}>
@@ -56,18 +62,10 @@ const DeleteCattleBtn = ({ id, name }: { id: string, name: string }) => {
                     initial="hidden"
                     animate="visible"
                     exit="exit"
-
+                    className='m-auto max-w-lg'
                 >
-                    <div className='w-[90vw] h-[80vh] overflow-auto pr-1 max-w-md'>
-                        {/* header */}
-                        <div
-                            className="w-full sticky top-0 z-10 mb-3 h-12
-                            bg-gradient-to-b custom-gradient"
-                        >
-                            <div className="flex-between gap-3 mb-2">
-                                <h1 className="semititle">Eliminar individuo</h1>
-                            </div>
-                        </div>
+                    <Card headerLabel='Eliminar individuo'>
+
                         <div className="mt-6">
                             <p>¿Realmente desea eliminar <b>{name}</b> de su lista de individuos?</p>
                             <p>Esta acción es <b>irreversible</b>.</p>
@@ -90,7 +88,7 @@ const DeleteCattleBtn = ({ id, name }: { id: string, name: string }) => {
                                 }
                             </button>
                         </div>
-                    </div>
+                    </Card>
                 </motion.div>
             </BlackOutModal>
         </>

@@ -20,8 +20,7 @@ const SelectInputSearch = ({
                 unstyled
                 classNames={{
                     control: ({ isDisabled }: { isDisabled: boolean }) => {
-                        return (`select_input_search bg-white dark:bg-slate-950 disabled:opacity-50
-                        ${isDisabled ? `opacity-50` : ``} ${error ? `border-red-500` : ``}`)
+                        return (`input ${error ? `border-red-500` : ``}  ${isDisabled ? `opacity-50` : ``}`)
                     },
                     placeholder: () => "text-gray-500 truncate",
                     input: () => "",
@@ -34,11 +33,11 @@ const SelectInputSearch = ({
                     // clearIndicator: () => "text-gray-500 p-1 rounded-md hover:bg-red-50 hover:text-red-800",
                     // indicatorSeparator: () => "bg-gray-300",
                     // dropdownIndicator: () => "rounded flex-center hover:bg-slate-100 h-full",
-                    menu: () => "z-10 bg-white dark:bg-slate-950 rounded-lg w-full max-h-xl overflow-y-auto border",
+                    menu: () => "z-10 bg-white dark:bg-cgray rounded-lg w-full max-h-xl overflow-y-auto border custom-border",
                     groupHeading: () => "ml-3 mt-2 mb-1 text-gray-500 text-sm",
                     option: ({ isFocused, isSelected }: { isFocused: boolean; isSelected: boolean }) => {
                         return (`hover:cursor-pointer p-3 transition-all
-                  ${isFocused ? "bg-slate-100 active:bg-gray-200" : ``} 
+                  ${isFocused ? "bg-slate-100 active:bg-gray-200 dark:bg-cblack active:bg-clightgray" : ``} 
                   ${isSelected ? "bg-slate-100" : ``} `)
                     },
                     noOptionsMessage: () => "p-3 w-full",

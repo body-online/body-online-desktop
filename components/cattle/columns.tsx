@@ -20,7 +20,7 @@ export const columnsCattle: ColumnDef<CattleProps>[] = [
                     className="flex-center"
                 >
                     <p>Caravana</p>
-                    <ArrowsIcon direction={column.getIsSorted() == "asc" ? 'dark:rotate-180' : column.getIsSorted() == "desc" ? '' : 'hidden'} />
+                    <ArrowsIcon direction={column.getIsSorted() == "asc" ? 'rotate-180' : column.getIsSorted() == "desc" ? '' : 'hidden'} />
                 </button>
             );
         },
@@ -39,7 +39,7 @@ export const columnsCattle: ColumnDef<CattleProps>[] = [
                     className="flex-center"
                 >
                     <p>Fecha de Creación</p>
-                    <ArrowsIcon direction={column.getIsSorted() == "asc" ? 'dark:rotate-180' : column.getIsSorted() == "desc" ? '' : 'hidden'} />
+                    <ArrowsIcon direction={column.getIsSorted() == "asc" ? 'rotate-180' : column.getIsSorted() == "desc" ? '' : 'hidden'} />
                 </button>
             );
         },
@@ -62,7 +62,7 @@ export const columnsCattle: ColumnDef<CattleProps>[] = [
                     className="flex-center"
                 >
                     <p>Ubicación</p>
-                    <ArrowsIcon direction={column.getIsSorted() == "asc" ? 'dark:rotate-180' : column.getIsSorted() == "desc" ? '' : 'hidden'} />
+                    <ArrowsIcon direction={column.getIsSorted() == "asc" ? 'rotate-180' : column.getIsSorted() == "desc" ? '' : 'hidden'} />
                 </button>
             );
         },
@@ -80,7 +80,7 @@ export const columnsCattle: ColumnDef<CattleProps>[] = [
                     className="flex-center"
                 >
                     <p>Genética</p>
-                    <ArrowsIcon direction={column.getIsSorted() == "asc" ? 'dark:rotate-180' : column.getIsSorted() == "desc" ? '' : 'hidden'} />
+                    <ArrowsIcon direction={column.getIsSorted() == "asc" ? 'rotate-180' : column.getIsSorted() == "desc" ? '' : 'hidden'} />
                 </button>
             );
         },
@@ -98,7 +98,7 @@ export const columnsCattle: ColumnDef<CattleProps>[] = [
                     className="flex-center"
                 >
                     <p>Estado</p>
-                    <ArrowsIcon direction={column.getIsSorted() == "asc" ? 'dark:rotate-180' : column.getIsSorted() == "desc" ? '' : 'hidden'} />
+                    <ArrowsIcon direction={column.getIsSorted() == "asc" ? 'rotate-180' : column.getIsSorted() == "desc" ? '' : 'hidden'} />
                 </button>
             );
         },
@@ -116,16 +116,16 @@ export const columnsCattle: ColumnDef<CattleProps>[] = [
                     className="flex-center"
                 >
                     <p>Fecha último estado</p>
-                    <ArrowsIcon direction={column.getIsSorted() == "asc" ? 'dark:rotate-180' : column.getIsSorted() == "desc" ? '' : 'hidden'} />
+                    <ArrowsIcon direction={column.getIsSorted() == "asc" ? 'rotate-180' : column.getIsSorted() == "desc" ? '' : 'hidden'} />
                 </button>
             );
         },
 
         accessorKey: "stateDate",
         cell: ({ row }) => {
-            const isDeath = row?.original?.state == 'death'
+            // const isDeath = row?.original?.state == 'death'
             const stateDate = row.getValue("stateDate");
-            if (!stateDate || isDeath)
+            if (!stateDate)
                 return <p>-</p>;
             const formatted = new Date(stateDate as string).toLocaleDateString("es-AR", { day: 'numeric', month: 'long', year: 'numeric' });
             return <p>{formatted}</p>;
@@ -141,19 +141,18 @@ export const columnsCattle: ColumnDef<CattleProps>[] = [
                     className="flex-center"
                 >
                     <p>Condición Corporal</p>
-                    <ArrowsIcon direction={column.getIsSorted() == "asc" ? 'dark:rotate-180' : column.getIsSorted() == "desc" ? '' : 'hidden'} />
+                    <ArrowsIcon direction={column.getIsSorted() == "asc" ? 'rotate-180' : column.getIsSorted() == "desc" ? '' : 'hidden'} />
                 </button>
             );
         },
         accessorKey: "bodyCondition",
         cell: ({ row }) => {
             return (
-                <div className="h-8">
-                    {row.getValue('state') == 'death' ?
-                        <div><p className='chip chip_red'>Muerta</p></div> :
-                        <ChipBodyCondition bodyRanges={row.original.bodyRanges} measure={Number(row.original.bodyCondition)} />
-                    }
-                </div>
+                <ChipBodyCondition
+                    bodyRanges={row?.original?.bodyRanges}
+                    measure={Number(row?.original?.bodyCondition)}
+                    state={row?.original?.state}
+                />
             )
         }
     },
@@ -166,7 +165,7 @@ export const columnsCattle: ColumnDef<CattleProps>[] = [
                     className="flex-center"
                 >
                     <p>Última medición</p>
-                    <ArrowsIcon direction={column.getIsSorted() == "asc" ? 'dark:rotate-180' : column.getIsSorted() == "desc" ? '' : 'hidden'} />
+                    <ArrowsIcon direction={column.getIsSorted() == "asc" ? 'rotate-180' : column.getIsSorted() == "desc" ? '' : 'hidden'} />
                 </button>
             );
         },
@@ -190,7 +189,7 @@ export const columnsCattle: ColumnDef<CattleProps>[] = [
                     className="flex-center"
                 >
                     <p>Ciclos</p>
-                    <ArrowsIcon direction={column.getIsSorted() == "asc" ? 'dark:rotate-180' : column.getIsSorted() == "desc" ? '' : 'hidden'} />
+                    <ArrowsIcon direction={column.getIsSorted() == "asc" ? 'rotate-180' : column.getIsSorted() == "desc" ? '' : 'hidden'} />
                 </button>
             );
         },
@@ -212,9 +211,7 @@ export const columnsCattle: ColumnDef<CattleProps>[] = [
                     <HistoryBtn
                         cattle={row.original}
                     />
-                    <AddEventBtn
-                        defaultCattle={row.original}
-                    />
+                    <AddEventBtn mode='chip' defaultCattle={row.original} />
                     <DeleteCattleBtn
                         id={row.original._id}
                         name={row.original.caravan}

@@ -8,7 +8,7 @@ const Locations = async () => {
 
     return (
         <div className="container px-default -mt-12 mb-12">
-            <Card>
+            <Card paddings=''>
                 <LocationsDataTable />
                 {/* :
                     <InfoMessage

@@ -11,8 +11,8 @@ import Card from '../ui/card'
 
 export default async function OperatorsPage({ params }: { params: SerializedSearchParamsProps }) {
     // get the list of operators existents to this farm
-    const { data, error } = await getOperators({ page: params?.pageOperators, limit: 10 });
-    
+    const { data, error } = await getOperators({ page: params?.pageOperators ?? 1, limit: 10 });
+
     return (
         <Card paddings='py-4 md:py-6 w-full flex flex-col overflow-hidden h-min'>
             <div className="px-3 md:px-5 pb-4 md:pb-6 border-b custom-border flex-between">
@@ -21,9 +21,9 @@ export default async function OperatorsPage({ params }: { params: SerializedSear
             </div>
 
             {!error && data ? (
-                <div className='w-full flex flex-col justify-between h-full max-h-96'>
+                <div className='w-full flex flex-col h-full max-h-96'>
                     {data?.users && data?.users?.length > 0 ? (
-                        <div className="w-full overflow-auto px-3 md:px-5 h-full">
+                        <div className="w-full overflow-auto h-full">
                             <table className='relative'>
                                 <thead className='sticky top-0'>
                                     <tr>
@@ -49,9 +49,9 @@ export default async function OperatorsPage({ params }: { params: SerializedSear
                                                     </td>
                                                     <td>{user?.email}</td>
                                                     <td>
-                                                        <div className={`chip ${user?.type == "operator" ? 'chip_blue' : 'bg-red-500 dark:bg-red-400'}`}>
-                                                            <p className='font-medium text-white'>{user?.type == 'operator' ? 'Operador' : 'Adminstrador'}</p>
-                                                        </div>
+                                                        <p className={`chip ${user?.type == "operator" ? 'chip_blue' : 'chip_red'}`}>
+                                                            {user?.type == 'operator' ? 'Operario' : 'Adminstrador'}
+                                                        </p>
                                                     </td>
                                                     <td>
                                                         <div className="flex gap-2 items-center">
@@ -71,7 +71,7 @@ export default async function OperatorsPage({ params }: { params: SerializedSear
                     <div className="px-3 md:px-5">
                         <Pagination
                             paramName="pageOperators"
-                            page={params.pageOperators}
+                            page={params.pageOperators ?? 1}
                             totalPages={data?.totalPages ?? 1}
                         />
                     </div>

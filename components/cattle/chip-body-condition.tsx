@@ -1,36 +1,22 @@
-import { useSession } from 'next-auth/react'
-import React from 'react'
 
-const ChipBodyCondition = ({ bodyRanges, measure }: { bodyRanges: number[]; measure?: number }) => {
+const ChipBodyCondition = ({ bodyRanges, measure, state }: { bodyRanges: number[]; measure?: number; state?: string }) => {
 
-    const bodyCondition = !measure || measure == 0 ? undefined : measure > Number(bodyRanges[1]) ? 'fat' : Number(bodyRanges[0]) > 10 ? 'ideal' : "skinny"
+    const minRange = Number(bodyRanges[0])
+    const maxRange = Number(bodyRanges[1])
+    const ideal = Number(measure) >= minRange && Number(measure) <= maxRange
+    const fat = Number(measure) > maxRange
+    const skinny = Number(measure) < minRange
 
-    if (bodyCondition == "fat") {
-        return (
-            <div>
-                <p className='chip chip_orange'>Gorda {`(${measure})`}</p>
-            </div>
-        )
-    }
-    if (bodyCondition == "skinny") {
-        return (
-            <div>
-                <p className='chip chip_yellow'>Flaca {`(${measure})`}</p>
-            </div>
-        )
-    }
-    if (bodyCondition == "ideal") {
-        return (
-            <div>
-                <p className='chip chip_green'>Ideal {`(${measure})`}</p>
-            </div>
-        )
-    }
-    return (
-        <div>
-            <p className='chip chip_gray'>Sin mediciones</p>
-        </div>
-    )
+    if (state == 'death') return <p className='chip chip_red'>Muerta</p>
+
+    if (!bodyRanges || !measure) return <p className='chip chip_gray'>Sin mediciones</p>
+
+    if (fat) return <p className='chip chip_orange'>Gorda {`(${measure})`}</p>
+
+    if (skinny) return <p className='chip chip_yellow'>Flaca {`(${measure})`}</p>
+
+    if (ideal) return <p className='chip chip_green'>Ideal {`(${measure})`}</p>
+
 }
 
 export default ChipBodyCondition

@@ -4,6 +4,7 @@ import * as z from "zod";
 import bcrypt from "bcryptjs";
 import { RegisterSchema } from "@/schemas";
 import axios from "axios";
+import { currentFarm } from "@/lib/auth";
 
 export async function registerUser(values: z.infer<typeof RegisterSchema>) {
  const validatedFields = RegisterSchema.safeParse(values);
@@ -15,12 +16,14 @@ export async function registerUser(values: z.infer<typeof RegisterSchema>) {
  const newUser = {
   email: email,
   name,
+  farmId: await currentFarm(),
   type: values?.type,
   password: hashedPassword,
  };
 
  console.log(`creating new ${newUser?.type}`);
  console.log(newUser);
+
  try {
   // insert and send the verification token via email
   const { data } = await axios({

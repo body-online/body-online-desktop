@@ -1,3 +1,5 @@
+'use client'
+
 import { LocationProps } from '@/lib/types'
 import React, { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
@@ -7,6 +9,7 @@ import { LoadingIcon, SearchIcon } from '../ui/icons'
 import InfoMessage from '../ui/info'
 import { enterModal } from '@/lib/constants'
 import { motion } from 'framer-motion'
+import Card from '../ui/card'
 
 const SelectInputSearchLocation = ({ handleSelectLocation, isOpen, setIsOpen, error, isSubmitting }:
     { handleSelectLocation: Function; isOpen: boolean; setIsOpen: Function; error?: string; isSubmitting?: boolean }) => {
@@ -53,7 +56,7 @@ const SelectInputSearchLocation = ({ handleSelectLocation, isOpen, setIsOpen, er
     }, [searchTerm]);
 
     return (
-        <div className='w-full'>
+        <div>
             <p className='input_label'>
                 Ubicación
             </p>
@@ -81,80 +84,71 @@ const SelectInputSearchLocation = ({ handleSelectLocation, isOpen, setIsOpen, er
                     initial="hidden"
                     animate="visible"
                     exit="exit"
-
+                    className='m-auto max-w-xl'
                 >
-                    <div className='w-[90vw] h-[80vh] relative pr-1 max-w-sm overflow-auto'>
-                        {/* header */}
-                        <div
-                            className="w-full sticky top-0 z-30 mb-3 h-20
-                            bg-gradient-to-b custom-gradient"
-                        >
-                            <div className="flex-between gap-3 mb-2">
-                                <h1 className="semititle">Seleccionar ubicación</h1>
-                                <p className='text-slate-400 text-sm'>
-                                    {isLoading ? 'buscando' : locations?.length ?? 0} resultados
-                                </p>
-                            </div>
+                    <Card headerLabel='Seleccionar ubicación'>
+                        <div className="relative max-h-[74vh] flex flex-col overflow-auto pr-1 mt-3">
+                            {/* search */}
+                            <div className='w-full sticky top-0 z-30'>
+                                <div className="backdrop-blur-md pb-2 rounded-lg border custom-border overflow-hidden h-max mb-3 bg-slate-200/50 dark:bg-clightgray/50">
+                                    <div className="flex-center px-3 gap-2 outline-0 ring-0 bg-white dark:bg-clightgray border-b custom-border">
+                                        <SearchIcon fill='fill-cblack dark:fill-slate-200' />
 
-                            <label>
-                                <div className="flex-center px-3 gap-2 text-sm md:text-base transition rounded-lg border hover:border-gray-400 focus:outline-0 focus:ring-[1px] ring-slate-300 dark:ring-slate-600 w-full disabled:opacity-50 bg-white dark:bg-clightgray dark:border-gray-800 dark:md:hover:border-slate-700">
-                                    {isLoading ? <LoadingIcon /> :
-                                        <SearchIcon fill='fill-cblack dark:fill-white' />
-                                    }
-                                    <input
-                                        className={`text-base h-12 border-none bg-transparent focus:outline-none w-full placeholder:text-slate-400 placeholder:font-normal disabled:opacity-50`}
-                                        disabled={!locations}
-                                        placeholder="Escriba el nombre de la ubicación..."
-                                        value={searchTerm ?? ''}
-                                        onChange={({ target }) => { return setSearchTerm(target.value) }}
-                                    />
+                                        <input
+                                            className={`text-base h-12 bg-transparent outline-0 ring-0 w-full disabled:opacity-50`}
+                                            disabled={!locations}
+                                            placeholder="Buscar ubicación..."
+                                            value={searchTerm ?? ''}
+                                            onChange={({ target }) => { return setSearchTerm(target.value) }}
+                                        />
+                                    </div>
+
+                                    <p className='text-sm mx-2 mt-2 flex gap-1 text-slate-600 dark:text-slate-400'>
+                                        {isLoading ? <LoadingIcon /> : locations?.length ?? 0} resultados
+                                    </p>
                                 </div>
-                            </label>
-                        </div>
-
-
-
-                        {isLoading ? (
-                            <div className='flex-center gap-2 py-default'>
-                                <LoadingIcon />
-                                <p className='text-base font-medium font-slate-300'>Buscando resultados</p>
                             </div>
-                        ) : locations?.length > 0 ? (
-                            <ul className='w-full flex flex-col gap-2 overflow-auto'>
-                                {locations.map((location, index) => {
-                                    return (
-                                        <li key={index}>
-                                            <button
-                                                type='button'
-                                                className='w-full border custom-border rounded-md bg-slate-100 dark:bg-cgray'
-                                                onClick={() => {
-                                                    setSelectedLocations(location);
-                                                    handleSelectLocation(location._id);
-                                                    handleClose();
-                                                }}
-                                            >
-                                                <div className="flex h-9 gap-4 mb-2">
-                                                    <div className='flex flex-col h-full items-start justify-between'>
-                                                        <p className='text-xs font-medium'>Nombre</p>
-                                                        <b className="text-center w-full">
-                                                            {location.name}
-                                                        </b>
-                                                    </div>
-                                                </div>
-                                            </button>
-                                        </li>
-                                    )
-                                })}
-                            </ul>
-                        ) : <InfoMessage type='censored' title='Sin resultados' subtitle='No hemos encontrado ubicaciones' />
-                        }
-                    </div>
-                    < div
-                        className="w-full sticky bottom-0 h-12 z-20
-                        bg-gradient-to-t custom-gradient"
-                    />
+
+
+                            {/* results */}
+                            <div className="h-full">
+                                {isLoading ?
+                                    <div className='flex-center gap-2 py-default'>
+                                        <LoadingIcon />
+                                        <p className='text-base font-medium font-slate-300'>Buscando resultados</p>
+                                    </div>
+                                    : locations?.length > 0 ?
+                                        <ul className='w-full overflow-auto space-y-2'>
+                                            {locations.map((location, index) => {
+                                                return (
+                                                    <li key={index}>
+                                                        <button
+                                                            type='button'
+                                                            onClick={() => {
+                                                                setSelectedLocations(location);
+                                                                handleSelectLocation(location._id);
+                                                                handleClose();
+                                                            }}
+                                                            className='border custom-border md:hover:bg-salte-100 dark:md:hover:bg-clightgray rounded w-full px-3 py-3'
+                                                        >
+                                                            <div className='text-start w-full'>
+                                                                <p className='text-sm opacity-50'>Nombre</p>
+                                                                <p className="text-xl">
+                                                                    {location.name}
+                                                                </p>
+                                                            </div>
+                                                        </button>
+                                                    </li>
+                                                )
+                                            })}
+                                        </ul>
+                                        : <InfoMessage type='censored' title='Sin resultados' subtitle='No hemos encontrado ubicaciones' />
+                                }
+                            </div>
+                        </div>
+                    </Card>
                 </motion.div>
-            </BlackOutModal>
+            </BlackOutModal >
 
         </div >
     )

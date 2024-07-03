@@ -68,13 +68,13 @@ const LoginForm = () => {
                             </div>
                         </label>
 
-                        <button disabled={isSubmitting} className='login_btn' type='submit'>
+                        <button disabled={isSubmitting} className='primary-btn ml-auto' type='submit'>
                             {isSubmitting ? (
                                 <LoadingIcon />
                             ) : (
                                 <>
-                                    <p>Ingresar</p>
-                                    <SendIcon fill='fill-clime dark:fill-caqua' />
+                                    <p className='text-white'>Ingresar</p>
+                                    <SendIcon fill='fill-clime' />
                                 </>
                             )
                             }

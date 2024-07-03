@@ -61,7 +61,7 @@ export function FarmForm() {
                                         {...register("cattleAmount")}
                                         name='cattleAmount'
                                         type="text"
-                                        placeholder='ej. 1500'
+                                        placeholder='Ej. 1500'
                                         disabled={isSubmitting}
                                         className={`input ${errors.cattleAmount ? 'border-red-500' : ''}`}
                                     />
@@ -77,7 +77,7 @@ export function FarmForm() {
                                         {...register("name")}
                                         name='name'
                                         type="text"
-                                        placeholder='ej. San Fernando'
+                                        placeholder='Ej. San Fernando'
                                         disabled={isSubmitting}
                                         className={`input ${errors.name ? 'border-red-500' : ''}`}
                                     />
@@ -114,28 +114,17 @@ export function FarmForm() {
                             />
                         </div>
 
-                        {/* <div className="flex items-center gap-1">
-                            <MeasureIcon />
-                            <p className='text-base font-medium text-slate-500'>Mediciones</p>
-                        </div> */}
-
-                        <div className="mt-6 flex-end">
-                            <button
-                                type="submit"
-                                className="btn cgreen sm:max-w-max px-3"
-                                disabled={isSubmitting}
-                            >
-                                {isSubmitting ? (
-                                    <LoadingIcon />
-                                ) :
-                                    <>
-                                        <p>Completar datos</p>
-                                        <SendIcon fill='fill-clime' />
-                                    </>
-
-                                }
-                            </button>
-                        </div>
+                        <button disabled={isSubmitting} className='primary-btn' type='submit'>
+                            {isSubmitting ? (
+                                <LoadingIcon />
+                            ) : (
+                                <>
+                                    <p className='text-white'>Completar registro</p>
+                                    <SendIcon fill='fill-clime' />
+                                </>
+                            )
+                            }
+                        </button>
                     </div>
                 </form >
 

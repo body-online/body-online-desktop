@@ -11,6 +11,7 @@ export async function createGenetic(genetic: GeneticSchema): Promise<{
  try {
   const user = await currentUser();
 
+  if (user?.type != "owner") return { error: "Error de permisos" };
   if (!user?.farmId || !genetic?.name)
    return {
     error: "Error al encontrar la organización",
@@ -40,6 +41,9 @@ export async function deleteGenetic(
  geneticId: string
 ): Promise<{ error?: string; data?: string }> {
  try {
+  const user = await currentUser();
+
+  if (user?.type != "owner") return { error: "Error de permisos" };
   const { data } = await axios({
    method: "patch",
    url: `${process.env.API_URL}/api/ranchi/genetic/delete/${geneticId}`,

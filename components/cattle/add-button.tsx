@@ -15,8 +15,9 @@ import SelectInputSearchLocation from './select-input-search-location';
 import SelectInputSearchGenetic from './select-input-search-genetics';
 import { LoadingIcon, MiniAddIcon } from '../ui/icons';
 import BlackOutModal from '../ui/blackout-modal';
+import Card from '../ui/card';
 
-export function AddCattleBtn({ chipMode, children }: { chipMode?: boolean; children?: React.ReactNode }) {
+export function AddCattleBtn({ mode }: { mode?: 'chip' | 'mini' }) {
     const router = useRouter();
     const [isOpen, setIsOpen] = useState(false);
     const [isOpenLocations, setIsOpenLocations] = useState<boolean>(false)
@@ -54,31 +55,35 @@ export function AddCattleBtn({ chipMode, children }: { chipMode?: boolean; child
     }, [isOpen, isOpenGenetics, isOpenLocations]);
 
     const onSubmit: SubmitHandler<CattleSchema> = async (data: CattleSchema) => {
-        const toastSavingCattle = toast.loading("Creando individuo...");
+        // const toastSavingCattle = toast.loading("Creando individuo...");
         try {
             const { error } = await createCattle(data);
             if (error) return toast.error(error);
 
-            toast.success(`Individuo creado`);
+            // toast.success(`Individuo creado`);
             reset();
             handleClose();
             router.refresh();
         } catch (error) {
             toast.error("Ha ocurrido un error al crear el individuo");
         } finally {
-            toast.dismiss(toastSavingCattle);
+            // toast.dismiss(toastSavingCattle);
         }
     };
 
     return (
         <>
-            <button onClick={handleOpen}>
-                {children ??
-                    <div className={`${chipMode ? 'chip cgreen flex-center gap-2' : 'btn cgreen'}`}>
-                        <p>Crear  {chipMode ? '' : 'nuevo'} individuo</p>
-                        <MiniAddIcon fill="fill-clime" />
-                    </div>
+            <button
+                onClick={handleOpen}
+                className={`
+                    ${mode == 'chip' ? 'chip cgreen flex-center gap-2' :
+                        mode === 'mini' ? 'rounded-full cgreen dark:bg-csemigreen h-6 sm:h-7 w-6 sm:w-7 flex-center' :
+                            'primary-btn'
+                    }`
                 }
+            >
+                {mode != 'mini' ? <p>Crear individuo</p> : null}
+                <MiniAddIcon fill='fill-clime' />
             </button>
 
             <BlackOutModal handleClose={handleClose} isOpen={isOpen}>
@@ -89,11 +94,9 @@ export function AddCattleBtn({ chipMode, children }: { chipMode?: boolean; child
                     animate="visible"
                     exit="exit"
                 >
-                    <form className='w-[90vw] h-[80vh] overflow-auto pr-1 max-w-xl' onSubmit={handleSubmit(onSubmit)}>
-
-                        <div className="space-y-4">
-                            <h1 className="semititle">Crear individuo</h1>
-                            <div className="flex gap-2 w-full">
+                    <form className='max-w-xl m-auto' onSubmit={handleSubmit(onSubmit)}>
+                        <Card headerLabel='Crear individuo'>
+                            <div className="flex gap-2 w-full mt-3">
                                 <label htmlFor='caravan' className='w-full'>
                                     <p className="input_label">Caravana*</p>
                                     <input
@@ -144,7 +147,7 @@ export function AddCattleBtn({ chipMode, children }: { chipMode?: boolean; child
 
 
                             <div className="mt-6 flex-end gap-3">
-                                <button type="submit" className="btn cgreen" disabled={isSubmitting}>
+                                <button type="submit" className="primary-btn" disabled={isSubmitting}>
                                     {isSubmitting ? <LoadingIcon /> :
                                         <>
                                             <p>Crear individuo</p>
@@ -153,7 +156,7 @@ export function AddCattleBtn({ chipMode, children }: { chipMode?: boolean; child
                                     }
                                 </button>
                             </div>
-                        </div>
+                        </Card>
 
                     </form>
 

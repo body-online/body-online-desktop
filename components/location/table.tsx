@@ -22,7 +22,7 @@ import {
     TableRow,
 } from "@/components/ui/table";
 
-import { LoadingIcon, SearchIcon } from '../ui/icons';
+import { ArrowsIcon, LoadingIcon, SearchIcon } from '../ui/icons';
 import React, { useEffect, useState } from "react";
 import { columnsLocation } from './columns';
 import axios from 'axios';
@@ -85,27 +85,29 @@ export function LocationsDataTable({ totalAmount }: { totalAmount?: number }) {
     }, [page, totalAmount, limit])
 
     return (
-        <div>
+        <div className='space-y-3'>
+            <form onSubmit={(e) => { e.preventDefault(); searchLocations() }}>
 
-            <form
-                className='flex flex-wrap gap-3 mb-3'
-                onSubmit={(e) => { e.preventDefault(); searchLocations() }}
-            >
-                <label className='w-full max-w-sm'>
-                    <div className="flex input gap-3 items-center w-full">
-                        <SearchIcon fill={`${isLoading ? 'fill-slate-300' : 'fill-slate-400'}`} />
-                        <input
-                            className={`text-base h-12 border-none bg-transparent focus:outline-none w-full placeholder:text-slate-400 placeholder:font-normal disabled:opacity-50 md:max-w-sm`}
-                            disabled={!locations}
-                            placeholder="Buscar por nombre..."
-                            value={searchTerm}
-                            onChange={({ target }) => setSearchTerm(target.value)}
-                        />
-                    </div>
-                </label>
+                <div className=" p-3 md:p-5">
+                    <label>
+                        <div className="flex input gap-3 items-center w-full max-w-sm">
+                            <SearchIcon fill={`${isLoading ? 'fill-slate-300' : 'fill-slate-400'}`} />
+                            <input
+                                className={`text-base h-12 border-none bg-transparent focus:outline-none w-full placeholder:text-slate-400 placeholder:font-normal disabled:opacity-50 md:max-w-sm`}
+                                disabled={!locations}
+                                placeholder="Buscar por nombre..."
+                                value={searchTerm}
+                                onChange={({ target }) => setSearchTerm(target.value)}
+                            />
+                        </div>
+                    </label>
+                    <p className="opacity-50 text-xs mt-1">
+                        Presione <b>Enter / Ir</b> para buscar
+                    </p>
+                </div>
             </form>
 
-            <div className='h-[65vh] sm:h-[50vh] overflow-auto'>
+            <div className='overflow-auto relative w-full flex flex-col h-full max-h-96'>
                 {isLoading ? (
                     <div className='h-full flex-center gap-2 py-default'>
                         <LoadingIcon />
@@ -153,12 +155,13 @@ export function LocationsDataTable({ totalAmount }: { totalAmount?: number }) {
             </div>
 
 
-            < div className="flex-end flex-wrap gap-6 h-9 mt-3">
-                <label className='flex-center bg-slate-100 gap-2 border rounded-full overflow-hidden h-full'>
-                    <p className='input_label pl-3 text-slate-400'> Cantidad de filas</p>
+            <div className="flex-end gap-3 p-3 md:p-5">
+
+                <label className='pagination'>
+                    <p className='text-xs pl-2 m-auto'>Cantidad de filas</p>
                     <select
                         disabled={isLoading}
-                        className='p-2 disabled:opacity-50 rounded-full focus:outline-none bg-transparent font-medium'
+                        className='dark:bg-cgray dark:text-white'
                         value={limit}
                         onChange={({ target }) => { setPage(1); setLimit(target.value) }}
                     >
@@ -171,33 +174,25 @@ export function LocationsDataTable({ totalAmount }: { totalAmount?: number }) {
                 </label>
 
                 {totalPages &&
-                    <label className='flex-center bg-slate-100 gap-2 border rounded-full overflow-hidden h-full'>
-
+                    <div className="pagination">
                         <button
-                            className="rounded-full bg-slate-100 p-2 disabled:opacity-50"
-                            disabled={page == 1}
-                            onClick={() => {
-                                setPage(page ? page - 1 : 1)
-                            }}
+                            className="table_btn_pag"
+                            disabled={page === 1}
+                            onClick={() => setPage(page - 1)}
                         >
-                            <ArrowIcon direction="left" />
+                            <ArrowsIcon direction="rotate-90" />
                         </button>
 
-                        <p className={`p-2 ${isLoading ? 'opacity-50' : ''}`}>
-                            {page}/{totalPages}
-                        </p>
+                        <p className="text-xs px-2 m-auto">Pág. {page} de {totalPages}</p>
 
                         <button
-                            className="rounded-full bg-slate-100 p-2 disabled:opacity-50"
-                            disabled={page == totalPages}
-                            onClick={() => {
-                                setPage(page ? page + 1 : totalPages ?? 1);
-                            }}
+                            className="table_btn_pag"
+                            disabled={page === totalPages || totalPages === 1 || !totalPages}
+                            onClick={() => setPage(page + 1)}
                         >
-                            <ArrowIcon direction="right" />
+                            <ArrowsIcon direction="-rotate-90" />
                         </button>
-
-                    </label>
+                    </div>
                 }
             </div>
         </div >

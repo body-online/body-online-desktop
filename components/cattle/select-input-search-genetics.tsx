@@ -7,16 +7,14 @@ import { LoadingIcon, SearchIcon } from '../ui/icons'
 import InfoMessage from '../ui/info'
 import { enterModal } from '@/lib/constants'
 import { motion } from 'framer-motion'
+import Card from '../ui/card'
 
-const SelectInputSearchGenetic = ({ handleSelectGenetic, isOpen, setIsOpen, error, isSubmitting }: {
-    handleSelectGenetic: Function; isOpen: boolean; setIsOpen: Function; error?: string; isSubmitting?: boolean
-}) => {
+const SelectInputSearchGenetic = ({ handleSelectGenetic, isOpen, setIsOpen, error, isSubmitting }:
+    { handleSelectGenetic: Function; isOpen: boolean; setIsOpen: Function; error?: string; isSubmitting?: boolean }) => {
     // genetics
     const [selectedGenetic, setSelectedGenetics] = useState<GeneticProps>()
     const [genetics, setGenetics] = useState<GeneticProps[]>([])
-    const [filteredResults, setFilteredResults] = useState<GeneticProps[] | undefined>()
     const [isLoading, setIsLoading] = useState<boolean>(true)
-    const [searchTerm, setSearchTerm] = useState<string>()
 
     const handleOpen = () => {
         return setIsOpen(true)
@@ -25,13 +23,11 @@ const SelectInputSearchGenetic = ({ handleSelectGenetic, isOpen, setIsOpen, erro
         return setIsOpen(false)
     }
 
-    const getGenetics = async () => {
+    const searchGenetics = async () => {
         setIsLoading(true)
         try {
             const { data } = await axios.get(`api/genetics`)
-            if (Array.isArray(data)) {
-                setGenetics(data)
-            }
+            if (data) setGenetics(data)
 
         } catch (error) {
             toast.error('Ha ocurrido un error al encontrar los resultados')
@@ -42,21 +38,11 @@ const SelectInputSearchGenetic = ({ handleSelectGenetic, isOpen, setIsOpen, erro
     }
 
     useEffect(() => {
-        getGenetics()
+        searchGenetics()
     }, [])
 
-    // debounce input filter
-    useEffect(() => {
-        if (searchTerm) {
-            const filter = genetics.filter((genetic) => genetic?.name?.toLowerCase()?.indexOf(searchTerm.toLowerCase()) >= 0)
-
-            return setFilteredResults(filter)
-        }
-        setFilteredResults(genetics)
-    }, [searchTerm, genetics]);
-
     return (
-        <div className='w-full'>
+        <div>
             <p className='input_label'>
                 Genética
             </p>
@@ -84,83 +70,60 @@ const SelectInputSearchGenetic = ({ handleSelectGenetic, isOpen, setIsOpen, erro
                     initial="hidden"
                     animate="visible"
                     exit="exit"
-
+                    className='m-auto max-w-xl'
                 >
-                    <div className='w-[90vw] h-[80vh] relative pr-1 max-w-sm overflow-auto'>
-                        {/* header */}
-                        <div
-                            className="w-full sticky top-0 z-30 mb-3 h-20
-                            bg-gradient-to-b custom-gradient"
-                        >
-                            <div className="flex-between gap-3 mb-2">
-                                <h1 className="semititle">Seleccionar genética</h1>
-                                <p className='text-slate-400 text-sm'>
-                                    {isLoading ? 'buscando' : genetics?.length ?? 0} resultados
-                                </p>
-                            </div>
-
-                            <label>
-                                <div className="input text-start w-full disabled:opacity-50">
-                                    {isLoading ? <LoadingIcon /> :
-                                        <SearchIcon fill='fill-cblack dark:fill-white' />
-                                    }
-                                    <input
-                                        className={`text-base h-12 border-none bg-transparent focus:outline-none w-full placeholder:text-slate-400 placeholder:font-normal disabled:opacity-50`}
-                                        disabled={!genetics}
-                                        placeholder="Escriba el nombre de la caravana..."
-                                        value={searchTerm ?? ''}
-                                        onChange={({ target }) => { return setSearchTerm(target.value) }}
-                                    />
+                    <Card headerLabel='Seleccionar genética'>
+                        <div className="relative max-h-[74vh] flex flex-col overflow-auto pr-1 mt-3">
+                            {/* search */}
+                            <div className='w-full sticky top-0 z-30'>
+                                <div className="backdrop-blur-md pb-2 rounded-lg border custom-border overflow-hidden h-max mb-3 bg-slate-200/50 dark:bg-clightgray/50">
+                                    <p className='text-sm mx-2 mt-2 flex gap-1 text-slate-600 dark:text-slate-400'>
+                                        {isLoading ? <LoadingIcon /> : genetics?.length ?? 0} resultados
+                                    </p>
                                 </div>
-                            </label>
-                        </div>
-
-                        {isLoading ? (
-                            <div className='flex-center gap-2 py-default'>
-                                <LoadingIcon />
-                                <p className='text-base font-medium font-slate-300'>Buscando resultados</p>
                             </div>
-                        ) : filteredResults ? (
-                            <ul className='w-full flex flex-col gap-2 overflow-auto'>
-                                {genetics.map((genetic, index) => {
-                                    return (
-                                        <li key={index}>
-                                            <button
-                                                type='button'
-                                                className='w-full py-4 px-4 transition-all rounded-xl border
-                                            md:opacity-70 md:hover:opacity-100 md:hover:bg-white dark:bg-slate-950 md:bg-slate-100'
-                                                onClick={() => {
-                                                    setSelectedGenetics(genetic);
-                                                    handleSelectGenetic(genetic._id);
-                                                    handleClose();
-                                                }}
-                                            >
-                                                <div className="flex-between">
-                                                    <p className='text-start font-medium text-lg'>
-                                                        {genetic.name}
-                                                    </p>
 
-                                                    <div className="text-base font-medium w-20 chip chip_green">
-                                                        {genetic?.bodyRanges?.[0]} - {genetic?.bodyRanges?.[1]}
-                                                    </div>
-                                                </div>
-                                            </button>
-                                        </li>
-                                    )
-                                })}
-                            </ul>
-                        ) : <InfoMessage type='censored' title='Sin resultados' subtitle='No hemos encontrado genéticas' />
-                        }
-                        < div
-                            className="w-full sticky bottom-0 h-12 z-20
-                        bg-gradient-to-t custom-gradient"
-                        />
-
-                    </div>
+                            {/* results */}
+                            <div className="h-full">
+                                {isLoading ?
+                                    <div className='flex-center gap-2 py-default'>
+                                        <LoadingIcon />
+                                        <p className='text-base font-medium font-slate-300'>Buscando resultados</p>
+                                    </div>
+                                    : genetics?.length > 0 ?
+                                        <ul className='w-full overflow-auto space-y-2'>
+                                            {genetics.map((genetic, index) => {
+                                                return (
+                                                    <li key={index}>
+                                                        <button
+                                                            type='button'
+                                                            onClick={() => {
+                                                                setSelectedGenetics(genetic);
+                                                                handleSelectGenetic(genetic._id);
+                                                                handleClose();
+                                                            }}
+                                                            className='border custom-border md:hover:bg-salte-100 dark:md:hover:bg-clightgray rounded w-full px-3 py-3'
+                                                        >
+                                                            <div className='text-start w-full'>
+                                                                <p className='text-sm opacity-50'>Nombre</p>
+                                                                <p className="text-xl">
+                                                                    {genetic.name}
+                                                                </p>
+                                                            </div>
+                                                        </button>
+                                                    </li>
+                                                )
+                                            })}
+                                        </ul>
+                                        : <InfoMessage type='censored' title='Sin resultados' subtitle='No hemos encontrado genéticas' />
+                                }
+                            </div>
+                        </div>
+                    </Card>
                 </motion.div>
-            </BlackOutModal>
+            </BlackOutModal >
 
-        </div>
+        </div >
     )
 }
 

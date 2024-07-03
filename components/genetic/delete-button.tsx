@@ -11,8 +11,10 @@ import { deleteGenetic } from '@/actions/genetic'
 import { enterModal } from '@/lib/constants'
 import Card from '../ui/card'
 import BlackOutModal from '../ui/blackout-modal'
+import { useSession } from 'next-auth/react'
 
 const DeleteGeneticBtn = ({ id, name }: { id: string, name: string }) => {
+    const { data, status } = useSession()
     const [isLoading, setIsLoading] = useState<boolean>(false)
     const [isOpen, setIsOpen] = useState<boolean>(false)
     const router = useRouter()
@@ -42,13 +44,17 @@ const DeleteGeneticBtn = ({ id, name }: { id: string, name: string }) => {
             setIsLoading(false)
         }
     }
+
+    if (status === 'loading') return <LoadingIcon />
+    if (data?.user?.type != 'owner') return null;
+
     return (
         <>
             <button
-                className='group transition-all'
+                className='rounded-full ring-0 md:hover:opacity-70 active:opacity-50 transition-all'
                 onClick={handleOpen}
             >
-                <TrashIcon fill='fill-slate-500 md:group-hover:fill-slate-900 transition-all' />
+                <TrashIcon fill='fill-cgray dark:fill-white' />
             </button>
 
             <BlackOutModal isOpen={isOpen} handleClose={handleClose}>
@@ -60,7 +66,7 @@ const DeleteGeneticBtn = ({ id, name }: { id: string, name: string }) => {
                     exit="exit"
 
                 >
-                    <div className='w-[90vw] h-[80vh] overflow-auto pr-1 max-w-md'>
+                    <div className='w-[90vw] h-[74vh] overflow-auto pr-1 max-w-md'>
                         {/* header */}
                         <div
                             className="w-full sticky top-0 z-10 mb-3

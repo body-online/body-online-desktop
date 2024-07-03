@@ -5,6 +5,7 @@ import Card from '@/components/ui/card';
 import PageHeader from '@/components/ui/header';
 import InfoMessage from '@/components/ui/info';
 import { getGenetics } from '@/data/genetic';
+import { currentUser } from '@/lib/auth';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -12,6 +13,7 @@ export const metadata: Metadata = {
 };
 
 export default async function GeneticsPage() {
+    const user = await currentUser()
     const { data, error } = await getGenetics()
 
     return (
@@ -24,7 +26,7 @@ export default async function GeneticsPage() {
                         </div>
                         <p className='text-sm tracking-tight font-medium text-slate-500'>Cree y consulte sus genéticas.</p>
                     </div>
-                    <AddGeneticBtn />
+                    {user?.type === 'owner' ? <AddGeneticBtn /> : null}
                 </div>
             </PageHeader>
 
