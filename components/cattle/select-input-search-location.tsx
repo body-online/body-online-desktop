@@ -10,6 +10,7 @@ import InfoMessage from '../ui/info'
 import { enterModal } from '@/lib/constants'
 import { motion } from 'framer-motion'
 import Card from '../ui/card'
+import { getLocations } from '@/data/location'
 
 const SelectInputSearchLocation = ({ handleSelectLocation, isOpen, setIsOpen, error, isSubmitting }:
     { handleSelectLocation: Function; isOpen: boolean; setIsOpen: Function; error?: string; isSubmitting?: boolean }) => {
@@ -29,7 +30,7 @@ const SelectInputSearchLocation = ({ handleSelectLocation, isOpen, setIsOpen, er
     const searchLocations = async () => {
         setIsLoading(true)
         try {
-            const { data } = await axios.get(`api/locations`, { params: { page: 1, limit: 20, name: searchTerm } })
+            const { data } = await getLocations({ page: 1, limit: 20, name: searchTerm })
             if (data?.locations) setLocations(data.locations)
 
         } catch (error) {

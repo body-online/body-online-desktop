@@ -14,12 +14,11 @@ export const metadata: Metadata = {
 
 export default async function LocationsPage() {
     const user = await currentUser()
-    const { data } = await getLocations({ limit: '0' })
+    const { data } = await getLocations({ limit: 0 })
 
     if (!user?.farmId) {
         return redirect('/onboarding')
     }
-
 
     return (
         <div>
@@ -31,7 +30,7 @@ export default async function LocationsPage() {
                         </div>
                         <p className='text-sm tracking-tight font-medium text-slate-500'>Cree y consulte sus ubicaciones.</p>
                     </div>
-                    <AddLocationBtn />
+                    {user?.type == 'owner' ? <AddLocationBtn /> : null}
                 </div>
             </PageHeader>
 

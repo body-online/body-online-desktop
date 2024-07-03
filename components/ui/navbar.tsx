@@ -107,6 +107,22 @@ export default function Navbar({ user }: { user?: ExtendedUser }) {
                         {navigationItems.map((i, index) => {
                             var selected: boolean = i.href == pathname;
 
+                            if (user?.type == 'operator' && i.title == 'Inicio') {
+                                var selected: boolean = '/panel' == pathname;
+                                return (
+                                    <div key={index} className={`${selected ? ' border-b-clime' : 'border-transparent'} h-12 flex items-center border-b-2`}>
+                                        <Link href={i.href} onClick={() => setIsOpen(false)}>
+                                            <p
+                                                className={`font-medium text-sm active:bg-transparent rounded-md px-3 py-1.5 transition-all
+                                            ${selected ? 'text-clime dark:text-clime' : 'text-white dark:text-white opacity-50 active:opacity-100 md:hover:opacity-100'}`}
+                                            >
+                                                Inicio
+                                            </p>
+                                        </Link>
+                                    </div>
+                                )
+                            }
+
                             return (
                                 <div key={index} className={`${selected ? ' border-b-clime' : 'border-transparent'} h-12 flex items-center border-b-2`}>
                                     <Link href={i.href} onClick={() => setIsOpen(false)}>
@@ -146,7 +162,7 @@ export default function Navbar({ user }: { user?: ExtendedUser }) {
                                 <p className='text-cblack dark:text-white font-semibold px-6 py-4 text-lg'>Menú</p>
                                 <div className='flex-between gap-1 px-6 py-4'>
                                     <p className='font-medium'>{user?.email}</p>
-                                    <ProfileImage url={user?.image} />
+                                    <ProfileImage url={user?.image} type={user?.type} />
                                 </div>
                                 <div className='flex-between gap-1 px-6 py-4'>
                                     <p className='text-sm text-start font-medium transition-all'>Tema</p>

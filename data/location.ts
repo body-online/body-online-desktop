@@ -10,8 +10,8 @@ export async function getLocations({
  limit,
 }: {
  name?: string;
- page?: string;
- limit?: string;
+ page?: number;
+ limit?: number;
 }): Promise<{
  error?: string;
  data?: {

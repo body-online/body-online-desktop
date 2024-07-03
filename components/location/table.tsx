@@ -27,6 +27,8 @@ import React, { useEffect, useState } from "react";
 import { columnsLocation } from './columns';
 import axios from 'axios';
 import toast from 'react-hot-toast';
+import { getLocations } from '@/data/location';
+import { LocationProps } from '@/lib/types';
 
 export function LocationsDataTable({ totalAmount }: { totalAmount?: number }) {
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
@@ -34,9 +36,9 @@ export function LocationsDataTable({ totalAmount }: { totalAmount?: number }) {
     const [isLoading, setIsLoading] = useState<boolean>(true)
     const [searchTerm, setSearchTerm] = useState("")
 
-    const [locations, setLocations] = useState([])
+    const [locations, setLocations] = useState<LocationProps[]>([])
     const [totalPages, setTotalPages] = useState<number>()
-    const [limit, setLimit] = useState<string>('10')
+    const [limit, setLimit] = useState<number>(10)
     const [page, setPage] = useState<number>(1)
 
     const table = useReactTable({
@@ -68,8 +70,8 @@ export function LocationsDataTable({ totalAmount }: { totalAmount?: number }) {
     const searchLocations = async () => {
         setIsLoading(true)
         try {
-            const { data } = await axios.get(`api/locations`, { params: { page, limit, name: searchTerm } })
-            if (data?.totalPages) setTotalPages(parseInt(data.totalPages))
+            const { data } = await getLocations({ page, limit, name: searchTerm })
+            if (data?.totalPages) setTotalPages(Number(data.totalPages))
             if (data?.locations) setLocations(data.locations)
 
         } catch (error) {
@@ -163,7 +165,7 @@ export function LocationsDataTable({ totalAmount }: { totalAmount?: number }) {
                         disabled={isLoading}
                         className='dark:bg-cgray dark:text-white'
                         value={limit}
-                        onChange={({ target }) => { setPage(1); setLimit(target.value) }}
+                        onChange={({ target }) => { setPage(1); setLimit(Number(target.value)) }}
                     >
                         <option value="10">10</option>
                         <option value="20">20</option>

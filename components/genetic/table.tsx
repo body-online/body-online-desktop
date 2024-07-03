@@ -79,7 +79,7 @@ export function GeneticsDataTable<TData, TValue>({
     }
 
     return (
-        <div>
+        <div className='overflow-auto relative w-full flex flex-col h-full max-h-96'>
             {genetics.length > 0 && (
                 <label className='flex flex-wrap gap-3 mb-3 max-w-sm'>
                     <div className="flex input gap-3 items-center w-full">

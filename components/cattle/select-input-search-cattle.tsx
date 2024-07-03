@@ -12,6 +12,7 @@ import { motion } from 'framer-motion'
 import Card from '../ui/card'
 import ChipState from './chip-state'
 import ChipBodyCondition from './chip-body-condition'
+import { getCattles } from '@/data/cattle'
 
 const SelectInputSearchCattle = ({ selectedCattle, handleSelectCattle, isOpen, setIsOpen, error, isSubmitting }:
     { selectedCattle?: CattleProps; handleSelectCattle: Function; isOpen: boolean; setIsOpen: Function; error?: string; isSubmitting?: boolean }) => {
@@ -31,7 +32,8 @@ const SelectInputSearchCattle = ({ selectedCattle, handleSelectCattle, isOpen, s
     const searchCattles = async () => {
         setIsLoading(true)
         try {
-            const { data } = await axios.get(`api/cattles`, { params: { page: 1, limit: 10, name: searchTerm } })
+            const { data } = await getCattles({ page: 1, limit: 10, name: searchTerm })
+
             if (data?.cattles) setCattles(data.cattles)
 
         } catch (error) {

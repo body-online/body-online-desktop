@@ -100,15 +100,13 @@ export async function getHistoricalEvents({
    `${process.env.API_URL}/api/ranchi/event/${cattleId}/${user?.farmId}`
   );
 
-  //   console.log(data);
-
   const sortedData = data?.sort((a: EventProps, b: EventProps) => {
    // Turn your strings into dates, and then subtract them
    // to get a value that is either negative, positive, or zero.
    return (new Date(b?.eventDate) as any) - (new Date(a?.eventDate) as any);
   });
 
-  return sortedData;
+  return { data: sortedData };
  } catch (error) {
   console.log(error);
 

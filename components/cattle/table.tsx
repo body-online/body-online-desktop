@@ -27,6 +27,8 @@ import { columnsCattle } from './columns';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import InfoMessage from '../ui/info';
+import { getCattles } from '@/data/cattle';
+import { CattleProps } from '@/lib/types';
 
 export function CattlesDataTable({ totalAmount, totalEvents }: { totalAmount?: number; totalEvents?: number }) {
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
@@ -34,9 +36,9 @@ export function CattlesDataTable({ totalAmount, totalEvents }: { totalAmount?: n
     const [isLoading, setIsLoading] = useState<boolean>(true)
     const [searchTerm, setSearchTerm] = useState("")
 
-    const [cattles, setCattles] = useState([])
+    const [cattles, setCattles] = useState<CattleProps[]>([])
     const [totalPages, setTotalPages] = useState<number>()
-    const [limit, setLimit] = useState<string>('10')
+    const [limit, setLimit] = useState<number>(10)
     const [page, setPage] = useState<number>(1)
 
     const table = useReactTable(
@@ -70,9 +72,9 @@ export function CattlesDataTable({ totalAmount, totalEvents }: { totalAmount?: n
     const searchCattles = async () => {
         setIsLoading(true)
         try {
-            const { data } = await axios.get(`api/cattles`, { params: { page, limit, name: searchTerm } })
+            const { data } = await getCattles({ page, limit, name: searchTerm })
 
-            if (data?.totalPages) setTotalPages(parseInt(data.totalPages))
+            if (data?.totalPages) setTotalPages(Number(data.totalPages))
             if (data?.cattles) setCattles(data.cattles)
 
         } catch (error) {
@@ -166,7 +168,7 @@ export function CattlesDataTable({ totalAmount, totalEvents }: { totalAmount?: n
                         disabled={isLoading}
                         className='dark:bg-cgray dark:text-white'
                         value={limit}
-                        onChange={({ target }) => { setPage(1); setLimit(target.value) }}
+                        onChange={({ target }) => { setPage(1); setLimit(Number(target.value)) }}
                     >
                         <option value="10">10</option>
                         <option value="20">20</option>
