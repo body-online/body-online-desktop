@@ -16,7 +16,7 @@ export default async function OperatorsPage({ params }: { params: SerializedSear
     return (
         <Card paddings='py-4 md:py-6 w-full flex flex-col overflow-hidden h-min'>
             <div className="px-3 md:px-5 pb-4 md:pb-6 border-b custom-border flex-between">
-                <CardHeader label='Operarios' />
+                <CardHeader label='Usuarios' />
                 <CreateOperator mode={'mini'} />
             </div>
 
@@ -65,7 +65,7 @@ export default async function OperatorsPage({ params }: { params: SerializedSear
                                 </tbody>
                             </table>
                         </div>
-                    ) : <InfoMessage type='censored' title='No hemos encontrado operarios' />
+                    ) : <InfoMessage type='censored' title='No hemos encontrado usuarios' />
                     }
 
                     <div className="px-3 md:px-5">
@@ -76,7 +76,7 @@ export default async function OperatorsPage({ params }: { params: SerializedSear
                         />
                     </div>
                 </div>
-            ) : <InfoMessage type='warning' title='Lista de operarios inaccesible' subtitle={error} />
+            ) : <InfoMessage type='warning' title='Lista de usuarios inaccesible' subtitle={error} />
             }
 
         </Card>

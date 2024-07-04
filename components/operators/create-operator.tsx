@@ -20,6 +20,7 @@ import Card from '../ui/card';
 export function CreateOperator({ mode }: { mode?: 'chip' | 'mini' }) {
     const router = useRouter();
     const [isOpen, setIsOpen] = useState(false);
+    const [isAdmin, setIsAdmin] = useState(false);
 
     const {
         register,
@@ -71,7 +72,7 @@ export function CreateOperator({ mode }: { mode?: 'chip' | 'mini' }) {
                     }`
                 }
             >
-                {!mode ? <p>Nuevo operario</p> : mode === 'mini' ? <MiniAddIcon fill='fill-clime' /> : null}
+                {!mode ? <p>Nuevo usuario</p> : mode === 'mini' ? <MiniAddIcon fill='fill-clime' /> : null}
             </button>
 
             <BlackOutModal handleClose={handleClose} isOpen={isOpen}>
@@ -84,7 +85,7 @@ export function CreateOperator({ mode }: { mode?: 'chip' | 'mini' }) {
                 >
                     <form className='max-w-sm mx-auto' onSubmit={handleSubmit(onSubmit)}>
 
-                        <Card headerLabel='Crear operario'>
+                        <Card headerLabel='Crear usuario'>
                             <div className="flex gap-2 w-full mt-3">
                                 <label htmlFor='name' className='w-full'>
                                     <p className="input_label">Nombre completo*</p>
@@ -135,7 +136,7 @@ export function CreateOperator({ mode }: { mode?: 'chip' | 'mini' }) {
                                 >
                                     {isSubmitting ? <LoadingIcon /> : (
                                         <>
-                                            <p className='text-white'>Crear operario</p>
+                                            <p className='text-white'>Crear usuario</p>
                                             <MiniAddIcon fill='fill-clime' />
                                         </>
                                     )}

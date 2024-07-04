@@ -4,7 +4,7 @@ import toast from 'react-hot-toast';
 import * as z from "zod";
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { CreateAccountIcon, LoadingIcon, SendIcon } from '../ui/icons';
+import { CreateAccountIcon, LoadingIcon } from '../ui/icons';
 import { registerUser } from '@/actions/register';
 import { useRouter } from 'next/navigation';
 import { RegisterSchema } from '@/schemas';
@@ -23,14 +23,14 @@ const RegisterForm = () => {
 
     const onSubmit = async (values: z.infer<typeof RegisterSchema>) => {
 
-        const response = await registerUser({ ...values, type: 'owner' });
-        if (response.success) {
-            toast.success(response.success);
-            reset()
-            return await login(values)
-            // return router.push('/auth/login');
-        }
-        toast.error(response.error ?? 'Ha ocurrido un error')
+        const { data, error } = await registerUser({ ...values, type: 'owner' });
+
+        if (error)
+            return toast.error(error ?? 'Ha ocurrido un error')
+
+        toast.loading('Iniciando sesión');
+        reset()
+        return await login({ email: values.email, password: values.password })
     }
 
     return (

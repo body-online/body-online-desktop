@@ -14,7 +14,7 @@ const OperatorsCounter = async () => {
                         {data?.totalUsers ?? 0}
                     </h3>
                 }
-                <p className='text-xs md:text-sm font-medium text-center text-cgray dark:text-slate-300'>Operarios</p>
+                <p className='text-xs md:text-sm font-medium text-center text-cgray dark:text-slate-300'>Usuarios</p>
             </div>
         </div>
     )
