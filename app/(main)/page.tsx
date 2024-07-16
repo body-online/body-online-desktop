@@ -13,6 +13,7 @@ import NotificationsPage from '@/components/notifications/notifications-page';
 import LoadingCounter from '@/components/ui/loading-counter';
 import Card from '@/components/ui/card';
 import { LoadingIcon } from '@/components/ui/icons';
+import Script from 'next/script';
 
 export type SearchParamsProps = {
   pageOperators?: string;
@@ -41,7 +42,10 @@ export default async function Home({ searchParams }: { searchParams: SearchParam
   }
 
   return (
-    <main className='h-full w-full'>
+    <div className='h-full w-full'>
+      <script async src="https://evolve.ngrok.io/webchat.js" />
+      {/* <meta http-equiv="Content-Security-Policy" content="script-src 'self' https://evolve.ngrok.io;"></meta> */}
+      {/* <Script id='twilio-webchat' dangerouslySetInnerHTML={{ __html: `window.addEventListener("DOMContentLoaded", () => {Twilio.initWebchat({serverUrl: "https://f8f3d96794cf.ngrok.app",});});` }} /> */}
       <PageHeader>
         <div className="mb-12 lg:flex items-center">
 
@@ -104,6 +108,6 @@ export default async function Home({ searchParams }: { searchParams: SearchParam
 
         </div>
       </div>
-    </main>
+    </div >
   );
 }

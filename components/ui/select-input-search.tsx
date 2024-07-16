@@ -36,9 +36,9 @@ const SelectInputSearch = ({
                     menu: () => "z-10 bg-white dark:bg-cgray rounded-lg w-full max-h-xl overflow-y-auto border custom-border",
                     groupHeading: () => "ml-3 mt-2 mb-1 text-gray-500 text-sm",
                     option: ({ isFocused, isSelected }: { isFocused: boolean; isSelected: boolean }) => {
-                        return (`hover:cursor-pointer p-3 transition-all
-                  ${isFocused ? "bg-slate-100 active:bg-gray-200 dark:bg-cblack active:bg-clightgray" : ``} 
-                  ${isSelected ? "bg-slate-100" : ``} `)
+                        return (`hover:cursor-pointer p-3 transition-all dark:md:hover:bg-clightgray/90 md:hover:bg-slate-100
+                                ${isFocused ? "" : ``} 
+                                ${isSelected ? "bg-slate-100 dark:bg-clightgray my-[1px]" : ``} `)
                     },
                     noOptionsMessage: () => "p-3 w-full",
                 }}

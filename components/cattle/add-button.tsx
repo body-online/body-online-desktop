@@ -78,7 +78,7 @@ export function AddCattleBtn({ mode }: { mode?: 'chip' | 'mini' }) {
                 className={`
                     ${mode == 'chip' ? 'chip cgreen flex-center gap-2' :
                         mode === 'mini' ? 'rounded-full cgreen dark:bg-csemigreen h-6 sm:h-7 w-6 sm:w-7 flex-center' :
-                            'primary-btn'
+                            'primary-btn md:max-w-max'
                     }`
                 }
             >

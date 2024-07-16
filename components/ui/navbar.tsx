@@ -9,7 +9,7 @@ import Image from "next/image";
 import Link from 'next/link';
 
 import { enterDropdown, navigationItems } from '@/lib/constants';
-import { CloseIcon, FarmIcon, LogoutIcon, MenuIcon, UserIcon } from './icons';
+import { CloseIcon, LogoutIcon, MenuIcon } from './icons';
 
 import Divider from './divider';
 import ThemeSwitch from './theme-switch';
@@ -61,11 +61,15 @@ export default function Navbar({ user }: { user?: ExtendedUser }) {
 
     return (
         <>
-            <div className="bg-cgreen py-3">
+            <div className="bg-cgreen py-3 h-[60px]">
                 <div className='flex-between px-default'>
                     <div className='flex items-center gap-2'>
                         <ProfileImage url={user?.image} type={user?.type} />
-                        <p className='text-white font-semibold'>{user?.name}</p>
+
+                        <div>
+                            <p className='text-sm text-white font-semibold'>{user?.farmName}</p>
+                            <p className='text-xs opacity-50 font-medium'>{user?.name}</p>
+                        </div>
                         {/* <p className='text-white text-base font-bold'>
                             Body<span className='text-clime'>Online</span>
                         </p> */}
@@ -151,8 +155,8 @@ export default function Navbar({ user }: { user?: ExtendedUser }) {
                         initial="hidden"
                         animate="visible"
                         exit="exit"
-                        className='fixed right-0 md:right-6 bottom-0 md:top-12 z-50
-                        w-screen overflow-y-auto h-[calc(100vh-97px)] md:h-max 
+                        className='fixed right-0 md:right-8 bottom-0 md:top-12 z-50
+                        w-screen overflow-y-auto h-[calc(100vh-60px)] md:h-max 
                         md:rounded-2xl md:w-full md:max-w-xs
                         custom-gradient custom-border md:border'
                     >

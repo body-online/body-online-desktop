@@ -72,11 +72,11 @@
 }
 
 .custom-gradient {
-  @apply bg-gradient-to-br from-white to-slate-50 dark:from-cgray dark:to-cblack;
+  @apply bg-white dark:bg-cgray;
 }
 
 .custom-border {
-  @apply border-slate-200 dark:border-slate-700/50;
+  @apply border-slate-200 dark:border-clightgray;
 }
 
 .card {
@@ -98,12 +98,10 @@
 @apply text-white font-medium;
 }
 .btn {
-  @apply h-max w-full md:max-w-max px-2 md:px-5 py-3
+  @apply h-max w-full px-2 md:px-5 py-3
   flex-center gap-1 md:gap-2
   rounded-lg disabled:opacity-50 active:opacity-50
-  ring-slate-300 md:min-w-[100px] focus:outline-0 focus:ring-[2px] transition-all
-  ;
-  
+  ring-slate-300 md:min-w-[100px] focus:outline-0 focus:ring-[2px] transition-all;
 }
 
 .btn > p {
@@ -250,30 +248,39 @@ table>tbody>tr>td>p {
 }
 
 /* Forms */
+.input-colors {
+  @apply 
+  w-full bg-white dark:bg-cgray 
+  text-sm md:text-base 
+  rounded-lg border border-slate-200 dark:border-clightgray
+  focus:outline-0 
+  focus:ring-[2px] ring-slate-300 dark:ring-slate-300 
+  placeholder:opacity-50 
+  disabled:opacity-50 
+  transition 
+}
 .input {
-  @apply h-11 sm:h-12 py-2 px-4 sm:p-3 text-sm md:text-base transition rounded-lg border hover:border-gray-400 focus:outline-0 focus:ring-[2px] 
-  ring-slate-300 dark:ring-slate-300 w-full disabled:opacity-50 bg-white dark:bg-clightgray dark:border-gray-800 dark:md:hover:border-slate-700;
+  @apply input-colors h-11 sm:h-12 py-2 px-4 sm:p-3 ;
 }
 
 .textarea {
-  @apply min-h-20 max-h-60 py-2 px-4 sm:p-3 text-sm md:text-base transition rounded-lg border hover:border-gray-400 focus:outline-0 focus:ring-[2px] 
-  ring-slate-300 dark:ring-slate-300 w-full disabled:opacity-50 bg-white dark:bg-clightgray dark:border-gray-800 dark:md:hover:border-slate-700;
+  @apply input-colors min-h-20 max-h-60 py-2 px-4 sm:p-3;
 }
 
 .select_input {
-  @apply h-11 sm:h-12 p-2 sm:p-3 cursor-pointer transition rounded-lg border hover:border-gray-400 focus:outline-0 focus:ring-[1px] ring-slate-300 w-full disabled:opacity-50;
+  @apply input-colors h-11 sm:h-12 p-2 sm:p-3 cursor-pointer;
 }
 
 .select_input_search {
-  @apply h-11 sm:h-12 p-2 sm:p-3 pl-3 cursor-pointer transition rounded-lg border hover:border-gray-400 focus:outline-0 focus:ring-[1px] ring-slate-300 w-full disabled:opacity-50;
+  @apply input-colors h-11 sm:h-12 p-2 sm:p-3 pl-3 cursor-pointer;
 }
 
 .search_input {
-  @apply px-3 py-2 border rounded-lg outline-none focus:ring-slate-600 w-full max-w-lg transition-all;
+  @apply placeholder:opacity-50 px-3 py-2 border rounded-lg outline-none focus:ring-slate-600 w-full max-w-lg transition-all;
 }
 
 .input_label {
-  @apply font-medium text-sm tracking-tight mb-1;
+  @apply text-sm mb-1 opacity-80;
 }
 
 .input_error {
