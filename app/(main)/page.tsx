@@ -43,7 +43,7 @@ export default async function Home({ searchParams }: { searchParams: SearchParam
 
   return (
     <div className='h-full w-full'>
-      <script async src="https://evolve.ngrok.io/webchat.js" />
+      <script async src="https://fran-3xogithubio-production.up.railway.app/webchat.js" />
       {/* <meta http-equiv="Content-Security-Policy" content="script-src 'self' https://evolve.ngrok.io;"></meta> */}
       {/* <Script id='twilio-webchat' dangerouslySetInnerHTML={{ __html: `window.addEventListener("DOMContentLoaded", () => {Twilio.initWebchat({serverUrl: "https://f8f3d96794cf.ngrok.app",});});` }} /> */}
       <PageHeader>
