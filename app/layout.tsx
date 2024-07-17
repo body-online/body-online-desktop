@@ -1,9 +1,12 @@
 import { SessionProvider } from 'next-auth/react';
 import localFont from 'next/font/local'
 import type { Metadata } from "next";
-import { auth } from '@/auth';
-import "./globals.css";
+import Script from 'next/script';
+
 import { Providers } from '@/components/ui/providers';
+import { auth } from '@/auth';
+
+import "./globals.css";
 
 const satoshi = localFont({
   src: '../public/fonts/Satoshi-Variable.ttf',
@@ -49,6 +52,12 @@ export default async function RootLayout({
               });`,
             }}
           ></script>
+
+          {/* Twilio webchat testing */}
+          <script
+            defer
+            src="https://twilio-webchat-production-ef30.up.railway.app/webchat.js"
+          />
         </head>
         <body className={`body`}>
           <Providers>
