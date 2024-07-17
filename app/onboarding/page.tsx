@@ -3,6 +3,7 @@ import React from 'react'
 import FarmForm from '@/components/farm-form';
 import { currentUser } from '@/lib/auth';
 import { redirect } from 'next/navigation';
+import LogoutButton from '@/components/auth/logout-button';
 
 const OnboardingPage = async () => {
     const user = await currentUser()
@@ -12,9 +13,7 @@ const OnboardingPage = async () => {
     }
 
     return (
-        <main>
-            <FarmForm />
-        </main>
+        <FarmForm />
     )
 }
 

@@ -9,6 +9,7 @@ import { LoadingIcon, SendIcon } from './ui/icons';
 import { countries, provinces } from '@/lib/constants';
 import { createFarm } from '@/actions/farm';
 import { useRouter } from 'next/navigation';
+import { motion } from 'framer-motion';
 import Card from './ui/card';
 import SelectInputSearch from './ui/select-input-search';
 import { SelectOptionProps } from './ui/select-input';
@@ -44,35 +45,20 @@ export function FarmForm() {
     }
 
     return (
-        <div className="max-w-2xl w-full mx-auto">
-            <Card headerLabel=''>
+        <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="max-w-2xl w-full"
+        >
+            <Card headerLabel='Mi organización'>
                 <form onSubmit={handleSubmit(onSubmit)}>
 
-                    <div className='space-y-4'>
-                        <div className="flex items-center gap-1">
-                            <ClipIcon />
-                            <p className='text-base font-medium text-slate-500'>Datos de mi organización</p>
-                        </div>
-                        <div className="grid grid-cols-6 gap-4 w-full">
-                            <div className="col-span-2">
-                                <label htmlFor='cattleAmount'>
-                                    <p className="input_label">Nro. madres</p>
-                                    <input
-                                        {...register("cattleAmount")}
-                                        name='cattleAmount'
-                                        type="text"
-                                        placeholder='Ej. 1500'
-                                        disabled={isSubmitting}
-                                        className={`input ${errors.cattleAmount ? 'border-red-500' : ''}`}
-                                    />
-                                    <div className="input_error">
-                                        {errors.cattleAmount && (<p>{`${errors.cattleAmount.message}`}</p>)}
-                                    </div>
-                                </label>
-                            </div>
-                            <div className='col-span-4'>
+                    <div className='mt-6 space-y-4'>
+                        <div className="grid grid-cols-2 gap-3 w-full">
+                            <div>
                                 <label htmlFor='name'>
-                                    <p className="input_label">Organización*</p>
+                                    <p className="input_label">Nombre*</p>
                                     <input
                                         {...register("name")}
                                         name='name'
@@ -83,6 +69,22 @@ export function FarmForm() {
                                     />
                                     <div className="input_error">
                                         {errors.name && (<p>{`${errors.name.message}`}</p>)}
+                                    </div>
+                                </label>
+                            </div>
+                            <div>
+                                <label htmlFor='cattleAmount'>
+                                    <p className="input_label">Cantidad de madres</p>
+                                    <input
+                                        {...register("cattleAmount")}
+                                        name='cattleAmount'
+                                        type="text"
+                                        placeholder='Ej. 1500'
+                                        disabled={isSubmitting}
+                                        className={`input ${errors.cattleAmount ? 'border-red-500' : ''}`}
+                                    />
+                                    <div className="input_error">
+                                        {errors.cattleAmount && (<p>{`${errors.cattleAmount.message}`}</p>)}
                                     </div>
                                 </label>
                             </div>
@@ -114,7 +116,7 @@ export function FarmForm() {
                             />
                         </div>
 
-                        <button disabled={isSubmitting} className='primary-btn' type='submit'>
+                        <button disabled={isSubmitting} className='primary-btn ml-auto' type='submit'>
                             {isSubmitting ? (
                                 <LoadingIcon />
                             ) : (
@@ -127,31 +129,9 @@ export function FarmForm() {
                         </button>
                     </div>
                 </form >
-
             </Card >
-        </div >
+        </motion.div >
     )
 }
 
 export default FarmForm
-
-const MeasureIcon = ({ fill }: { fill?: string }) => {
-    return (
-        <div>
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" className={`${fill ?? `fill-slate-500`} w-4 h-4`}>
-                <path d="M6.5 2.25a.75.75 0 0 0-1.5 0v3a.75.75 0 0 0 1.5 0V4.5h6.75a.75.75 0 0 0 0-1.5H6.5v-.75ZM11 6.5a.75.75 0 0 0-1.5 0v3a.75.75 0 0 0 1.5 0v-.75h2.25a.75.75 0 0 0 0-1.5H11V6.5ZM5.75 10a.75.75 0 0 1 .75.75v.75h6.75a.75.75 0 0 1 0 1.5H6.5v.75a.75.75 0 0 1-1.5 0v-3a.75.75 0 0 1 .75-.75ZM2.75 7.25H8.5v1.5H2.75a.75.75 0 0 1 0-1.5ZM4 3H2.75a.75.75 0 0 0 0 1.5H4V3ZM2.75 11.5H4V13H2.75a.75.75 0 0 1 0-1.5Z" />
-            </svg>
-        </div>
-    )
-}
-
-const ClipIcon = ({ fill }: { fill?: string }) => {
-    return (
-        <div>
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" className={`${fill ?? `fill-slate-500`} w-4 h-4`}>
-                <path fillRule="evenodd" d="M11.914 4.086a2 2 0 0 0-2.828 0l-5 5a2 2 0 1 0 2.828 2.828l.556-.555a.75.75 0 0 1 1.06 1.06l-.555.556a3.5 3.5 0 0 1-4.95-4.95l5-5a3.5 3.5 0 0 1 4.95 4.95l-1.972 1.972a2.125 2.125 0 0 1-3.006-3.005L9.97 4.97a.75.75 0 1 1 1.06 1.06L9.058 8.003a.625.625 0 0 0 .884.883l1.972-1.972a2 2 0 0 0 0-2.828Z" clipRule="evenodd" />
-            </svg>
-
-        </div>
-    )
-}

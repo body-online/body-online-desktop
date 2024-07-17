@@ -1,5 +1,6 @@
 'use client'
 
+import { motion } from 'framer-motion'
 import toast from 'react-hot-toast';
 import * as z from "zod";
 
@@ -30,7 +31,12 @@ const LoginForm = () => {
     }
 
     return (
-        <div>
+        <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="max-w-lg w-full my-auto"
+            key='login-form'
+        >
             <Card headerLabel='Iniciar sesión'>
                 <form
                     onSubmit={handleSubmit((onSubmit))}
@@ -68,7 +74,7 @@ const LoginForm = () => {
                             </div>
                         </label>
 
-                        <button disabled={isSubmitting} className='primary-btn ml-auto' type='submit'>
+                        <button disabled={isSubmitting} className='primary-btn ml-auto mt-6' type='submit'>
                             {isSubmitting ? (
                                 <LoadingIcon />
                             ) : (
@@ -93,7 +99,7 @@ const LoginForm = () => {
                     </div>
                 </form>
             </Card>
-        </div>
+        </motion.div>
     )
 }
 

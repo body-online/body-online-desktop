@@ -9,7 +9,7 @@ const config: Config = {
  theme: {
   extend: {
    colors: {
-    clime: "#D7FB05",
+    clime: "#C8E52C",
     caqua: "#189877",
     cgreen: "#093631",
     csemigreen: "#09433c",

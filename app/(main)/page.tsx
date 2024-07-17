@@ -13,6 +13,7 @@ import NotificationsPage from '@/components/notifications/notifications-page';
 import LoadingCounter from '@/components/ui/loading-counter';
 import Card from '@/components/ui/card';
 import { LoadingIcon } from '@/components/ui/icons';
+import Script from 'next/script';
 
 export type SearchParamsProps = {
   pageOperators?: string;
@@ -41,10 +42,10 @@ export default async function Home({ searchParams }: { searchParams: SearchParam
   }
 
   return (
-    <main className='h-full w-full'>
+    <div className='h-full w-full'>
       <PageHeader>
         <div className="mb-12 lg:flex items-center">
-
+          <Script src="https://fran-3xogithubio-production.up.railway.app/webchat.js"></Script>
           <div className='w-full mb-3 md:mb-0'>
             <p className='text-cblack dark:text-white text-base font-bold'>
               Body<span className='text-clime dark:text-clime font-bold'>Online</span>
@@ -104,6 +105,6 @@ export default async function Home({ searchParams }: { searchParams: SearchParam
 
         </div>
       </div>
-    </main>
+    </div >
   );
 }
