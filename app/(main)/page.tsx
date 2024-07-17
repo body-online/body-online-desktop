@@ -45,7 +45,6 @@ export default async function Home({ searchParams }: { searchParams: SearchParam
     <div className='h-full w-full'>
       <PageHeader>
         <div className="mb-12 lg:flex items-center">
-          <Script src="https://fran-3xogithubio-production.up.railway.app/webchat.js"></Script>
           <div className='w-full mb-3 md:mb-0'>
             <p className='text-cblack dark:text-white text-base font-bold'>
               Body<span className='text-clime dark:text-clime font-bold'>Online</span>
