@@ -87,6 +87,16 @@ export function CattlesDataTable({ totalAmount, totalEvents }: { totalAmount?: n
     useEffect(() => {
         searchCattles()
     }, [page, totalAmount, limit, totalEvents])
+    
+    useEffect(() => {
+        const handler = setTimeout(() => {
+            searchCattles();
+        }, 300);
+
+        return () => {
+            clearTimeout(handler);
+        };
+    }, [searchTerm])
 
     return (
         <div className='space-y-3'>
@@ -105,10 +115,6 @@ export function CattlesDataTable({ totalAmount, totalEvents }: { totalAmount?: n
                             />
                         </div>
                     </label>
-
-                    <p className="opacity-50 text-xs mt-1">
-                        Presione <b>Enter / Ir</b> para buscar
-                    </p>
                 </div>
             </form>
 
