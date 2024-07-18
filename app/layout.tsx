@@ -56,8 +56,22 @@ export default async function RootLayout({
           {/* Twilio webchat testing */}
           <script
             defer
-            src="https://twilio-webchat-production-ef30.up.railway.app/webchat.js"
-          />
+            src="https://twilio-webchat-production-ef30.up.railway.app/static/js/main.js"
+          >
+          </script>
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `window.addEventListener("DOMContentLoaded", () => {
+              Twilio.initWebchat({
+                serverUrl: "https://webchat-server-production.up.railway.app",
+                theme: {
+                  isLight: true
+                }
+              })
+            })`
+            }}
+          >
+          </script>
         </head>
         <body className={`body`}>
           <Providers>
