@@ -4,7 +4,6 @@ import {
     ColumnDef,
     ColumnFiltersState,
     SortingState,
-    VisibilityState,
     flexRender,
     getCoreRowModel,
     getFilteredRowModel,
@@ -24,71 +23,84 @@ import {
 
 import { ArrowsIcon, LoadingIcon, SearchIcon } from '../ui/icons';
 import React, { useEffect, useState } from "react";
-import { columnsLocation } from './columns';
-import axios from 'axios';
-import toast from 'react-hot-toast';
-import { getLocations } from '@/data/location';
-import { LocationProps } from '@/lib/types';
 
-export function LocationsDataTable({ totalAmount }: { totalAmount?: number }) {
+import toast from 'react-hot-toast';
+import InfoMessage from '../ui/info';
+import { getEvents } from '@/data/events';
+import { EventProps } from '@/lib/types';
+import { columnsEvent } from './columns';
+
+export function EventsDataTable({ totalAmount, totalEvents }: { totalAmount?: number; totalEvents?: number }) {
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
     const [sorting, setSorting] = React.useState<SortingState>([]);
     const [isLoading, setIsLoading] = useState<boolean>(true)
     const [searchTerm, setSearchTerm] = useState("")
 
-    const [locations, setLocations] = useState<LocationProps[]>([])
+    const [events, setEvents] = useState<EventProps[]>([])
     const [totalPages, setTotalPages] = useState<number>()
     const [limit, setLimit] = useState<number>(10)
     const [page, setPage] = useState<number>(1)
 
-    const table = useReactTable({
-        data: locations,
-        columns: columnsLocation,
-        getCoreRowModel: getCoreRowModel(),
-        getPaginationRowModel: getPaginationRowModel(),
-        getSortedRowModel: getSortedRowModel(),
-        getFilteredRowModel: getFilteredRowModel(),
+    const table = useReactTable(
+        {
+            data: events,
+            columns: columnsEvent,
+            getCoreRowModel: getCoreRowModel(),
+            getPaginationRowModel: getPaginationRowModel(),
+            getSortedRowModel: getSortedRowModel(),
+            getFilteredRowModel: getFilteredRowModel(),
 
-        onSortingChange: setSorting,
-        onColumnFiltersChange: setColumnFilters,
-        // onColumnVisibilityChange: setColumnVisibility,
-        // onRowSelectionChange: setRowSelection,
+            onSortingChange: setSorting,
+            onColumnFiltersChange: setColumnFilters,
+            // onColumnVisibilityChange: setColumnVisibility,
+            // onRowSelectionChange: setRowSelection,
 
-        initialState: {
-            pagination: {
-                pageSize: 50, //custom default page size
+            initialState: {
+                pagination: {
+                    pageSize: 50, //custom default page size
+                },
             },
-        },
-        state: {
-            sorting,
-            columnFilters,
-            // columnVisibility,
-            // rowSelection,
-        },
-    });
+            state: {
+                sorting,
+                columnFilters,
+                // columnVisibility,
+                // rowSelection,
+            },
+        }
+    );
 
-    const searchLocations = async () => {
+    const searchEvents = async () => {
         setIsLoading(true)
         try {
-            const { data } = await getLocations({ page, limit, name: searchTerm })
+            const { data } = await getEvents({ page, limit })
+
             if (data?.totalPages) setTotalPages(Number(data.totalPages))
-            if (data?.locations) setLocations(data.locations)
+            if (data?.events) setEvents(data.events)
 
         } catch (error) {
             toast.error('Ha ocurrido un error al encontrar los resultados')
-            console.log(error)
         } finally {
             setIsLoading(false)
         }
     }
 
     useEffect(() => {
-        searchLocations()
-    }, [page, totalAmount, limit])
+        searchEvents()
+    }, [page, totalAmount, limit, totalEvents])
+
+    useEffect(() => {
+        const handler = setTimeout(() => {
+            searchEvents();
+        }, 300);
+
+        return () => {
+            clearTimeout(handler);
+        };
+    }, [searchTerm])
 
     return (
         <div className='space-y-3'>
-            <form onSubmit={(e) => { e.preventDefault(); searchLocations() }}>
+            <form onSubmit={(e) => { e.preventDefault(); searchEvents() }}>
 
                 <div className=" p-3 md:p-5">
                     <label>
@@ -96,16 +108,13 @@ export function LocationsDataTable({ totalAmount }: { totalAmount?: number }) {
                             <SearchIcon fill={`${isLoading ? 'fill-slate-300' : 'fill-slate-400'}`} />
                             <input
                                 className={`text-base h-12 border-none bg-transparent focus:outline-none w-full placeholder:text-slate-400 placeholder:font-normal disabled:opacity-50 md:max-w-sm`}
-                                disabled={!locations}
-                                placeholder="Buscar por nombre..."
+                                disabled={!events}
+                                placeholder="Buscar caravana..."
                                 value={searchTerm}
                                 onChange={({ target }) => setSearchTerm(target.value)}
                             />
                         </div>
                     </label>
-                    <p className="opacity-50 text-xs mt-1">
-                        Presione <b>Enter / Ir</b> para buscar
-                    </p>
                 </div>
             </form>
 
@@ -115,49 +124,49 @@ export function LocationsDataTable({ totalAmount }: { totalAmount?: number }) {
                         <LoadingIcon />
                     </div>
                 ) : (
-                    <div className='relative'>
-                        <Table>
-                            <TableHeader className='sticky top-0'>
-                                {table.getHeaderGroups().map((headerGroup) => {
-                                    return (
-                                        <TableRow key={headerGroup.id} className='w-min'>
-                                            {headerGroup.headers.map((header) => {
-                                                return (
-                                                    <TableHead key={header.id} className='w-min'>
-                                                        {flexRender(
-                                                            header.column.columnDef.header,
-                                                            header.getContext(),
-                                                        )}
-                                                    </TableHead>
-                                                );
-                                            })}
-                                        </TableRow>
-                                    );
-                                })}
-                            </TableHeader>
+                    <>
+                        {events.length > 0 ?
+                            <Table className='relative'>
+                                <TableHeader className='sticky top-0'>
+                                    {table.getHeaderGroups().map((headerGroup) => {
+                                        return (
+                                            <TableRow key={headerGroup.id}>
+                                                {headerGroup.headers.map((header) => {
+                                                    return (
+                                                        <TableHead key={header.id}>
+                                                            {flexRender(
+                                                                header.column.columnDef.header,
+                                                                header.getContext(),
+                                                            )}
+                                                        </TableHead>
+                                                    );
+                                                })}
+                                            </TableRow>
+                                        );
+                                    })}
+                                </TableHeader>
 
-                            <TableBody>
-                                {table.getRowModel().rows.map((row) => (
-                                    <TableRow key={row.id}>
-                                        {row.getVisibleCells().map((cell) => (
-                                            <TableCell key={cell.id}>
-                                                {flexRender(
-                                                    cell.column.columnDef.cell,
-                                                    cell.getContext(),
-                                                )}
-                                            </TableCell>
-                                        ))}
-                                    </TableRow>
-                                ))}
-                            </TableBody>
-                        </Table>
-                    </div>
+                                <TableBody>
+                                    {table.getRowModel().rows.map((row) => (
+                                        <TableRow key={row.id}>
+                                            {row.getVisibleCells().map((cell) => (
+                                                <TableCell key={cell.id}>
+                                                    {flexRender(
+                                                        cell.column.columnDef.cell,
+                                                        cell.getContext(),
+                                                    )}
+                                                </TableCell>
+                                            ))}
+                                        </TableRow>
+                                    ))}
+                                </TableBody>
+                            </Table> : <InfoMessage type='censored' title='No hemos encontrado resultados' />
+                        }
+                    </>
                 )}
             </div>
 
-
             <div className="flex-end gap-3 p-3 md:p-5">
-
                 <label className='pagination'>
                     <p className='text-xs pl-2 m-auto'>Cantidad de filas</p>
                     <select
@@ -194,6 +203,7 @@ export function LocationsDataTable({ totalAmount }: { totalAmount?: number }) {
                             <ArrowsIcon direction="-rotate-90" />
                         </button>
                     </div>
+
                 }
             </div>
         </div >
@@ -202,7 +212,7 @@ export function LocationsDataTable({ totalAmount }: { totalAmount?: number }) {
     );
 }
 
-export default LocationsDataTable;
+export default EventsDataTable;
 
 const ArrowIcon = ({ direction }: { direction: "left" | "right" }) => {
     return (

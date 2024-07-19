@@ -4,7 +4,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import DeleteCattleBtn from './delete-button';
 import { CattleProps } from '@/lib/types';
 import { ArrowsIcon } from '../ui/icons';
-import { AddEventBtn } from './add-event';
+import { AddEventBtn } from '../events/add-event';
 import ChipBodyCondition from './chip-body-condition';
 import ChipState from './chip-state';
 import HistoryBtn from './history-button';

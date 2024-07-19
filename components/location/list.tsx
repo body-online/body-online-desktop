@@ -12,7 +12,7 @@ const Locations = ({ locations, error }: { error?: string; locations?: LocationP
 
     return (
 
-        <div className='card overflow-hidden'>
+        <div className='rounded-2xl custom-gradient border custom-border w-full overflow-hidden'>
             {/* header */}
             <div className="px-4 md:px-5 py-6">
                 <div className='flex items-center justify-between h-8'>

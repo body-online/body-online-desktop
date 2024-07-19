@@ -14,6 +14,10 @@ export const navigationItems: Array<NavigationItemProps> = [
   title: "Individuos",
  },
  {
+  href: "/eventos",
+  title: "Eventos",
+ },
+ {
   href: "/ubicaciones",
   title: "Ubicaciones",
  },
@@ -171,7 +175,7 @@ export const enterModal = {
   scale: 1,
   y: 0,
   transition: {
-   duration: 0.1,
+   duration: 0.2,
   },
  },
  exit: {
@@ -202,5 +206,21 @@ export const modalBackground = {
    duration: 0.2,
    type: "ease-out",
   },
+ },
+};
+export const swipeCard = {
+ hidden: {
+  y: "10vh",
+ },
+ visible: {
+  y: 0,
+  transition: {
+   delay: 0,
+   duration: 0.2,
+   type: "ease-out",
+  },
+ },
+ exit: {
+  y: "10vh",
  },
 };

@@ -67,7 +67,7 @@ export function AddGeneticBtn({ chipMode, children }: { chipMode?: boolean; chil
                 {children ??
                     <div className={`${chipMode ? 'chip cgreen dark:bg-csemigreen flex-center gap-2' : 'primary-btn'}`}>
                         <p>Crear  {chipMode ? '' : 'nueva'} genética</p>
-                        <MiniAddIcon fill="fill-clime" />
+                        <MiniAddIcon fill='fill-clime dark:fill-cblack' />
                     </div>
                 }
             </button>
@@ -163,7 +163,7 @@ export function AddGeneticBtn({ chipMode, children }: { chipMode?: boolean; chil
                                 >
                                     {isSubmitting ? <LoadingIcon /> : <>
                                         <p>Crear genética</p>
-                                        <MiniAddIcon fill='fill-clime' />
+                                        <MiniAddIcon fill='fill-clime dark:fill-cblack' />
                                     </>}
                                 </button>
                             </div>

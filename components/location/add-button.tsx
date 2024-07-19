@@ -65,7 +65,7 @@ export function AddLocationBtn({ mode }: { mode?: 'chip' | 'mini' }) {
                 }
             >
                 {mode != 'mini' ? <p>Crear ubicación</p> : null}
-                <MiniAddIcon fill='fill-clime' />
+                <MiniAddIcon fill='fill-clime dark:fill-cblack' />
             </button>
 
             <BlackOutModal isOpen={isOpen} handleClose={handleClose}>
@@ -115,7 +115,7 @@ export function AddLocationBtn({ mode }: { mode?: 'chip' | 'mini' }) {
                                     >
                                         {isSubmitting ? <LoadingIcon /> : <>
                                             <p>Crear ubicación</p>
-                                            <MiniAddIcon fill='fill-clime' />
+                                            <MiniAddIcon fill='fill-clime dark:fill-cblack' />
                                         </>}
                                     </button>
                                 </div>

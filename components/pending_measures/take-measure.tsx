@@ -45,7 +45,7 @@ export function TakeMeasure({ cattleId, dueDate, cattleCaravan }: NewMeasureButt
 
             <button className="chip cgreen flex-center gap-1" onClick={handleOpen}>
                 <p>Carga rapida</p>
-                <EventIcon fill="fill-clime" />
+                <EventIcon stroke="stroke-clime" />
             </button>
 
 

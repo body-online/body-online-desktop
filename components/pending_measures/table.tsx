@@ -90,9 +90,8 @@ export function PendingMeasuresDataTable({ totalAmount }: { totalAmount?: number
         <div className='w-full overflow-hidden'>
             <div className='h-[55vh] sm:h-[50vh] overflow-auto'>
                 {isLoading ? (
-                    <div className='h-full flex-center gap-2 py-default'>
+                    <div className='py-default'>
                         <LoadingIcon />
-                        <p className='text-base font-medium font-slate-300'>Buscando resultados</p>
                     </div>
                 ) : (
                     <div className='relative'>

@@ -20,20 +20,17 @@ export function AddEventBtn({ defaultCattle, mode }: NewEventButtonProps) {
     const handleOpen = () => {
         setIsOpen(true)
     }
-
+    const buttonClassName = () => {
+        return mode == 'chip' ? 'chip cgreen flex-center gap-2' : mode === 'mini' ? 'rounded-full cgreen dark:bg-csemigreen h-6 sm:h-7 w-6 sm:w-7 flex-center' : 'primary-btn md:max-w-max'
+    }
     return (
         <>
             <button
                 onClick={handleOpen}
-                className={`
-                    ${mode == 'chip' ? 'chip cgreen dark:bg-csemigreen flex-center gap-2' :
-                        mode === 'mini' ? 'rounded-full cgreen dark:bg-csemigreen h-6 sm:h-7 w-6 sm:w-7 flex-center' :
-                            'primary-btn'
-                    }`
-                }
+                className={buttonClassName()}
             >
                 {mode != 'mini' ? <p>Crear evento</p> : null}
-                <EventIcon fill="fill-clime" />
+                <EventIcon stroke='stroke-clime dark:stroke-cblack' />
             </button>
 
             <BlackOutModal isOpen={isOpen} handleClose={handleClose}>

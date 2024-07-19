@@ -1,10 +1,11 @@
-import AddCattleBtn from '@/components/cattle/add-button';
+import AddCattleBtn from '@/components/cattle/create-cattle';
 import CattlesDataTable from '@/components/cattle/table';
 import Card from '@/components/ui/card';
 import PageHeader from '@/components/ui/header';
 import InfoMessage from '@/components/ui/info';
 import { getCattles } from '@/data/cattle';
 import { getEvents } from '@/data/events';
+import { getLocations } from '@/data/location';
 import { currentUser } from '@/lib/auth';
 import { Metadata } from 'next';
 
@@ -15,6 +16,7 @@ export const metadata: Metadata = {
 export default async function CattlesPage() {
     const user = await currentUser()
     const { data } = await getCattles({ limit: 1 })
+    const { data: locationsData } = await getLocations({ limit: 1, page: 1 })
     const { data: eventsData } = await getEvents({ limit: 1, page: 1 })
 
     return (
@@ -27,7 +29,7 @@ export default async function CattlesPage() {
                         </div>
                         <p className='text-sm tracking-tight font-medium text-slate-500'>Cree y consulte sus individuos.</p>
                     </div>
-                    {user?.type === 'owner' ? <AddCattleBtn /> : null}
+                    <AddCattleBtn />
                 </div>
             </PageHeader>
 
@@ -36,8 +38,7 @@ export default async function CattlesPage() {
                     {data?.totalCattles == 0 ?
                         <InfoMessage
                             type='censored'
-                            title='Crea tu primer individuo'
-                            subtitle='Para poder visualizar la tabla'
+                            title='Sin resultados'
                         /> :
                         <CattlesDataTable totalAmount={data?.totalCattles} totalEvents={eventsData?.totalEvents} />
                     }

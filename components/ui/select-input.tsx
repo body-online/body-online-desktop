@@ -68,9 +68,8 @@ const SelectInput = ({
                 <p className="input_label">{label}</p>
 
                 {loading ? (
-                    <div className="flex gap-2 items-center input">
+                    <div className='py-default'>
                         <LoadingIcon />
-                        <p>Buscando resultados...</p>
                     </div>
                 ) : listIsEmpty ? (
                     <div className="flex gap-2 items-center input">

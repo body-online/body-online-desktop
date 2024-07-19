@@ -8,8 +8,8 @@ interface InfoMessageProps {
 
 const InfoMessage = ({ title, subtitle, type }: InfoMessageProps) => {
     return (
-        <div className="px-3 py-8 mx-auto flex flex-col items-center justify-center max-w-sm">
-            <div className="p-2 rounded-full bg-caqua/10 dark:bg-csemigreen/10">
+        <div className="px-3 py-8 mx-auto flex flex-col items-center justify-center">
+            <div className="p-2 rounded-full bg-slate-50 dark:bg-clightgray">
                 {type == "warning" ? <WarningIcon /> :
                     type === "info" ? <InfoIcon /> :
                         type === "success" ? <SuccessIcon /> :
@@ -17,10 +17,10 @@ const InfoMessage = ({ title, subtitle, type }: InfoMessageProps) => {
                                 <></>
                 }
             </div>
-            <p className="font-medium mt-3">{title}</p>
+            <h3 className="font-medium mt-3 dark:text-slate-400 text-center">{title}</h3>
             {subtitle ? (
                 <div className={`px-2 mt-2 `}>
-                    <p className="text-center text-sm md:text-base text-slate-600 dark:text-slate-300">{subtitle}</p>
+                    <p className="text-center text-sm md:text-base text-slate-600 dark:text-slate-500">{subtitle}</p>
                 </div>
             ) : (
                 <></>
@@ -37,7 +37,7 @@ const InfoIcon = () => {
                 fill="none"
                 viewBox="0 0 24 24"
                 strokeWidth={1.5}
-                className="h-8 w-8 stroke-cgreen dark:stroke-clime"
+                className="h-8 w-8 stroke-caqua dark:stroke-clime"
             >
                 <path
                     strokeLinecap="round"
@@ -54,7 +54,7 @@ const SuccessIcon = () => {
                 viewBox="0 0 32 32"
                 fill="none"
                 aria-hidden="true"
-                className="h-8 w-8 stroke-cgreen dark:stroke-clime"
+                className="h-8 w-8 stroke-caqua dark:stroke-clime"
             >
                 <path
                     strokeLinecap="round"
@@ -73,7 +73,7 @@ const CloseEyeIcon = () => {
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none" viewBox="0 0 24 24"
                 strokeWidth="1.5"
-                className="h-8 w-8 stroke-cgreen dark:stroke-clime"
+                className="h-8 w-8 stroke-caqua dark:stroke-clime"
             >
                 <path
                     strokeLinecap="round"
@@ -92,10 +92,10 @@ const WarningIcon = () => {
                 aria-hidden="true"
                 fill="none"
                 className="h-8 w-8"
-                >
+            >
                 <path
                     d="m13 13 6 6m0-6-6 6m15-3c0 6.627-5.373 12-12 12S4 22.627 4 16 9.373 4 16 4s12 5.373 12 12Z"
-                    className="stroke-cgreen dark:stroke-clime"
+                    className="stroke-caqua dark:stroke-clime"
                     strokeWidth="2"
                     strokeLinecap="round"
                     strokeLinejoin="round"

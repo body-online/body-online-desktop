@@ -4,7 +4,6 @@ import { getNotifications } from '@/data/notifications'
 import { SerializedSearchParamsProps } from '@/app/(main)/page'
 import { PendingMeasureProps } from '@/lib/types'
 
-import CardHeader from '../ui/card-header'
 import Pagination from '../ui/pagination'
 import InfoMessage from '../ui/info'
 import Card from '../ui/card'
@@ -16,8 +15,10 @@ export default async function NotificationsPage({ params }: { params: Serialized
 
     return (
         <Card paddings='py-4 md:py-6 w-full flex flex-col overflow-hidden h-min'>
-            <div className="px-3 md:px-5 pb-4 md:pb-6 border-b custom-border flex-between">
-                <CardHeader label='Notificaciones' />
+            <div className="px-3 md:px-5 pb-4 md:pb-6 flex-between border-b custom-border">
+                <h2 className="semititle">
+                    Notificaciones
+                </h2>
             </div>
 
             {!error && data ? (

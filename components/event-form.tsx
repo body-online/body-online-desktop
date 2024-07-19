@@ -293,9 +293,9 @@ export function EventForm({ defaultCattle, isOpenCattles, setIsOpenCattles, hand
                             className="primary-btn"
                             disabled={isSubmitting || !eventType || !cattleId || !eventDate}
                         >
-                            {isSubmitting ? <LoadingIcon /> : <>
+                            {isSubmitting ? <LoadingIcon fill='fill-slate-100 dark:fill-cblack' /> : <>
                                 <p>Crear evento</p>
-                                <EventIcon fill='fill-clime' />
+                                <EventIcon stroke='stroke-clime dark:stroke-cblack' />
                             </>}
                         </button>
                     </div>

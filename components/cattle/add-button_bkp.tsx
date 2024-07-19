@@ -3,18 +3,17 @@
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import { motion } from "framer-motion";
 import toast from "react-hot-toast";
 import { useEffect, useState } from "react";
 
 import { CattleSchema, cattleSchema } from "@/lib/types";
 import { createCattle } from '@/actions/cattle';
-import { enterModal } from "@/lib/constants";
 
 import SelectInputSearchLocation from './select-input-search-location';
 import SelectInputSearchGenetic from './select-input-search-genetics';
-import { LoadingIcon, MiniAddIcon } from '../ui/icons';
+import { CloseIcon, LoadingIcon, MiniAddIcon } from '../ui/icons';
 import BlackOutModal from '../ui/blackout-modal';
+import { LayoutBottom, LayoutHeader } from '../ui/default-layout';
 import Card from '../ui/card';
 
 export function AddCattleBtn({ mode }: { mode?: 'chip' | 'mini' }) {
@@ -50,9 +49,23 @@ export function AddCattleBtn({ mode }: { mode?: 'chip' | 'mini' }) {
         return setIsOpen(true);
     };
 
+    const handleEsc = (event: KeyboardEvent) => {
+        if (event.key === 'Escape') {
+            return setIsOpen(false);
+        }
+    };
+
     useEffect(() => {
-        document.body.style.overflow = isOpen || isOpenLocations || isOpenGenetics ? "hidden" : "auto";
-    }, [isOpen, isOpenGenetics, isOpenLocations]);
+        if (!isOpen) {
+            document.removeEventListener('keydown', handleEsc);
+            document.body.style.overflow = "auto";
+        } else {
+            window.scrollTo(0, 0)
+            document.addEventListener('keydown', handleEsc);
+            document.body.style.overflow = "hidden";
+        }
+    }, [isOpen])
+
 
     const onSubmit: SubmitHandler<CattleSchema> = async (data: CattleSchema) => {
         // const toastSavingCattle = toast.loading("Creando individuo...");
@@ -71,32 +84,38 @@ export function AddCattleBtn({ mode }: { mode?: 'chip' | 'mini' }) {
         }
     };
 
+    const buttonClassName = () => {
+        return mode == 'chip' ? 'chip cgreen flex-center gap-2' : mode === 'mini' ? 'rounded-full cgreen dark:bg-csemigreen h-6 sm:h-7 w-6 sm:w-7 flex-center' : 'primary-btn md:max-w-max'
+    }
+
     return (
-        <>
+        <div>
             <button
                 onClick={handleOpen}
-                className={`
-                    ${mode == 'chip' ? 'chip cgreen flex-center gap-2' :
-                        mode === 'mini' ? 'rounded-full cgreen dark:bg-csemigreen h-6 sm:h-7 w-6 sm:w-7 flex-center' :
-                            'primary-btn md:max-w-max'
-                    }`
-                }
+                className={buttonClassName()}
             >
-                {mode != 'mini' ? <p>Crear individuo</p> : null}
-                <MiniAddIcon fill='fill-clime' />
-            </button>
+                {mode != 'mini' ? <p>Crear individuos</p> : null}
+                <MiniAddIcon fill='fill-clime dark:fill-cblack' />
+            </button >
 
-            <BlackOutModal handleClose={handleClose} isOpen={isOpen}>
-                <motion.span
-                    onClick={(e) => e.stopPropagation()}
-                    variants={enterModal}
-                    initial="hidden"
-                    animate="visible"
-                    exit="exit"
-                >
-                    <form className='max-w-xl m-auto' onSubmit={handleSubmit(onSubmit)}>
-                        <Card headerLabel='Crear individuo'>
-                            <div className="flex gap-2 w-full mt-3">
+            <BlackOutModal
+                handleClose={handleClose}
+                isOpen={isOpen}
+            >
+                <div className="relative h-full">
+
+                    <LayoutHeader>
+                        <div className="flex-between w-full">
+                            <h2 className='semititle'>Crear individuos</h2>
+                            <button type='button' onClick={() => setIsOpen(false)} className='md:hover:opacity-100 md:opacity-50 transition-all'>
+                                <CloseIcon fill='fill-cgray dark:fill-white' />
+                            </button>
+                        </div>
+                    </LayoutHeader>
+
+                    <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+                        <div className="max-w-md mx-auto w-full mt-auto md:my-auto">
+                            <Card rounded='rounded-t-2xl md:rounded-b-2xl'>
                                 <label htmlFor='caravan' className='w-full'>
                                     <p className="input_label">Caravana*</p>
                                     <input
@@ -127,42 +146,47 @@ export function AddCattleBtn({ mode }: { mode?: 'chip' | 'mini' }) {
                                         {errors.defaultCicles && (<p>{`${errors.defaultCicles.message}`}</p>)}
                                     </div>
                                 </label>
-                            </div>
 
-                            <div className="grid md:grid-cols-2 gap-3 w-full">
+
+
                                 <SelectInputSearchLocation
                                     isOpen={isOpenLocations}
                                     setIsOpen={setIsOpenLocations}
                                     handleSelectLocation={registerLocationId}
                                     error={errors?.locationId?.message}
                                 />
+
                                 <SelectInputSearchGenetic
                                     isOpen={isOpenGenetics}
                                     setIsOpen={setIsOpenGenetics}
                                     handleSelectGenetic={registerGeneticId}
                                     error={errors?.geneticId?.message}
                                 />
-                            </div>
-
-
-
-                            <div className="mt-6 flex-end gap-3">
-                                <button type="submit" className="primary-btn" disabled={isSubmitting}>
-                                    {isSubmitting ? <LoadingIcon /> :
-                                        <>
-                                            <p>Crear individuo</p>
-                                            <MiniAddIcon fill='fill-clime' />
-                                        </>
-                                    }
-                                </button>
-                            </div>
-                        </Card>
-
+                            </Card>
+                        </div>
                     </form>
 
-                </motion.span>
-            </BlackOutModal>
-        </>
+                    <LayoutBottom>
+                        <div className="px-default h-full max-w-md mx-auto w-full">
+                            <button
+                                disabled={isSubmitting}
+                                className='primary-btn'
+                                type='submit'
+                            >
+                                {isSubmitting ? <LoadingIcon /> : (
+                                    <>
+                                        <p className='text-white'>Crear individuo</p>
+                                        <MiniAddIcon fill='fill-clime dark:fill-cblack' />
+                                    </>
+                                )}
+                            </button>
+                        </div>
+                    </LayoutBottom>
+                </div>
+
+
+            </BlackOutModal >
+        </div>
     );
 }
 

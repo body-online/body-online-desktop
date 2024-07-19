@@ -87,9 +87,8 @@ const SelectInputSearchGenetic = ({ handleSelectGenetic, isOpen, setIsOpen, erro
                             {/* results */}
                             <div className="h-full">
                                 {isLoading ?
-                                    <div className='flex-center gap-2 py-default'>
+                                    <div className='py-default'>
                                         <LoadingIcon />
-                                        <p className='text-base font-medium font-slate-300'>Buscando resultados</p>
                                     </div>
                                     : genetics?.length > 0 ?
                                         <ul className='w-full overflow-auto space-y-2'>

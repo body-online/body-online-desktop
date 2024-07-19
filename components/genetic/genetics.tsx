@@ -10,7 +10,7 @@ type GeneticPageProps = { error?: string; genetics?: GeneticProps[]; }
 const Genetics = ({ genetics, error }: GeneticPageProps) => {
 
     return (
-        <div className='card h-min'>
+        <div className='rounded-2xl custom-gradient border custom-border w-full h-min'>
             {// verify that genetics are not undefined and have data inside
                 <>
                     {/* header */}

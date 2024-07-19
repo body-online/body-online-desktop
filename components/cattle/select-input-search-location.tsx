@@ -68,7 +68,7 @@ const SelectInputSearchLocation = ({ handleSelectLocation, isOpen, setIsOpen, er
                 disabled={isSubmitting}
             >
                 <div className="flex-between gap-2">
-                    <p className='w-full truncate'>
+                    <p className='w-full truncate opacity-50'>
                         {selectedLocation ? selectedLocation?.name : 'Seleccionar ubicación'}
                     </p>
                     <SearchIcon fill='fill-cblack dark:fill-white' />
@@ -114,9 +114,8 @@ const SelectInputSearchLocation = ({ handleSelectLocation, isOpen, setIsOpen, er
                             {/* results */}
                             <div className="h-full">
                                 {isLoading ?
-                                    <div className='flex-center gap-2 py-default'>
+                                    <div className='py-default'>
                                         <LoadingIcon />
-                                        <p className='text-base font-medium font-slate-300'>Buscando resultados</p>
                                     </div>
                                     : locations?.length > 0 ?
                                         <ul className='w-full overflow-auto space-y-2'>

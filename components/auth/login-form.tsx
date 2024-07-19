@@ -1,15 +1,16 @@
 'use client'
 
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useRouter } from 'next/navigation';
+import { useForm } from 'react-hook-form';
+import { LoginSchema } from '@/schemas';
 import { motion } from 'framer-motion'
 import toast from 'react-hot-toast';
 import * as z from "zod";
 
-import { zodResolver } from '@hookform/resolvers/zod';
-import { LoadingIcon, SendIcon } from '../ui/icons';
-import { useRouter } from 'next/navigation';
-import { useForm } from 'react-hook-form';
 import { login } from '@/actions/login';
-import { LoginSchema } from '@/schemas';
+
+import { LoadingIcon, SendIcon } from '../ui/icons';
 import Card from '../ui/card';
 
 
@@ -33,11 +34,11 @@ const LoginForm = () => {
     return (
         <motion.div
             initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="max-w-lg w-full my-auto"
+            animate={{ opacity: 1, transition: { duration: 0.3 } }}
+            className="max-w-sm w-full mb-auto"
             key='login-form'
         >
-            <Card headerLabel='Iniciar sesión'>
+            <Card headerLabel="Iniciar sesión">
                 <form
                     onSubmit={handleSubmit((onSubmit))}
                     className="mt-6 space-y-8"
@@ -76,11 +77,11 @@ const LoginForm = () => {
 
                         <button disabled={isSubmitting} className='primary-btn ml-auto mt-6' type='submit'>
                             {isSubmitting ? (
-                                <LoadingIcon />
+                                <LoadingIcon fill='fill-clime dark:fill-cblack' />
                             ) : (
                                 <>
-                                    <p className='text-white'>Ingresar</p>
-                                    <SendIcon fill='fill-clime' />
+                                    <p>Ingresar</p>
+                                    <SendIcon fill='fill-clime dark:fill-cblack' />
                                 </>
                             )
                             }
@@ -99,7 +100,7 @@ const LoginForm = () => {
                     </div>
                 </form>
             </Card>
-        </motion.div>
+        </motion.div >
     )
 }
 

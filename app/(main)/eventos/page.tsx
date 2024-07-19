@@ -1,24 +1,19 @@
-import AddLocationBtn from '@/components/location/add-button';
-import LocationsDataTable from '@/components/location/table';
+import AddEventBtn from '@/components/events/add-event';
+import EventsDataTable from '@/components/events/table';
 import Card from '@/components/ui/card';
 import PageHeader from '@/components/ui/header';
 import InfoMessage from '@/components/ui/info';
-import { getLocations } from '@/data/location';
+import { getEvents } from '@/data/events';
 import { currentUser } from '@/lib/auth';
 import { Metadata } from 'next';
-import { redirect } from 'next/navigation';
 
 export const metadata: Metadata = {
-    title: "Ubicaciones - BodyOnline",
+    title: "Eventos - BodyOnline",
 };
 
-export default async function LocationsPage() {
+export default async function EventsPage() {
     const user = await currentUser()
-    const { data } = await getLocations({ limit: 0 })
-
-    if (!user?.farmId) {
-        return redirect('/onboarding')
-    }
+    const { data: eventsData } = await getEvents({ limit: 1, page: 1 })
 
     return (
         <div>
@@ -26,22 +21,22 @@ export default async function LocationsPage() {
                 <div className="mb-12 flex md:items-center flex-col md:flex-row justify-between gap-3">
                     <div className='space-y-2'>
                         <div className="flex-between">
-                            <h1 className='title'>Ubicaciones <span className='opacity-50'>({data?.totalLocations})</span></h1>
+                            <h1 className='title'>Eventos <span className='opacity-50'>({eventsData?.totalEvents ?? 0})</span></h1>
                         </div>
-                        <p className='text-sm tracking-tight font-medium text-slate-500'>Cree y consulte sus ubicaciones.</p>
+                        <p className='text-sm tracking-tight font-medium text-slate-500'>Cree y consulte sus individuos.</p>
                     </div>
-                    {user?.type == 'owner' ? <AddLocationBtn /> : null}
+                    {user?.type === 'owner' ? <AddEventBtn /> : null}
                 </div>
             </PageHeader>
 
             <div className="container px-default -mt-12 mb-12">
                 <Card paddings=''>
-                    {data?.totalLocations == 0 ?
+                    {eventsData?.totalEvents == 0 ?
                         <InfoMessage
                             type='censored'
-                            title='Crea tu primera ubicación'
+                            title='Sin resultados'
                         /> :
-                        <LocationsDataTable totalAmount={data?.totalLocations} />
+                        <EventsDataTable totalAmount={eventsData?.totalEvents} totalEvents={eventsData?.totalEvents} />
                     }
                 </Card>
             </div>

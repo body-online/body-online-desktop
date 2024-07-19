@@ -21,7 +21,7 @@ export default function Pagination({ page, paramName, totalPages }: { page: numb
   if (!page) return null;
 
   return (
-    <div className="flex-end w-full mt-4">
+    <div className="flex-end w-full">
       <div className="pagination">
         <button
           className="table_btn_pag"

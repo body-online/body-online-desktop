@@ -122,7 +122,7 @@ export function FarmForm() {
                             ) : (
                                 <>
                                     <p className='text-white'>Completar registro</p>
-                                    <SendIcon fill='fill-clime' />
+                                    <SendIcon fill='fill-clime dark:fill-cblack' />
                                 </>
                             )
                             }

@@ -1,18 +1,17 @@
 'use client'
 
-import CardHeader from './card-header';
-
 interface CardProps {
     children: React.ReactNode,
     headerLabel?: string;
     paddings?: string;
+    rounded?: string;
 }
 
-const Card = ({ children, headerLabel, paddings }: CardProps) => {
+const Card = ({ children, headerLabel, paddings, rounded }: CardProps) => {
     return (
-        <div className={`card ${paddings ?? `py-4 md:py-6 px-3 md:px-5`}`}>
+        <div className={`custom-gradient border custom-border w-full ${rounded ?? `rounded-2xl`} ${paddings ?? `p-3 md:p-6`}`} onClick={(e) => { return e.stopPropagation() }}>
             {headerLabel ?
-                <CardHeader label={headerLabel} />
+                <h2 className="semititle">{headerLabel}</h2>
                 : <></>
             }
             {children}

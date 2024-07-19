@@ -37,8 +37,7 @@ export default async function GeneticsPage() {
                         Array.isArray(data) && data?.length == 0 ?
                             <InfoMessage
                                 type='censored'
-                                title='Crea tu primera genética'
-                                subtitle='Para poder visualizar la tabla'
+                                title='Crea tu primera genética para poder visualizar la tabla'
                             /> :
                             <GeneticsDataTable genetics={data} columns={columnsGenetic} />
                     }

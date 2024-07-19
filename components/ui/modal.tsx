@@ -49,7 +49,7 @@ const Modal = ({ handleClose, children, isOpen }: ModalProps) => {
                     initial="hidden"
                     animate="visible"
                     exit="exit"
-                    className="fixed inset-0 top-0 z-50 backdrop-blur-sm bg-black/30 flex-center overflow-hidden px-2"
+                    className="fixed inset-0 top-0 z-40 backdrop-blur-sm bg-black/30 flex-center overflow-hidden px-2"
                     onClick={(e) => { return e.stopPropagation() }}
                 >
                     <div className="relative w-full max-w-max">

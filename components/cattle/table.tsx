@@ -24,7 +24,6 @@ import {
 import { ArrowsIcon, LoadingIcon, SearchIcon } from '../ui/icons';
 import React, { useEffect, useState } from "react";
 import { columnsCattle } from './columns';
-import axios from 'axios';
 import toast from 'react-hot-toast';
 import InfoMessage from '../ui/info';
 import { getCattles } from '@/data/cattle';
@@ -87,7 +86,7 @@ export function CattlesDataTable({ totalAmount, totalEvents }: { totalAmount?: n
     useEffect(() => {
         searchCattles()
     }, [page, totalAmount, limit, totalEvents])
-    
+
     useEffect(() => {
         const handler = setTimeout(() => {
             searchCattles();
@@ -120,9 +119,8 @@ export function CattlesDataTable({ totalAmount, totalEvents }: { totalAmount?: n
 
             <div className='overflow-auto relative w-full flex flex-col h-full max-h-96'>
                 {isLoading ? (
-                    <div className='h-full flex-center gap-2 py-default'>
+                    <div className='py-default'>
                         <LoadingIcon />
-                        <p className='text-base font-medium font-slate-300'>Buscando resultados</p>
                     </div>
                 ) : (
                     <>

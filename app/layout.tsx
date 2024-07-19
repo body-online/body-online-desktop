@@ -53,11 +53,10 @@ export default async function RootLayout({
             }}
           ></script>
 
-          {/* Twilio webchat testing */}
-          <script
-            defer
-            src="https://twilio-webchat-production-ef30.up.railway.app/webchat.js"
-          />
+          {/* 
+          // Twilio webchat testing
+          <script defer src="https://twilio-webchat-production-ef30.up.railway.app/webchat.js"/> 
+          */}
         </head>
         <body className={`body`}>
           <Providers>

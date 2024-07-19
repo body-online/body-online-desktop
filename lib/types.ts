@@ -135,7 +135,7 @@ export type FarmSchema = z.infer<typeof farmSchema>;
 
 // modal
 export type ModalProps = {
- handleClose: Function;
+ handleClose: () => void;
  children: React.ReactNode;
  isOpen: boolean;
 };
