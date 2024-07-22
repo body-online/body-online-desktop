@@ -13,6 +13,7 @@ import { LoadingIcon } from '@/components/ui/icons';
 import PageHeader from '@/components/ui/header';
 import { currentUser } from '@/lib/auth';
 import Card from '@/components/ui/card';
+import LoadingRowsSkeleton from '@/components/ui/loading-rows-skeleton';
 
 export type SearchParamsProps = {
   pageOperators?: string;
@@ -72,18 +73,16 @@ export default async function Home({ searchParams }: { searchParams: SearchParam
 
       <div className="container px-default -mt-12 mb-12 w-full">
         <div className="grid gap-6 lg:grid-cols-2 w-full">
-          <div className="md:order-1">
-            <Suspense
-              key={`notifications-${searchParams?.pageNotifications ?? '1'}`}
-              fallback={<Card headerLabel='Notificaciones'><div className="w-full h-60 flex-center"><LoadingIcon /></div></Card>}
-            >
-              <NotificationsPage params={serializeParams(searchParams)} />
-            </Suspense>
-          </div>
+          <Suspense
+            key={`notifications-${searchParams?.pageNotifications ?? '1'}`}
+            fallback={<Card headerLabel='Notificaciones'><div className="w-full h-60 flex-center"><LoadingRowsSkeleton /></div></Card>}
+          >
+            <NotificationsPage params={serializeParams(searchParams)} />
+          </Suspense>
 
           <Suspense
             key={`operators-${searchParams?.pageOperators ?? '1'}`}
-            fallback={<Card headerLabel='Usuarios'><div className="w-full h-60 flex-center"><LoadingIcon /></div></Card>}
+            fallback={<Card headerLabel='Usuarios'><div className="w-full h-60 flex-center"><LoadingRowsSkeleton /></div></Card>}
           >
             <OperatorsPage params={serializeParams(searchParams)} />
           </Suspense>

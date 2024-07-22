@@ -42,9 +42,9 @@ const CreateSingleCattle = ({ handleSubmit, register, isSubmitting, errors, rese
 
     return (
         <>
-            <div className='py-default px-default h-full w-full bg-gradient-to-b dark:from-cgray/50 border-t custom-border'>
+            <div className='py-default px-default h-full w-full bg-gradient-to-b dark:from-cgray/50'>
                 {isSubmitting ? <LoadingIcon /> :
-                    <form onSubmit={(e) => e.preventDefault()} className="flex flex-col gap-y-4 max-w-2xl mx-auto ">
+                    <form onSubmit={(e) => e.preventDefault()} className="flex flex-col gap-y-4 max-w-2xl mx-auto">
                         {step == 0 ?
                             <>
                                 <h3 className='semititle'>Datos principales</h3>
@@ -85,19 +85,13 @@ const CreateSingleCattle = ({ handleSubmit, register, isSubmitting, errors, rese
                             step == 1 ?
                                 <>
                                     <h3 className='semititle'>Asignar ubicación</h3>
-                                    <SelectCattleLocation
-                                        watch={watch}
-                                        setValue={setValue}
-                                    />
+                                    <SelectCattleLocation watch={watch} setValue={setValue} />
                                 </>
                                 :
                                 step == 2 ?
                                     <>
                                         <h3 className='semititle'>Asignar genetica</h3>
-                                        <SelectCattleGenetic
-                                            watch={watch}
-                                            setValue={setValue}
-                                        />
+                                        <SelectCattleGenetic watch={watch} setValue={setValue} />
                                     </> : null
                         }
 

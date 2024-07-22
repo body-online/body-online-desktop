@@ -325,7 +325,7 @@ table>tbody>tr>td>p {
 }
 
 .chip {
-  @apply rounded-lg min-w-max py-1.5 sm:py-2 px-2 sm:px-3 flex-center max-w-max font-medium text-sm h-8 md:h-9 transition-all;
+  @apply rounded-lg min-w-max py-1.5 sm:py-2 px-2 sm:px-3 flex-center max-w-max font-medium text-sm h-8 md:h-9 transition-all focus:outline-0 focus:ring-[1px] ring-slate-300 dark:ring-clightgray;
 }
 
 .chip_gray {

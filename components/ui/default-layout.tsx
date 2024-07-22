@@ -14,7 +14,7 @@ export default DefaultLayout
 
 export const LayoutHeader = ({ children }: { children: React.ReactNode, }) => {
     return (
-        <div className="w-full sticky top-0 py-3 md:py-6 backdrop-blur-lg z-20">
+        <div className="w-full sticky top-0 py-3 md:py-6 backdrop-blur-lg z-20 border-b custom-border">
             <div className="flex-between w-full gap-2 px-default">
                 {children}
             </div>

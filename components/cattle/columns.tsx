@@ -4,10 +4,10 @@ import { ColumnDef } from "@tanstack/react-table";
 import DeleteCattleBtn from './delete-button';
 import { CattleProps } from '@/lib/types';
 import { ArrowsIcon } from '../ui/icons';
-import { AddEventBtn } from '../events/add-event';
 import ChipBodyCondition from './chip-body-condition';
 import ChipState from './chip-state';
 import HistoryBtn from './history-button';
+import CreateEventButton from "../events/create-event-btn";
 
 
 export const columnsCattle: ColumnDef<CattleProps>[] = [
@@ -209,9 +209,11 @@ export const columnsCattle: ColumnDef<CattleProps>[] = [
             return (
                 <div className="flex-end gap-3">
                     <HistoryBtn
-                        cattle={row.original}
+                        mode="chip"
+                        cattleId={row.original._id}
+                        cattleCaravan={row.original.caravan}
                     />
-                    <AddEventBtn mode='chip' defaultCattle={row.original} />
+                    <CreateEventButton mode='chip' defaultCattle={row.original} />
                     <DeleteCattleBtn
                         id={row.original._id}
                         name={row.original.caravan}

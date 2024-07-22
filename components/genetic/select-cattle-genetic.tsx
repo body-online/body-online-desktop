@@ -61,7 +61,7 @@ const SelectCattleGenetic = ({ watch, setValue }: { watch: UseFormWatch<CattleSc
                                             `No hemos encontrado resultados que contengan "${searchTerm}"`
                                     }
                                 />
-                                <Link href='/genéticas' className='rounded_btn custom-gradient px-3'>
+                                <Link href='/geneticas' className='rounded_btn custom-gradient px-3'>
                                     Ir a genéticas
                                 </Link>
                             </div> :

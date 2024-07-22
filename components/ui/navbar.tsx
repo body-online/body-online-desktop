@@ -80,7 +80,7 @@ export default function Navbar({ user }: { user?: ExtendedUser }) {
 
             {/* navigation */}
             <div className="w-full backdrop-blur-lg z-10 sticky top-0 bg-white dark:bg-transparent">
-                <div className="overflow-x-scroll no-scrollbar flex gap-1 items-center px-default">
+                <div className="overflow-x-scroll no-scrollbar flex gap-1 items-center px-default border-b custom-border">
                     <div className="flex items-center pr-4">
                         {navigationItems.map((i, index) => {
                             var selected: boolean = i.href == pathname;

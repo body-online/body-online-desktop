@@ -30,7 +30,7 @@ export default async function NotificationsPage({ params }: { params: Serialized
                                     <tr>
                                         <th>Caravana</th>
                                         <th>Vencimiento</th>
-                                        <th>Fecha de medición sugerida</th>
+                                        <th>Medición sugerida</th>
                                     </tr>
                                 </thead>
 
@@ -60,8 +60,8 @@ export default async function NotificationsPage({ params }: { params: Serialized
                                                         </p>
                                                     </td>
                                                     <td>
-                                                        <p className='font-semibold text-black dark:text-white test-sm'>
-                                                            {new Date(notification?.expiresAt)?.toLocaleDateString("es-AR", { day: 'numeric', month: 'long', year: 'numeric' })}
+                                                        <p className='text-black dark:text-white test-sm'>
+                                                            {new Date(notification?.expiresAt)?.toLocaleDateString("es-AR", { day: 'numeric', month: 'long'})}
                                                         </p>
                                                     </td>
                                                 </tr>

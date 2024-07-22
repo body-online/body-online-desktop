@@ -117,7 +117,7 @@ export function CattlesDataTable({ totalAmount, totalEvents }: { totalAmount?: n
                 </div>
             </form>
 
-            <div className='overflow-auto relative w-full flex flex-col h-full max-h-96'>
+            <div className='overflow-auto relative w-full flex flex-col h-full max-h-[50vh]'>
                 {isLoading ? (
                     <div className='py-default'>
                         <LoadingIcon />

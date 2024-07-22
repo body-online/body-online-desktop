@@ -11,7 +11,7 @@ export default function EventItem({ event, prevEventDate }: { event: EventProps;
     return (
         <>
             {!hideEventDate &&
-                <div className='w-full sticky top-0 z-30 mb-5'>
+                <div className='w-full sticky top-0 z-10 mb-5'>
                     <div className="backdrop-blur-md rounded-lg border custom-border overflow-hidden h-max p-2 bg-slate-500/50 dark:bg-clightgray/50 w-full">
                         <div className="flex-center gap-2 h-full w-full">
                             <CalendarIcon />

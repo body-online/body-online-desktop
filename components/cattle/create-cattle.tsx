@@ -65,7 +65,7 @@ export function CreateCattle({ mode }: { mode?: 'chip' | 'mini' }) {
                         </div>
 
                         {/* massive mode switch */}
-                        <div className='grid grid-cols-2 max-w-max rounded-xl overflow-hidden bg-slate-200 dark:bg-cgray border custom-border'>
+                        <div className='grid grid-cols-2 max-w-max bg-slate-200 dark:bg-cgray border custom-border rounded-xl overflow-hidden'>
                             <button
                                 type='button'
                                 onClick={() => setMassiveUpload(false)}
@@ -91,10 +91,10 @@ export function CreateCattle({ mode }: { mode?: 'chip' | 'mini' }) {
 
                 {massiveUpload ?
                     <div key='massive'>
-                        <div className='py-default px-default h-full w-full bg-gradient-to-b dark:from-cgray/50 border-t custom-border'>
+                        <div className='py-default px-default h-full w-full bg-gradient-to-b dark:from-cgray/50'>
                             <div className="flex flex-col gap-y-4 max-w-3xl mx-auto ">
                                 {/* <h3 className='semititle'>Datos principales</h3> */}
-                                <InfoMessage type='censored' title='Estamos desarrollando este apartado, vuelva pronto...' />
+                                <InfoMessage type='censored' title='Estamos desarrollando este apartado' />
                             </div>
                         </div>
                     </div>

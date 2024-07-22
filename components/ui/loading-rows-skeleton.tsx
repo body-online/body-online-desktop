@@ -6,8 +6,6 @@ const LoadingRowsSkeleton = () => {
             <div className="min-h-12 w-full rounded-lg animate-pulse bg-slate-200 dark:bg-clightgray border dark:border-0"></div>
             <div className="min-h-12 w-full rounded-lg animate-pulse bg-slate-200 dark:bg-clightgray border dark:border-0"></div>
             <div className="min-h-12 w-full rounded-lg animate-pulse bg-slate-200 dark:bg-clightgray border dark:border-0"></div>
-            <div className="min-h-12 w-full rounded-lg animate-pulse bg-slate-200 dark:bg-clightgray border dark:border-0 sm:block hidden"></div>
-            <div className="min-h-12 w-full rounded-lg animate-pulse bg-slate-200 dark:bg-clightgray border dark:border-0 sm:block hidden"></div>
         </div>
     )
 }
