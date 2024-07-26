@@ -13,9 +13,8 @@ import { LayoutHeader } from '../ui/default-layout';
 import BlackOutModal from '../ui/blackout-modal';
 import EventForm from '../event-form';
 
-export function CreateEventButton({ mode, defaultCattle }: { mode?: 'chip' | 'mini'; defaultCattle: CattleProps }) {
+export function CreateEventButton({ mode, defaultCattle }: { mode?: 'chip' | 'mini'; defaultCattle?: CattleProps }) {
     const [isOpen, setIsOpen] = useState(false);
-    const [cattleSelected, setCattleSelected] = useState<CattleProps>()
 
     useEffect(() => { // esc handler and disable background overflow
         const handleEsc = (event: KeyboardEvent) => {
@@ -37,7 +36,10 @@ export function CreateEventButton({ mode, defaultCattle }: { mode?: 'chip' | 'mi
 
     const {
         register,
+        unregister,
         setValue,
+        setError,
+        clearErrors,
         handleSubmit,
         watch,
         formState: { errors, isSubmitting },
@@ -46,7 +48,7 @@ export function CreateEventButton({ mode, defaultCattle }: { mode?: 'chip' | 'mi
 
 
     return (
-        <div>
+        <>
             <BlackOutModal isOpen={isOpen} handleClose={() => setIsOpen(false)}>
                 <LayoutHeader>
                     <div className='w-full space-y-2'>
@@ -66,84 +68,30 @@ export function CreateEventButton({ mode, defaultCattle }: { mode?: 'chip' | 'mi
                 </LayoutHeader>
 
                 <EventForm
+                    defaultCattle={defaultCattle}
                     register={register}
+                    unregister={unregister}
                     setValue={setValue}
+                    setError={setError}
                     handleSubmit={handleSubmit}
                     isSubmitting={isSubmitting}
                     errors={errors}
                     reset={reset}
                     watch={watch}
+                    clearErrors={clearErrors}
                     handleCloseEventsModal={() => setIsOpen(false)}
                 />
             </BlackOutModal>
 
             <button
                 onClick={() => { setIsOpen(true); }}
-                className={`chip bg-cgray dark:bg-clightgray gap-2`}
+                className={`chip bg-csemigreen dark:bg-clime gap-2`}
             >
-                <p className={`text-white`}>Crear evento</p>
-                <EventIcon stroke='stroke-clime' />
+                <p className={`text-white dark:text-cblack font-medium`}>Crear evento</p>
+                <EventIcon stroke='stroke-clime dark:stroke-cblack' />
             </button>
-        </div >
+        </ >
     );
 }
 
 export default CreateEventButton;
-
-// 'use client'
-
-// import { motion } from 'framer-motion';
-
-// import { NewEventButtonProps } from '@/lib/types';
-// import { EventIcon } from '../ui/icons';
-// import { useState } from 'react';
-// import { enterModal } from '@/lib/constants';
-// import EventForm from '../event-form';
-// import BlackOutModal from '../ui/blackout-modal';
-
-// export function AddEventBtn({ defaultCattle, mode }: NewEventButtonProps) {
-//     const [isOpenCattles, setIsOpenCattles] = useState<boolean>(false)
-//     const [isOpen, setIsOpen] = useState(false)
-
-//     const handleClose = () => {
-//         if (isOpenCattles) return setIsOpenCattles(false)
-//         return setIsOpen(false)
-//     }
-//     const handleOpen = () => {
-//         setIsOpen(true)
-//     }
-//     const buttonClassName = () => {
-//         return mode == 'chip' ? 'chip cgreen flex-center gap-2' : mode === 'mini' ? 'rounded-full cgreen dark:bg-csemigreen h-6 sm:h-7 w-6 sm:w-7 flex-center' : 'primary-btn md:max-w-max'
-//     }
-//     return (
-//         <>
-//             <button
-//                 onClick={handleOpen}
-//                 className={buttonClassName()}
-//             >
-//                 {mode != 'mini' ? <p>Crear evento</p> : null}
-//                 <EventIcon stroke='stroke-clime dark:stroke-cblack' />
-//             </button>
-
-// <BlackOutModal isOpen={isOpen} handleClose={handleClose}>
-//     <motion.div
-//         onClick={(e) => e.stopPropagation()}
-//         variants={enterModal}
-//         initial="hidden"
-//         animate="visible"
-//         exit="exit"
-
-//     >
-//         <EventForm
-//             defaultCattle={defaultCattle}
-//             isOpenCattles={isOpenCattles}
-//             setIsOpenCattles={setIsOpenCattles}
-//             handleClose={handleClose}
-//         />
-//     </motion.div >
-// </BlackOutModal>
-//         </>
-//     )
-// }
-
-// export default AddEventBtn

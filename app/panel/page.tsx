@@ -33,19 +33,18 @@ export default async function OperatorPanel({ searchParams }: { searchParams: Se
   return (
     <main className='h-full w-full'>
       <PageHeader>
-        <div className="mb-12 lg:flex items-center">
 
-          <div className='w-full mb-3 md:mb-0'>
-            <p className='text-cblack dark:text-white text-base font-bold'>
-              Body<span className='text-clime dark:text-clime font-bold'>Online</span>
-            </p>
-            <h1 className='title w-full'>{user?.farmName}</h1>
-          </div>
 
+        <div className='w-full'>
+          <p className='text-cblack dark:text-white text-base font-bold'>
+            Body<span className='text-clime dark:text-clime font-bold'>Online</span>
+          </p>
+          <h1 className='title w-full'>{user?.farmName}</h1>
         </div>
+
       </PageHeader>
 
-      <div className="container px-default -mt-12 mb-12 w-full">
+      <div className="container px-default w-full">
         <div className="grid gap-6 w-full">
 
           <Suspense

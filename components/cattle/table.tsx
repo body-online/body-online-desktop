@@ -28,6 +28,7 @@ import toast from 'react-hot-toast';
 import InfoMessage from '../ui/info';
 import { getCattles } from '@/data/cattle';
 import { CattleProps } from '@/lib/types';
+import LoadingRowsSkeleton from '../ui/loading-rows-skeleton';
 
 export function CattlesDataTable({ totalAmount, totalEvents }: { totalAmount?: number; totalEvents?: number }) {
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
@@ -89,6 +90,7 @@ export function CattlesDataTable({ totalAmount, totalEvents }: { totalAmount?: n
 
     useEffect(() => {
         const handler = setTimeout(() => {
+            setPage(1)
             searchCattles();
         }, 300);
 
@@ -119,8 +121,8 @@ export function CattlesDataTable({ totalAmount, totalEvents }: { totalAmount?: n
 
             <div className='overflow-auto relative w-full flex flex-col h-full max-h-[50vh]'>
                 {isLoading ? (
-                    <div className='py-default'>
-                        <LoadingIcon />
+                    <div className='py-default px-default'>
+                        <LoadingRowsSkeleton />
                     </div>
                 ) : (
                     <>
@@ -159,7 +161,12 @@ export function CattlesDataTable({ totalAmount, totalEvents }: { totalAmount?: n
                                         </TableRow>
                                     ))}
                                 </TableBody>
-                            </Table> : <InfoMessage type='censored' title='No hemos encontrado resultados' />
+                            </Table> : <InfoMessage
+                                type='censored'
+                                title='No hemos encontrado resultados'
+                                subtitle={!searchTerm ? 'Debes crear un individuo para continuar' :
+                                    `No hemos encontrado caravanas que contengan ${searchTerm}`}
+                            />
                         }
                     </>
                 )}

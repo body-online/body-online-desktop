@@ -34,7 +34,7 @@ export default function Navbar({ user }: { user?: ExtendedUser }) {
         }
     }, [isOpen])
 
-
+    if (!user) return null
 
     return (
         <>

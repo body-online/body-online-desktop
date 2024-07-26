@@ -11,7 +11,7 @@ import InfoMessage from '../ui/info'
 import LoadingRowsSkeleton from '../ui/loading-rows-skeleton'
 import Link from 'next/link'
 
-const SelectCattleLocation = ({ watch, setValue }: { watch: UseFormWatch<CattleSchema>; setValue: UseFormSetValue<CattleSchema> }) => {
+const SelectLocation = ({ watch, setValue }: { watch: UseFormWatch<CattleSchema>; setValue: UseFormSetValue<CattleSchema> }) => {
     const [options, setOptions] = useState<any[]>();
     const [searchTerm, setSearchTerm] = useState<string>();
     const [error, setError] = useState<string>();
@@ -46,15 +46,20 @@ const SelectCattleLocation = ({ watch, setValue }: { watch: UseFormWatch<CattleS
     }, [searchTerm]);
 
     return (
-        <div className="h-full flex flex-col gap-y-2">
-            <label className='flex-center'>
-                <input type="text" className='input' placeholder='Buscar por ubicación...' value={searchTerm ?? ''}
-                    onChange={({ target }) => { return setSearchTerm(target.value) }} />
-            </label>
+        <div className="w-full space-y-3">
+            <h3 className='semititle'>Ubicación</h3>
 
-            {
-                error ? <InfoMessage type='warning' title='Algo ha salido mal...' subtitle={error} /> :
-                    isLoading ? <LoadingRowsSkeleton /> :
+            <input
+                type="text"
+                className='input'
+                placeholder='Buscar por ubicación...'
+                value={searchTerm ?? ''}
+                onChange={({ target }) => { return setSearchTerm(target.value) }}
+            />
+
+            <div className='h-full w-full overflow-y-auto'>
+                {error ? <InfoMessage type='warning' title='Algo ha salido mal...' subtitle={error} /> :
+                    isLoading ? <div className='m-auto'><LoadingRowsSkeleton /></div> :
                         !options?.length ?
                             <div className='max-w-md mx-auto flex-center flex-col'>
                                 <InfoMessage type='info' title='No hemos encontrado ubicaciones'
@@ -73,9 +78,10 @@ const SelectCattleLocation = ({ watch, setValue }: { watch: UseFormWatch<CattleS
                                 setValue={(e: any) => { return setValue('locationId', e) }}
                                 options={options}
                             />
-            }
+                }
+            </div>
         </div>
     )
 }
 
-export default SelectCattleLocation
+export default SelectLocation

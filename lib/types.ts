@@ -90,6 +90,7 @@ export const eventSchema = z.object({
    message: "El campo debe ser numérico",
   })
   .optional(),
+ notificationId: z.string().optional(),
 });
 export type EventSchema = z.infer<typeof eventSchema>;
 export interface EventProps extends EventSchema {
@@ -110,7 +111,9 @@ export type PendingMeasureProps = {
  caravan: string;
  eventId: string;
  farmId: string;
- month: 1;
+ month: number;
+ maxRange: number;
+ minRange: number;
  isExpired: boolean;
  createdAt: string;
  updatedAt: string;

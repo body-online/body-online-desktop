@@ -7,15 +7,25 @@ const ChipBodyCondition = ({ bodyRanges, measure, state }: { bodyRanges: number[
     const fat = Number(measure) > maxRange
     const skinny = Number(measure) < minRange
 
-    if (state == 'death') return <p className='chip chip_red'>Muerta</p>
+    if (state == 'death') return <div>
+        <p className='chip chip_red'>Muerta</p>
+    </div>
 
-    if (!bodyRanges || !measure) return <p className='chip chip_gray'>Sin mediciones</p>
+    if (!bodyRanges || !measure) return <div>
+        <p className='chip chip_gray'>Sin mediciones</p>
+    </div>
 
-    if (fat) return <p className='chip chip_orange'>Gorda {`(${measure})`}</p>
+    if (fat) return <div>
+        <p className='chip chip_orange'>Gorda {`(${measure})`}</p>
+    </div>
 
-    if (skinny) return <p className='chip chip_yellow'>Flaca {`(${measure})`}</p>
+    if (skinny) return <div>
+        <p className='chip chip_yellow'>Flaca {`(${measure})`}</p>
+    </div>
 
-    if (ideal) return <p className='chip chip_green'>Ideal {`(${measure})`}</p>
+    if (ideal) return <div>
+        <p className='chip chip_green'>Ideal {`(${measure})`}</p>
+    </div>
 
 }
 

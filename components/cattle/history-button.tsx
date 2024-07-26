@@ -51,7 +51,7 @@ export function HistoricalBtn({ cattleId, cattleCaravan, mode }: { cattleId: str
     }, [isOpen]);
 
     return (
-        <div>
+        <>
             <BlackOutModal isOpen={isOpen} handleClose={() => setIsOpen(false)}>
                 <LayoutHeader>
                     <div className='w-full space-y-2'>
@@ -69,7 +69,7 @@ export function HistoricalBtn({ cattleId, cattleCaravan, mode }: { cattleId: str
                     </div>
                 </LayoutHeader>
 
-                <div className='py-default px-default h-full w-full bg-gradient-to-b dark:from-cgray/50'>
+                <div className='py-default px-default h-full w-full overflow-auto'>
                     <div className="flex flex-col gap-y-4 max-w-2xl mx-auto">
                         {isLoading ?
                             <LoadingHistoricalSkeleton /> :
@@ -100,12 +100,12 @@ export function HistoricalBtn({ cattleId, cattleCaravan, mode }: { cattleId: str
 
             <button
                 onClick={() => { setIsOpen(true); fetchHistorical() }}
-                className={`chip bg-cgray dark:bg-clightgray gap-2`}
+                className={`chip bg-csemigreen dark:bg-clightgray gap-2`}
             >
                 <p className={`text-white`}>Histórico</p>
                 <ListIcon fill='fill-clime' />
             </button>
-        </div >
+        </ >
     );
 }
 

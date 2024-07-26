@@ -29,6 +29,29 @@ export const columnsCattle: ColumnDef<CattleProps>[] = [
             return <div className='text-base font-medium'>{row.getValue("caravan")}</div>;
         },
     },
+    // Actions
+    {
+        header: () => {
+            return <p>Acciones</p>;
+        },
+        accessorKey: "actions",
+        cell: ({ row }) => {
+            return (
+                <div className="flex items-center gap-3">
+                    <CreateEventButton mode='chip' defaultCattle={row.original} />
+                    <HistoryBtn
+                        mode="chip"
+                        cattleId={row.original._id}
+                        cattleCaravan={row.original.caravan}
+                    />
+                    <DeleteCattleBtn
+                        id={row.original._id}
+                        name={row.original.caravan}
+                    />
+                </div>
+            );
+        },
+    },
 
     {
         header: ({ column }) => {
@@ -196,30 +219,6 @@ export const columnsCattle: ColumnDef<CattleProps>[] = [
         accessorKey: "defaultCicles",
         cell: ({ row }) => {
             return <p>{row.getValue("defaultCicles")}</p>;
-        },
-    },
-
-    // Actions
-    {
-        header: () => {
-            return <p></p>;
-        },
-        accessorKey: "actions",
-        cell: ({ row }) => {
-            return (
-                <div className="flex-end gap-3">
-                    <HistoryBtn
-                        mode="chip"
-                        cattleId={row.original._id}
-                        cattleCaravan={row.original.caravan}
-                    />
-                    <CreateEventButton mode='chip' defaultCattle={row.original} />
-                    <DeleteCattleBtn
-                        id={row.original._id}
-                        name={row.original.caravan}
-                    />
-                </div>
-            );
         },
     },
 ];

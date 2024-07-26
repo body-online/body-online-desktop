@@ -61,14 +61,14 @@ export const provinces = [
 export const countries = [{ label: "Argentina", value: "Argentina" }];
 export const eventTypesList = [
  {
-  label: "Medición corporal",
-  allowedStates: ["not_pregnant", "pregnant", "cattle_birth"],
-  value: "body_measure",
- },
- {
   label: "Servicio",
   allowedStates: ["not_pregnant", "cattle_birth"],
   value: "pregnant",
+ },
+ {
+  label: "Medición corporal",
+  allowedStates: ["not_pregnant", "pregnant", "cattle_birth"],
+  value: "body_measure",
  },
  {
   label: "Parto",
@@ -87,6 +87,28 @@ export const eventTypesList = [
  },
 ];
 export const detailsByEvent = {
+ cattle_birth: [
+  { label: "1", value: "1" },
+  { label: "2", value: "2" },
+  { label: "3", value: "3" },
+  { label: "4", value: "4" },
+  { label: "5", value: "5" },
+  { label: "6", value: "6" },
+  { label: "7", value: "7" },
+  { label: "8", value: "8" },
+  { label: "9", value: "9" },
+  { label: "10", value: "10" },
+  { label: "11", value: "11" },
+  { label: "12", value: "12" },
+  { label: "13", value: "13" },
+  { label: "14", value: "14" },
+  { label: "15", value: "15" },
+  { label: "16", value: "16" },
+  { label: "17", value: "17" },
+  { label: "18", value: "18" },
+  { label: "19", value: "19" },
+  { label: "20", value: "20" },
+ ],
  body_measure: [
   //   { label: "0", value: 0 },
   { label: "1", value: 1 },
@@ -136,8 +158,6 @@ export const detailsByEvent = {
   },
   { label: "Otro", value: "Otro" },
  ],
- //  cattle_birth: [""],
- //  pregnant: [""],
 };
 
 // animation keyframes

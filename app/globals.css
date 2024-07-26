@@ -11,7 +11,7 @@
 }
 
 ::selection {
-  @apply bg-caqua/10 dark:bg-clime/10;
+  @apply bg-slate-500/50;
 }
 
 /* ::selection {
@@ -35,7 +35,7 @@
 }
 
 .body {
-  @apply bg-slate-100 dark:bg-cblack p-0 w-full h-full overflow-hidden text-sm sm:text-base;
+  @apply bg-slate-50 dark:bg-cblack p-0 w-full h-full text-sm sm:text-base;
 }
 
 /* Layout */
@@ -88,7 +88,7 @@
 }
 
 .primary-btn {
-  @apply btn bg-cgreen dark:bg-clime;
+  @apply btn bg-csemigreen dark:bg-clime;
 }
 .primary-btn > p {
 @apply text-white dark:text-cblack font-bold dark:font-bold;
@@ -177,8 +177,8 @@
 }
 
 .option_button {
-  @apply py-3 px-4 bg-slate-50 dark:bg-clightgray flex items-center gap-4 w-full rounded-lg cursor-pointer transition-all border custom-border select-none
-  active:bg-opacity-30 md:hover:bg-opacity-80; 
+  @apply px-2 py-1 min-h-14 bg-white dark:bg-clightgray flex items-center gap-3 w-full rounded-lg enabled:cursor-pointer transition-all border custom-border select-none
+  enabled:active:bg-opacity-50 enabled:md:hover:bg-opacity-70 disabled:opacity-50; 
 }
 
 .info_chip {
@@ -212,7 +212,7 @@
 
 /* Table */
 table {
-  @apply w-full min-w-max mb-5;
+  @apply w-full min-w-max;
 }
 
 table>thead {
@@ -244,7 +244,7 @@ table>tbody>tr>td>p {
 }
 
 .table_btn_pag {
-  @apply bg-slate-100 dark:bg-cgray dark:disabled:hover:bg-none enabled:md:hover:bg-slate-200 enabled:dark:md:hover:bg-cblack p-1 rounded-full transition-all disabled:cursor-default disabled:opacity-50;
+  @apply bg-slate-100 dark:bg-cgray dark:disabled:hover:bg-none enabled:md:hover:bg-slate-200 enabled:dark:md:hover:bg-clightgray p-1 rounded-full transition-all disabled:cursor-default disabled:opacity-50;
 }
 
 /* Forms */
@@ -284,11 +284,11 @@ table>tbody>tr>td>p {
 }
 
 .input_error {
-  @apply h-5 mt-1;
+  @apply h-max mt-1 mb-2;
 }
 
 .input_error>p {
-  @apply font-semibold text-xs text-red-500 leading-3;
+  @apply font-semibold text-sm text-red-500 leading-3;
 }
 
 .file_input {
@@ -406,16 +406,28 @@ table>tbody>tr>td>p {
 
 /* Track */
 ::-webkit-scrollbar-track {
-  @apply bg-cgray dark:bg-slate-600;
+  @apply bg-slate-500/30 dark:bg-slate-600;
 }
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: #888;
+  background: #8888888c;
   border-radius: 10px;
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
   background: #555;
+}
+.slider {
+  @apply
+  [&::-webkit-slider-runnable-track]:rounded-full 
+  [&::-webkit-slider-runnable-track]:bg-cgray
+  dark:[&::-webkit-slider-runnable-track]:bg-clightgray 
+
+  [&::-webkit-slider-thumb]:appearance-none 
+  [&::-webkit-slider-thumb]:h-4
+  [&::-webkit-slider-thumb]:w-4
+  [&::-webkit-slider-thumb]:rounded-full 
+  [&::-webkit-slider-thumb]:bg-slate-50;
 }

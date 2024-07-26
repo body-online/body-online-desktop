@@ -48,8 +48,7 @@ const BlackOutModal = ({ handleClose, children, isOpen }: ModalProps) => {
                     initial="hidden"
                     animate="visible"
                     exit="exit"
-                    className='fixed top-0 left-0 z-30  w-screen h-screen overflow-y-auto flex flex-col 
-                    bg-white dark:bg-cblack'
+                    className='fixed top-0 left-0 z-30 w-screen h-screen flex flex-col bg-white dark:bg-cblack'
                     onClick={(e) => { return e.stopPropagation() }}
                 >
                     {children}

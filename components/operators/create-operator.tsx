@@ -100,77 +100,81 @@ export function CreateOperator({ mode }: { mode?: 'chip' | 'mini' }) {
                                     </button>
                                 </div>
 
-                                <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 mt-6">
-
-                                    <label htmlFor='type' className='w-full'>
-                                        <p className="input_label">Tipo de usuario*</p>
-                                        <div className="flex gap-2 mt-2">
-                                            <button
-                                                type='button'
+                                <form onSubmit={handleSubmit(onSubmit)} className="space-y-6 mt-6">
+                                    <div>
+                                        <label htmlFor='type' className='w-full'>
+                                            <p className="input_label">Tipo de usuario*</p>
+                                            <div className="flex gap-2 mt-2">
+                                                <button
+                                                    type='button'
+                                                    disabled={isSubmitting}
+                                                    className={`chip cursor-pointer disabled:opacity-50 md:hover:bg-opacity-60 active:bg-opacity-60 ${isAdmin ? `chip_gray` : `chip_blue`}`}
+                                                    onClick={() => setIsAdmin(false)}
+                                                >
+                                                    Operario
+                                                </button>
+                                                <button
+                                                    type='button'
+                                                    disabled={isSubmitting}
+                                                    className={`chip cursor-pointer disabled:opacity-50 md:hover:bg-opacity-60 active:bg-opacity-60 ${isAdmin ? `chip_red` : `chip_gray`}`}
+                                                    onClick={() => setIsAdmin(true)}
+                                                >
+                                                    Administrador
+                                                </button>
+                                            </div>
+                                            <div className="input_error">
+                                                {errors.type && (<p>{`${errors.type.message}`}</p>)}
+                                            </div>
+                                        </label>
+                                    </div>
+                                    <div>
+                                        <label htmlFor='name' className='w-full'>
+                                            <p className="input_label">Nombre completo*</p>
+                                            <input
+                                                {...register("name")}
+                                                placeholder='Ej. Juan Perez'
                                                 disabled={isSubmitting}
-                                                className={`chip cursor-pointer disabled:opacity-50 md:hover:bg-opacity-60 active:bg-opacity-60 ${isAdmin ? `chip_gray` : `chip_blue`}`}
-                                                onClick={() => setIsAdmin(false)}
-                                            >
-                                                Operario
-                                            </button>
-                                            <button
-                                                type='button'
+                                                className={`input ${errors.name ? 'border-red-500' : ''}`}
+                                                type="text"
+                                                name='name'
+                                            />
+                                            <div className="input_error">
+                                                {errors.name && (<p>{`${errors.name.message}`}</p>)}
+                                            </div>
+                                        </label>
+                                    </div>
+                                    <div>
+                                        <label htmlFor='email' className='w-full'>
+                                            <p className="input_label">Email*</p>
+                                            <input
+                                                {...register("email")}
+                                                placeholder='Ej. juanperez@bodyonline.com'
                                                 disabled={isSubmitting}
-                                                className={`chip cursor-pointer disabled:opacity-50 md:hover:bg-opacity-60 active:bg-opacity-60 ${isAdmin ? `chip_red` : `chip_gray`}`}
-                                                onClick={() => setIsAdmin(true)}
-                                            >
-                                                Administrador
-                                            </button>
-                                        </div>
-                                        <div className="input_error">
-                                            {errors.type && (<p>{`${errors.type.message}`}</p>)}
-                                        </div>
-                                    </label>
-
-                                    <label htmlFor='name' className='w-full'>
-                                        <p className="input_label">Nombre completo*</p>
-                                        <input
-                                            {...register("name")}
-                                            placeholder='Ej. Juan Perez'
-                                            disabled={isSubmitting}
-                                            className={`input ${errors.name ? 'border-red-500' : ''}`}
-                                            type="text"
-                                            name='name'
-                                        />
-                                        <div className="input_error">
-                                            {errors.name && (<p>{`${errors.name.message}`}</p>)}
-                                        </div>
-                                    </label>
-
-                                    <label htmlFor='email' className='w-full'>
-                                        <p className="input_label">Email*</p>
-                                        <input
-                                            {...register("email")}
-                                            placeholder='Ej. juanperez@bodyonline.com'
-                                            disabled={isSubmitting}
-                                            className={`input ${errors.email ? 'border-red-500' : ''}`}
-                                            type="email"
-                                            name='email'
-                                        />
-                                        <div className="input_error">
-                                            {errors.email && (<p>{`${errors.email.message}`}</p>)}
-                                        </div>
-                                    </label>
-
-                                    <label htmlFor='password' className='w-full'>
-                                        <p className="input_label">Contraseña*</p>
-                                        <input
-                                            {...register("password")}
-                                            disabled={isSubmitting}
-                                            placeholder='••••••••'
-                                            className={`input ${errors.password ? 'border-red-500' : ''}`}
-                                            type="password"
-                                            name='password'
-                                        />
-                                        <div className="input_error">
-                                            {errors.password && (<p>{`${errors.password.message}`}</p>)}
-                                        </div>
-                                    </label>
+                                                className={`input ${errors.email ? 'border-red-500' : ''}`}
+                                                type="email"
+                                                name='email'
+                                            />
+                                            <div className="input_error">
+                                                {errors.email && (<p>{`${errors.email.message}`}</p>)}
+                                            </div>
+                                        </label>
+                                    </div>
+                                    <div>
+                                        <label htmlFor='password' className='w-full'>
+                                            <p className="input_label">Contraseña*</p>
+                                            <input
+                                                {...register("password")}
+                                                disabled={isSubmitting}
+                                                placeholder='••••••••'
+                                                className={`input ${errors.password ? 'border-red-500' : ''}`}
+                                                type="password"
+                                                name='password'
+                                            />
+                                            <div className="input_error">
+                                                {errors.password && (<p>{`${errors.password.message}`}</p>)}
+                                            </div>
+                                        </label>
+                                    </div>
 
                                     <button
                                         disabled={isSubmitting}

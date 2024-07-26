@@ -251,23 +251,23 @@ export const BoltIcon = ({ fill }: { fill?: string }) => {
     )
 }
 
-export const BodyMeasureIcon = ({ fill }: { fill?: string }) => {
+export const BodyMeasureIcon = ({ fill, sizes }: { fill?: string, sizes?: string }) => {
     return (
         <div>
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" className={`w-5 h-5 ${fill ?? `fill-white`}`}>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" className={`${sizes ?? `w-5 h-5`} ${fill ?? `fill-white`}`}>
                 <path d="M12 9a1 1 0 0 1-1-1V3c0-.552.45-1.007.997-.93a7.004 7.004 0 0 1 5.933 5.933c.078.547-.378.997-.93.997h-5Z" />
                 <path d="M8.003 4.07C8.55 3.994 9 4.449 9 5v5a1 1 0 0 0 1 1h5c.552 0 1.008.45.93.997A7.001 7.001 0 0 1 2 11a7.002 7.002 0 0 1 6.003-6.93Z" />
             </svg>
         </div>
     )
 }
-export const NotPregnantIcon = ({ stroke }: { stroke?: string }) => {
+export const NotPregnantIcon = ({ stroke, sizes }: { stroke?: string; sizes?: string }) => {
     return (
         <div>
             <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
-                className={`w-5 h-5 ${stroke ?? `stroke-white`}`}
+                className={`${sizes ?? `w-5 h-5`} ${stroke ?? `stroke-white`}`}
             >
                 <path
                     fill="none"
@@ -280,23 +280,23 @@ export const NotPregnantIcon = ({ stroke }: { stroke?: string }) => {
         </div>
     )
 }
-export const DeathIcon = ({ fill }: { fill?: string }) => {
+export const DeathIcon = ({ fill, sizes }: { fill?: string; sizes?: string }) => {
     return (
         <div>
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" className={`w-5 h-5 ${fill ?? `fill-white`}`}>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" className={`${sizes ?? `w-5 h-5`} ${fill ?? `fill-white`}`}>
                 <path d="M6.28 5.22a.75.75 0 0 0-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 1 0 1.06 1.06L10 11.06l3.72 3.72a.75.75 0 1 0 1.06-1.06L11.06 10l3.72-3.72a.75.75 0 0 0-1.06-1.06L10 8.94 6.28 5.22Z" />
             </svg>
         </div>
     )
 }
-export const CattleBirthIcon = ({ stroke }: { stroke?: string }) => {
+export const CattleBirthIcon = ({ stroke, sizes }: { stroke?: string; sizes?: string }) => {
     stroke = stroke?.replaceAll('fill', 'stroke')
     return (
         <div>
             <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 24 24"
-                className={`w-5 h-5 ${stroke ?? `stroke-white`}`}
+                className={`${sizes ?? `w-5 h-5`} ${stroke ?? `stroke-white`}`}
             >
                 <path
                     fill="none"
@@ -309,11 +309,22 @@ export const CattleBirthIcon = ({ stroke }: { stroke?: string }) => {
         </div>
     )
 }
-export const PregnantIcon = ({ fill }: { fill?: string }) => {
+export const PregnantIcon = ({ fill, sizes }: { fill?: string; sizes?: string }) => {
     return (
         <div>
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" className={`w-5 h-5 ${fill ?? `fill-white`}`}>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" className={`${sizes ?? `w-5 h-5`} ${fill ?? `fill-white`}`}>
                 <path fillRule="evenodd" d="M12.1 3.667a3.502 3.502 0 1 1 6.782 1.738 3.487 3.487 0 0 1-.907 1.57 3.495 3.495 0 0 1-1.617.919L16 7.99V10a.75.75 0 0 1-.22.53l-.25.25a.75.75 0 0 1-1.06 0l-.845-.844L7.22 16.34A2.25 2.25 0 0 1 5.629 17H5.12a.75.75 0 0 0-.53.22l-1.56 1.56a.75.75 0 0 1-1.061 0l-.75-.75a.75.75 0 0 1 0-1.06l1.56-1.561a.75.75 0 0 0 .22-.53v-.508c0-.596.237-1.169.659-1.59l6.405-6.406-.844-.845a.75.75 0 0 1 0-1.06l.25-.25A.75.75 0 0 1 10 4h2.01l.09-.333ZM4.72 13.84l6.405-6.405 1.44 1.439-6.406 6.405a.75.75 0 0 1-.53.22H5.12c-.258 0-.511.044-.75.129a2.25 2.25 0 0 0 .129-.75v-.508a.75.75 0 0 1 .22-.53Z" clipRule="evenodd" />
+            </svg>
+        </div>
+    )
+}
+
+
+export const CheckIcon = () => {
+    return (
+        <div className="max-h-[20px] max-w-[20px] relative">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" className="scale-125 fill-caqua dark:fill-clime transition-all w-full h-full">
+                <path fillRule="evenodd" d="M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16Zm3.857-9.809a.75.75 0 0 0-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 1 0-1.06 1.061l2.5 2.5a.75.75 0 0 0 1.137-.089l4-5.5Z" clipRule="evenodd" />
             </svg>
         </div>
     )

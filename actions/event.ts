@@ -23,13 +23,12 @@ export async function createEvent(event: EventSchema): Promise<{
    },
   });
 
-  return { data: "Individuo creado correctamente" };
+  return { data: "Evento creado correctamente" };
  } catch (err: any) {
   console.log(err);
   return {
    error:
-    err?.response?.data?.message ??
-    "Ha ocurrido un error al crear el individuo",
+    err?.response?.data?.message ?? "Ha ocurrido un error al crear el evento",
   };
  }
 }

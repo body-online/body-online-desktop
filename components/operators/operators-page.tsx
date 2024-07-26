@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { SerializedSearchParamsProps } from '@/app/(main)/page'
+import { SerializedSearchParamsProps } from '@/app/page'
 
 import CreateOperator from './create-operator'
 import { getOperators } from '@/data/operators'
@@ -22,7 +22,7 @@ export default async function OperatorsPage({ params }: { params: SerializedSear
             </div>
 
             {!error && data ? (
-                <div className='w-full flex flex-col h-full max-h-96'>
+                <div className='w-full flex flex-col h-full'>
                     {data?.users && data?.users?.length > 0 ? (
                         <div className="w-full overflow-auto h-full">
                             <OperatorsTable users={data.users} />

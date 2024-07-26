@@ -11,11 +11,11 @@ export default function EventItem({ event, prevEventDate }: { event: EventProps;
     return (
         <>
             {!hideEventDate &&
-                <div className='w-full sticky top-0 z-10 mb-5'>
-                    <div className="backdrop-blur-md rounded-lg border custom-border overflow-hidden h-max p-2 bg-slate-500/50 dark:bg-clightgray/50 w-full">
+                <div className='w-full sticky top-0 z-10'>
+                    <div className="w-full bg-slate-100 border custom-border dark:bg-clightgray rounded-lg h-10">
                         <div className="flex-center gap-2 h-full w-full">
                             <CalendarIcon />
-                            <p className='text-sm text-slate-700 dark:text-slate-100'>
+                            <p className='text-sm text-cblack dark:text-slate-100'>
                                 {eventDate}
                             </p>
                         </div>
@@ -95,35 +95,35 @@ const EventTypeIcon = ({ event }: { event: EventProps }) => {
     switch (event.eventType) {
         case 'death':
             return (
-                <div className={`h-7 md:h-8 min-w-7 md:min-w-8 flex-center rounded-full bg-red-500 dark:bg-red-500`}>
-                    <DeathIcon fill='fill-white dark:fill-white' />
+                <div className={`h-7 md:h-8 min-w-7 md:min-w-8 flex-center`}>
+                    <DeathIcon fill='fill-csemigreen dark:fill-clime' />
                 </div>
             )
         case 'pregnant':
             return (
-                <div className={`h-7 md:h-8 min-w-7 md:min-w-8 flex-center rounded-full bg-violet-500 dark:bg-violet-500`}>
-                    <PregnantIcon fill='fill-white dark:fill-white' />
+                <div className={`h-7 md:h-8 min-w-7 md:min-w-8 flex-center`}>
+                    <PregnantIcon fill='fill-csemigreen dark:fill-clime' />
                 </div>
             )
 
         case 'not_pregnant':
             return (
-                <div className={`h-7 md:h-8 min-w-7 md:min-w-8 flex-center rounded-full bg-slate-500 dark:bg-slate-500`}>
-                    <NotPregnantIcon stroke='stroke-white dark:fill-white' />
+                <div className={`h-7 md:h-8 min-w-7 md:min-w-8 flex-center`}>
+                    <NotPregnantIcon stroke='stroke-csemigreen dark:stroke-clime' />
                 </div>
             )
 
         case 'body_measure':
             return (
-                <div className={`h-7 md:h-8 min-w-7 md:min-w-8 flex-center rounded-full ${fillBgColor}`}>
-                    <BodyMeasureIcon fill={fillColor} />
+                <div className={`h-7 md:h-8 min-w-7 md:min-w-8 flex-center`}>
+                    <BodyMeasureIcon fill='fill-csemigreen dark:fill-clime' />
                 </div>
             )
 
         case 'cattle_birth':
             return (
-                <div className={`h-7 md:h-8 min-w-7 md:min-w-8 flex-center rounded-full bg-pink-500 dark:bg-pink-500`}>
-                    <CattleBirthIcon stroke='stroke-white dark:stroke-white' />
+                <div className={`h-7 md:h-8 min-w-7 md:min-w-8 flex-center`}>
+                    <CattleBirthIcon stroke='stroke-csemigreen dark:stroke-clime' />
                 </div>
             )
 

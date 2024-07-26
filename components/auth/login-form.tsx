@@ -27,7 +27,7 @@ const LoginForm = () => {
         if (response?.error) {
             return toast.error(response.error ?? 'Ha ocurrido un error')
         }
-        toast.success('Seras redirigido en segundos');
+        toast.success('Serás redirigido en segundos');
         reset()
     }
 

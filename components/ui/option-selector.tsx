@@ -1,7 +1,8 @@
 'use client'
-import { delay, motion } from 'framer-motion'
+import { motion } from 'framer-motion'
 import React, { useEffect, useState } from 'react'
 import { CheckmarkIcon } from 'react-hot-toast';
+import { CheckIcon } from './icons';
 
 const container = {
     hidden: { opacity: 1 },
@@ -24,7 +25,7 @@ const item = {
 
 const OptionSelector = (
     { options, value, setValue, hasOther, customOtherLabel, customOtherPlaceholder, error }:
-        { options: Array<{ label: string, value?: string }>; value?: string; setValue: Function; hasOther?: boolean; customOtherLabel?: string; customOtherPlaceholder?: string; error?: string }
+        { options: Array<{ label: string, value?: string; disabled?: boolean; }>; value?: string; setValue: Function; hasOther?: boolean; customOtherLabel?: string; customOtherPlaceholder?: string; error?: string }
 ) => {
     const [isOther, setIsOther] = useState<boolean>(false);
 
@@ -39,7 +40,7 @@ const OptionSelector = (
 
     return (
         <motion.ul
-            className='w-full space-y-2  transition-all'
+            className='w-full space-y-3 transition-all'
             variants={container}
             initial="hidden"
             animate="visible"
@@ -48,21 +49,25 @@ const OptionSelector = (
                 const selected = option.value == value;
 
                 return (
-                    <motion.button
+                    <motion.li
                         variants={item}
                         key={index}
-                        type='button'
-                        onClick={() => { setIsOther(false); setValue(option.value) }}
-                        className={`option_button`}
                     >
-                        <div className="min-h-5 min-w-5 bg-slate-300 dark:bg-slate-600 rounded-full">
-                            {selected ? <CheckmarkIcon /> : ''}
-                        </div>
+                        <button
+                            type='button'
+                            onClick={() => { setIsOther(false); setValue(option.value) }}
+                            disabled={option?.disabled}
+                            className="option_button"
+                        >
+                            <div className="min-h-5 min-w-5 bg-slate-100 dark:bg-slate-600 rounded-full">
+                                {selected ? <CheckIcon /> : ''}
+                            </div>
 
-                        <p className='text-start leading-6 text-truncate text-base text-slate-800 dark:text-slate-300 font-medium'>
-                            {option.label}
-                        </p>
-                    </motion.button>
+                            <p className='text-start leading-6 text-truncate text-base text-slate-800 dark:text-slate-300 font-medium'>
+                                {option.label}
+                            </p>
+                        </button>
+                    </motion.li>
                 )
             })}
 
@@ -70,7 +75,7 @@ const OptionSelector = (
                 <motion.div
                     className='space-y-2'
                     initial={{ opacity: 0 }}
-                    animate={{ opacity: 1, transition: { delay: (options?.length ?? 1) * 0.05 } }}
+                    animate={{ opacity: 1, transition: { delay: (options?.length ?? 1) * 0.02 } }}
                 >
                     <motion.button
                         type='button'
@@ -78,7 +83,7 @@ const OptionSelector = (
                         className={`option_button ${isOther ? 'custom-gradient border custom-border' : ''}`}
                     >
                         <div className="h-5 w-5 bg-slate-300 dark:bg-slate-600 rounded-full">
-                            {isOther ? <CheckmarkIcon /> : ''}
+                            {isOther ? <CheckIcon /> : ''}
                         </div>
 
                         <p className='text-start leading-6 text-truncate text-base text-slate-800 dark:text-slate-300 font-medium'>
