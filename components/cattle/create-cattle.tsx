@@ -10,19 +10,33 @@ import { z } from 'zod';
 import { CattleSchema, cattleSchema } from '@/lib/types';
 import { createCattle } from '@/actions/cattle';
 
-import SelectCattleLocation from '../location/select-location';
-import SelectCattleGenetic from '../genetic/select-genetic';
 import { CloseIcon, LoadingIcon, MiniAddIcon } from '../ui/icons';
-import { LayoutBottom, LayoutHeader } from '../ui/default-layout';
-import BlackOutModal from '../ui/blackout-modal';
-import InfoMessage from '../ui/info';
+import { LayoutBody, LayoutBottom, LayoutHeader } from '../ui/default-layout';
 import SelectLocation from '../location/select-location';
+import SelectGenetic from '../genetic/select-genetic';
+import BlackOutModal from '../ui/blackout-modal';
+import StepIndicator from '../ui/step-indicator';
+import InfoMessage from '../ui/info';
+import StepsContainer from '../ui/steps-container';
 
 export function CreateCattle() {
-    const [isOpen, setIsOpen] = useState(false);
-    const [massiveUpload, setMassiveUpload] = useState(false);
-    const [step, setStep] = useState<number>(0)
     const router = useRouter();
+
+    const [isOpen, setIsOpen] = useState<boolean>(false);
+    const [massiveUpload, setMassiveUpload] = useState<boolean>(false);
+    const [step, setStep] = useState<number>(0)
+    const [locationName, setLocationName] = useState<string>()
+    const [geneticName, setGeneticName] = useState<string>()
+
+    const handleClose = () => {
+        return setIsOpen(false)
+    }
+    const handleOpen = () => {
+        setLocationName(undefined)
+        setGeneticName(undefined)
+        reset();
+        setIsOpen(true);
+    }
 
     const onSubmit: SubmitHandler<CattleSchema> = async (data: CattleSchema) => {
         try {
@@ -47,6 +61,7 @@ export function CreateCattle() {
         };
 
         if (isOpen) {
+            setStep(0)
             document.body.style.overflow = "hidden";
             document.addEventListener('keydown', handleEsc);
         } else {
@@ -68,117 +83,122 @@ export function CreateCattle() {
 
     return (
         <>
-            <BlackOutModal isOpen={isOpen} handleClose={() => setIsOpen(false)}>
+            <BlackOutModal isOpen={isOpen} handleClose={handleClose}>
                 <LayoutHeader>
-                    <div className='w-full space-y-2'>
-                        {/* title */}
-                        <div className="flex-between w-full">
-                            <h2 className='semititle'>Crear individuo{massiveUpload ? 's' : ''}</h2>
-                            <button
-                                type='button'
-                                disabled={isSubmitting}
-                                onClick={() => setIsOpen(false)}
-                                className='md:hover:opacity-100 md:opacity-50 transition-all disabled:opacity-30'
-                            >
-                                <CloseIcon fill='fill-cgray dark:fill-white' />
-                            </button>
-                        </div>
-
-                        {/* massive mode switch */}
-                        <div className='grid grid-cols-2 max-w-max bg-slate-200 dark:bg-cgray border custom-border rounded-xl overflow-hidden'>
-                            <button
-                                type='button'
-                                onClick={() => setMassiveUpload(false)}
-                                disabled={isSubmitting}
-                                className={`font-medium text-xs sm:text-sm py-2 px-3 disabled:opacity-40 transition-all
-                                    ${massiveUpload ? 'text-slate-400 dark:dark:text-gray-500' : 'bg-clightgray dark:bg-clightgray text-white dark:text-white'}`}
-                            >
-                                Carga manual
-                            </button>
-                            <button
-                                type='button'
-                                onClick={() => setMassiveUpload(true)}
-                                disabled={isSubmitting}
-                                className={`font-medium text-xs sm:text-sm py-2 px-3 disabled:opacity-40 transition-all
-                                    ${!massiveUpload ? 'text-slate-400 dark:dark:text-gray-500' : 'bg-clightgray dark:bg-clightgray text-white dark:text-white'}`}
-                            >
-                                Carga masiva
-                            </button>
-                        </div>
+                    <div className="flex-between w-full container">
+                        <h2 className='semititle'>Crear individuo{massiveUpload ? 's' : ''}</h2>
+                        <button
+                            type='button'
+                            disabled={isSubmitting}
+                            onClick={handleClose}
+                            className='md:hover:opacity-100 md:opacity-50 transition-all disabled:opacity-30'
+                        >
+                            <CloseIcon fill='fill-cgray dark:fill-white' />
+                        </button>
                     </div>
                 </LayoutHeader>
 
+                {/* steps status */}
+                <StepsContainer>
+                    <StepIndicator
+                        label='Caravana'
+                        value={watch('caravan')}
+                        active={step == 0}
+                        step={'1'}
+                    />
+                    <StepIndicator
+                        label='Ciclos'
+                        value={watch('defaultCicles')}
+                        active={step == 0}
+                        step={'2'}
+                    />
+                    <StepIndicator
+                        label='Ubicación'
+                        value={locationName}
+                        active={step == 1}
+                        step={'3'}
+                    />
+                    <StepIndicator
+                        label='Genética'
+                        value={geneticName}
+                        active={step == 2}
+                        step={'4'}
+                    />
+                </StepsContainer>
 
-                <div className='w-full h-full flex flex-col overflow-auto'>
+                <LayoutBody>
                     {!massiveUpload ? (
-                        <div>
-                            {isSubmitting ? <div className="m-auto py-default"><LoadingIcon /></div> :
-                                <form onSubmit={(e) => e.preventDefault()} className="flex flex-col gap-y-4 max-w-2xl mx-auto">
-                                    {step == 0 ?
-                                        <div className='py-default px-default h-full w-full'>
-                                            <div className="flex flex-col gap-y-4 max-w-3xl mx-auto ">
-                                                <h3 className='semititle mb-3'>Datos principales</h3>
-                                                <div className="grid grid-cols-2 gap-4">
-                                                    <label htmlFor='caravan' className='w-full'>
-                                                        <p className="input_label">Caravana*</p>
-                                                        <input
-                                                            {...register("caravan")}
-                                                            placeholder='Ej. AAA001'
-                                                            disabled={isSubmitting}
-                                                            className={`input ${errors.caravan ? 'border-red-500' : ''}`}
-                                                            type="text"
-                                                            name='caravan'
-                                                        />
-                                                        <div className="input_error">
-                                                            {errors.caravan && (<p>{`${errors.caravan.message}`}</p>)}
-                                                        </div>
-                                                    </label>
+                        <>
+                            {isSubmitting ? (
+                                <div className="flex-center h-full gap-2 py-default">
+                                    <LoadingIcon />
+                                    <p>Creando individuo...</p>
+                                </div>
+                            ) : (
+                                <form onSubmit={(e) => e.preventDefault()} className='px-default py-default'>
+                                    {step == 0 ? (
+                                        <div className=''>
+                                            <h3 className='semititle mb-3'>Datos principales</h3>
+                                            <div className="grid grid-cols-2 gap-4">
+                                                <label htmlFor='caravan' className='w-full'>
+                                                    <p className="input_label">Caravana</p>
+                                                    <input
+                                                        onChange={(e: any) => {
+                                                            const value = e?.target?.value?.toUpperCase()
+                                                            setValue('caravan', value)
+                                                        }}
+                                                        value={watch('caravan')}
+                                                        placeholder='Ej. AAA001'
+                                                        disabled={isSubmitting}
+                                                        className={`input ${errors.caravan ? 'border-red-500' : ''}`}
+                                                        type="text"
+                                                        name='caravan'
+                                                    />
+                                                    <div className="input_error">
+                                                        {errors.caravan && (<p>{`${errors.caravan.message}`}</p>)}
+                                                    </div>
+                                                </label>
 
-                                                    <label htmlFor='defaultCicles' className='max-w-1/3'>
-                                                        <p className="input_label">Ciclos</p>
-                                                        <input
-                                                            {...register("defaultCicles")}
-                                                            placeholder='Ej. 2'
-                                                            disabled={isSubmitting}
-                                                            className={`input ${errors.defaultCicles ? 'border-red-500' : ''}`}
-                                                            type="number"
-                                                            min={0}
-                                                            name='defaultCicles'
-                                                        />
-                                                        <div className="input_error">
-                                                            {errors.defaultCicles && (<p>{`${errors.defaultCicles.message}`}</p>)}
-                                                        </div>
-                                                    </label>
-                                                </div>
+                                                <label htmlFor='defaultCicles' className='max-w-1/3'>
+                                                    <p className="input_label">Ciclos</p>
+                                                    <input
+                                                        {...register("defaultCicles")}
+                                                        placeholder='Ej. 2'
+                                                        disabled={isSubmitting}
+                                                        className={`input ${errors.defaultCicles ? 'border-red-500' : ''}`}
+                                                        type="number"
+                                                        min={0}
+                                                        name='defaultCicles'
+                                                    />
+                                                    <div className="input_error">
+                                                        {errors.defaultCicles && (<p>{`${errors.defaultCicles.message}`}</p>)}
+                                                    </div>
+                                                </label>
                                             </div>
                                         </div>
-                                        :
-                                        step == 1 ?
-                                            <div className='py-default px-default h-full w-full'>
-                                                <SelectLocation watch={watch} setValue={setValue} />
-                                            </div>
-                                            :
-                                            step == 2 ?
-                                                <div className='py-default px-default h-full w-full'>
-                                                    <SelectCattleGenetic watch={watch} setValue={setValue} />
-                                                </div>
-                                                :
-                                                null
-                                    }
+                                    ) : step == 1 ? (
+                                        <SelectLocation
+                                            watch={watch}
+                                            setValue={setValue}
+                                            setLocationName={setLocationName}
+                                        />
+                                    ) : step == 2 ? (
+                                        <SelectGenetic
+                                            watch={watch}
+                                            setValue={setValue}
+                                            setGeneticName={setGeneticName}
+                                        />
+                                    ) : null}
                                 </form>
-                            }
-                        </div>
+                            )}
+                        </>
                     ) : (
                         <div key='massive'>
-                            <div className='py-default px-default h-full w-full'>
-                                <div className="flex flex-col gap-y-4 max-w-3xl mx-auto ">
-                                    {/* <h3 className='semititle mb-3'>Datos principales</h3> */}
-                                    <InfoMessage type='censored' title='Estamos desarrollando este apartado' />
-                                </div>
-                            </div>
+
+                            <InfoMessage type='censored' title='Estamos desarrollando este apartado' />
                         </div>
                     )}
-                </div>
+                </LayoutBody >
 
                 {/* send and control buttons */}
                 <LayoutBottom>
@@ -225,14 +245,14 @@ export function CreateCattle() {
                         </div>
                     </div>
                 </LayoutBottom>
-            </BlackOutModal>
+            </BlackOutModal >
 
 
             <button
-                onClick={() => { reset(); return setIsOpen(true) }}
-                className='h-7 md:h-max w-7 md:w-max rounded_btn bg-csemigreen dark:bg-clime flex-center md:px-3'
+                onClick={handleOpen}
+                className='h-max w-max rounded_btn bg-csemigreen dark:bg-clime flex-center px-3 gap-1'
             >
-                <p className={`text-white dark:text-cblack font-medium hidden md:block`}>Crear individuo</p>
+                <p className={`text-white dark:text-cblack font-medium`}>Crear individuo</p>
                 <MiniAddIcon fill='fill-clime dark:fill-cblack' />
             </button>
         </>

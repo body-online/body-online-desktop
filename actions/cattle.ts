@@ -31,6 +31,7 @@ export async function createCattle(cattle: CattleSchema): Promise<{
   };
  }
 }
+
 export async function deleteCattle(cattleId: string): Promise<{
  data?: string;
  error?: string;

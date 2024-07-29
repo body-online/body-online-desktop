@@ -1,12 +1,12 @@
-import AddCattleBtn from '@/components/cattle/create-cattle';
-import CattlesDataTable from '@/components/cattle/table';
-import Card from '@/components/ui/card';
-import PageHeader from '@/components/ui/header';
-import InfoMessage from '@/components/ui/info';
+import { Metadata } from 'next';
+
 import { getCattles } from '@/data/cattle';
 import { getEvents } from '@/data/events';
-import { getLocations } from '@/data/location';
-import { Metadata } from 'next';
+
+import AddCattleBtn from '@/components/cattle/create-cattle';
+import CattlesDataTable from '@/components/cattle/table';
+import InfoMessage from '@/components/ui/info';
+import Card from '@/components/ui/card';
 
 export const metadata: Metadata = {
     title: "Individuos - BodyOnline",
@@ -14,7 +14,6 @@ export const metadata: Metadata = {
 
 export default async function CattlesPage() {
     const { data } = await getCattles({ limit: 1 })
-    const { data: locationsData } = await getLocations({ limit: 1, page: 1 })
     const { data: eventsData } = await getEvents({ limit: 1, page: 1 })
 
     return (
@@ -28,7 +27,6 @@ export default async function CattlesPage() {
                             </h1>
                             <AddCattleBtn />
                         </div>
-                        <p className='text-sm tracking-tight font-medium text-slate-500'>Cree y consulte sus individuos.</p>
                     </div>
                 </div>
                 {data?.totalCattles == 0 ?

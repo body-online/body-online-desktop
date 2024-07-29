@@ -52,7 +52,7 @@ const SelectCattle = ({ selectedCattle, setSelectedCattle }: { selectedCattle?: 
     }, [searchTerm]);
 
     return (
-        <div className="w-full space-y-3">
+        <div className="flex flex-col w-full gap-3">
             <h3 className='semititle'>Individuo</h3>
 
             <input
@@ -63,63 +63,65 @@ const SelectCattle = ({ selectedCattle, setSelectedCattle }: { selectedCattle?: 
                 onChange={({ target }) => { return setSearchTerm(target.value) }}
             />
 
-            {error ? <InfoMessage type='warning' title='Algo ha salido mal...' subtitle={error} /> :
-                isLoading ? <LoadingRowsSkeleton /> :
-                    !options?.length ?
-                        <div className='max-w-md mx-auto flex-center flex-col'>
-                            <InfoMessage type='censored' title='No hemos encontrado individuos'
-                                subtitle={
-                                    searchTerm ? `No hemos encontrado resultados que contengan "${searchTerm}"` : 'Debes crear un individuo para continuar'
-                                }
-                            />
-                        </div> :
-                        <ul className='w-full space-y-3'>
-                            {options.map((cattle, index) => {
-                                const selected = cattle?._id === selectedCattle?._id;
+            <div className="h-full overflow-y-auto">
 
-                                return (
-                                    <li key={index}>
-                                        <button
-                                            type='button'
-                                            onClick={() => {
-                                                setSelectedCattle(cattle)
-                                            }}
-                                            className="option_button"
-                                        >
-                                            <div className="w-full relative overflow-x-auto pb-[2px] flex items-center">
-                                                <div
-                                                    className="min-w-max w-max py-1 pl-2 pr-4 sticky left-0 gap-2 flex items-center"
-                                                >
-                                                    {selected ? <CheckIcon /> :
-                                                        <div className="h-[20px] w-[20px] bg-slate-300 dark:bg-slate-600 rounded-full">
-                                                        </div>
-                                                    }
-                                                    <p className="text-lg font-medium h-full">{cattle.caravan}</p>
-                                                </div>
+                {error ? <InfoMessage type='warning' title='Algo ha salido mal...' subtitle={error} /> :
+                    isLoading ? <LoadingRowsSkeleton /> :
+                        !options?.length ?
+                            <div className='max-w-md mx-auto flex-center flex-col'>
+                                <InfoMessage type='censored' title='No hemos encontrado individuos'
+                                    subtitle={
+                                        searchTerm ? `No hemos encontrado resultados que contengan "${searchTerm}"` : 'Debes crear un individuo para continuar'
+                                    }
+                                />
+                            </div> :
+                            <ul className='w-full space-y-3 h-max'>
+                                {options.map((cattle, index) => {
+                                    const selected = cattle?._id === selectedCattle?._id;
 
-                                                <div className="w-full overflow-x-auto">
-                                                    <div className="flex items-center gap-2 w-max">
-                                                        <ChipState state={cattle?.state} />
-                                                        <ChipBodyCondition
-                                                            bodyRanges={cattle?.bodyRanges}
-                                                            measure={Number(cattle.bodyCondition)}
-                                                            state={cattle.state}
-                                                        />
-                                                        <div>
-                                                            <p className="text-base px-2">{cattle.geneticName}</p>
-                                                        </div>
-                                                        <div>
-                                                            <p className="text-base px-2">{cattle.locationName}</p>
+                                    return (
+                                        <li key={index}>
+                                            <button
+                                                type='button'
+                                                onClick={() => {
+                                                    setSelectedCattle(cattle)
+                                                }}
+                                                className="option_button"
+                                            >
+                                                <div className="w-full relative overflow-x-auto pb-[2px] flex items-center">
+                                                    <div
+                                                        className="min-w-max w-max py-1 pl-2 pr-4 sticky left-0 gap-2 flex items-center"
+                                                    >
+                                                        {selected ? <CheckIcon /> :
+                                                            <div className="h-[20px] w-[20px] bg-slate-300 dark:bg-slate-600 rounded-full">
+                                                            </div>
+                                                        }
+                                                        <p className="text-lg font-medium h-full">{cattle.caravan}</p>
+                                                    </div>
+
+                                                    <div className="w-full overflow-x-auto">
+                                                        <div className="flex items-center gap-2 w-max">
+                                                            <ChipState state={cattle?.state} />
+                                                            <ChipBodyCondition
+                                                                bodyRanges={cattle?.bodyRanges}
+                                                                measure={Number(cattle.bodyCondition)}
+                                                            />
+                                                            <div>
+                                                                <p className="text-base px-2">{cattle.geneticName}</p>
+                                                            </div>
+                                                            <div>
+                                                                <p className="text-base px-2">{cattle.locationName}</p>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        </button>
-                                    </li>
-                                )
-                            })}
-                        </ul>
-            }
+                                            </button>
+                                        </li>
+                                    )
+                                })}
+                            </ul>
+                }
+            </div>
         </div >
     )
 }

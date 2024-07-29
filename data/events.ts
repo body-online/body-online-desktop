@@ -28,9 +28,6 @@ export async function getEvents({
    { params: { page, limit } }
   );
 
-  // console.log("eventos:::");
-  // console.log(data?.totalEvents);
-
   return { data };
  } catch (error: any) {
   console.log(error);

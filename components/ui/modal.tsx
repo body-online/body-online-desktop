@@ -63,7 +63,7 @@ const Modal = ({ handleClose, children, isOpen }: ModalProps) => {
                                 type='button'
                                 onClick={() => handleClose()}
                                 className="px-1 py-1 rounded-md bg-slate-200 absolute top-4 right-4 z-20">
-                                <p className='text-[10px] sm:text-[12px] font-bold text-cgray hidden md:block'>ESC</p>
+                                <p className='text-[10px] sm:text-[12px] font-bold text-cgray'>ESC</p>
                                 <CloseIcon fill='fill-cgray md:hidden' />
                             </motion.button> : null
                         }

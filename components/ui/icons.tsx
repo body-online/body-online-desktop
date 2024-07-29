@@ -180,22 +180,26 @@ export const MiniAddIcon = ({ fill, sizes }: { fill?: string; sizes?: string }) 
     )
 }
 
-export const ArrowsIcon = ({ direction, stroke }: { stroke?: string; direction: string }) => {
+export const ArrowsIcon = ({ direction, fill }: { fill?: string; direction: string }) => {
 
     return (
-        <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={1.5}
-            className={`${stroke ?? `stroke-slate-500 dark:stroke-slate-200`} ${direction ?? ``} w-5 h-5 transition-all`}
-        >
-            <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M12 4.5v15m0 0l6.75-6.75M12 19.5l-6.75-6.75"
-            />
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" className={`${fill ?? `fill-slate-500 dark:fill-slate-200`} ${direction ?? ``} w-5 h-5 transition-all`}>
+            <path fillRule="evenodd" d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clipRule="evenodd" />
         </svg>
+
+        // <svg
+        //     xmlns="http://www.w3.org/2000/svg"
+        //     fill="none"
+        //     viewBox="0 0 24 24"
+        //     strokeWidth={1.5}
+        //     className={`${stroke ?? `stroke-slate-500 dark:stroke-slate-200`} ${direction ?? ``} w-5 h-5 transition-all`}
+        // >
+        //     <path
+        //         strokeLinecap="round"
+        //         strokeLinejoin="round"
+        //         d="M12 4.5v15m0 0l6.75-6.75M12 19.5l-6.75-6.75"
+        //     />
+        // </svg>
     )
 };
 
@@ -217,7 +221,7 @@ export const SearchIcon = ({ fill }: { fill?: string }) => {
 export const BellIcon = ({ fill }: { fill?: string }) => {
     return (
         <div>
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" className={`w-5 h-5 ${fill ?? `fill-cgray`}`}>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" className={`w-4 h-4 ${fill ?? `fill-cgray`}`}>
                 <path fillRule="evenodd" d="M10 2a6 6 0 0 0-6 6c0 1.887-.454 3.665-1.257 5.234a.75.75 0 0 0 .515 1.076 32.91 32.91 0 0 0 3.256.508 3.5 3.5 0 0 0 6.972 0 32.903 32.903 0 0 0 3.256-.508.75.75 0 0 0 .515-1.076A11.448 11.448 0 0 1 16 8a6 6 0 0 0-6-6ZM8.05 14.943a33.54 33.54 0 0 0 3.9 0 2 2 0 0 1-3.9 0Z" clipRule="evenodd" />
             </svg>
 
@@ -320,15 +324,35 @@ export const PregnantIcon = ({ fill, sizes }: { fill?: string; sizes?: string })
 }
 
 
-export const CheckIcon = () => {
+export const CheckIcon = ({ fill }: { fill?: string }) => {
     return (
         <div className="max-h-[20px] max-w-[20px] relative">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" className="scale-125 fill-caqua dark:fill-clime transition-all w-full h-full">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" className={`scale-125  ${fill ?? 'fill-csemigreen dark:fill-clime'} transition-all w-full h-full`}>
                 <path fillRule="evenodd" d="M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16Zm3.857-9.809a.75.75 0 0 0-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 1 0-1.06 1.061l2.5 2.5a.75.75 0 0 0 1.137-.089l4-5.5Z" clipRule="evenodd" />
             </svg>
         </div>
     )
 }
+export const CalendarIcon = ({ fill }: { fill?: string }) => {
+    return (
+        <div>
+            <svg xmlns="http://www.w3.org/5000/svg" viewBox="0 0 20 20" className={`w-5 h-5 ${fill ?? `fill-white`}`}>
+                <path fillRule="evenodd" d="M5.75 2a.75.75 0 0 1 .75.75V4h7V2.75a.75.75 0 0 1 1.5 0V4h.25A2.75 2.75 0 0 1 18 6.75v8.5A2.75 2.75 0 0 1 15.25 18H4.75A2.75 2.75 0 0 1 2 15.25v-8.5A2.75 2.75 0 0 1 4.75 4H5V2.75A.75.75 0 0 1 5.75 2Zm-1 5.5c-.69 0-1.25.56-1.25 1.25v6.5c0 .69.56 1.25 1.25 1.25h10.5c.69 0 1.25-.56 1.25-1.25v-6.5c0-.69-.56-1.25-1.25-1.25H4.75Z" clipRule="evenodd" />
+            </svg>
+        </div>
+    )
+}
+export const ClockMiniIcon = ({ fill }: { fill?: string }) => {
+    return (
+        <div>
+            <svg xmlns="http://www.w3.org/5000/svg" viewBox="0 0 16 16" className={`w-5 h-5 ${fill ?? `fill-white`}`}>
+                <path fillRule="evenodd" d="M1 8a7 7 0 1 1 14 0A7 7 0 0 1 1 8Zm7.75-4.25a.75.75 0 0 0-1.5 0V8c0 .414.336.75.75.75h3.25a.75.75 0 0 0 0-1.5h-2.5v-3.5Z" clipRule="evenodd" />
+            </svg>
+
+        </div>
+    )
+}
+
 export const SaveIcon = ({ fill }: { fill?: string }) => {
     return (
         <div>

@@ -45,10 +45,9 @@ export async function getCattles({
 }> {
  try {
   const farmId = await currentFarm();
-
   if (!farmId) return { error: "No hemos encontrado su organización" };
-  const params = { page, limit, name };
 
+  const params = { page, limit, name };
   const { data } = await axios({
    method: "GET",
    url: `${process.env.API_URL}/api/ranchi/cattle/${farmId}`,

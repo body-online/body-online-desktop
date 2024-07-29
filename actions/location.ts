@@ -29,7 +29,6 @@ export async function createLocation(location: LocationSchema): Promise<{
   return { data: "Ubicación creada correctamente" };
  } catch (err: any) {
   console.log(err?.response?.data);
-  console.log(err);
   return {
    error:
     err?.response?.data?.message ??

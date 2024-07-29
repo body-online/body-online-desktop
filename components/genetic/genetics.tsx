@@ -1,6 +1,6 @@
 import React from 'react'
 import InfoMessage from '../ui/info'
-import AddGeneticBtn from './add-button'
+import AddGeneticBtn from './add-genetic'
 import { columnsGenetic } from './columns'
 import { GeneticProps } from '@/lib/types'
 import GeneticsDataTable from './table'

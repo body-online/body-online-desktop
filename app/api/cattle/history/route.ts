@@ -11,8 +11,6 @@ export async function GET(request: Request) {
   const { data } = await axios.get(
    `${process.env.API_URL}/api/ranchi/event/${id}/${farm}`
   );
-  console.log('')
-    console.log(data);
 
   const sortedData = data.sort((a: EventProps, b: EventProps) => {
    // Turn your strings into dates, and then subtract them

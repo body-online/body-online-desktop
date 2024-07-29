@@ -11,7 +11,7 @@ import InfoMessage from '../ui/info'
 import LoadingRowsSkeleton from '../ui/loading-rows-skeleton'
 import Link from 'next/link'
 
-const SelectLocation = ({ watch, setValue }: { watch: UseFormWatch<CattleSchema>; setValue: UseFormSetValue<CattleSchema> }) => {
+const SelectLocation = ({ watch, setValue, setLocationName }: { watch: UseFormWatch<CattleSchema>; setValue: UseFormSetValue<CattleSchema>; setLocationName: (e: any) => void }) => {
     const [options, setOptions] = useState<any[]>();
     const [searchTerm, setSearchTerm] = useState<string>();
     const [error, setError] = useState<string>();
@@ -46,7 +46,7 @@ const SelectLocation = ({ watch, setValue }: { watch: UseFormWatch<CattleSchema>
     }, [searchTerm]);
 
     return (
-        <div className="w-full space-y-3">
+        <div className="w-full h-full flex flex-col gap-y-3">
             <h3 className='semititle'>Ubicación</h3>
 
             <input
@@ -75,7 +75,7 @@ const SelectLocation = ({ watch, setValue }: { watch: UseFormWatch<CattleSchema>
                             <OptionSelector
                                 value={watch('locationId')}
                                 error={error}
-                                setValue={(e: any) => { return setValue('locationId', e) }}
+                                setValue={(e: any) => { setLocationName(options.find((i) => i.value === e)?.label); return setValue('locationId', e) }}
                                 options={options}
                             />
                 }

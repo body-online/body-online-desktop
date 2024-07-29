@@ -18,7 +18,7 @@ export default async function OperatorsPage({ params }: { params: SerializedSear
         <Card paddings='py-4 md:py-6 w-full flex flex-col overflow-hidden h-min'>
             <div className="px-3 md:px-5 pb-4 md:pb-6 flex-between border-b custom-border">
                 <h2 className='semititle'>Usuarios</h2>
-                <CreateOperator mode={'mini'} />
+                <CreateOperator />
             </div>
 
             {!error && data ? (

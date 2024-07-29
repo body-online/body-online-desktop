@@ -15,7 +15,7 @@ import { enterDropdown } from '@/lib/constants';
 import { useRouter } from 'next/navigation';
 import Card from '../ui/card';
 
-export function CreateOperator({ mode }: { mode?: 'chip' | 'mini' }) {
+export function CreateOperator() {
     const router = useRouter()
     const [isOpen, setIsOpen] = useState(false);
     const [isAdmin, setIsAdmin] = useState(false);
@@ -63,19 +63,7 @@ export function CreateOperator({ mode }: { mode?: 'chip' | 'mini' }) {
     };
 
     return (
-        <div>
-            <button
-                onClick={() => setIsOpen(true)}
-                className={`
-                    ${mode == 'chip' ? 'chip cgreen flex-center gap-2' :
-                        mode === 'mini' ? 'rounded-full bg-cgreen dark:bg-clime h-6 sm:h-7 w-6 sm:w-7 flex-center' :
-                            'primary-btn'
-                    }`
-                }
-            >
-                {!mode ? <p>Nuevo usuario</p> : mode === 'mini' ? <CreateAccountIcon fill='fill-clime dark:fill-cblack' /> : null}
-            </button>
-
+        <>
             <AnimatePresence mode='wait'>
                 {isOpen ?
                     <motion.div
@@ -197,7 +185,17 @@ export function CreateOperator({ mode }: { mode?: 'chip' | 'mini' }) {
                     : <div key='null' />
                 }
             </AnimatePresence>
-        </div >
+
+            <button
+                onClick={() => setIsOpen(true)}
+                className='h-max w-max rounded_btn bg-csemigreen dark:bg-clime flex-center px-3 gap-1'
+            >
+                <div className='flex-center gap-1'>
+                    <p className={`text-white dark:text-cblack font-medium`}>Crear usuario</p>
+                    <CreateAccountIcon fill='fill-clime dark:fill-cblack' />
+                </div>
+            </button>
+        </>
     );
 }
 

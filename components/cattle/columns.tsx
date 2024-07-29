@@ -1,13 +1,15 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import DeleteCattleBtn from './delete-button';
+
 import { CattleProps } from '@/lib/types';
-import { ArrowsIcon } from '../ui/icons';
+
 import ChipBodyCondition from './chip-body-condition';
-import ChipState from './chip-state';
+import DeleteCattleBtn from './delete-button';
 import HistoryBtn from './history-button';
-import CreateEventButton from "../events/create-event-btn";
+import { ArrowsIcon } from '../ui/icons';
+import AddEventBtn from './add-event';
+import ChipState from './chip-state';
 
 
 export const columnsCattle: ColumnDef<CattleProps>[] = [
@@ -38,9 +40,8 @@ export const columnsCattle: ColumnDef<CattleProps>[] = [
         cell: ({ row }) => {
             return (
                 <div className="flex items-center gap-3">
-                    <CreateEventButton mode='chip' defaultCattle={row.original} />
+                    <AddEventBtn defaultCattle={row.original} />
                     <HistoryBtn
-                        mode="chip"
                         cattleId={row.original._id}
                         cattleCaravan={row.original.caravan}
                     />
@@ -53,65 +54,6 @@ export const columnsCattle: ColumnDef<CattleProps>[] = [
         },
     },
 
-    {
-        header: ({ column }) => {
-            return (
-                <button
-                    type="button"
-                    onClick={() => column.toggleSorting(column.getIsSorted() == "asc")}
-                    className="flex-center"
-                >
-                    <p>Fecha de Creación</p>
-                    <ArrowsIcon direction={column.getIsSorted() == "asc" ? 'rotate-180' : column.getIsSorted() == "desc" ? '' : 'hidden'} />
-                </button>
-            );
-        },
-
-        accessorKey: "createdAt",
-        cell: ({ row }) => {
-            const created_at = row.getValue("createdAt");
-            const formatted = new Date(created_at as string).toLocaleDateString("es-AR", { day: 'numeric', month: 'long', year: 'numeric' });
-
-            return <p> {formatted}</p>;
-        },
-    },
-
-    {
-        header: ({ column }) => {
-            return (
-                <button
-                    type="button"
-                    onClick={() => column.toggleSorting(column.getIsSorted() == "asc")}
-                    className="flex-center"
-                >
-                    <p>Ubicación</p>
-                    <ArrowsIcon direction={column.getIsSorted() == "asc" ? 'rotate-180' : column.getIsSorted() == "desc" ? '' : 'hidden'} />
-                </button>
-            );
-        },
-        accessorKey: "locationName",
-        cell: ({ row }) => {
-            return <p>{row.getValue("locationName")}</p>;
-        },
-    },
-    {
-        header: ({ column }) => {
-            return (
-                <button
-                    type="button"
-                    onClick={() => column.toggleSorting(column.getIsSorted() == "asc")}
-                    className="flex-center"
-                >
-                    <p>Genética</p>
-                    <ArrowsIcon direction={column.getIsSorted() == "asc" ? 'rotate-180' : column.getIsSorted() == "desc" ? '' : 'hidden'} />
-                </button>
-            );
-        },
-        accessorKey: "geneticName",
-        cell: ({ row }) => {
-            return <p>{row.getValue("geneticName")}</p>;
-        },
-    },
     {
         header: ({ column }) => {
             return (
@@ -163,18 +105,19 @@ export const columnsCattle: ColumnDef<CattleProps>[] = [
                     onClick={() => column.toggleSorting(column.getIsSorted() == "asc")}
                     className="flex-center"
                 >
-                    <p>Condición Corporal</p>
+                    <p>Condición corporal</p>
                     <ArrowsIcon direction={column.getIsSorted() == "asc" ? 'rotate-180' : column.getIsSorted() == "desc" ? '' : 'hidden'} />
                 </button>
             );
         },
         accessorKey: "bodyCondition",
         cell: ({ row }) => {
+            if (row?.original?.state === 'death') return <p className='chip chip_red'>Muerta</p>
+
             return (
                 <ChipBodyCondition
                     bodyRanges={row?.original?.bodyRanges}
                     measure={Number(row?.original?.bodyCondition)}
-                    state={row?.original?.state}
                 />
             )
         }
@@ -219,6 +162,65 @@ export const columnsCattle: ColumnDef<CattleProps>[] = [
         accessorKey: "defaultCicles",
         cell: ({ row }) => {
             return <p>{row.getValue("defaultCicles")}</p>;
+        },
+    },
+    {
+        header: ({ column }) => {
+            return (
+                <button
+                    type="button"
+                    onClick={() => column.toggleSorting(column.getIsSorted() == "asc")}
+                    className="flex-center"
+                >
+                    <p>Ubicación</p>
+                    <ArrowsIcon direction={column.getIsSorted() == "asc" ? 'rotate-180' : column.getIsSorted() == "desc" ? '' : 'hidden'} />
+                </button>
+            );
+        },
+        accessorKey: "locationName",
+        cell: ({ row }) => {
+            return <p>{row.getValue("locationName")}</p>;
+        },
+    },
+    {
+        header: ({ column }) => {
+            return (
+                <button
+                    type="button"
+                    onClick={() => column.toggleSorting(column.getIsSorted() == "asc")}
+                    className="flex-center"
+                >
+                    <p>Genética</p>
+                    <ArrowsIcon direction={column.getIsSorted() == "asc" ? 'rotate-180' : column.getIsSorted() == "desc" ? '' : 'hidden'} />
+                </button>
+            );
+        },
+        accessorKey: "geneticName",
+        cell: ({ row }) => {
+            return <p>{row.getValue("geneticName")}</p>;
+        },
+    },
+
+    {
+        header: ({ column }) => {
+            return (
+                <button
+                    type="button"
+                    onClick={() => column.toggleSorting(column.getIsSorted() == "asc")}
+                    className="flex-center"
+                >
+                    <p>Fecha de Creación</p>
+                    <ArrowsIcon direction={column.getIsSorted() == "asc" ? 'rotate-180' : column.getIsSorted() == "desc" ? '' : 'hidden'} />
+                </button>
+            );
+        },
+
+        accessorKey: "createdAt",
+        cell: ({ row }) => {
+            const created_at = row.getValue("createdAt");
+            const formatted = new Date(created_at as string).toLocaleDateString("es-AR", { day: 'numeric', month: 'long', year: 'numeric' });
+
+            return <p> {formatted}</p>;
         },
     },
 ];

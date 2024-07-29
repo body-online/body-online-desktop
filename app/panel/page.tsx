@@ -32,30 +32,19 @@ export default async function OperatorPanel({ searchParams }: { searchParams: Se
 
   return (
     <main className='h-full w-full'>
-      <PageHeader>
-
-
-        <div className='w-full'>
-          <p className='text-cblack dark:text-white text-base font-bold'>
-            Body<span className='text-clime dark:text-clime font-bold'>Online</span>
-          </p>
-          <h1 className='title w-full'>{user?.farmName}</h1>
-        </div>
-
-      </PageHeader>
-
-      <div className="container px-default w-full">
-        <div className="grid gap-6 w-full">
-
+      <div className="container px-default py-default gap-6">
+        <div className="flex flex-col gap-6 max-w-lg">
+          <h1 className="title">
+            {user?.farmName}
+          </h1>
           <Suspense
             key={`notifications-${searchParams?.pageNotifications ?? '1'}`}
             fallback={<Card><div className="w-full h-96 flex-center"><LoadingIcon /></div></Card>}
           >
             <NotificationsPage params={serializeParams(searchParams)} />
           </Suspense>
-
         </div>
       </div>
-    </main>
+    </main >
   );
 }

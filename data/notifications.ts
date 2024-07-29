@@ -35,6 +35,8 @@ export async function getNotifications({
     isExpired: doc?.isExpired,
     cattleId: doc?.["_doc"].cattleId?.["_id"],
     caravan: doc?.["_doc"]?.cattleId?.caravan,
+    maxRange: doc?.maxRange,
+    minRange: doc?.minRange,
    };
 
    return parsedNotification;

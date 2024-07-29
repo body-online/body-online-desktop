@@ -9,6 +9,7 @@ import Pagination from '../ui/pagination'
 import InfoMessage from '../ui/info'
 import Card from '../ui/card'
 import CreateMeasureButton from '../events/create-measure-btn'
+import { BellIcon } from '../ui/icons'
 
 export default async function NotificationsPage({ params }: { params: SerializedSearchParamsProps }) {
     // get the list of notifications existents to this farm
@@ -18,7 +19,7 @@ export default async function NotificationsPage({ params }: { params: Serialized
         <Card paddings='py-4 md:py-6 w-full flex flex-col overflow-hidden h-min'>
             <div className="px-3 md:px-5 pb-4 md:pb-6 flex-between border-b custom-border">
                 <h2 className="semititle">
-                    Notificaciones
+                    Mediciones pendientes
                 </h2>
             </div>
 
@@ -28,7 +29,7 @@ export default async function NotificationsPage({ params }: { params: Serialized
                         <div className="w-full overflow-auto h-full">
                             {data?.notifications?.map(
                                 (notification: PendingMeasureProps, index: number) => {
-                                    const measureDate = new Date(notification?.expiresAt)?.toLocaleDateString("es-AR", { day: 'numeric', month: 'long' })
+                                    // const measureDate = new Date(notification?.expiresAt)?.toLocaleDateString("es-AR", { day: 'numeric', month: 'long' })
                                     const expireDate = new Date(notification?.expiresAt);
                                     const diffDays = dateDiffInDays(new Date(), expireDate);
 
@@ -40,31 +41,26 @@ export default async function NotificationsPage({ params }: { params: Serialized
 
                                     return (
                                         <div
-                                            className='grid grid-cols-3 min-w-max py-3 w-full border-b custom-border px-3 md:px-5'
+                                            className='grid grid-cols-3 items-center px-3 py-2 md:hover:bg-slate-50 dark:md:hover:bg-clightgray border-b custom-border'
                                             key={index}
                                         >
-                                            <div>
-                                                <div className="flex items-center gap-2">
-                                                    <div className={`rounded-lg p-1 w-max
+                                            <div className="flex gap-2 items-center">
+                                                <div className={`rounded-lg p-1
                                                         ${!notification?.isExpired ?
-                                                            'bg-green-500 dark:bg-green-500' :
-                                                            'bg-red-500 dark:bg-red-500'
-                                                        }`
-                                                    }>
-                                                        <CalendarIcon />
-                                                    </div>
-                                                    <p className='font-medium text-white dark:text-white'>
-                                                        {notification?.isExpired ? 'Hace ' : 'En '}
-                                                        {Math.abs(diffDays)} días
-                                                    </p>
+                                                        'bg-green-500 dark:bg-green-400/50' :
+                                                        'bg-red-500 dark:bg-red-400/50'
+                                                    }`
+                                                }>
+                                                    <BellIcon fill={notification?.isExpired ? 'fill-white dark:fill-yellow-500' : 'fill-white dark:fill-green-400'} />
                                                 </div>
-                                            </div>
 
-                                            <div className='pl-3 md:pl-5'>
-                                                <p className='semititle'>
-                                                    {notification?.caravan}
+                                                <p className='font-medium text-cblack truncate text-sm dark:text-white'>
+                                                    {notification?.isExpired ? 'Hace ' : 'En '}
+                                                    {Math.abs(diffDays)} días
                                                 </p>
                                             </div>
+
+                                            <p className='text-xl font-medium'>{notification?.caravan}</p>
 
                                             <CreateMeasureButton notification={notification} />
                                         </div>
@@ -72,7 +68,7 @@ export default async function NotificationsPage({ params }: { params: Serialized
                                 }
                             )}
                         </div>
-                    ) : <InfoMessage type='censored' title='No hemos encontrado notificaciones' />
+                    ) : <InfoMessage type='info' title='Sin resultados' subtitle='Las mediciones pendientes apareceran cuando sea creado un evento de tipo Servicio.' />
                     }
 
                     {

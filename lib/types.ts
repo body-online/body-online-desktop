@@ -95,7 +95,10 @@ export const eventSchema = z.object({
 export type EventSchema = z.infer<typeof eventSchema>;
 export interface EventProps extends EventSchema {
  _id: string;
- bodyRanges?: number[];
+ caravan: string;
+ user: string;
+ userType: string;
+ bodyRanges: number[];
 }
 export type NewEventButtonProps = {
  mode?: "chip" | "mini";

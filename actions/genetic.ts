@@ -52,8 +52,8 @@ export async function deleteGenetic(
   return { data: "success" };
  } catch (err: any) {
   const errorMessage: string =
-   err?.message ??
    err?.response?.data?.message ??
+   err?.message ??
    `Ha ocurrido un error al eliminar la genética`;
 
   return { error: errorMessage };

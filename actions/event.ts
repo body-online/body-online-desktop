@@ -11,7 +11,8 @@ export async function createEvent(event: EventSchema): Promise<{
  try {
   const user = await currentUser();
 
-  if (user?.type != "owner") return { error: "Error de permisos" };
+  if (event?.eventType != "body_measure" && user?.type != "owner")
+   return { error: "Error de permisos" };
   if (!user?.farmId) return { error: "No hemos encontrado organización" };
 
   await axios({
@@ -20,6 +21,8 @@ export async function createEvent(event: EventSchema): Promise<{
    data: {
     ...event,
     farmId: user.farmId,
+    userId: user.id,
+    userType: user.type,
    },
   });
 

@@ -11,7 +11,7 @@ import OptionSelector from '../ui/option-selector'
 import InfoMessage from '../ui/info'
 import Link from 'next/link'
 
-const SelectGenetic = ({ watch, setValue }: { watch: UseFormWatch<CattleSchema>; setValue: UseFormSetValue<CattleSchema> }) => {
+const SelectGenetic = ({ watch, setValue, setGeneticName }: { watch: UseFormWatch<CattleSchema>; setValue: UseFormSetValue<CattleSchema>; setGeneticName: (e: any) => void }) => {
     const [options, setOptions] = useState<{ value: string; label: string; }[]>();
     const [filteredGenetics, setFilteredGenetics] = useState<{ value: string; label: string; }[]>();
     const [searchTerm, setSearchTerm] = useState<string>();
@@ -44,7 +44,7 @@ const SelectGenetic = ({ watch, setValue }: { watch: UseFormWatch<CattleSchema>;
     }, [searchTerm]);
 
     return (
-        <div className="h-full flex flex-col gap-y-2">
+        <div className="h-full flex flex-col gap-y-3">
             <h3 className="semititle">Genética</h3>
             <label className='flex-center'>
                 <input type="text" className='input' placeholder='Buscar por genética...' value={searchTerm ?? ''}
@@ -69,7 +69,7 @@ const SelectGenetic = ({ watch, setValue }: { watch: UseFormWatch<CattleSchema>;
                             <OptionSelector
                                 value={watch('geneticId')}
                                 error={error}
-                                setValue={(e: any) => { return setValue('geneticId', e) }}
+                                setValue={(e: any) => { setGeneticName(options.find((i) => i.value === e)?.label); return setValue('geneticId', e) }}
                                 options={filteredGenetics ?? options}
                             />
             }

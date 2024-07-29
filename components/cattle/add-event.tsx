@@ -10,17 +10,20 @@ import { CattleProps, eventSchema, NewEventButtonProps } from '@/lib/types';
 import { enterModal } from '@/lib/constants';
 
 import BlackOutModal from '../ui/blackout-modal';
-import { EventIcon } from '../ui/icons';
+import { CloseIcon, EventIcon } from '../ui/icons';
 import EventForm from '../event-form';
+import { LayoutBody, LayoutHeader } from '../ui/default-layout';
 
-export function AddEventBtn({ defaultCattle, mode }: NewEventButtonProps) {
+export function AddEventBtn({ defaultCattle }: NewEventButtonProps) {
     const [isOpen, setIsOpen] = useState(false)
 
     const handleClose = () => {
+        reset();
         return setIsOpen(false)
     }
     const handleOpen = () => {
-        setIsOpen(true)
+        reset();
+        setIsOpen(true);
     }
 
     const {
@@ -37,46 +40,48 @@ export function AddEventBtn({ defaultCattle, mode }: NewEventButtonProps) {
 
     return (
         <>
+            <BlackOutModal isOpen={isOpen} handleClose={handleClose}>
+                <LayoutHeader>
+                    <div className="flex-between w-full container">
+                        <h2 className='semititle'>Crear evento</h2>
+                        <button
+                            type='button'
+                            disabled={isSubmitting}
+                            onClick={() => setIsOpen(false)}
+                            className='md:hover:opacity-100 md:opacity-50 transition-all disabled:opacity-30'
+                        >
+                            <CloseIcon fill='fill-cgray dark:fill-white' />
+                        </button>
+                    </div>
+                </LayoutHeader>
+
+                <EventForm
+                    defaultCattle={defaultCattle}
+                    handleSubmit={handleSubmit}
+                    // clearErrors={clearErrors}
+                    isSubmitting={isSubmitting}
+                    register={register}
+                    unregister={unregister}
+                    setValue={setValue}
+                    // setError={setError}
+                    errors={errors}
+                    reset={reset}
+                    watch={watch}
+                    handleCloseEventsModal={handleClose}
+                />
+            </BlackOutModal>
+
+
             <button
                 onClick={handleOpen}
-                className={`
-                    ${mode == 'chip' ? (
-                        'chip cgreen dark:bg-csemigreen flex-center gap-2'
-                    ) : mode === 'mini' ? (
-                        'rounded-full cgreen dark:bg-csemigreen h-6 sm:h-7 w-6 sm:w-7 flex-center'
-                    ) : (
-                        'primary-btn'
-                    )}`
-                }
+                className='h-max w-max rounded_btn bg-csemigreen dark:bg-clime flex-center px-3 gap-1'
             >
-                {mode != 'mini' ? <p>Crear evento</p> : null}
-                <EventIcon stroke="stroke-clime" />
+                <div className='flex-center gap-1'>
+                    <p className={`text-white dark:text-cblack font-medium`}>Crear evento</p>
+                    <EventIcon stroke='stroke-clime dark:stroke-cblack' />
+                </div>
             </button>
-            <BlackOutModal isOpen={isOpen} handleClose={handleClose}>
-                <motion.div
-                    onClick={(e) => e.stopPropagation()}
-                    variants={enterModal}
-                    initial="hidden"
-                    animate="visible"
-                    exit="exit"
-                    className='h-full flex flex-col overflow-auto'
-                >
-                    <EventForm
-                        defaultCattle={defaultCattle}
-                        handleSubmit={handleSubmit}
-                        clearErrors={clearErrors}
-                        isSubmitting={isSubmitting}
-                        register={register}
-                        unregister={unregister}
-                        setValue={setValue}
-                        setError={setError}
-                        errors={errors}
-                        reset={reset}
-                        watch={watch}
-                        handleCloseEventsModal={handleClose}
-                    />
-                </motion.div >
-            </BlackOutModal>
+
         </>
     )
 }

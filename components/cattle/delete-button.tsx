@@ -2,96 +2,67 @@
 
 import { useRouter } from 'next/navigation'
 import React, { useState } from 'react'
-import { motion } from 'framer-motion'
 import toast from 'react-hot-toast'
-import Modal from '../ui/modal'
 
 import { LoadingIcon, TrashIcon } from '../ui/icons'
 import { deleteCattle } from '@/actions/cattle'
-import { enterModal } from '@/lib/constants'
-import BlackOutModal from '../ui/blackout-modal'
-import Card from '../ui/card'
 import { useSession } from 'next-auth/react'
+import CardModal from '../ui/card-modal'
 
 const DeleteCattleBtn = ({ id, name }: { id: string, name: string }) => {
     const { data, status } = useSession()
     const [isLoading, setIsLoading] = useState<boolean>(false)
-    const [isOpen, setIsOpen] = useState<boolean>(false)
     const router = useRouter()
 
-    const handleOpen = () => {
-        document.body.style.overflow = "hidden";
-        setIsOpen(true)
-    }
-    const handleClose = () => {
-        document.body.style.overflow = "auto";
-        setIsOpen(false)
-    }
-
     const handleDelete = async () => {
-        const toastDeletingCattle = toast.loading('Eliminando...');
         setIsLoading(true)
         try {
             await deleteCattle(id);
-            handleClose()
+
             toast.success(`Invididuo eliminado`);
             return router.refresh();
         } catch (error) {
-            toast.error('Ha ocurrido un error al eliminar la individuo')
+            toast.error('Ha ocurrido un error al eliminar el individuo')
         } finally {
-            toast.dismiss(toastDeletingCattle)
             setIsLoading(false)
         }
     }
 
     if (status === 'loading') return <LoadingIcon />
     if (data?.user?.type != 'owner') return null;
+
     return (
-        <>
-            <button
-                className='rounded-full ring-0 md:hover:opacity-70 active:opacity-50 transition-all'
-                onClick={handleOpen}
-            >
-                <TrashIcon fill='fill-cgray dark:fill-white' />
-            </button>
+        <CardModal
+            cardLabel={'Eliminar individuo'}
+            isSubmitting={isLoading}
+            buttonIcon={<TrashIcon />}
+            buttonBg={'bg-red-600 dark:bg-red-500'}
+        >
+            <div className='m-auto max-w-lg px-default pb-3 md:pb-6'>
+                <div>
+                    <p>¿Realmente desea eliminar <b>{name}</b> de su lista de individuos?</p>
+                    <p>Esta acción es <b>irreversible</b>.</p>
+                </div>
 
-            <BlackOutModal isOpen={isOpen} handleClose={handleClose}>
-                <motion.div
-                    onClick={(e) => e.stopPropagation()}
-                    variants={enterModal}
-                    initial="hidden"
-                    animate="visible"
-                    exit="exit"
-                    className='m-auto max-w-lg'
-                >
-                    <Card headerLabel='Eliminar individuo'>
-
-                        <div className="mt-6">
-                            <p>¿Realmente desea eliminar <b>{name}</b> de su lista de individuos?</p>
-                            <p>Esta acción es <b>irreversible</b>.</p>
-                        </div>
-
-                        <div className="mt-6 flex-end gap-3">
-                            <button
-                                type="button"
-                                className="btn red"
-                                disabled={isLoading}
-                                onClick={handleDelete}
-                            >
-                                {isLoading ? (
-                                    <LoadingIcon />
-                                ) :
-                                    <>
-                                        <p>Eliminar</p>
-                                        <TrashIcon />
-                                    </>
-                                }
-                            </button>
-                        </div>
-                    </Card>
-                </motion.div>
-            </BlackOutModal>
-        </>
+                <div className="mt-6 flex-end gap-3">
+                    <button
+                        type="button"
+                        className="btn red"
+                        disabled={isLoading}
+                        onClick={handleDelete}
+                    >
+                        {isLoading ? (
+                            <LoadingIcon />
+                        ) :
+                            <>
+                                <p>Eliminar</p>
+                                <TrashIcon />
+                            </>
+                        }
+                    </button>
+                </div>
+            </div>
+        </CardModal>
     )
 }
 

@@ -4,7 +4,6 @@ import {
     ColumnDef,
     ColumnFiltersState,
     SortingState,
-    VisibilityState,
     flexRender,
     getCoreRowModel,
     getFilteredRowModel,
@@ -22,10 +21,16 @@ import {
     TableRow,
 } from "@/components/ui/table";
 
+import { ArrowsIcon, SearchIcon } from '../ui/icons';
 import React, { useEffect, useState } from "react";
+
+import toast from 'react-hot-toast';
 import InfoMessage from '../ui/info';
-import { SearchIcon } from '../ui/icons';
-import ResizablePanel from '../ui/resizable-panel';
+import { getGenetics } from '@/data/genetic';
+import { GeneticProps } from '@/lib/types';
+import { columnsGenetic } from './columns';
+import LoadingRowsSkeleton from '../ui/loading-rows-skeleton';
+
 
 interface DataTableProps<TData, TValue> {
     columns: ColumnDef<TData, TValue>[];
@@ -38,9 +43,7 @@ export function GeneticsDataTable<TData, TValue>({
 }: DataTableProps<TData, TValue>) {
     const [searchTerm, setSearchTerm] = useState("")
     const [sorting, setSorting] = React.useState<SortingState>([]);
-    const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-        [],
-    );
+    const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
 
     const table = useReactTable({
         data: genetics,
@@ -77,34 +80,35 @@ export function GeneticsDataTable<TData, TValue>({
     const onSearchChange = () => {
         table.getColumn("name")?.setFilterValue(searchTerm);
     }
-
     return (
-        <div className='overflow-auto relative w-full flex flex-col h-full max-h-96'>
-            {genetics.length > 0 && (
-                <label className='flex flex-wrap gap-3 mb-3 max-w-sm'>
-                    <div className="flex input gap-3 items-center w-full">
-                        <SearchIcon fill={`${!genetics ? 'fill-slate-300' : 'fill-slate-400'}`} />
-                        <input
-                            className={`text-base h-12 border-none bg-transparent focus:outline-none w-full placeholder:text-slate-400 placeholder:font-normal disabled:opacity-50 md:max-w-sm`}
-                            disabled={!genetics.length}
-                            placeholder="Buscar por nombre..."
-                            value={searchTerm}
-                            onChange={({ target }) => setSearchTerm(target.value)}
-                        />
-                    </div>
-                </label>
-            )}
+        <div>
+            <form onSubmit={(e) => { e.preventDefault(); }}>
+                <div className="px-3 md:px-5">
+                    <label>
+                        <div className="flex input gap-3 items-center w-full max-w-sm">
+                            <SearchIcon fill={`fill-slate-400`} />
+                            <input
+                                className={`text-base h-12 border-none bg-transparent focus:outline-none w-full placeholder:text-slate-400 placeholder:font-normal disabled:opacity-50 md:max-w-sm`}
+                                disabled={!genetics}
+                                placeholder="Buscar ubicación..."
+                                value={searchTerm}
+                                onChange={({ target }) => setSearchTerm(target.value)}
+                            />
+                        </div>
+                    </label>
+                </div>
+            </form>
 
-            <div className='h-[65vh] sm:h-[50vh] overflow-auto'>
-                {table.getRowModel().rows?.length ? (
-                    <Table>
+            <div className='overflow-auto relative w-full flex flex-col max-h-[70vh]'>
+                {genetics.length ? (
+                    <Table className='relative'>
                         <TableHeader className='sticky top-0'>
                             {table.getHeaderGroups().map((headerGroup) => {
                                 return (
-                                    <TableRow key={headerGroup.id} className='w-min'>
+                                    <TableRow key={headerGroup.id}>
                                         {headerGroup.headers.map((header) => {
                                             return (
-                                                <TableHead key={header.id} className='w-min'>
+                                                <TableHead key={header.id}>
                                                     {flexRender(
                                                         header.column.columnDef.header,
                                                         header.getContext(),
@@ -133,37 +137,20 @@ export function GeneticsDataTable<TData, TValue>({
                         </TableBody>
                     </Table>
                 ) : (
-                    <div className="px-4 md:px-5 py-6">
-                        <InfoMessage
-                            type={"censored"}
-                            title={`Sin resultados`}
-                            subtitle={searchTerm ? `No hemos econtrado resultados para "${searchTerm}"` : undefined}
-                        />
-                    </div>
+                    <InfoMessage
+                        type='censored'
+                        title='No hemos encontrado resultados'
+                        subtitle={!searchTerm ? 'Debes crear un ubicaciones para continuar' :
+                            `No hemos encontrado caravanas que contengan ${searchTerm}`}
+                    />
                 )}
             </div>
 
-        </div >
+            <div className="flex-end gap-3 p-3 md:p-5">
+            </div>
+        </div>
     );
+
 }
 
 export default GeneticsDataTable;
-
-const ArrowIcon = ({ direction }: { direction: "left" | "right" }) => {
-    return (
-        <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={1.5}
-            stroke="currentColor"
-            className={`w-4 h-4 ${direction === "right" ? "rotate-180" : ""}`}
-        >
-            <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M15.75 19.5L8.25 12l7.5-7.5"
-            />
-        </svg>
-    );
-};

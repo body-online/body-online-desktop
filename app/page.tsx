@@ -13,7 +13,11 @@ import PageHeader from '@/components/ui/header';
 import { currentUser } from '@/lib/auth';
 import Card from '@/components/ui/card';
 import LoadingRowsSkeleton from '@/components/ui/loading-rows-skeleton';
-import CardHeader from '@/components/ui/card-header';
+import CreateCattle from '@/components/cattle/create-cattle';
+import AddEventBtn from '@/components/cattle/add-event';
+import AddGeneticBtn from '@/components/genetic/add-genetic';
+import AddLocationBtn from '@/components/location/add-location';
+import CreateOperator from '@/components/operators/create-operator';
 
 export type SearchParamsProps = {
   pageOperators?: string;
@@ -43,57 +47,74 @@ export default async function Home({ searchParams }: { searchParams: SearchParam
 
   return (
     <div className='h-full w-full'>
-      <PageHeader>
-        <h1 className="semititle">
-          {user?.farmName}
-        </h1>
-        <Card paddings='py-4 md:py-6 px-0 max-w-max'>
-          <div className="px-3 md:px-5 max-w-max w-full overflow-auto">
-            <div className="flex items-end justify-end gap-2 w-max">
-              <Suspense fallback={<LoadingCounter />}>
-                <CattleCounter />
-              </Suspense>
+      <div className="container px-default py-default flex flex-col lg:flex-row gap-6">
+        <div className="flex flex-col gap-6 max-w-lg">
+          <h1 className="title">
+            {user?.farmName}
+          </h1>
 
-              <Suspense fallback={<LoadingCounter />}>
-                <LocationCounter />
-              </Suspense>
+          <Card paddings='py-4 md:py-6 px-0'>
+            <div className="px-3 md:px-5 w-full overflow-auto">
+              <div className="flex items-end justify-evenly gap-2 w-max mx-auto">
+                <Suspense fallback={<LoadingCounter />}>
+                  <CattleCounter />
+                </Suspense>
 
-              <Suspense fallback={<LoadingCounter />}>
-                <GeneticCounter />
-              </Suspense>
+                <Suspense fallback={<LoadingCounter />}>
+                  <LocationCounter />
+                </Suspense>
 
-              <Suspense fallback={<LoadingCounter />}>
-                <EventCounter />
-              </Suspense>
+                <Suspense fallback={<LoadingCounter />}>
+                  <GeneticCounter />
+                </Suspense>
 
-              <Suspense fallback={<LoadingCounter />}>
-                <OperatorsCounter />
-              </Suspense>
+                <Suspense fallback={<LoadingCounter />}>
+                  <EventCounter />
+                </Suspense>
+
+                <Suspense fallback={<LoadingCounter />}>
+                  <OperatorsCounter />
+                </Suspense>
+              </div>
             </div>
+          </Card>
+
+
+          <div className="px-3 md:px-5 py-2 flex flex-wrap justify-center gap-4 w-full ">
+            <AddGeneticBtn />
+            <AddLocationBtn />
+            <CreateCattle />
+            <AddEventBtn />
+            <CreateOperator />
           </div>
-        </Card>
-        <h1 className='hidden'>Inicio</h1>
-      </PageHeader>
 
 
-      <div className="container px-default w-full py-default space-y-6">
 
-        <div className="grid gap-6 lg:grid-cols-2 w-full">
-          <Suspense
-            key={`notifications-${searchParams?.pageNotifications}`}
-            fallback={<Card headerLabel='Notificaciones'><div className="w-full h-60 flex-center"><LoadingRowsSkeleton /></div></Card>}
+          <Suspense key={`notifications-${searchParams?.pageNotifications}`} fallback={
+            <Card headerLabel='Mediciones pendientes'>
+              <div className="w-full h-60 flex-start overflow-y-hidden pt-4">
+                <LoadingRowsSkeleton />
+              </div>
+            </Card>}
           >
             <NotificationsPage params={serializeParams(searchParams)} />
           </Suspense>
 
           <Suspense
             key={`operators-${searchParams?.pageOperators}`}
-            fallback={<Card headerLabel='Usuarios'><div className="w-full h-60 flex-center"><LoadingRowsSkeleton /></div></Card>}
+            fallback={
+              <Card headerLabel='Usuarios'>
+                <div className="w-full h-60 flex-center pt-4">
+                  <LoadingRowsSkeleton />
+                </div>
+              </Card>
+            }
           >
             <OperatorsPage params={serializeParams(searchParams)} />
           </Suspense>
+        </div>
 
-
+        <div className='w-full'>
         </div>
       </div>
     </div >

@@ -6,13 +6,15 @@ import React, { useEffect, useState } from 'react'
 import { CattleProps, EventSchema } from '@/lib/types'
 
 import { BodyMeasureIcon, CattleBirthIcon, DeathIcon, InfoIcon, LoadingIcon, MiniAddIcon, NotPregnantIcon, PregnantIcon } from './ui/icons'
-import { LayoutBottom } from './ui/default-layout'
+import { LayoutBody, LayoutBottom } from './ui/default-layout'
 import { createEvent } from '@/actions/event'
 import SelectCattle from './cattle/select-cattle'
 import { detailsByEvent, eventTypesList } from '@/lib/constants'
 import SelectEventType from './events/select-type'
 import SelectEventDetail from './events/select-details'
 import StepIndicator from './ui/step-indicator'
+import Card from './ui/card'
+import StepsContainer from './ui/steps-container'
 
 type EventFormProps = {
     handleSubmit: UseFormHandleSubmit<EventSchema>;
@@ -25,26 +27,25 @@ type EventFormProps = {
     setValue: UseFormSetValue<EventSchema>;
     handleCloseEventsModal: () => void;
     defaultCattle?: CattleProps;
-    defaultDate?: string | Date;
-    setError: UseFormSetError<EventSchema>;
-    clearErrors: UseFormClearErrors<EventSchema>;
+    // defaultDate?: string | Date;
+    // setError: UseFormSetError<EventSchema>;
+    // clearErrors: UseFormClearErrors<EventSchema>;
 };
 
-const EventForm = ({ defaultCattle, defaultDate, handleSubmit, register, unregister, isSubmitting, errors, reset, watch, setValue, setError, handleCloseEventsModal, clearErrors }: EventFormProps) => {
+const EventForm = ({ defaultCattle, handleSubmit, register, unregister, isSubmitting, errors, reset, watch, setValue, handleCloseEventsModal }: EventFormProps) => {
     const [step, setStep] = useState<number>(defaultCattle ? 1 : 0)
     const [selectedCattle, setSelectedCattle] = useState<CattleProps | undefined>(defaultCattle)
     const router = useRouter();
 
     const onSubmit: SubmitHandler<EventSchema> = async (data: EventSchema) => {
-        console.log(data)
         try {
             const { error } = await createEvent(data);
             if (error) return toast.error(error);
 
             reset();
             handleCloseEventsModal();
-            router.refresh();
             toast.success('Evento creado')
+            return router.refresh();
         } catch (error) {
             toast.error("Ha ocurrido un error al crear el evento");
         }
@@ -66,12 +67,14 @@ const EventForm = ({ defaultCattle, defaultDate, handleSubmit, register, unregis
         unregister('eventDetail');
         unregister('eventType');
         unregister('eventDate');
+        unregister('observations');
     }, [selectedCattle])
 
     useEffect(() => { // set empty fields on change event type
         unregister('measure');
         unregister('eventDetail');
         unregister('eventDate');
+        unregister('observations');
     }, [eventType])
 
     useEffect(() => { // set cattle id equal to default cattle value
@@ -83,148 +86,121 @@ const EventForm = ({ defaultCattle, defaultDate, handleSubmit, register, unregis
     return (
         <>
             {/* resume */}
-            {/* <div className="sticky top-0 z-50 px-default border-b custom-border">
-                <div className="flex divide-x divide-slate-200 dark:divide-clightgray items-center w-max h-max">
-                    <StepIndicator
-                        label='Caravana'
-                        value={selectedCattle?.caravan}
-                        active={step == 0}
-                    />
-                    <StepIndicator
-                        label='Tipo de evento'
-                        value={watch('eventType') ? eventTypesList.find((i) => { return i.value === eventType })?.label : undefined}
-                        active={step == 1}
-                    />
-                    <StepIndicator
-                        label='Detalle / Motivo'
-                        value={eventDetail ?? measure}
-                        active={step == 2}
-                    />
-                    <StepIndicator
-                        label='Detalle / Motivo'
-                        value={watch('eventDate') ? new Date(watch('eventDate')).toLocaleDateString() : undefined}
-                        active={step == 3}
-                    />
-                    <StepIndicator
-                        label='Evento'
-                        value={}
-                        active={}
-                    />
-                    <StepIndicator
-                        label='Detalle'
-                        value={}
-                        active={}
-                    />
-                    <StepIndicator
-                        label='Fecha'
-                        value={}
-                        active={}
-                    />
-                    <div>
-                        <p className={`text-xs ${step == 0 ? 'text-caqua dark:text-clime' : 'opacity-50'}`}></p>
-                        <p>{}</p>
-                    </div>
-                    <div>
-                        <p className={`text-xs ${step == 1 ? 'text-caqua dark:text-clime' : 'opacity-50'}`}></p>
-                        <p>{watch('eventType') ? eventTypesList.find((i) => { return i.value === eventType })?.label : "-"}</p>
-                    </div>
-                    <div>
-                        <p className={`text-xs ${step == 2 ? 'text-caqua dark:text-clime' : 'opacity-50'}`}></p>
-                        <p></p>
-                    </div>
-                    <div>
-                        <p className={`text-xs ${step == 3 ? 'text-caqua dark:text-clime' : 'opacity-50'}`}></p>
-                        <p>{watch('eventDate') ? `${new Date(watch('eventDate')).toLocaleDateString()}` : '-'}</p>
-                    </div>
-                    <div>
-                        <p className='text-caqua dark:text-clime text-sm truncate'>
-                        </p>
-                    </div>
-                </div>
-            </div> */}
+            <StepsContainer>
+                <StepIndicator
+                    label='Individuo'
+                    value={selectedCattle?.caravan}
+                    active={step == 0}
+                    step={'1'}
+                />
+                <StepIndicator
+                    label='Tipo de evento'
+                    value={watch('eventType') ? eventTypesList.find((i) => { return i.value === eventType })?.label : undefined}
+                    active={step == 1}
+                    step={'2'}
+                />
+                <StepIndicator
+                    label='Detalle / Motivo'
+                    value={eventType === 'pregnant' ? 'No requiere' : (eventDetail ?? measure)}
+                    active={step == 2}
+                    step={'3'}
+                />
+                <StepIndicator
+                    label='Fecha'
+                    value={(lastEventDate && lastEventDate < new Date(watch('eventDate'))) ? new Date(watch('eventDate')).toLocaleDateString() : undefined}
+                    active={step == 3}
+                    step={'4'}
+                />
+            </StepsContainer>
 
-            {/* form */}
-            {isSubmitting ? (
-                <div className="flex-center gap-2 py-default">
-                    <LoadingIcon />
-                    <p>Creando evento...</p>
-                </div>
-            ) : (
-                <div className='h-full flex flex-col gap-y-3 overflow-auto w-full'>
-                    <form onSubmit={(e) => { return e.preventDefault() }} className="py-default mx-auto max-w-2xl w-full px-default">
-                        {
-                            step == 0 ? (
-                                <SelectCattle selectedCattle={selectedCattle} setSelectedCattle={setSelectedCattle} />
-                            ) : step == 1 && selectedCattle ? (
-                                <SelectEventType
-                                    watch={watch}
-                                    setValue={setValue}
-                                    unregister={unregister}
-                                    isSubmitting={isSubmitting}
-                                    selectedCattle={selectedCattle}
-                                />
-                            ) : step == 2 && selectedCattle ? (
-                                <SelectEventDetail
-                                    eventType={eventType}
-                                    eventDetail={eventDetail}
-                                    selectedMeasure={measure}
-                                    setValue={setValue}
-                                    isSubmitting={isSubmitting}
-                                    selectedCattle={selectedCattle}
-                                />
-                            ) : step == 3 ? (
-                                <div className='h-full flex flex-col justify-between gap-y-3'>
-                                    {/* <h3 className='semititle'>Detalles</h3> */}
-                                    {lastEventDate &&
-                                        <div className='py-4 rounded-lg border custom-border px-3'>
-                                            <div className="flex items-center gap-2">
-                                                <InfoIcon fill='fill-caqua dark:fill-clime' />
-                                                <p>
-                                                    La fecha de tu evento debe ser posterior a
-                                                    <b className='text-caqua dark:text-clime'>
-                                                        {' '}{new Date(lastEventDate).getDate()}/{new Date(lastEventDate)?.getMonth() + 1}/{new Date(lastEventDate)?.getFullYear()}
-                                                    </b>
-                                                </p>
+            <LayoutBody>
+                {isSubmitting ? (
+                    <div className="flex-center h-full gap-2">
+                        <LoadingIcon />
+                        <p className='text-base'>Creando evento...</p>
+                    </div>
+                ) : (
+
+                    <form onSubmit={(e) => { return e.preventDefault() }} className=' px-default py-default'>
+                        {step == 0 ? (
+                            <SelectCattle
+                                selectedCattle={selectedCattle}
+                                setSelectedCattle={(e) => {
+                                    setSelectedCattle(e)
+                                    return setValue('cattleId', e._id)
+                                }}
+                            />
+                        ) : step == 1 && selectedCattle ? (
+                            <SelectEventType
+                                watch={watch}
+                                setValue={setValue}
+                                unregister={unregister}
+                                isSubmitting={isSubmitting}
+                                selectedCattle={selectedCattle}
+                            />
+                        ) : step == 2 && selectedCattle ? (
+                            <SelectEventDetail
+                                eventType={eventType}
+                                eventDetail={eventDetail}
+                                selectedMeasure={measure}
+                                setValue={setValue}
+                                isSubmitting={isSubmitting}
+                                selectedCattle={selectedCattle}
+                            />
+                        ) : step == 3 ? (
+                            <div className='h-full flex flex-col justify-between gap-y-3'>
+                                {lastEventDate &&
+                                    <div className="mb-2">
+                                        <Card>
+                                            <div className="flex-center w-max gap-2 mb-3">
+                                                <InfoIcon />
+                                                <h2 className='uppercase text-sm font-medium tracking-wide'>Importante</h2>
                                             </div>
-                                            <p className='ml-7 text-sm mt-2'>
-                                                Último evento registrado del individuo {selectedCattle?.caravan}
+                                            <p>
+                                                La fecha del evento debe ser posterior a
+                                                <b>
+                                                    {' '}{new Date(lastEventDate).getDate()}/{new Date(lastEventDate)?.getMonth() + 1}/{new Date(lastEventDate)?.getFullYear()}
+                                                </b>
                                             </p>
+                                            <p className='text-sm opacity-50 mt-1'>
+                                                (Último evento registrado del individuo {selectedCattle?.caravan})
+                                            </p>
+                                        </Card>
+                                    </div>
+                                }
+                                <div>
+                                    <label htmlFor="eventDate">
+                                        <p className="input_label">Fecha del evento*</p>
+                                        <input
+                                            disabled={isSubmitting}
+                                            className='input min-w-[50%] w-full'
+                                            value={watch('eventDate') as any ?? ''}
+                                            {...register('eventDate')}
+                                            type='datetime-local'
+                                        />
+                                        <div className="input_error">
+                                            {errors.eventDate && (<p>{`${errors.eventDate.message}`}</p>)}
                                         </div>
-                                    }
-                                    <div>
-                                        <label htmlFor="eventDate">
-                                            <p className="input_label">Fecha del evento*</p>
-                                            <input
-                                                disabled={isSubmitting}
-                                                className='input min-w-[50%] w-full'
-                                                value={watch('eventDate') as any ?? ''}
-                                                {...register('eventDate')}
-                                                type='datetime-local'
-                                            />
-                                            <div className="input_error">
-                                                {errors.eventDate && (<p>{`${errors.eventDate.message}`}</p>)}
-                                            </div>
-                                        </label>
-                                    </div>
-                                    <div className='mt-auto'>
-                                        <label htmlFor="eventObservations">
-                                            <p className="input_label">Observaciones*</p>
-                                            <textarea
-                                                disabled={isSubmitting}
-                                                {...register('observations')}
-                                                className='textarea'
-                                                placeholder='Observaciones...'
-                                            >
-                                            </textarea>
-                                        </label>
-                                    </div>
+                                    </label>
                                 </div>
-                            ) : null
-                        }
+                                <div>
+                                    <label htmlFor="eventObservations">
+                                        <p className="input_label">Observaciones*</p>
+                                        <textarea
+                                            disabled={isSubmitting}
+                                            {...register('observations')}
+                                            className='h-32 md:h-60 textarea'
+                                            placeholder='Observaciones...'
+                                        >
+                                        </textarea>
+                                    </label>
+                                </div>
+                            </div>
+                        ) : null}
                     </form>
-                </div>
-            )
-            }
+                )
+                }
+            </LayoutBody>
 
             {/* send and control buttons */}
             <LayoutBottom>

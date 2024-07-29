@@ -29,6 +29,7 @@ import InfoMessage from '../ui/info';
 import { getEvents } from '@/data/events';
 import { EventProps } from '@/lib/types';
 import { columnsEvent } from './columns';
+import LoadingRowsSkeleton from '../ui/loading-rows-skeleton';
 
 export function EventsDataTable({ totalAmount, totalEvents }: { totalAmount?: number; totalEvents?: number }) {
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
@@ -41,42 +42,30 @@ export function EventsDataTable({ totalAmount, totalEvents }: { totalAmount?: nu
     const [limit, setLimit] = useState<number>(10)
     const [page, setPage] = useState<number>(1)
 
-    const table = useReactTable(
-        {
-            data: events,
-            columns: columnsEvent,
-            getCoreRowModel: getCoreRowModel(),
-            getPaginationRowModel: getPaginationRowModel(),
-            getSortedRowModel: getSortedRowModel(),
-            getFilteredRowModel: getFilteredRowModel(),
+    const table = useReactTable({
+        data: events,
+        columns: columnsEvent,
+        getCoreRowModel: getCoreRowModel(),
+        getPaginationRowModel: getPaginationRowModel(),
+        getSortedRowModel: getSortedRowModel(),
+        getFilteredRowModel: getFilteredRowModel(),
 
-            onSortingChange: setSorting,
-            onColumnFiltersChange: setColumnFilters,
-            // onColumnVisibilityChange: setColumnVisibility,
-            // onRowSelectionChange: setRowSelection,
-
-            initialState: {
-                pagination: {
-                    pageSize: 50, //custom default page size
-                },
-            },
-            state: {
-                sorting,
-                columnFilters,
-                // columnVisibility,
-                // rowSelection,
-            },
-        }
-    );
+        onSortingChange: setSorting,
+        onColumnFiltersChange: setColumnFilters,
+        state: {
+            sorting,
+            columnFilters,
+        },
+    });
 
     const searchEvents = async () => {
         setIsLoading(true)
         try {
             const { data } = await getEvents({ page, limit })
-
-            if (data?.totalPages) setTotalPages(Number(data.totalPages))
-            if (data?.events) setEvents(data.events)
-
+            if (data) {
+                setTotalPages(Number(data.totalPages) > 0 ? Number(data.totalPages) : 1)
+                setEvents(data.events)
+            }
         } catch (error) {
             toast.error('Ha ocurrido un error al encontrar los resultados')
         } finally {
@@ -85,13 +74,14 @@ export function EventsDataTable({ totalAmount, totalEvents }: { totalAmount?: nu
     }
 
     useEffect(() => {
-        searchEvents()
+        searchEvents();
     }, [page, totalAmount, limit, totalEvents])
 
     useEffect(() => {
         const handler = setTimeout(() => {
+            setPage(1)
             searchEvents();
-        }, 300);
+        }, 500);
 
         return () => {
             clearTimeout(handler);
@@ -99,10 +89,9 @@ export function EventsDataTable({ totalAmount, totalEvents }: { totalAmount?: nu
     }, [searchTerm])
 
     return (
-        <div className='space-y-3'>
+        <div>
             <form onSubmit={(e) => { e.preventDefault(); searchEvents() }}>
-
-                <div className=" p-3 md:p-5">
+                <div className="px-3 md:px-5">
                     <label>
                         <div className="flex input gap-3 items-center w-full max-w-sm">
                             <SearchIcon fill={`${isLoading ? 'fill-slate-300' : 'fill-slate-400'}`} />
@@ -118,10 +107,10 @@ export function EventsDataTable({ totalAmount, totalEvents }: { totalAmount?: nu
                 </div>
             </form>
 
-            <div className='overflow-auto relative w-full flex flex-col h-full max-h-96'>
+            <div className='overflow-auto relative w-full flex flex-col max-h-[70vh]'>
                 {isLoading ? (
-                    <div className='py-default'>
-                        <LoadingIcon />
+                    <div className='py-default px-default'>
+                        <LoadingRowsSkeleton />
                     </div>
                 ) : (
                     <>
@@ -160,18 +149,23 @@ export function EventsDataTable({ totalAmount, totalEvents }: { totalAmount?: nu
                                         </TableRow>
                                     ))}
                                 </TableBody>
-                            </Table> : <InfoMessage type='censored' title='No hemos encontrado resultados' />
+                            </Table> : <InfoMessage
+                                type='censored'
+                                title='No hemos encontrado resultados'
+                                subtitle={!searchTerm ? 'Debes crear un evento para continuar' :
+                                    `No hemos encontrado caravanas que contengan ${searchTerm}`}
+                            />
                         }
                     </>
                 )}
             </div>
 
             <div className="flex-end gap-3 p-3 md:p-5">
-                <label className='pagination'>
-                    <p className='text-xs pl-2 m-auto'>Cantidad de filas</p>
+                <label className='pagination px-3'>
+                    <p className='text-xs pl-2 m-auto'>Filas</p>
                     <select
                         disabled={isLoading}
-                        className='dark:bg-cgray dark:text-white'
+                        className='dark:bg-cgray dark:text-white text-xs focus:outline-none active:outline-none'
                         value={limit}
                         onChange={({ target }) => { setPage(1); setLimit(Number(target.value)) }}
                     >
@@ -180,6 +174,7 @@ export function EventsDataTable({ totalAmount, totalEvents }: { totalAmount?: nu
                         <option value="30">30</option>
                         <option value="40">40</option>
                         <option value="50">50</option>
+                        <option value="60">60</option>
                     </select>
                 </label>
 
@@ -188,12 +183,22 @@ export function EventsDataTable({ totalAmount, totalEvents }: { totalAmount?: nu
                         <button
                             className="table_btn_pag"
                             disabled={page === 1}
+                            onClick={() => setPage(1)}
+                        >
+                            <div className="flex">
+                                <ArrowsIcon direction="rotate-90 -mr-4" />
+                                <ArrowsIcon direction="rotate-90" />
+                            </div>
+                        </button>
+                        <button
+                            className="table_btn_pag"
+                            disabled={page === 1}
                             onClick={() => setPage(page - 1)}
                         >
                             <ArrowsIcon direction="rotate-90" />
                         </button>
 
-                        <p className="text-xs px-2 m-auto">Pág. {page} de {totalPages}</p>
+                        <p className="text-xs px-2 m-auto">{page} / {totalPages}</p>
 
                         <button
                             className="table_btn_pag"
@@ -202,33 +207,23 @@ export function EventsDataTable({ totalAmount, totalEvents }: { totalAmount?: nu
                         >
                             <ArrowsIcon direction="-rotate-90" />
                         </button>
+                        <button
+                            className="table_btn_pag"
+                            disabled={page === totalPages || totalPages === 1 || !totalPages}
+                            onClick={() => setPage(totalPages)}
+                        >
+                            <div className="flex">
+                                <ArrowsIcon direction="-rotate-90 -mr-4" />
+                                <ArrowsIcon direction="-rotate-90" />
+                            </div>
+                        </button>
                     </div>
 
                 }
             </div>
         </div >
-
-
     );
+
 }
 
 export default EventsDataTable;
-
-const ArrowIcon = ({ direction }: { direction: "left" | "right" }) => {
-    return (
-        <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={1.5}
-            stroke="currentColor"
-            className={`w-4 h-4 ${direction === "right" ? "rotate-180" : ""}`}
-        >
-            <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M15.75 19.5L8.25 12l7.5-7.5"
-            />
-        </svg>
-    );
-};

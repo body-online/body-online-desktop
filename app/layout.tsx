@@ -54,8 +54,8 @@ export default async function RootLayout({
           ></script>
         </head>
         <body className={`body`}>
-          <Navbar user={session?.user} />
           <Providers>
+            <Navbar user={session?.user} />
             {children}
           </Providers>
         </body>
