@@ -1,27 +1,28 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
-import React, { useState } from 'react'
 import toast from 'react-hot-toast'
+import { useState } from 'react'
+
+import { deleteGenetic } from '@/actions/genetic'
 
 import { LoadingIcon, TrashIcon } from '../ui/icons'
-import { deleteGenetic } from '@/actions/genetic'
-import { useSession } from 'next-auth/react'
-import CardModal from '../ui/card-modal'
+import CloseBtn from '../ui/close-btn'
+import Modal from '../ui/modal'
 
-const DeleteGeneticBtn = ({ id, name }: { id: string, name: string }) => {
-    const { data, status } = useSession()
+const DeleteGeneticBtn = ({ id, name, searchGenetics }: { id: string, name: string; searchGenetics: () => void }) => {
+    const [isOpen, setIsOpen] = useState<boolean>(false)
     const [isLoading, setIsLoading] = useState<boolean>(false)
-    const router = useRouter()
 
     const handleDelete = async () => {
         setIsLoading(true)
         try {
             const { error } = await deleteGenetic(id);
-            if (error) { return toast.error(error) }
-
+            if (error) {
+                return toast.error(error ?? 'Error al borrar la genética')
+            }
             toast.success(`Genética eliminada`);
-            return router.refresh();
+            if (searchGenetics)
+                searchGenetics()
         } catch (error) {
             toast.error('Ha ocurrido un error al eliminar la genética')
         } finally {
@@ -29,41 +30,51 @@ const DeleteGeneticBtn = ({ id, name }: { id: string, name: string }) => {
         }
     }
 
-    if (status === 'loading') return <LoadingIcon />
-    if (data?.user?.type != 'owner') return null;
-
     return (
-        <CardModal
-            cardLabel={'Eliminar genética'}
-            isSubmitting={isLoading}
-            buttonIcon={<TrashIcon />}
-            buttonBg={'bg-red-600 dark:bg-red-500'}
-        >
-            <div className='m-auto max-w-lg px-default pb-3 md:pb-6'>
-                <div>
-                    <p>¿Realmente desea eliminar <b>{name}</b> de su lista de genéticas?</p>
-                    <p>Esta acción es <b>irreversible</b>.</p>
-                </div>
+        <>
+            <button className='rounded_btn' onClick={() => setIsOpen(true)}>
+                <TrashIcon fill='fill-cgray dark:fill-white' />
+            </button>
 
-                <div className="mt-6 flex-end gap-3">
-                    <button
-                        type="button"
-                        className="btn red"
-                        disabled={isLoading}
-                        onClick={handleDelete}
-                    >
-                        {isLoading ? (
-                            <LoadingIcon />
-                        ) :
-                            <>
-                                <p>Eliminar</p>
-                                <TrashIcon />
-                            </>
-                        }
-                    </button>
+            <Modal
+                handleClose={() => setIsOpen(false)}
+                isOpen={isOpen}
+
+            >
+                <div className='p-4 w-full card'>
+                    <div className="flex-between mb-4">
+                        <p className="semititle">
+                            Eliminar genética
+                        </p>
+                        <CloseBtn handleClose={() => setIsOpen(false)} />
+                    </div>
+                    <p>
+                        ¿Realmente desea eliminar <b>{name}</b> de su lista de genéticas?
+                    </p>
+                    <p>
+                        Esta acción es <b>irreversible</b>.
+                    </p>
+
+                    <div className="mt-6 flex-end gap-3">
+                        <button
+                            type="button"
+                            className="rounded_btn red"
+                            disabled={isLoading}
+                            onClick={handleDelete}
+                        >
+                            {isLoading ? (
+                                <LoadingIcon />
+                            ) :
+                                <>
+                                    <p>Eliminar</p>
+                                    <TrashIcon />
+                                </>
+                            }
+                        </button>
+                    </div>
                 </div>
-            </div>
-        </CardModal>
+            </Modal>
+        </>
     )
 }
 

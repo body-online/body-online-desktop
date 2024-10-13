@@ -35,6 +35,22 @@ export const CloseIcon = ({ fill, sizes }: { fill?: string; sizes?: string }) =>
 }
 
 
+export const FilterIcon = ({ fill, sizes }: { fill?: string; sizes?: string }) => {
+    return (
+        <div>
+            <svg
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+                className={`${sizes ?? 'w-5 h-5'} ${fill ? fill : `fill-white`}`}
+            >
+                <path
+                    d="M6.35376 2H17.76C18.9179 2 19.4968 2 19.9359 2.23248C20.2902 2.42008 20.5799 2.70982 20.7675 3.06411C21 3.50318 21 4.08213 21 5.24004C21 5.90205 21 6.23305 20.9197 6.54222C20.8543 6.794 20.75 7.03403 20.6105 7.25364C20.4393 7.5233 20.1973 7.74915 19.7134 8.20085L14.7707 12.814C14.1445 13.3985 13.8314 13.6907 13.6657 14.072C13.5 14.4533 13.5 14.8816 13.5 15.7382V19.4944C13.5 19.9292 13.5 20.1466 13.4352 20.3398C13.378 20.5108 13.2844 20.6674 13.1609 20.7987C13.0213 20.9473 12.8299 21.0502 12.4469 21.2561C11.4754 21.7782 10.9896 22.0393 10.5929 21.9891C10.2467 21.9452 9.9346 21.7587 9.73207 21.4745C9.5 21.1489 9.5 20.5974 9.5 19.4944V15.5708C9.5 14.7948 9.5 14.4068 9.36161 14.0543C9.22322 13.7019 8.9592 13.4176 8.43117 12.849L4.12018 8.20635C3.67434 7.72622 3.45142 7.48615 3.30019 7.20607C3.20433 7.02853 3.13032 6.84005 3.07976 6.64473C3 6.33658 3 6.00897 3 5.35376C3 4.08825 3 3.45549 3.27603 2.98614C3.44848 2.69289 3.69289 2.44848 3.98614 2.27603C4.45549 2 5.08825 2 6.35376 2Z"
+                >
+                </path>
+            </svg>
+        </div>
+    )
+}
 export const MoonIcon = ({ fill }: { fill?: string }) => {
     return (
         <div>
@@ -64,14 +80,14 @@ export const PCIcon = () => {
 }
 
 
-export const CreateAccountIcon = ({ fill }: { fill?: string }) => {
+export const CreateAccountIcon = ({ fill, sizes }: { fill?: string; sizes?: string }) => {
     return (
         <div>
             <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 20 20"
                 fill="currentColor"
-                className={`${fill ? fill : `fill-white`} h-5 w-5`}
+                className={`${fill ? fill : `fill-white`} ${sizes ?? 'h-5 w-5'}`}
             >
                 <path d="M10 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0ZM1.615 16.428a1.224 1.224 0 0 1-.569-1.175 6.002 6.002 0 0 1 11.908 0c.058.467-.172.92-.57 1.174A9.953 9.953 0 0 1 7 18a9.953 9.953 0 0 1-5.385-1.572ZM16.25 5.75a.75.75 0 0 0-1.5 0v2h-2a.75.75 0 0 0 0 1.5h2v2a.75.75 0 0 0 1.5 0v-2h2a.75.75 0 0 0 0-1.5h-2v-2Z" />
             </svg>
@@ -93,13 +109,13 @@ export const SendIcon = ({ fill }: { fill?: string }) => {
     )
 }
 
-export const TrashIcon = ({ fill }: { fill?: string }) => {
+export const TrashIcon = ({ fill, sizes }: { fill?: string; sizes?: string }) => {
     return (
         <div>
             <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 16 16"
-                className={`${fill ? fill : `fill-white`} h-5 w-5`}
+                className={`${fill ? fill : `fill-white`} ${sizes ?? 'h-5 w-5'}`}
             >
                 <path
                     fillRule="evenodd" d="M5 3.25V4H2.75a.75.75 0 0 0 0 1.5h.3l.815 8.15A1.5 1.5 0 0 0 5.357 15h5.285a1.5 1.5 0 0 0 1.493-1.35l.815-8.15h.3a.75.75 0 0 0 0-1.5H11v-.75A2.25 2.25 0 0 0 8.75 1h-1.5A2.25 2.25 0 0 0 5 3.25Zm2.25-.75a.75.75 0 0 0-.75.75V4h3v-.75a.75.75 0 0 0-.75-.75h-1.5ZM6.05 6a.75.75 0 0 1 .787.713l.275 5.5a.75.75 0 0 1-1.498.075l-.275-5.5A.75.75 0 0 1 6.05 6Zm3.9 0a.75.75 0 0 1 .712.787l-.275 5.5a.75.75 0 0 1-1.498-.075l.275-5.5a.75.75 0 0 1 .786-.711Z"
@@ -180,26 +196,12 @@ export const MiniAddIcon = ({ fill, sizes }: { fill?: string; sizes?: string }) 
     )
 }
 
-export const ArrowsIcon = ({ direction, fill }: { fill?: string; direction: string }) => {
+export const ArrowsIcon = ({ direction, fill, sizes }: { fill?: string; direction: string; sizes?: string }) => {
 
     return (
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" className={`${fill ?? `fill-slate-500 dark:fill-slate-200`} ${direction ?? ``} w-5 h-5 transition-all`}>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" className={`${fill ?? `fill-slate-500 dark:fill-slate-200`} ${direction ?? ``} ${sizes ?? `w-5 h-5`} transition-all`}>
             <path fillRule="evenodd" d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clipRule="evenodd" />
         </svg>
-
-        // <svg
-        //     xmlns="http://www.w3.org/2000/svg"
-        //     fill="none"
-        //     viewBox="0 0 24 24"
-        //     strokeWidth={1.5}
-        //     className={`${stroke ?? `stroke-slate-500 dark:stroke-slate-200`} ${direction ?? ``} w-5 h-5 transition-all`}
-        // >
-        //     <path
-        //         strokeLinecap="round"
-        //         strokeLinejoin="round"
-        //         d="M12 4.5v15m0 0l6.75-6.75M12 19.5l-6.75-6.75"
-        //     />
-        // </svg>
     )
 };
 
@@ -210,7 +212,7 @@ export const SearchIcon = ({ fill }: { fill?: string }) => {
             <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 20 20"
-                className={`w-5 h-5 ${fill ?? `fill-cgray`}`}
+                className={`w-5 h-5 ${fill ?? `fill-slate-400 dark:fill-slate-400`}`}
             >
                 <path fillRule="evenodd" d="M9 3.5a5.5 5.5 0 1 0 0 11 5.5 5.5 0 0 0 0-11ZM2 9a7 7 0 1 1 12.452 4.391l3.328 3.329a.75.75 0 1 1-1.06 1.06l-3.329-3.328A7 7 0 0 1 2 9Z" clipRule="evenodd" />
             </svg>
@@ -326,7 +328,7 @@ export const PregnantIcon = ({ fill, sizes }: { fill?: string; sizes?: string })
 
 export const CheckIcon = ({ fill }: { fill?: string }) => {
     return (
-        <div className="max-h-[20px] max-w-[20px] relative">
+        <div className="max-h-[18px] max-w-[18px] relative">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" className={`scale-125  ${fill ?? 'fill-csemigreen dark:fill-clime'} transition-all w-full h-full`}>
                 <path fillRule="evenodd" d="M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16Zm3.857-9.809a.75.75 0 0 0-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 1 0-1.06 1.061l2.5 2.5a.75.75 0 0 0 1.137-.089l4-5.5Z" clipRule="evenodd" />
             </svg>

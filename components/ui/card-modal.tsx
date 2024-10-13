@@ -9,6 +9,7 @@ import { enterDropdown } from '@/lib/constants';
 
 import { CloseIcon } from '../ui/icons';
 import Card from '../ui/card';
+import CloseBtn from './close-btn';
 
 export type CardModalProps = {
     cardLabel: string;
@@ -31,10 +32,10 @@ export function CardModal({ cardLabel, isSubmitting, children, buttonLabel, butt
 
         if (isOpen) {
             document.addEventListener('keydown', handleEsc);
-            document.body.style.overflow = "hidden";
+            document.body.style.overflowY = "hidden";
         } else {
             document.removeEventListener('keydown', handleEsc);
-            document.body.style.overflow = "auto";
+            document.body.style.overflowY = "auto";
         }
 
         return () => {
@@ -43,7 +44,7 @@ export function CardModal({ cardLabel, isSubmitting, children, buttonLabel, butt
     }, [isOpen]);
 
     return (
-        <div>
+        <div className='-inset-0'>
             <AnimatePresence mode='wait'>
                 {isOpen ?
                     <motion.div
@@ -52,26 +53,20 @@ export function CardModal({ cardLabel, isSubmitting, children, buttonLabel, butt
                         animate="visible"
                         exit="exit"
                         key='modal'
-                        className='fixed h-screen w-screen top-0 left-0 z-40 backdrop-blur-sm flex'
+                        className='fixed h-[100vh] w-[100vw] top-0 left-0 z-40 backdrop-blur-sm flex'
                     >
-                        <div className="max-w-md mx-auto w-full mt-auto sm:my-auto">
+                        <div className="max-w-md mx-auto w-full mt-auto sm:my-auto flex flex-col overflow-hidden">
                             <Card rounded='rounded-t-3xl sm:rounded-2xl overflow-hidden' paddings={''}>
-                                <div className="flex-between p-3 md:p-6">
+                                <div className="flex-between px-4 pt-4">
                                     <h2 className='semititle'>{cardLabel}</h2>
 
-                                    <button
+                                    <CloseBtn
+                                        handleClose={() => setIsOpen(false)}
                                         disabled={isSubmitting}
-                                        type='button' onClick={() => setIsOpen(false)}
-                                        className='md:hover:opacity-100 md:opacity-50 disabled:opacity-30 transition-all'
-                                    >
-                                        <CloseIcon fill='fill-cgray dark:fill-white' />
-                                    </button>
+                                    />
                                 </div>
 
-                                <div className="h-max">
-                                    {children}
-                                </div>
-
+                                {children}
                             </Card>
                         </div>
                     </motion.div>
@@ -81,12 +76,10 @@ export function CardModal({ cardLabel, isSubmitting, children, buttonLabel, butt
 
             <button
                 onClick={() => setIsOpen(true)}
-                className={`h-7 md:h-max w-7 md:w-max rounded_btn ${buttonBg} flex-center md:px-3`}
+                className={`rounded_btn ${buttonBg} flex-center md:px-3`}
             >
-                <div className='flex-center gap-1'>
-                    {buttonLabel}
-                    {buttonIcon}
-                </div>
+                {buttonLabel}
+                {buttonIcon}
             </button>
         </div >
     );

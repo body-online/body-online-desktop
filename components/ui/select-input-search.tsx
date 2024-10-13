@@ -16,6 +16,7 @@ const SelectInputSearch = ({
             <p className={`${darkMode ? `text-white` : ``} input_label`}>{label}</p>
 
             <Select
+                instanceId={'select-1'}
                 isDisabled={props.isDisabled}
                 unstyled
                 classNames={{

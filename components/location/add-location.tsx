@@ -2,22 +2,15 @@
 
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useRouter } from 'next/navigation';
-import { motion } from 'framer-motion';
 import toast from 'react-hot-toast';
 import { useState } from 'react';
 
 import { LocationSchema, locationSchema } from '@/lib/types';
 import { createLocation } from '@/actions/location';
 
-import { CloseIcon, LoadingIcon, MiniAddIcon } from '../ui/icons';
-import { LayoutBody, LayoutBottom, LayoutHeader } from '../ui/default-layout';
-import BlackOutModal from '../ui/blackout-modal';
-import StepsContainer from '../ui/steps-container';
-import StepIndicator from '../ui/step-indicator';
+import { LoadingIcon, MiniAddIcon } from '../ui/icons';
 
-export function AddLocationBtn() {
-    const router = useRouter()
+export function AddLocationBtn({ customText, searchLocations }: { customText?: string; searchLocations?: () => void }) {
     const [isOpen, setIsOpen] = useState(false)
     const {
         register,
@@ -31,12 +24,10 @@ export function AddLocationBtn() {
 
 
     const handleClose = () => {
-        document.body.style.overflow = "auto";
         reset();
         return setIsOpen(false)
     }
     const handleOpen = () => {
-        document.body.style.overflow = "hidden";
         return setIsOpen(true)
     }
 
@@ -47,8 +38,9 @@ export function AddLocationBtn() {
             if (error) return toast.error(error)
             // toast.success(`Ubicación creada exitosamente!`);
             reset();
-            handleClose()
-            return router.refresh();
+            handleClose();
+            if (searchLocations)
+                searchLocations();
         } catch (error) {
             toast.error('Ha ocurrido un error al crear la ubicación')
         } finally {
@@ -58,104 +50,70 @@ export function AddLocationBtn() {
 
     return (
         <>
-            <BlackOutModal isOpen={isOpen} handleClose={handleClose}>
+            {isOpen ? (
+                <div
+                    className='flex flex-col w-full dark:bg-clightgray/50 border custom-border p-2 md:p-3 rounded-lg'
+                >
+                    {/* <p className="input_label">Crear ubicación</p> */}
+                    <form onSubmit={(e) => { return e.preventDefault() }} className='space-y-6'>
+                        <div className="w-full flex flex-col gap-2">
+                            <label htmlFor='name' className='w-full'>
+                                <input
+                                    {...register("name")}
+                                    name='name'
+                                    type="text"
+                                    placeholder='Nombre de la ubicación'
+                                    disabled={isSubmitting}
+                                    className={`input ${errors.name ? 'border-red-500' : ''}`}
+                                />
+                                <div className="input_error">
+                                    {errors.name && (<p>{`${errors.name.message}`}</p>)}
+                                </div>
+                            </label>
+                        </div>
 
-                <LayoutHeader>
-                    <div className="flex-between w-full container">
-                        <h2 className='semititle'>Crear ubicación</h2>
-                        <button
-                            type='button'
-                            disabled={isSubmitting}
-                            onClick={() => setIsOpen(false)}
-                            className='md:hover:opacity-100 md:opacity-50 transition-all disabled:opacity-30'
-                        >
-                            <CloseIcon fill='fill-cgray dark:fill-white' />
-                        </button>
-                    </div>
-                </LayoutHeader>
-
-                <StepsContainer>
-                    <StepIndicator
-                        label='Nombre'
-                        value={watch('name')}
-                        active={true}
-                        step={'1'}
-                    />
-                    <StepIndicator
-                        label='Descripción'
-                        value={'No requerido'}
-                        active={true}
-                        step={'2'}
-                    />
-                </StepsContainer>
-
-                <LayoutBody>
-                    <form onSubmit={(e) => { return e.preventDefault() }} className=' px-default py-default'>
-                        <div className=''>
-                            <h3 className='semititle mb-3'>Datos principales</h3>
-                            <div className="grid gap-4">
-                                <label htmlFor='name' className='md:col-span-2'>
-                                    <p className="input_label">Nombre*</p>
-                                    <input
-                                        {...register("name")}
-                                        name='name'
-                                        type="text"
-                                        placeholder='Ej. Jaula 1'
-                                        disabled={isSubmitting}
-                                        className={`input ${errors.name ? 'border-red-500' : ''}`}
-                                    />
-                                    <div className="input_error">
-                                        {errors.name && (<p>{`${errors.name.message}`}</p>)}
-                                    </div>
-                                </label>
-
-                                <label htmlFor='description' className='md:col-span-2'>
-                                    <p className="input_label">Descripción</p>
-                                    <textarea
-                                        {...register("description")}
-                                        name='description'
-                                        placeholder='Escriba una descripción de ser necesario'
-                                        disabled={isSubmitting}
-                                        className={`h-32 md:h-60 textarea`}
-                                    />
-                                </label>
-                            </div>
+                        <div className="flex-between gap-2">
+                            <button
+                                disabled={isSubmitting}
+                                className='rounded_btn bg-gray-100 dark:bg-clightgray md:max-w-max px-3'
+                                type='button'
+                                onClick={handleClose}
+                            >
+                                <p className='dark:text-slate-400 text-slate-500'>
+                                    Cancelar
+                                </p>
+                            </button>
+                            <button
+                                disabled={isSubmitting || !watch('name')}
+                                className='rounded_btn bg-cgreen dark:bg-clightgray md:max-w-max px-3'
+                                type='button'
+                                onClick={handleSubmit(onSubmit)}
+                            >
+                                {isSubmitting ?
+                                    <LoadingIcon fill='fill-clime dark:fill-' /> :
+                                    <>
+                                        <p className='text-white'>Crear</p>
+                                        <MiniAddIcon fill='fill-clime' />
+                                    </>
+                                }
+                            </button>
                         </div>
                     </form >
-                </LayoutBody>
-
-                <LayoutBottom>
-                    <div className="flex-end w-full">
-                        <button
-                            disabled={isSubmitting || !watch('name')}
-                            className='rounded_btn bg-csemigreen dark:bg-clime md:max-w-max px-3'
-                            type='button'
-                            onClick={handleSubmit(onSubmit)}
-                        >
-                            {isSubmitting ? (
-                                <LoadingIcon fill='fill-clime dark:fill-cblack' />
-                            ) : (
-                                <div className='flex-center gap-1'>
-                                    <p className='text-white py-1 dark:text-cblack'>Crear ubicación</p>
-                                    <MiniAddIcon fill='fill-clime dark:fill-cblack' />
-                                </div>
-                            )}
-                        </button>
-                    </div>
-                </LayoutBottom>
-            </BlackOutModal>
-
-
-            <button
-                onClick={handleOpen}
-                className='h-max w-max rounded_btn bg-csemigreen dark:bg-clime flex-center px-3 gap-1'
-            >
-                <div className='flex-center gap-1'>
-                    <p className={`text-white dark:text-cblack font-medium`}>Crear ubicación</p>
-                    <MiniAddIcon fill='fill-clime dark:fill-cblack' />
-                </div>
-            </button>
-        </>
+                </div >
+            ) : (
+                <button
+                    type='button'
+                    onClick={handleOpen}
+                    className='rounded_btn bg-cgreen  dark:bg-clightgray/50'
+                >
+                    <p className={`text-white dark:`}>
+                        {customText ?? "Crear ubicación"}
+                    </p>
+                    <MiniAddIcon fill='dark:fill-clime fill-clime' />
+                </button>
+            )
+            }
+        </ >
     )
 }
 

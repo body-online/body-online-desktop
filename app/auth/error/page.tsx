@@ -9,7 +9,7 @@ const AuthErrorPage = () => {
     const router = useRouter();
 
     return (
-        <Card>
+        <div className='card p-4'>
             <InfoMessage type='warning' title='Ha ocurrido un error al iniciar' />
             <button
                 type='button'
@@ -18,7 +18,7 @@ const AuthErrorPage = () => {
             >
                 <p className="text-center group-hover:underline underline-offset-2">Volver a intentar</p>
             </button>
-        </Card>
+        </div>
     )
 }
 

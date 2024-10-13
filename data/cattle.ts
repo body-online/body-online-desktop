@@ -47,17 +47,30 @@ export async function getCattles({
   const farmId = await currentFarm();
   if (!farmId) return { error: "No hemos encontrado su organización" };
 
-  const params = { page, limit, name };
   const { data } = await axios({
    method: "GET",
    url: `${process.env.API_URL}/api/ranchi/cattle/${farmId}`,
-   params: { page: params?.page, limit: params?.limit },
-   data: { caravan: params?.name },
+   params: { page, limit },
+   data: { caravan: name },
   });
 
-  return { data };
+  const cattless = {
+   ...data,
+   cattles: data?.cattles?.map((cattle: CattleProps) => {
+    return {
+     ...cattle,
+     state: ["PREGNANT", "EMPTY", "MATERNITY", "DEAD"].includes(
+      cattle?.state.toUpperCase()
+     )
+      ? cattle?.state
+      : "EMPTY",
+    };
+   }),
+  };
+  return {
+   data: cattless,
+  };
  } catch (error: any) {
-  console.log(error);
   return {
    error:
     error?.response?.data?.message ??
@@ -65,39 +78,3 @@ export async function getCattles({
   };
  }
 }
-
-// export async function getAllCattles(): Promise<{
-//  error?: string;
-//  data?: CattleProps[];
-// }> {
-//  try {
-//   const filteredCattles: CattleProps[] = [];
-//   const farm = await currentFarm();
-//   if (!farm) return { error: "No hemos encontrado organización" };
-
-//   const { data } = await axios.get(
-//    `${process.env.API_URL}/api/ranchi/cattle/${farm}`
-//   );
-//   // console.log(`getting ${data?.length} cattles for ${farm}`);
-
-//   data.map((obj: CattleProps) => {
-//    const notDeleted = obj.createdAt == obj.updatedAt;
-
-//    if (notDeleted) {
-//     filteredCattles.push({
-//      ...obj,
-//      state: obj.state == "" || obj.state == null ? "not_pregnant" : obj.state,
-//     });
-//    }
-//   });
-
-//   return { data: filteredCattles };
-//  } catch (error: any) {
-//   console.log(error);
-//   return {
-//    error:
-//     error?.response?.data?.message ??
-//     "Ha ocurrido un erorr al buscar las genéticas.",
-//   };
-//  }
-// }

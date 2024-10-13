@@ -1,11 +1,11 @@
 "use server";
 
 import { currentUser } from "@/lib/auth";
-import { GeneticSchema } from "../lib/types";
+import { GeneticProps, GeneticSchema } from "../lib/types";
 import axios from "axios";
 
 export async function createGenetic(genetic: GeneticSchema): Promise<{
- data?: string;
+ data?: GeneticProps;
  error?: string;
 }> {
  try {
@@ -17,7 +17,7 @@ export async function createGenetic(genetic: GeneticSchema): Promise<{
     error: "Error al encontrar la organización",
    };
 
-  await axios({
+  const { data } = await axios({
    method: "post",
    url: `${process.env.API_URL}/api/ranchi/genetic`,
    data: {
@@ -27,8 +27,8 @@ export async function createGenetic(genetic: GeneticSchema): Promise<{
     farmId: user.farmId,
    },
   });
-
-  return { data: "Genética creada correctamente" };
+  console.log(data);
+  return { data };
  } catch (err: any) {
   console.log(err?.response?.data);
   return {

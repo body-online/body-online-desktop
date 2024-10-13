@@ -22,17 +22,31 @@ export const {
 
    return session;
   },
-  async jwt({ token }) {
+  async jwt({ token, trigger, session }) {
    if (!token?.email) return token;
 
-   const existingUser = await getUserByEmail(token.email);
-   if (!existingUser) return null;
+   if (trigger == "update") {
+    const existingUser = await getUserByEmail(token.email);
+    if (!existingUser) return null;
+    console.log(existingUser);
 
-   token.id = existingUser?.id;
-   token.farmId = existingUser?.farmId;
-   token.farmName = existingUser?.farmName;
-   token.type = existingUser?.type;
-   token.name = existingUser?.name;
+    token.id = existingUser?.id;
+    token.farmId = existingUser?.farmId;
+    token.farmName = existingUser?.farmName;
+    token.type = existingUser?.type;
+    token.name = existingUser?.name;
+   }
+
+   if (trigger === "signIn") {
+    const existingUser = await getUserByEmail(token.email);
+    if (!existingUser) return null;
+
+    token.id = existingUser?.id;
+    token.farmId = existingUser?.farmId;
+    token.farmName = existingUser?.farmName;
+    token.type = existingUser?.type;
+    token.name = existingUser?.name;
+   }
 
    return token;
   },

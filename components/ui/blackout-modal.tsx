@@ -33,8 +33,8 @@ const BlackOutModal = ({ handleClose, children, isOpen }: ModalProps) => {
     }, [isOpen, handleClose]);
 
     useEffect(() => {
-        if (isOpen) document.body.style.overflow = "hidden";
-        else document.body.style.overflow = "auto";
+        if (isOpen) document.body.style.overflowY = "hidden";
+        else document.body.style.overflowY = "auto";
     }, [isOpen]);
 
     return (

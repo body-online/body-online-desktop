@@ -39,17 +39,14 @@ const LoginForm = () => {
             key='login-form'
         >
             <Card headerLabel="Iniciar sesión">
-                <form
-                    onSubmit={handleSubmit((onSubmit))}
-                    className="mt-6 space-y-8"
-                >
+                <form onSubmit={handleSubmit((onSubmit))}>
                     {/* classic login */}
-                    <div className="flex flex-col space-y-4">
+                    <div className='flex flex-col w-full space-y-4 mt-3'>
                         <label htmlFor='email'>
-                            <p className="input_label">Correo*</p>
+                            {/* <p className="input_label">Correo*</p> */}
                             <input
                                 {...register("email")}
-                                placeholder='Ej. juan.perez@gmail.com'
+                                placeholder='Email'
                                 disabled={isSubmitting}
                                 className={`input ${errors.email ? 'border-red-500' : ''}`}
                                 type="text"
@@ -61,7 +58,7 @@ const LoginForm = () => {
                         </label>
 
                         <label htmlFor='password'>
-                            <p className="input_label">Contraseña*</p>
+                            <p className="input_instructions mb-1 font-medium">Contraseña</p>
                             <input
                                 {...register("password")}
                                 disabled={isSubmitting}
@@ -74,8 +71,10 @@ const LoginForm = () => {
                                 {errors.password && (<p>{`${errors.password.message}`}</p>)}
                             </div>
                         </label>
+                    </div>
 
-                        <button disabled={isSubmitting} className='primary-btn ml-auto mt-6' type='submit'>
+                    <div className="flex-center py-4">
+                        <button disabled={isSubmitting} className='primary-btn' type='submit'>
                             {isSubmitting ? (
                                 <LoadingIcon fill='fill-clime dark:fill-cblack' />
                             ) : (

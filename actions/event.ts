@@ -4,7 +4,10 @@ import { currentFarm, currentUser } from "@/lib/auth";
 import { EventSchema } from "../lib/types";
 import axios from "axios";
 
-export async function createEvent(event: EventSchema): Promise<{
+interface UpdateEventProps extends EventSchema {
+ caravan?: string;
+}
+export async function createEvent(event: UpdateEventProps): Promise<{
  data?: string;
  error?: string;
 }> {
@@ -13,9 +16,10 @@ export async function createEvent(event: EventSchema): Promise<{
 
   if (event?.eventType != "body_measure" && user?.type != "owner")
    return { error: "Error de permisos" };
+
   if (!user?.farmId) return { error: "No hemos encontrado organización" };
 
-  await axios({
+  const { data } = await axios({
    method: "post",
    url: `${process.env.API_URL}/api/ranchi/event`,
    data: {
@@ -25,8 +29,9 @@ export async function createEvent(event: EventSchema): Promise<{
     userType: user.type,
    },
   });
+  console.log(data);
 
-  return { data: "Evento creado correctamente" };
+  return { data };
  } catch (err: any) {
   console.log(err);
   return {

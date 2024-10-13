@@ -1,5 +1,6 @@
 'use client'
 
+import { motion, AnimatePresence } from 'framer-motion'
 interface CardProps {
     children: React.ReactNode,
     headerLabel?: string;
@@ -9,15 +10,18 @@ interface CardProps {
 
 const Card = ({ children, headerLabel, paddings, rounded }: CardProps) => {
     return (
-        <div
-            className={`custom-gradient border custom-border flex flex-col w-full 
-            ${rounded ?? `rounded-2xl`} ${paddings ?? `p-3 md:p-6`}`}
-            onClick={(e) => { return e.stopPropagation() }}
-        >
-            {headerLabel ? <h2 className="semititle">{headerLabel}</h2> : <></>}
-
-            {children}
-        </div>
+        <AnimatePresence mode='wait'>
+            <motion.div
+                animate={{ opacity: 1 }}
+                initial={{ opacity: 0 }}
+                exit={{ opacity: 0 }}
+                className={`card ${paddings ?? `p-4`}`}
+                onClick={(e) => { return e.stopPropagation() }}
+            >
+                {headerLabel ? <h2 className="semititle">{headerLabel}</h2> : <></>}
+                {children}
+            </motion.div>
+        </AnimatePresence>
     )
 }
 
