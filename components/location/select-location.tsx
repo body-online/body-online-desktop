@@ -4,14 +4,14 @@ import { UseFormSetValue, UseFormWatch } from 'react-hook-form'
 import React, { useEffect, useState } from 'react'
 
 import { getLocations } from '@/data/location'
-import { CattleSchema } from '@/lib/types'
+import { CreateCattleSchema } from '@/lib/types'
 
 import OptionSelector from '../ui/option-selector'
 import InfoMessage from '../ui/info'
 import LoadingRowsSkeleton from '../ui/loading-rows-skeleton'
 import Link from 'next/link'
 
-const SelectLocation = ({ watch, setValue, setLocationName }: { watch: UseFormWatch<CattleSchema>; setValue: UseFormSetValue<CattleSchema>; setLocationName: (e: any) => void }) => {
+const SelectLocation = ({ watch, setValue, setLocationName }: { watch: UseFormWatch<CreateCattleSchema>; setValue: UseFormSetValue<CreateCattleSchema>; setLocationName: (e: any) => void }) => {
     const [options, setOptions] = useState<any[]>();
     const [searchTerm, setSearchTerm] = useState<string>();
     const [error, setError] = useState<string>();

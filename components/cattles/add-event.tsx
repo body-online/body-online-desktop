@@ -6,7 +6,6 @@ import { EventIcon } from '../ui/icons';
 import CreateEventForm from '../create-event-form';
 import Modal from '../ui/modal';
 import { CattleProps } from '@/lib/types';
-import CloseBtn from '../ui/close-btn';
 
 export function AddEventBtn({ defaultCattle, handleRefresh }: { defaultCattle?: CattleProps, handleRefresh?: () => void }) {
     const [isOpen, setIsOpen] = useState(false)

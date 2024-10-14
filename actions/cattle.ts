@@ -1,10 +1,10 @@
 "use server";
 
 import { currentUser } from "@/lib/auth";
-import { CattleSchema, CattleState } from "../lib/types";
+import { CreateCattleSchema, CattleState } from "../lib/types";
 import axios from "axios";
 
-export async function createCattle(cattle: CattleSchema): Promise<{
+export async function createCattle(cattle: CreateCattleSchema): Promise<{
  data?: string;
  error?: string;
 }> {

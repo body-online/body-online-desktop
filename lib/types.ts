@@ -3,7 +3,7 @@ import { Props } from "react-select";
 import { z } from "zod";
 
 // cattle
-export const cattleSchema = z.object({
+export const createCattleSchema = z.object({
  caravan: z
   .string({ required_error: "Caravana requerida!" })
   .refine((value) => value != "", "Caravana requerida!"),
@@ -27,11 +27,19 @@ export enum CattleState {
  MATERNITY = "MATERNITY",
 }
 
-export type CattleSchema = z.infer<typeof cattleSchema>;
-export interface CattleProps extends CattleSchema {
+export type CreateCattleSchema = z.infer<typeof createCattleSchema>;
+export interface CattleProps {
  _id: string;
  creator: string;
+ caravan: string;
  geneticName: string;
+ geneticId: {
+  name: string;
+  description: string;
+  farmId: string;
+  bodyRanges: number[];
+  deletedAt: string;
+ };
  locationName: string;
  createdAt: string;
  state: CattleState;

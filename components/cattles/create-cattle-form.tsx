@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import toast from 'react-hot-toast';
 import { z } from 'zod';
 
-import { CattleSchema, cattleSchema, GeneticProps, LocationProps } from '@/lib/types';
+import { CreateCattleSchema, createCattleSchema, GeneticProps, LocationProps } from '@/lib/types';
 import { createCattle } from '@/actions/cattle';
 
 import { LoadingIcon } from '../ui/icons';
@@ -29,7 +29,7 @@ const CreateCattleForm = (
     const [selectedGenetic, setSelectedGenetic] = useState<GeneticProps>()
 
     // functions
-    const onSubmit: SubmitHandler<CattleSchema> = async (data: CattleSchema) => {
+    const onSubmit: SubmitHandler<CreateCattleSchema> = async (data: CreateCattleSchema) => {
         try {
             const { error } = await createCattle(data);
             if (error) return toast.error(error)
@@ -54,7 +54,7 @@ const CreateCattleForm = (
         watch,
         formState: { errors, isSubmitting },
         reset,
-    } = useForm<z.infer<typeof cattleSchema>>({ resolver: zodResolver(cattleSchema), })
+    } = useForm<z.infer<typeof createCattleSchema>>({ resolver: zodResolver(createCattleSchema), })
 
     // update the form values after any list changes
     useEffect(() => { if (selectedLocations?.length) setValue('locationId', selectedLocations?.[0]._id) }, [selectedLocations])
