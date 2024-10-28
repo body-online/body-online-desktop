@@ -1,9 +1,9 @@
 'use client'
 
-import React from 'react'
-import Card from '../ui/card'
-import CardHeader from '../ui/card-header'
 import { useRouter } from 'next/navigation'
+import React from 'react'
+
+import Card from '../ui/card'
 
 const ErrorCard = () => {
     const router = useRouter();
@@ -13,7 +13,7 @@ const ErrorCard = () => {
             <div className="flex items-center justify-center mb-4">
                 <ErrorIcon />
             </div>
-            <CardHeader label='Ha ocurrido un error' />
+            <h2 className="semititle">Ha ocurrido un error</h2>
             <div className="flex justify-center py-2">
                 <button
                     type='button'

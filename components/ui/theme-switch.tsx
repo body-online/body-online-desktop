@@ -15,10 +15,10 @@ const ThemeSwitch = () => {
         return setTheme(type)
     }
 
-    if (!mounted) return (<div className='h-10 w-12 px-3 rounded-full animate-pulse bg-white dark:bg-cgray' />)
+    if (!mounted) return (null)
 
     return (
-        <div className='grid grid-cols-2 gap-1 border rounded-full custom-border flex-center h-10 px-2 bg-white dark:bg-cgray'>
+        <div className='grid grid-cols-2 gap-1 border rounded-full custom-border flex-center h-8 px-1 bg-white dark:bg-cgray'>
             <button
                 onClick={() => changeTheme('dark')}
                 className="h-6 md:h-7 w-6 md:w-7 flex-center rounded-full group"

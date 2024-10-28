@@ -1,22 +1,27 @@
 'use client'
 
-import CardHeader from './card-header';
-
+import { motion, AnimatePresence } from 'framer-motion'
 interface CardProps {
     children: React.ReactNode,
     headerLabel?: string;
     paddings?: string;
+    rounded?: string;
 }
 
-const Card = ({ children, headerLabel, paddings }: CardProps) => {
+const Card = ({ children, headerLabel, paddings, rounded }: CardProps) => {
     return (
-        <div className={`card ${paddings ?? `py-4 md:py-6 px-3 md:px-5`}`}>
-            {headerLabel ?
-                <CardHeader label={headerLabel} />
-                : <></>
-            }
-            {children}
-        </div>
+        <AnimatePresence mode='wait'>
+            <motion.div
+                animate={{ opacity: 1 }}
+                initial={{ opacity: 0 }}
+                exit={{ opacity: 0 }}
+                className={`card ${paddings ?? `p-4`}`}
+                onClick={(e) => { return e.stopPropagation() }}
+            >
+                {headerLabel ? <h2 className="semititle">{headerLabel}</h2> : <></>}
+                {children}
+            </motion.div>
+        </AnimatePresence>
     )
 }
 

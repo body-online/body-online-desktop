@@ -1,12 +1,12 @@
 import { SessionProvider } from 'next-auth/react';
 import localFont from 'next/font/local'
 import type { Metadata } from "next";
-import Script from 'next/script';
 
 import { Providers } from '@/components/ui/providers';
 import { auth } from '@/auth';
 
 import "./globals.css";
+import Navbar from '@/components/ui/navbar';
 
 const satoshi = localFont({
   src: '../public/fonts/Satoshi-Variable.ttf',
@@ -19,10 +19,8 @@ export const metadata: Metadata = {
   description: "",
 };
 
-export default async function RootLayout({
-  children,
-}: Readonly<{ children: React.ReactNode; }>) {
-  const session = await auth()
+export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode; }>) {
+  const session = await auth();
 
   return (
     <SessionProvider session={session}>
@@ -52,29 +50,10 @@ export default async function RootLayout({
               });`,
             }}
           ></script>
-
-          {/* Twilio webchat testing */}
-          <script
-            defer
-            src="https://twilio-webchat-production-ef30.up.railway.app/static/js/main.js"
-          >
-          </script>
-          <script
-            dangerouslySetInnerHTML={{
-              __html: `window.addEventListener("DOMContentLoaded", () => {
-              Twilio.initWebchat({
-                serverUrl: "https://webchat-server-production.up.railway.app",
-                theme: {
-                  isLight: true
-                }
-              })
-            })`
-            }}
-          >
-          </script>
         </head>
         <body className={`body`}>
           <Providers>
+            <Navbar user={session?.user} />
             {children}
           </Providers>
         </body>

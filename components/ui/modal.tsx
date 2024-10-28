@@ -13,8 +13,7 @@ import { ModalProps } from '@/lib/types';
     exit="exit"
 */}
 
-const Modal = ({ handleClose, children, isOpen }: ModalProps) => {
-
+const Modal = ({ handleClose, children, isOpen, hideCloseBtn }: ModalProps) => {
     useEffect(() => {
         const handleEsc = (event: KeyboardEvent) => {
             if (event.key === 'Escape' && handleClose) {
@@ -34,14 +33,13 @@ const Modal = ({ handleClose, children, isOpen }: ModalProps) => {
     }, [isOpen, handleClose]);
 
     useEffect(() => {
-        if (isOpen) document.body.style.overflow = "hidden";
-        else document.body.style.overflow = "auto";
+        if (isOpen) document.body.style.overflowY = "hidden";
+        else document.body.style.overflowY = "auto";
     }, [isOpen]);
 
     return (
         <AnimatePresence
             initial={false}
-            onExitComplete={() => null}
         >
             {isOpen && (
                 <motion.div
@@ -49,28 +47,12 @@ const Modal = ({ handleClose, children, isOpen }: ModalProps) => {
                     initial="hidden"
                     animate="visible"
                     exit="exit"
-                    className="fixed inset-0 top-0 z-50 backdrop-blur-sm bg-black/30 flex-center overflow-hidden px-2"
+                    className="fixed top-0 left-0 h-screen w-screen flex-center 
+                    backdrop-blur bg-cgray/50 dark:bg-cblack/95 z-40 px-2 overflow-hidden"
                     onClick={(e) => { return e.stopPropagation() }}
                 >
-                    <div className="relative w-full max-w-max">
-                        {/* close indicator */}
-                        {handleClose ?
-                            <motion.button
-                                variants={enterModal}
-                                initial="hidden"
-                                animate="visible"
-                                exit="exit"
-                                type='button'
-                                onClick={() => handleClose()}
-                                className="px-1 py-1 rounded-md bg-slate-200 absolute top-4 right-4 z-20">
-                                <p className='text-[10px] sm:text-[12px] font-bold text-cgray hidden md:block'>ESC</p>
-                                <CloseIcon fill='fill-cgray md:hidden' />
-                            </motion.button> : null
-                        }
-
-
+                    <div className="max-h-[98vh] max-w-2xl w-full m-auto flex flex-col my-auto">
                         {children}
-
                     </div>
                 </motion.div>
             )}

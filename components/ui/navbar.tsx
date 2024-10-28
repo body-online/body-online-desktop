@@ -1,148 +1,121 @@
 "use client";
 
-import { MouseEventHandler, useEffect, useRef, useState } from "react";
+function getInitials(name?: string) {
+    if (!name) return "";
+    return name.match(/(\b\S)?/g)?.join("");
+}
+
 import { AnimatePresence, motion } from 'framer-motion'
 import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 import { ExtendedUser } from '@/next-auth';
 import { signOut } from 'next-auth/react';
-import Image from "next/image";
 import Link from 'next/link';
 
-import { enterDropdown, navigationItems } from '@/lib/constants';
+import { modalBackground, navigationItems } from '@/lib/constants';
 import { CloseIcon, LogoutIcon, MenuIcon } from './icons';
-
-import Divider from './divider';
 import ThemeSwitch from './theme-switch';
 
 
+
 export default function Navbar({ user }: { user?: ExtendedUser }) {
-    const pathname = usePathname();
-    // const router = useRouter();
-
     const [isOpen, setIsOpen] = useState(false);
-    const wrapperRef = useRef<any>(null);
+    const pathname = usePathname();
 
-    const handleOpen = () => {
-        setIsOpen(true)
-    }
-    const handleClose = () => {
-        setIsOpen(false);
-    }
-
-    // onclick outside handler
-    // const handleClickListener = (event: MouseEvent) => {
-    //     let clickedInside;
-
-    //     clickedInside =
-    //         wrapperRef?.current && wrapperRef.current.contains(event.target);
-
-    //     if (clickedInside && isOpen || !isOpen) return;
-    //     return handleClose();
-    // };
     const handleEsc = (event: KeyboardEvent) => {
         if (event.key === 'Escape') {
-            return handleClose();
+            return setIsOpen(false);
         }
     };
 
     useEffect(() => {
         if (!isOpen) {
             document.removeEventListener('keydown', handleEsc);
-            // document.removeEventListener("mousedown", handleClickListener);
-            document.body.style.overflow = "auto";
+            document.body.style.overflowY = "auto";
         } else {
+            window.scrollTo(0, 0)
             document.addEventListener('keydown', handleEsc);
-            // document.addEventListener("mousedown", handleClickListener);
-            document.body.style.overflow = "hidden";
+            document.body.style.overflowY = "hidden";
         }
     }, [isOpen])
 
-
+    if (!user) return null
 
     return (
         <>
-            <div className="bg-cgreen py-3 h-[60px]">
+            <div className="py-3 h-[60px] bg-white dark:bg-cgray border-b custom-border">
                 <div className='flex-between px-default'>
-                    <div className='flex items-center gap-2'>
-                        <ProfileImage url={user?.image} type={user?.type} />
+                    <div className='flex items-center gap-2 h-8 overflow-hidden'>
+                        <ProfileImage user={user} height='h-8' width='w-8' />
 
                         <div>
-                            <p className='text-sm text-white font-semibold'>{user?.farmName}</p>
-                            <p className='text-xs opacity-50 font-medium'>{user?.name}</p>
+                            <p className='text-sm dark:text-white font-semibold'>{user?.name}</p>
+                            <p className='text-xs dark:text-white opacity-70 font-medium'>{user?.farmName}</p>
                         </div>
-                        {/* <p className='text-white text-base font-bold'>
-                            Body<span className='text-clime'>Online</span>
-                        </p> */}
                     </div>
 
 
-                    <button onClick={() => setIsOpen(!isOpen)} className='h-6 md:h-7 w-6 md:w-7 overflow-hidden rounded-full focus:ring-0 focus:outline-none bg-csemigreen border-slate-100/50 flex-center'>
-                        <AnimatePresence mode='wait'>
-                            {isOpen ?
-                                <motion.div
-                                    initial={{ opacity: 0 }}
-                                    animate={{ opacity: 1 }}
-                                    exit={{ opacity: 0 }}
-                                    transition={{ duration: 0.1 }}
-                                    key='close'
-                                >
-                                    <CloseIcon sizes='w-5 md:w-6 h-5 md:h-6' fill='fill-clime' />
-                                </motion.div>
-                                :
-                                <motion.div
-                                    initial={{ opacity: 0 }}
-                                    animate={{ opacity: 1 }}
-                                    exit={{ opacity: 0 }}
-                                    transition={{ duration: 0.1 }}
-                                    key='open'
-                                >
-                                    <MenuIcon fill='fill-clime' />
-                                </motion.div>
-                            }
-                        </AnimatePresence>
-                    </button>
+                    <div className="flex gap-2">
+                        <ThemeSwitch />
+                        <button onClick={() => setIsOpen(!isOpen)} className='border custom-border rounded-full flex-center block p-2 w-8 h-8'>
+                            <AnimatePresence mode='wait'>
+                                {isOpen ?
+                                    <motion.div
+                                        initial={{ opacity: 0 }}
+                                        animate={{ opacity: 1 }}
+                                        exit={{ opacity: 0 }}
+                                        transition={{ duration: 0.1 }}
+                                        key='close'
+                                    >
+                                        <CloseIcon fill="fill-cgray dark:fill-white" sizes='w-5 h-5' />
+                                    </motion.div>
+                                    :
+                                    <motion.div
+                                        initial={{ opacity: 0 }}
+                                        animate={{ opacity: 1 }}
+                                        exit={{ opacity: 0 }}
+                                        transition={{ duration: 0.1 }}
+                                        key='open'
+                                    >
+                                        <MenuIcon fill="fill-cgray dark:fill-white" />
+                                    </motion.div>
+                                }
+                            </AnimatePresence>
+                        </button>
+                    </div>
                 </div>
             </div>
 
-            {/* navigation */}
-            <div className="w-full bg-csemigreen z-30 sticky top-0">
-                <div className="overflow-x-scroll no-scrollbar flex gap-1 items-center px-default border-b custom-border">
-                    <div className="flex items-center pr-4">
-                        {navigationItems.map((i, index) => {
-                            var selected: boolean = i.href == pathname;
+            {user.farmId && (
+                <>
+                    {/* navigation */}
+                    {(pathname?.match(/\//g) || []).length <= 1 && (
+                        <div className="w-full backdrop-blur-lg z-30 sticky top-0 bg-white/90 dark:bg-cgray/90 border-b custom-border">
+                            <div className="overflow-x-scroll no-scrollbar flex gap-1 items-center">
+                                <div className="flex items-center px-default first:-ml-3">
+                                    {navigationItems.map((i, index) => {
+                                        if (user?.type == 'operator' && i.href != '/tareas') return null
+                                        var selected: boolean = Boolean((i.title === 'Inicio' && pathname === '/') || (i.title != 'Inicio' && pathname.includes(i.href)));
 
-                            if (user?.type == 'operator' && i.title == 'Inicio') {
-                                var selected: boolean = '/panel' == pathname;
-                                return (
-                                    <div key={index} className={`${selected ? ' border-b-clime' : 'border-transparent'} h-12 flex items-center border-b-2`}>
-                                        <Link href={i.href} onClick={() => setIsOpen(false)}>
-                                            <p
-                                                className={`font-medium text-sm active:bg-transparent rounded-md px-3 py-1.5 transition-all
-                                            ${selected ? 'text-clime dark:text-clime' : 'text-white dark:text-white opacity-50 active:opacity-100 md:hover:opacity-100'}`}
-                                            >
-                                                Inicio
-                                            </p>
-                                        </Link>
-                                    </div>
-                                )
-                            }
-
-                            return (
-                                <div key={index} className={`${selected ? ' border-b-clime' : 'border-transparent'} h-12 flex items-center border-b-2`}>
-                                    <Link href={i.href} onClick={() => setIsOpen(false)}>
-                                        <p
-                                            className={`font-medium text-sm active:bg-transparent rounded-md px-3 py-1.5 transition-all
-                                            ${selected ? 'text-clime dark:text-clime' : 'text-white dark:text-white opacity-50 active:opacity-100 md:hover:opacity-100'}`}
-                                        >
-                                            {i.title}
-                                        </p>
-                                    </Link>
+                                        return (
+                                            <div key={index} className={`${selected ? ' border-caqua dark:border-clime' : 'border-transparent'} h-12 flex items-center border-b-2`}>
+                                                <Link href={i.href} onClick={() => setIsOpen(false)}>
+                                                    <p
+                                                        className={`font-semibold text-sm rounded-md px-3 py-1.5 transition-all
+                                            ${selected ? 'dark:text-clime text-cblack' : 'text-cgray dark:text-white opacity-50 active:opacity-80 md:hover:opacity-100'}`}
+                                                    >
+                                                        {i.title}
+                                                    </p>
+                                                </Link>
+                                            </div>
+                                        )
+                                    })}
                                 </div>
-                            )
-                        })}
-                    </div>
-                </div>
-            </div>
+                            </div>
+                        </div>
+                    )}
+                </>
+            )}
 
             {/* config modal */}
             <AnimatePresence
@@ -151,35 +124,38 @@ export default function Navbar({ user }: { user?: ExtendedUser }) {
             >
                 {isOpen ? (
                     <motion.div onClick={(e) => e.stopPropagation()}
-                        variants={enterDropdown}
+                        variants={modalBackground}
                         initial="hidden"
                         animate="visible"
                         exit="exit"
-                        className='fixed right-0 md:right-8 bottom-0 md:top-12 z-50
-                        w-screen overflow-y-auto h-[calc(100vh-60px)] md:h-max 
-                        md:rounded-2xl md:w-full md:max-w-xs
-                        custom-gradient custom-border md:border'
+                        className='fixed right-2 md:right-8 top-14 z-30 overflow-y-auto h-max 
+                        rounded-2xl w-full max-w-xs
+                        bg-white dark:bg-cgray custom-border border'
                     >
                         <div className="container h-full flex flex-col">
 
-                            <div className="h-full">
-                                <p className='text-cblack dark:text-white font-semibold px-6 py-4 text-lg'>Menú</p>
-                                <div className='flex-between gap-1 px-6 py-4'>
-                                    <p className='font-medium'>{user?.email}</p>
-                                    <ProfileImage url={user?.image} type={user?.type} />
+                            <div className="h-full py-3">
+                                <div className="flex items-center justify-between mb-2 mx-3">
+                                    <p className="text-lg font-semibold">Menú</p>
                                 </div>
-                                <div className='flex-between gap-1 px-6 py-4'>
-                                    <p className='text-sm text-start font-medium transition-all'>Tema</p>
-                                    <ThemeSwitch />
+
+                                <div
+                                    className='flex flex-col items-center gap-2 px-3 border custom-border dark:bg-clightgray rounded-xl py-4 mx-3 md:mx-4'
+                                >
+                                    <ProfileImage user={user} width='w-8' height='h-8' />
+                                    <div className='text-center'>
+                                        <p className='font-semibold'>{user?.name}</p>
+                                        <p className='opacity-40 font-medium'>{user?.email}</p>
+                                    </div>
                                 </div>
                             </div>
 
-                            <button type='button' className='px-6 py-5 border-t custom-border md:hover:bg-slate-100 dark:md:hover:bg-cblack w-full transition-all group' onClick={() => signOut()}>
+                            <button type='button' className='px-6 py-5 border-t custom-border md:hover:bg-slate-80 dark:md:hover:bg-cblack w-full transition-all group' onClick={() => signOut()}>
                                 <div className="flex items-center justify-between">
                                     <p className='text-sm text-start font-medium transition-all'>
                                         Cerrar sesión
                                     </p>
-                                    <LogoutIcon fill='fill-black dark:fill-white transition-all rotate-90' />
+                                    <LogoutIcon fill='fill-cgray dark:fill-white transition-all rotate-90' />
                                 </div>
                             </button>
                         </div>
@@ -192,22 +168,22 @@ export default function Navbar({ user }: { user?: ExtendedUser }) {
 }
 
 
-export const ProfileImage = ({ url, type }: { url: ExtendedUser['image']; type?: string }) => {
+export const ProfileImage = ({ user, width, height }: { user: ExtendedUser; width?: string; height?: string }) => {
+    const type = user?.type ?? "operator"
+
     return (
         <div
-            className="h-6 md:h-7 w-6 md:w-7 overflow-hidden rounded-full focus:ring-0 focus:outline-none"
-        >
-            {!url ?
-                <div className={`bg-gradient-to-tr ${type == 'operator' ? 'from-blue-600 via-blue-400 to-blue-300' : 'from-clime via-emerald-500 to-caqua'} h-full w-full`}>
-                </div>
-                :
-                <Image
-                    height={100}
-                    width={100}
-                    src={url}
-                    alt="profile"
-                />
+            className={`
+                overflow-hidden rounded-full focus:ring-0 focus:outline-none
+                ${type == 'operator' ? 'from-blue-600 via-blue-400 to-blue-300' : 'from-clime via-emerald-500 to-caqua'} 
+                ${height ?? 'h-7 md:h-8'} ${width ?? 'w-7 md:w-8'}`
             }
+        >
+            <div className={`bg-gradient-to-tr h-full w-full flex-center`}>
+                <p className='font-bold text-white text-xs md:text-sm tracking-tight'>
+                    {getInitials(user?.name)}
+                </p>
+            </div>
         </div>
     );
 };

@@ -1,15 +1,16 @@
 'use client'
 
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useRouter } from 'next/navigation';
+import { useForm } from 'react-hook-form';
+import { LoginSchema } from '@/schemas';
 import { motion } from 'framer-motion'
 import toast from 'react-hot-toast';
 import * as z from "zod";
 
-import { zodResolver } from '@hookform/resolvers/zod';
-import { LoadingIcon, SendIcon } from '../ui/icons';
-import { useRouter } from 'next/navigation';
-import { useForm } from 'react-hook-form';
 import { login } from '@/actions/login';
-import { LoginSchema } from '@/schemas';
+
+import { LoadingIcon, SendIcon } from '../ui/icons';
 import Card from '../ui/card';
 
 
@@ -26,29 +27,26 @@ const LoginForm = () => {
         if (response?.error) {
             return toast.error(response.error ?? 'Ha ocurrido un error')
         }
-        toast.success('Seras redirigido en segundos');
+        toast.success('Serás redirigido en segundos');
         reset()
     }
 
     return (
         <motion.div
             initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="max-w-lg w-full my-auto"
+            animate={{ opacity: 1, transition: { duration: 0.3 } }}
+            className="max-w-sm w-full mb-auto"
             key='login-form'
         >
-            <Card headerLabel='Iniciar sesión'>
-                <form
-                    onSubmit={handleSubmit((onSubmit))}
-                    className="mt-6 space-y-8"
-                >
+            <Card headerLabel="Iniciar sesión">
+                <form onSubmit={handleSubmit((onSubmit))}>
                     {/* classic login */}
-                    <div className="flex flex-col space-y-4">
+                    <div className='flex flex-col w-full space-y-4 mt-3'>
                         <label htmlFor='email'>
-                            <p className="input_label">Correo*</p>
+                            {/* <p className="input_label">Correo*</p> */}
                             <input
                                 {...register("email")}
-                                placeholder='Ej. juan.perez@gmail.com'
+                                placeholder='Email'
                                 disabled={isSubmitting}
                                 className={`input ${errors.email ? 'border-red-500' : ''}`}
                                 type="text"
@@ -60,7 +58,7 @@ const LoginForm = () => {
                         </label>
 
                         <label htmlFor='password'>
-                            <p className="input_label">Contraseña*</p>
+                            <p className="input_instructions mb-1 font-medium">Contraseña</p>
                             <input
                                 {...register("password")}
                                 disabled={isSubmitting}
@@ -73,14 +71,16 @@ const LoginForm = () => {
                                 {errors.password && (<p>{`${errors.password.message}`}</p>)}
                             </div>
                         </label>
+                    </div>
 
-                        <button disabled={isSubmitting} className='primary-btn ml-auto mt-6' type='submit'>
+                    <div className="flex-center py-4">
+                        <button disabled={isSubmitting} className='primary-btn' type='submit'>
                             {isSubmitting ? (
-                                <LoadingIcon />
+                                <LoadingIcon fill='fill-clime dark:fill-cblack' />
                             ) : (
                                 <>
-                                    <p className='text-white'>Ingresar</p>
-                                    <SendIcon fill='fill-clime' />
+                                    <p>Ingresar</p>
+                                    <SendIcon fill='fill-clime dark:fill-cblack' />
                                 </>
                             )
                             }
@@ -99,7 +99,7 @@ const LoginForm = () => {
                     </div>
                 </form>
             </Card>
-        </motion.div>
+        </motion.div >
     )
 }
 

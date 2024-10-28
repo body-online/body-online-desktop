@@ -14,11 +14,12 @@ import { login } from '@/actions/login';
 
 import { CreateAccountIcon, LoadingIcon } from '../ui/icons';
 import Card from '../ui/card'
+import Link from 'next/link';
 
 
 const RegisterForm = () => {
     const [isLogginIn, setisLogginIn] = useState<boolean>(false)
-    const router = useRouter();
+
     const {
         register, handleSubmit, reset, formState: { errors, isSubmitting }
     } = useForm<z.infer<typeof RegisterSchema>>({
@@ -27,116 +28,117 @@ const RegisterForm = () => {
 
     const onSubmit = async (values: z.infer<typeof RegisterSchema>) => {
 
-        const { data, error } = await registerUser({ ...values, type: 'owner' });
+        const { error } = await registerUser({ ...values, type: 'owner' });
 
         if (error)
             return toast.error(error ?? 'Ha ocurrido un error')
 
         setisLogginIn(true)
-        toast.loading('Iniciando sesión');
         reset()
         return await login({ email: values.email, password: values.password })
     }
 
     return (
-        <AnimatePresence>
-            <div className="max-w-lg w-full my-auto">
-                <Card headerLabel={isLogginIn ? '' : 'Registrarme'}>
-                    {isLogginIn ?
-                        <motion.div
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            exit={{ opacity: 0 }}
-                            className="h-[30vh] w-full max-w-lg px-4"
-                            key='loading-session'
-                        >
+        <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1, transition: { duration: 0.3 } }}
+            className="max-w-sm w-full my-auto"
+            key='register-form'
+        >
+            <Card headerLabel="Registrarme">
+                {isLogginIn ? (
+
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="h-[30vh] w-full max-w-lg px-4 flex-center"
+                        key='loading-session'
+                    >
+                        <div className="flex flex-col items-center gap-2">
                             <LoadingIcon />
-                        </motion.div> :
-                        <motion.div
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            exit={{ opacity: 0 }}
-                            className="max-w-lg w-full"
-                            key='register-form'
-                        >
-
-                            <form
-                                onSubmit={handleSubmit((onSubmit))}
-                                className="mt-6 space-y-8"
-                            >
-                                {/* classic login */}
-                                <div className="flex flex-col space-y-4">
-                                    <label htmlFor='name'>
-                                        <p className="input_label">Nombre completo*</p>
-                                        <input
-                                            {...register("name")}
-                                            disabled={isSubmitting}
-                                            placeholder='Ej. Pablo Rodriguez'
-                                            className={`input ${errors.name ? 'border-red-500' : ''}`}
-                                            type="text"
-                                            name='name'
-                                        />
-                                        <div className="input_error">
-                                            {errors.name && (<p>{`${errors.name.message}`}</p>)}
-                                        </div>
-                                    </label>
-
-
-                                    <label htmlFor='email'>
-                                        <p className="input_label">Correo*</p>
-                                        <input
-                                            {...register("email")}
-                                            disabled={isSubmitting}
-                                            placeholder='Ej. pablorodriguez@gmail.com'
-                                            className={`input ${errors.email ? 'border-red-500' : ''}`}
-                                            type="text"
-                                            name='email'
-                                        />
-                                        <div className="input_error">
-                                            {errors.email && (<p>{`${errors.email.message}`}</p>)}
-                                        </div>
-                                    </label>
-
-                                    <label htmlFor='password'>
-                                        <p className="input_label">Contraseña*</p>
-                                        <input
-                                            {...register("password")}
-                                            disabled={isSubmitting}
-                                            placeholder='••••••••'
-                                            className={`input ${errors.password ? 'border-red-500' : ''}`}
-                                            type="password"
-                                            name='password'
-                                        />
-                                        <div className="input_error">
-                                            {errors.password && (<p>{`${errors.password.message}`}</p>)}
-                                        </div>
-                                    </label>
-
-                                    <button disabled={isSubmitting} className='primary-btn ml-auto mt-6' type='submit'>
-                                        {isSubmitting ? (
-                                            <LoadingIcon />
-                                        ) :
-                                            <>
-                                                <p className='text-white'>Crear cuenta</p>
-                                                <CreateAccountIcon fill='fill-clime' />
-                                            </>
-
-                                        }
-                                    </button>
+                            <p className='text-center'>Iniciando sesión</p>
+                        </div>
+                    </motion.div>
+                ) : (
+                    <motion.form
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1, transition: { duration: 0.3 } }}
+                        onSubmit={handleSubmit((onSubmit))}
+                        key='register-form'
+                    >
+                        <div className='flex flex-col w-full space-y-4 mt-3'>
+                            <label htmlFor='name'>
+                                <input
+                                    {...register("name")}
+                                    disabled={isSubmitting}
+                                    placeholder='Nombre completo'
+                                    className={`input ${errors.name ? 'border-red-500' : ''}`}
+                                    type="text"
+                                    name='name'
+                                />
+                                <div className="input_error">
+                                    {errors.name && (<p>{`${errors.name.message}`}</p>)}
                                 </div>
+                            </label>
 
-                                {/* login... */}
-                                <div className="flex justify-center py-2">
-                                    <button type='button' className='max-w-max group' onClick={() => router.replace('/auth/login')}>
-                                        <p className="text-center group-hover:underline underline-offset-2">¿Ya tienes una cuenta?</p>
-                                    </button>
+                            <label htmlFor='email'>
+                                <input
+                                    {...register("email")}
+                                    disabled={isSubmitting}
+                                    placeholder='Email'
+                                    className={`input ${errors.email ? 'border-red-500' : ''}`}
+                                    type="text"
+                                    name='email'
+                                />
+                                <div className="input_error">
+                                    {errors.email && (<p>{`${errors.email.message}`}</p>)}
                                 </div>
-                            </form>
-                        </motion.div>
-                    }
-                </Card>
-            </div>
-        </AnimatePresence>
+                            </label>
+
+                            <label htmlFor='password'>
+                                <p className="input_instructions font-medium mb-1">Contraseña*</p>
+
+                                <input
+                                    {...register("password")}
+                                    disabled={isSubmitting}
+                                    placeholder='••••••••'
+                                    className={`input ${errors.password ? 'border-red-500' : ''}`}
+                                    type="password"
+                                    name='password'
+                                />
+                                <div className="input_error">
+                                    {errors.password && (<p>{`${errors.password.message}`}</p>)}
+                                </div>
+                            </label>
+
+                        </div>
+
+                        <div className="flex-center py-4">
+                            <button disabled={isSubmitting} className='primary-btn' type='submit'>
+                                {isSubmitting ? (
+                                    <LoadingIcon fill='fill-clime dark:fill-cblack' />
+                                ) : (
+                                    <>
+                                        <p className='text-white'>Crear cuenta</p>
+                                        <CreateAccountIcon fill='fill-clime dark:fill-cblack' />
+                                    </>
+                                )
+                                }
+                            </button>
+                        </div>
+
+
+                        <div className="flex justify-center py-2">
+                            <Link href={'/auth/login'}>
+                                <p className="text-center group-hover:underline underline-offset-2">¿Ya tienes una cuenta?</p>
+                            </Link>
+                        </div>
+                    </motion.form>
+                )
+                }
+            </Card>
+        </motion.div>
     )
 }
 

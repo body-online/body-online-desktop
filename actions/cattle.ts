@@ -1,10 +1,10 @@
 "use server";
 
-import { currentFarm, currentUser } from "@/lib/auth";
-import { CattleSchema } from "../lib/types";
+import { currentUser } from "@/lib/auth";
+import { CreateCattleSchema, CattleState } from "../lib/types";
 import axios from "axios";
 
-export async function createCattle(cattle: CattleSchema): Promise<{
+export async function createCattle(cattle: CreateCattleSchema): Promise<{
  data?: string;
  error?: string;
 }> {
@@ -19,6 +19,8 @@ export async function createCattle(cattle: CattleSchema): Promise<{
    data: {
     ...cattle,
     farmId: user?.farmId,
+    defaultCicles: parseInt(cattle.defaultCicles),
+    state: CattleState.EMPTY,
    },
   });
 
@@ -31,6 +33,7 @@ export async function createCattle(cattle: CattleSchema): Promise<{
   };
  }
 }
+
 export async function deleteCattle(cattleId: string): Promise<{
  data?: string;
  error?: string;
@@ -41,10 +44,8 @@ export async function deleteCattle(cattleId: string): Promise<{
    url: `${process.env.API_URL}/api/ranchi/cattle/delete/${cattleId}`,
   });
 
-  if (!data?.success) {
-   const errorMessage = data?.message ?? "Error al eliminar el individuo";
-   return { error: errorMessage };
-  }
+  console.log(`delete: ${cattleId}`);
+  console.log(data);
 
   return data;
  } catch (err: any) {

@@ -24,7 +24,7 @@ const LogoutButton = () => {
         <form className="flex justify-center py-2 group" action={logOut}>
             <button type='submit' className='flex-center gap-2 border rounded-full custom-border w-max bg-white dark:bg-cgray h-10 px-3'>
                 <p className='text-sm text-start font-medium transition-all'>Cerrar sesión</p>
-                <LogoutIcon fill='fill-slate-600 dark:fill-slate-400 md:group-hover:fill-black dark:md:group-hover:fill-white' />
+                <LogoutIcon fill='fill-slate-600 dark:fill-slate-400 md:group-hover:fill-cgray dark:md:group-hover:fill-white' />
             </button>
         </form>
     )

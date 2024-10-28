@@ -1,10 +1,8 @@
 "use client";
 
 import {
-    ColumnDef,
     ColumnFiltersState,
     SortingState,
-    VisibilityState,
     flexRender,
     getCoreRowModel,
     getFilteredRowModel,
@@ -24,13 +22,19 @@ import {
 
 import { ArrowsIcon, LoadingIcon, SearchIcon } from '../ui/icons';
 import React, { useEffect, useState } from "react";
-import { columnsLocation } from './columns';
-import axios from 'axios';
+
 import toast from 'react-hot-toast';
+import InfoMessage from '../ui/info';
 import { getLocations } from '@/data/location';
 import { LocationProps } from '@/lib/types';
+import { columnsLocation } from './columns';
+import LoadingTableSkeleton from '../ui/loading-table-skeleton';
+import StatePagination from '../ui/state-pagination';
+import DeleteLocationBtn from './delete-button';
+import AddLocationBtn from './add-location';
+import FilterInput from '../ui/filter-input';
 
-export function LocationsDataTable({ totalAmount }: { totalAmount?: number }) {
+export function LocationsDataTable({ totalLocations }: { totalLocations?: number }) {
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
     const [sorting, setSorting] = React.useState<SortingState>([]);
     const [isLoading, setIsLoading] = useState<boolean>(true)
@@ -51,19 +55,9 @@ export function LocationsDataTable({ totalAmount }: { totalAmount?: number }) {
 
         onSortingChange: setSorting,
         onColumnFiltersChange: setColumnFilters,
-        // onColumnVisibilityChange: setColumnVisibility,
-        // onRowSelectionChange: setRowSelection,
-
-        initialState: {
-            pagination: {
-                pageSize: 50, //custom default page size
-            },
-        },
         state: {
             sorting,
             columnFilters,
-            // columnVisibility,
-            // rowSelection,
         },
     });
 
@@ -71,60 +65,76 @@ export function LocationsDataTable({ totalAmount }: { totalAmount?: number }) {
         setIsLoading(true)
         try {
             const { data } = await getLocations({ page, limit, name: searchTerm })
-            if (data?.totalPages) setTotalPages(Number(data.totalPages))
-            if (data?.locations) setLocations(data.locations)
-
+            if (data) {
+                setTotalPages(Number(data.totalPages) > 0 ? Number(data.totalPages) : 1)
+                setLocations(data.locations)
+            }
         } catch (error) {
             toast.error('Ha ocurrido un error al encontrar los resultados')
-            console.log(error)
         } finally {
             setIsLoading(false)
         }
     }
 
     useEffect(() => {
-        searchLocations()
-    }, [page, totalAmount, limit])
+        searchLocations();
+    }, [page, limit, totalLocations, searchTerm])
 
     return (
-        <div className='space-y-3'>
-            <form onSubmit={(e) => { e.preventDefault(); searchLocations() }}>
+        <div className='card max-h-max w-full'>
+            <div className="pt-4 px-4">
+                <div className="flex-between mb-2">
 
-                <div className=" p-3 md:p-5">
-                    <label>
-                        <div className="flex input gap-3 items-center w-full max-w-sm">
-                            <SearchIcon fill={`${isLoading ? 'fill-slate-300' : 'fill-slate-400'}`} />
-                            <input
-                                className={`text-base h-12 border-none bg-transparent focus:outline-none w-full placeholder:text-slate-400 placeholder:font-normal disabled:opacity-50 md:max-w-sm`}
-                                disabled={!locations}
-                                placeholder="Buscar por nombre..."
-                                value={searchTerm}
-                                onChange={({ target }) => setSearchTerm(target.value)}
-                            />
-                        </div>
-                    </label>
-                    <p className="opacity-50 text-xs mt-1">
-                        Presione <b>Enter / Ir</b> para buscar
-                    </p>
-                </div>
-            </form>
+                    <h2 className='font-semibold text-xl'>Ubicaciones</h2>
 
-            <div className='overflow-auto relative w-full flex flex-col h-full max-h-96'>
-                {isLoading ? (
-                    <div className='h-full flex-center gap-2 py-default'>
-                        <LoadingIcon />
-                        <p className='text-base font-medium font-slate-300'>Buscando resultados</p>
+
+                    <div className="flex gap-2 items-center">
+                        {isLoading ? <LoadingIcon /> :
+                            <p className='text-sm font-medium text-slate-500 dark:text-slate-400'>
+                                {locations?.length} {(locations?.length ?? 0) != 1 ? 'registros' : 'registro'}
+                            </p>
+                        }
                     </div>
-                ) : (
-                    <div className='relative'>
+                </div>
+            </div>
+
+
+            <div className="mb-2 px-4 space-y-2">
+                <FilterInput
+                    placeholder='Buscar por nombre...'
+                    onChange={(e) => setSearchTerm(e)}
+                    disabled={!locations.length && !searchTerm}
+                />
+
+                <AddLocationBtn customText='Nueva' searchLocations={searchLocations} />
+            </div>
+
+
+            {isLoading ? (
+                <LoadingTableSkeleton />
+            ) : locations?.length == 0 ? (
+                <div className='p-4'>
+                    <InfoMessage
+                        type='info'
+                        title='Sin resultados'
+                        subtitle={
+                            searchTerm ? `No hemos encontrado resultados con "${searchTerm}".` : 'Crea un individuo para visualizarlo en la tabla.'}
+                    />
+                </div>
+            ) : (
+                <>
+                    <div className='overflow-auto relative w-full flex flex-col max-h-[70vh]'>
                         <Table>
                             <TableHeader className='sticky top-0'>
                                 {table.getHeaderGroups().map((headerGroup) => {
                                     return (
-                                        <TableRow key={headerGroup.id} className='w-min'>
+                                        <TableRow key={headerGroup.id}>
+                                            <th>
+                                                <p>Acciones</p>
+                                            </th>
                                             {headerGroup.headers.map((header) => {
                                                 return (
-                                                    <TableHead key={header.id} className='w-min'>
+                                                    <TableHead key={header.id}>
                                                         {flexRender(
                                                             header.column.columnDef.header,
                                                             header.getContext(),
@@ -140,6 +150,13 @@ export function LocationsDataTable({ totalAmount }: { totalAmount?: number }) {
                             <TableBody>
                                 {table.getRowModel().rows.map((row) => (
                                     <TableRow key={row.id}>
+                                        <td key={'actions'}>
+                                            <DeleteLocationBtn
+                                                id={row.original._id}
+                                                name={row.original.name}
+                                                searchLocations={searchLocations}
+                                            />
+                                        </td>
                                         {row.getVisibleCells().map((cell) => (
                                             <TableCell key={cell.id}>
                                                 {flexRender(
@@ -153,73 +170,21 @@ export function LocationsDataTable({ totalAmount }: { totalAmount?: number }) {
                             </TableBody>
                         </Table>
                     </div>
-                )}
-            </div>
-
-
-            <div className="flex-end gap-3 p-3 md:p-5">
-
-                <label className='pagination'>
-                    <p className='text-xs pl-2 m-auto'>Cantidad de filas</p>
-                    <select
-                        disabled={isLoading}
-                        className='dark:bg-cgray dark:text-white'
-                        value={limit}
-                        onChange={({ target }) => { setPage(1); setLimit(Number(target.value)) }}
-                    >
-                        <option value="10">10</option>
-                        <option value="20">20</option>
-                        <option value="30">30</option>
-                        <option value="40">40</option>
-                        <option value="50">50</option>
-                    </select>
-                </label>
-
-                {totalPages &&
-                    <div className="pagination">
-                        <button
-                            className="table_btn_pag"
-                            disabled={page === 1}
-                            onClick={() => setPage(page - 1)}
-                        >
-                            <ArrowsIcon direction="rotate-90" />
-                        </button>
-
-                        <p className="text-xs px-2 m-auto">Pág. {page} de {totalPages}</p>
-
-                        <button
-                            className="table_btn_pag"
-                            disabled={page === totalPages || totalPages === 1 || !totalPages}
-                            onClick={() => setPage(page + 1)}
-                        >
-                            <ArrowsIcon direction="-rotate-90" />
-                        </button>
+                    <div className="p-2">
+                        <StatePagination
+                            page={page}
+                            changePage={(newPage) => setPage(newPage)}
+                            limit={limit}
+                            changeLimit={(newLimit) => setLimit(newLimit)}
+                            totalPages={totalPages ?? 1}
+                        />
                     </div>
-                }
-            </div>
+                </>
+            )}
+
         </div >
-
-
     );
+
 }
 
 export default LocationsDataTable;
-
-const ArrowIcon = ({ direction }: { direction: "left" | "right" }) => {
-    return (
-        <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={1.5}
-            stroke="currentColor"
-            className={`w-4 h-4 ${direction === "right" ? "rotate-180" : ""}`}
-        >
-            <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M15.75 19.5L8.25 12l7.5-7.5"
-            />
-        </svg>
-    );
-};

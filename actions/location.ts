@@ -11,6 +11,7 @@ export async function createLocation(location: LocationSchema): Promise<{
  try {
   const user = await currentUser();
 
+  if (user?.type != "owner") return { error: "Error de permisos" };
   if (!user?.farmId || !location?.name)
    return {
     error: "Error al encontrar la organización",
@@ -29,7 +30,6 @@ export async function createLocation(location: LocationSchema): Promise<{
   return { data: "Ubicación creada correctamente" };
  } catch (err: any) {
   console.log(err?.response?.data);
-  console.log(err);
   return {
    error:
     err?.response?.data?.message ??
@@ -53,7 +53,6 @@ export async function deleteLocation(
   return { data: "success" };
  } catch (err: any) {
   const errorMessage: string =
-   err?.message ??
    err?.response?.data?.message ??
    `Ha ocurrido un error al eliminar la ubicación`;
 
