@@ -12,6 +12,8 @@ import EventsDataTable from '@/components/event/table';
 export default async function Home() {
   const user = await currentUser()
 
+  if (!user) return redirect("/auth/login")
+
   if (!user?.farmId) {
     return (
       <div className="w-screen h-[calc(100vh-60px)] overflow-hidden flex-center px-default">

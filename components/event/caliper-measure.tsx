@@ -32,8 +32,7 @@ const CaliperMeasure = ({ min, max, measure, setMeasure, disabled }:
                 return (
                     <button
                         disabled={disabled}
-                        className={`
-                                option_button
+                        className={`option_button
                                         ${skinny ? `bg-yellow-400 dark:bg-yellow-400` : ideal ? `bg-green-300 dark:bg-green-400` : `bg-orange-500 dark:bg-orange-400`}
                                         ${selected ? `ring-2 ring-csemigreen` : `opacity-50 active:opacity-100 md:hover:opacity-80`}
                                 `}

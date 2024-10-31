@@ -26,7 +26,7 @@ const TasksDashboard = ({ user }: { user?: ExtendedUser }) => {
     const [totalTasks, setTotalTasks] = useState<number>(0)
     const [totalPages, setTotalPages] = useState<number>(0)
     const [isLoading, setIsLoading] = useState<boolean>(true)
-    const [filterAssignedTo, setFilterAssignedTo] = useState<ExtendedUser[]>([])
+    const [assignedTo, setAssignedTo] = useState<ExtendedUser[]>([])
 
     // new task modal
     const [isOpenNewTaskModal, setIsOpenNewTaskModal] = useState<boolean>(false)
@@ -42,7 +42,7 @@ const TasksDashboard = ({ user }: { user?: ExtendedUser }) => {
         const { data, error } = await getTasks({
             page,
             limit,
-            filterAssignedTo: (userType == 'operator') ? user?.id : filterAssignedTo?.[0]?.id,
+            assignedTo: userType == 'operator' ? user?.id : assignedTo?.[0]?.id,
             dueSoon: true,
             completed: userType != 'operator'
             // search
@@ -60,7 +60,7 @@ const TasksDashboard = ({ user }: { user?: ExtendedUser }) => {
     useEffect(() => {
         searchTasks();
         return setIsOpenUsersList(false);
-    }, [page, limit, filterAssignedTo])
+    }, [page, limit, assignedTo])
     // search,
 
     return (
@@ -70,35 +70,34 @@ const TasksDashboard = ({ user }: { user?: ExtendedUser }) => {
                 <div className="header_container">
                     {/* filters */}
                     <div className='rounded-lg bg-slate-100 dark:bg-clightgray max-w-max h-9 px-3 flex-center relative'>
+
                         <button
                             className='flex-center gap-2 w-max disabled:opacity-50'
                             onClick={() => {
-                                if (!filterAssignedTo?.length) setIsOpenUsersList(true)
-                                else setFilterAssignedTo([])
+                                if (!assignedTo?.length) setIsOpenUsersList(true)
+                                else setAssignedTo([])
                             }}
                         >
-                            {
-                                filterAssignedTo?.length ? (
-                                    <>
-                                        <CloseIcon
-                                            fill='fill-slate-700 dark:fill-slate-300'
-                                            sizes='w-4 h-4'
-                                        />
-                                        <div className="h-4 w-4 absolute -right-1 -top-1 rounded-full flex-center bg-clime">
-                                            <p className="text-cgray dark:text-cgray text-xs font-black">
-                                                {filterAssignedTo.length}
-                                            </p>
-                                        </div>
-                                    </>
-                                ) : null
-                            }
+                            {assignedTo?.length ? (
+                                <>
+                                    <CloseIcon
+                                        fill='fill-slate-700 dark:fill-slate-300'
+                                        sizes='w-4 h-4'
+                                    />
+                                    <div className="h-4 w-4 absolute -right-1 -top-1 rounded-full flex-center bg-clime">
+                                        <p className="text-cgray dark:text-cgray text-xs font-black">
+                                            {assignedTo.length ? 1 : 0}
+                                        </p>
+                                    </div>
+                                </>
+                            ) : null}
 
                             <>
                                 <FilterIcon fill='fill-slate-700 dark:fill-slate-300'
                                     sizes='w-4 h-4'
                                 />
                                 <p className='font-medium text-slate-700 dark:text-slate-300 text-sm'>
-                                    Filtrar
+                                    Usuarios
                                 </p>
                             </>
                         </button>
@@ -126,9 +125,8 @@ const TasksDashboard = ({ user }: { user?: ExtendedUser }) => {
                                 {/* list of users availables */}
                                 <div className="flex flex-col max-h-96 w-full">
                                     <UsersList
-                                        onlyOne={true}
-                                        selectedUsers={filterAssignedTo ?? []}
-                                        setSelectedUsers={setFilterAssignedTo}
+                                        selectedUsers={assignedTo ?? []}
+                                        setSelectedUsers={setAssignedTo}
                                         search={searchUsers}
                                         disabled={false}
                                     />

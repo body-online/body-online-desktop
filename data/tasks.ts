@@ -8,14 +8,14 @@ import axios from "axios";
 export async function getTasks({
  page,
  limit,
- filterAssignedTo,
+ assignedTo,
  dueSoon,
  completed,
  search,
 }: {
  page: number;
  limit: number;
- filterAssignedTo?: string;
+ assignedTo?: string;
  dueSoon?: boolean;
  completed?: boolean;
  search?: string;
@@ -40,10 +40,7 @@ export async function getTasks({
    },
    data: {
     caravan: search,
-    assignedTo:
-     filterAssignedTo?.length && filterAssignedTo.length >= 1
-      ? filterAssignedTo
-      : undefined,
+    assignedTo,
     dueSoon,
     // completed,
    },

@@ -83,10 +83,8 @@ const SelectCattle = ({ selectedCattle, setSelectedCattle }: { selectedCattle?: 
                                         <li key={index}>
                                             <button
                                                 type='button'
-                                                onClick={() => {
-                                                    setSelectedCattle(cattle)
-                                                }}
                                                 className="option_button"
+                                                onClick={() => setSelectedCattle(cattle)}
                                             >
                                                 <div className="w-full relative overflow-x-auto pb-[2px] flex items-center">
                                                     <div

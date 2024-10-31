@@ -185,7 +185,7 @@
 
 .option_button {
   @apply px-2 md:px-4 py-1 min-h-14 flex items-center gap-3 w-full rounded-lg enabled:cursor-pointer transition-all border custom-border select-none flex-center
-  enabled:active:bg-opacity-50 enabled:md:hover:bg-opacity-70 disabled:opacity-50 bg-white dark:bg-clightgray; 
+  enabled:active:bg-opacity-50 enabled:md:hover:bg-opacity-70 disabled:opacity-50; 
 }
 
 .info_chip {
