@@ -32,6 +32,7 @@ import { columnsEvent } from './columns';
 import LoadingRowsSkeleton from '../ui/loading-rows-skeleton';
 import AddEventBtn from '../cattles/add-event';
 import StatePagination from '../ui/state-pagination';
+import FilterInput from '../ui/filter-input';
 
 export function EventsDataTable({ totalAmount, totalEvents }: { totalAmount?: number; totalEvents?: number }) {
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
@@ -64,7 +65,7 @@ export function EventsDataTable({ totalAmount, totalEvents }: { totalAmount?: nu
     const searchEvents = async () => {
         setIsLoading(true)
         try {
-            const { data } = await getEvents({ page, limit })
+            const { data } = await getEvents({ page, limit, caravan: searchTerm })
             if (data) {
                 setTotalPages(Number(data.totalPages) > 0 ? Number(data.totalPages) : 1)
                 setEvents(data.events)
@@ -112,11 +113,11 @@ export function EventsDataTable({ totalAmount, totalEvents }: { totalAmount?: nu
 
 
             <div className="mb-2 px-4 space-y-2">
-                {/* <FilterInput
-                    placeholder='Buscar por nombre...'
+                <FilterInput
+                    placeholder='Buscar por caravana...'
                     onChange={(e) => setSearchTerm(e)}
-                    disabled={!locations.length && !searchTerm}
-                /> */}
+                    disabled={!events.length && !searchTerm}
+                />
 
 
             </div>
@@ -164,12 +165,14 @@ export function EventsDataTable({ totalAmount, totalEvents }: { totalAmount?: nu
                             </table>
                         </div>
                         :
-                        <InfoMessage
-                            type='censored'
-                            title='Sin resultados'
-                            subtitle={!searchTerm ? 'Debes crear un evento para continuar' :
-                                `No hemos encontrado eventos que contengan ${searchTerm}`}
-                        />
+                        <div className="px-4">
+                            <InfoMessage
+                                type='censored'
+                                title='Sin resultados'
+                                subtitle={!searchTerm ? 'Debes crear al menos un evento para visualizar la tabla' :
+                                    `No hemos encontrado resultados con "${searchTerm}".`}
+                            />
+                        </div>
                     }
                 </>
             )}

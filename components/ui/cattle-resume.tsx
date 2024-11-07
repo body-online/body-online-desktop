@@ -3,12 +3,17 @@ import React from 'react'
 import ChipState from '../cattles/chip-state'
 import ChipBodyCondition from '../cattles/chip-body-condition'
 
-const CattleResume = ({ cattle, withoutClasses }: { cattle: CattleProps; withoutClasses?: boolean }) => {
+const CattleResume = ({ cattle, withoutClasses, withoutHeader, customHeader }: {
+    customHeader?: any;
+    cattle: CattleProps;
+    withoutClasses?: boolean;
+    withoutHeader?: boolean;
+}) => {
     const lastMeditionHour = cattle?.bodyConditionDate ? new Date(cattle.bodyConditionDate)
-        .toLocaleTimeString("es-AR", { hour: 'numeric', minute: 'numeric' }) : '-'
+        .toLocaleTimeString("es-AR", { hour: 'numeric', minute: 'numeric' }) : ''
 
     const lastStateHour = cattle?.stateDate ? new Date(cattle.stateDate)
-        .toLocaleTimeString("es-AR", { hour: 'numeric', minute: 'numeric' }) : '-'
+        .toLocaleTimeString("es-AR", { hour: 'numeric', minute: 'numeric' }) : ''
 
 
     const lastMedition = cattle?.bodyConditionDate ?
@@ -18,55 +23,57 @@ const CattleResume = ({ cattle, withoutClasses }: { cattle: CattleProps; without
         new Date(cattle.stateDate).toLocaleDateString("es-AR", { day: 'numeric', month: 'short', year: 'numeric' }) : '-'
 
     return (
-        <div className={withoutClasses ? '' : 'p-4 w-full border custom-border rounded-xl dark:bg-clightgray bg-gray-50 overflow-auto'}>
-            <div className="flex gap-6 w-full min-w-max">
-                <div className='min-w-[50px]'>
-                    {/* <p className='input_instructions mb-2 text-sm'>Caravana</p> */}
-                    <p className='font-bold text-2xl text-center'>
+        <div className={withoutClasses ? '' : 'py-2 w-full border custom-border rounded-xl dark:bg-clightgray/50 bg-gray-50/50 overflow-x-auto min-h-max'}>
+            {withoutHeader ? null :
+                <p className="font-medium sticky left-0 pb-2 w-full border-b custom-border px-2 mb-2 text-gray-600 dark:text-gray-400">
+                    {customHeader ?? `Resumen`}
+                </p>
+            }
+
+            <div className="flex gap-5 w-full min-w-max px-4">
+                <div className='min-w-[50px] text-start'>
+                    <p className='text-gray-600 dark:text-gray-400 text-start mb-1 text-[11px] tracking-wide font-medium uppercase'>Caravana</p>
+                    <p className='font-bold text-2xl'>
                         {cattle?.caravan}
                     </p>
                 </div>
 
-                <div>
-                    {/* <p className='input_instructions mb-2 text-sm'>Estado</p> */}
-                    <div className='flex gap-2'>
+                <div className='min-w-[50px] text-start'>
+                    <p className='text-gray-600 dark:text-gray-400 text-start mb-1 text-[11px] tracking-wide font-medium uppercase'>Estado</p>
+
+                    <div className="flex gap-2">
                         <ChipState state={cattle.state} />
-                        <div>
-                            <p className="input_instructions text-sm -mb-1 text-start">
+                        <div className='-space-y-1.5'>
+                            <p className="input_instructions text-start text-sm">
                                 {lastState}
                             </p>
-                            <p className="input_instructions text-xs text-start">
-                                {lastMeditionHour}
-                            </p>
-                        </div>
-                    </div>
-                </div>
-
-                <div>
-                    {/* <p className='input_instructions mb-2 text-sm'>Cond. Corporal</p> */}
-                    <div className='flex gap-2'>
-                        <ChipBodyCondition measure={Number(cattle.bodyCondition)} bodyRanges={cattle.bodyRanges} />
-                        <div>
-                            <p className="input_instructions text-sm -mb-1 text-start">
-                                {lastMedition}
-                            </p>
-                            <p className="input_instructions text-xs text-start">
+                            <p className="input_instructions text-start text-xs">
                                 {lastStateHour}
                             </p>
                         </div>
                     </div>
                 </div>
+
+
+
+                <div className='min-w-[50px] text-start'>
+                    <p className='text-gray-600 dark:text-gray-400 text-start mb-1 text-[11px] tracking-wide font-medium uppercase'>Condición Corporal</p>
+
+                    <div className="flex gap-2">
+                        <ChipBodyCondition measure={Number(cattle.bodyCondition)} bodyRanges={cattle.bodyRanges} />
+
+                        <div className='-space-y-1.5'>
+                            <p className="input_instructions text-start text-sm">
+                                {lastMedition}
+                            </p>
+                            <p className="input_instructions text-start text-xs">
+                                {lastMeditionHour}
+                            </p>
+                        </div>
+                    </div>
+
+                </div >
             </div >
-
-
-
-
-
-
-
-
-
-
         </div >
     )
 }

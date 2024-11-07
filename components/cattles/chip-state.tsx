@@ -6,7 +6,7 @@ const ChipState = ({ state }: { state?: CattleState }) => {
             return <p className='chip chip_red'>Muerta</p>
 
         case 'pregnant':
-            return <p className='chip chip_violet'>Gestante</p>
+            return <p className='chip chip_violet'>Gestación</p>
 
         case 'maternity':
             return <p className='chip chip_rose'>Maternidad</p>

@@ -52,7 +52,7 @@ export function AddUserBtn({ customText, handleRefresh }: { customText?: string;
                     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
                         <div>
                             <label htmlFor='type' className='w-full'>
-                                {/* <p className="input_label">Tipo de usuario*</p> */}
+                                <p className="input_label mb-3">Nuevo usuario</p>
                                 <div className="flex gap-2 mt-2">
                                     <HorizontalSelector
                                         options={[
@@ -152,7 +152,7 @@ export function AddUserBtn({ customText, handleRefresh }: { customText?: string;
                 <button
                     type='button'
                     onClick={handleOpen}
-                    className='rounded_btn bg-cgreen  dark:bg-clightgray/50'
+                    className='rounded_btn bg-cgreen  dark:bg-clightgray'
                 >
                     <p className={`text-white dark:`}>
                         {customText ?? "Crear usuario"}

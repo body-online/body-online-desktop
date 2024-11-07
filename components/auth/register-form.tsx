@@ -29,7 +29,6 @@ const RegisterForm = () => {
     const onSubmit = async (values: z.infer<typeof RegisterSchema>) => {
 
         const { error } = await registerUser({ ...values, type: 'owner' });
-
         if (error)
             return toast.error(error ?? 'Ha ocurrido un error')
 
@@ -47,7 +46,6 @@ const RegisterForm = () => {
         >
             <Card headerLabel="Registrarme">
                 {isLogginIn ? (
-
                     <motion.div
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}

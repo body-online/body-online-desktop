@@ -9,15 +9,16 @@ const CheckButton = ({ value, onClick, selected, disabled, children }: { value: 
             value={value}
             type='button'
             onClick={onClick}
-            className={`relative flex items-center transition-all px-6 py-4 w-full
+            className={`relative flex items-center transition-all px-6 py-3 w-full gap-2
                         md:hover:bg-slate-100 md:dark:hover:bg-clightgray ${disabled ? 'opacity-50' : ''}`}
         >
-            <div className={`h-5 overflow-hidden flex items-center justify-start w-5 mr-2 opacity-100`}>
-                <div className='min-w-max min-h-max'>
-                    {selected &&
-                        <CheckIcon fill='fill-cgreen dark:fill-clime' />
-                    }
-                </div>
+            <div className='min-h-6 min-w-6 max-h-6 max-w-6'>
+                {selected ?
+                    <CheckIcon className='fill-cgreen dark:fill-clime h-6 w-6' />
+                    :
+                    <div className={`h-6 rounded-full bg-white dark:bg-clightgray border-2 border-slate-300 dark:border-cgray/50 overflow-hidden flex items-center justify-start w-6 opacity-100`}>
+                    </div>
+                }
             </div>
 
             <div className='flex items-center gap-2 w-full'>

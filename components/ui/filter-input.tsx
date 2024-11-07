@@ -31,7 +31,7 @@ const FilterInput = ({ label, instructions, placeholder, onChange, disabled }: {
             }
 
             {/* search */}
-            <div className="flex input gap-3 items-center w-full">
+            <div className="flex input gap-3 items-center w-full md:max-w-sm">
                 <div className={`${disabled ? "opacity-50" : ""}`}>
                     <SearchIcon />
                 </div>

@@ -118,7 +118,7 @@ const LocationsList = ({
                                         selected={selected}
                                         disabled={disabled}
                                     >
-                                        <p className={`font-medium text-base text-gray-600 dark:text-gray-300 ${selected ? 'text-opacity-100' : 'dark:text-opacity-50 text-opacity-50 enabled:md:hover:text-opacity-100'}`}>
+                                        <p className={`text-lg font-medium text-gray-600 dark:text-gray-300 ${selected ? 'text-opacity-100' : 'dark:text-opacity-50 text-opacity-50 enabled:md:hover:text-opacity-100'}`}>
                                             {location.name}
                                         </p>
                                     </CheckButton>

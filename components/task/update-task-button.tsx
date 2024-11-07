@@ -10,13 +10,14 @@ import { createEvent } from '@/actions/event';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import CaliperMeasure from '../event/caliper-measure';
-import { EventIcon, LoadingIcon } from '../ui/icons';
+import { ArrowsIcon, EventIcon, LoadingIcon } from '../ui/icons';
 import CheckButton from '../ui/check-button';
 import CloseBtn from '../ui/close-btn';
 import Modal from '../ui/modal'
 import { useSession } from 'next-auth/react';
 import ChipState from '../cattles/chip-state';
 import ChipBodyCondition from '../cattles/chip-body-condition';
+import CattleResume from '../ui/cattle-resume';
 
 const UpdateTaskButton = (
     { task, setTask, defaultValues }: { task: TaskProps; setTask: Dispatch<SetStateAction<TaskProps>>; defaultValues: DefaultValues<EventSchema> }
@@ -25,7 +26,7 @@ const UpdateTaskButton = (
     const [pendingMeasures, setPendingMeasures] = useState<CattleProps[]>([...task?.cattleIds])
     const [step, setStep] = useState<number>(1)
     const [isOpen, setIsOpen] = useState<boolean>(false)
-    const [selectedCattle, setSelectedCattle] = useState<any>()
+    const [selectedCattle, setSelectedCattle] = useState<CattleProps | any>()
 
     function handleOpen() {
         setSelectedCattle(task?.cattleIds?.[0]);
@@ -109,21 +110,45 @@ const UpdateTaskButton = (
             </button>
 
             <Modal isOpen={isOpen} handleClose={handleClose}>
-                <div className='card'>
+                <div className='card max-w-2xl mx-auto w-full'>
                     <div className="header_container">
-                        <h2 className="semititle">
-                            {step == 1 ? 'Individuos pendientes de medición' : (step === 2 && selectedCattle) ? `Individuo ${selectedCattle.caravan}` : null}
-                        </h2>
+                        <div className="overflow-x-auto w-full">
+                            <div className="flex items-center gap-1 w-max py-1 px-2">
+                                <div>
+                                    <p className="text-base font-medium">
+                                        Nueva medición
+                                    </p>
+                                </div>
+                                {selectedCattle &&
+                                    <>
+                                        <ArrowsIcon direction='-rotate-90' />
+                                        <p className=''>
+                                            {selectedCattle?.caravan}
+                                        </p>
+                                    </>
+                                }
+                                {watch('measure') && selectedCattle?.geneticId?.bodyRanges &&
+                                    <>
+                                        <ArrowsIcon direction='-rotate-90' />
 
-                        <CloseBtn handleClose={handleClose} />
+                                        <ChipBodyCondition bodyRanges={selectedCattle.geneticId.bodyRanges} measure={watch('measure')} />
+                                    </>
+                                }
+                            </div>
+                        </div>
+                        {handleClose &&
+                            <CloseBtn handleClose={handleClose} />
+                        }
                     </div>
 
                     <div className="h-full overflow-auto flex flex-col">
                         {step == 1 ? (
                             <>
-                                <p className="input_instructions mb-3 px-4">
-                                    Seleccione la caravana a medir
-                                </p>
+                                <div className='px-4 flex flex-col'>
+                                    <p className="input_instructions text-base mb-2">
+                                        Seleccione la caravana a medir
+                                    </p>
+                                </div>
 
                                 <div
                                     className="custom_list"
@@ -139,23 +164,7 @@ const UpdateTaskButton = (
                                                 selected={selected}
                                                 disabled={isSubmitting}
                                             >
-                                                <div className=" overflow-auto w-full ">
-                                                    <div className="flex gap-3">
-                                                        <div className="sticky left-0 backdrop-blur flex-center w-max">
-                                                            <p className={`text-base md:text-lg px-2 font-medium text-gray-600 dark:text-gray-300 ${selected ? 'text-opacity-100' : 'dark:text-opacity-50 text-opacity-50 enabled:md:hover:text-opacity-100'}`}>
-                                                                {cattle.caravan}
-                                                            </p>
-                                                        </div>
-                                                        <div>
-                                                            <ChipState state={cattle.state} />
-                                                        </div>
-                                                        <div>
-                                                            <ChipBodyCondition
-                                                                bodyRanges={cattle?.geneticId?.bodyRanges}
-                                                                measure={Number(cattle?.bodyCondition ?? 0)} />
-                                                        </div>
-                                                    </div>
-                                                </div>
+                                                <CattleResume withoutHeader={true} cattle={{ ...cattle, bodyRanges: cattle.geneticId.bodyRanges }} withoutClasses={true} />
                                             </CheckButton>
                                         )
                                     })}
@@ -163,9 +172,10 @@ const UpdateTaskButton = (
                             </>
                         ) : (step == 2 && selectedCattle && selectedCattle?.geneticId) ? (
                             <div className='px-4 flex flex-col'>
-                                <p className="input_instructions mb-3">
-                                    Ingrese la medida de la caravana {selectedCattle.caravan}.
+                                <p className="input_instructions text-base mb-2">
+                                    Indique la medida del caliper
                                 </p>
+
 
                                 <CaliperMeasure
                                     min={Number(selectedCattle?.geneticId?.bodyRanges?.[0])}

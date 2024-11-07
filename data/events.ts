@@ -7,9 +7,11 @@ import { currentFarm, currentUser } from "@/lib/auth";
 export async function getEvents({
  page,
  limit,
+ caravan,
 }: {
  page: number;
  limit: number;
+ caravan?: string;
 }): Promise<{
  error?: string;
  data?: {
@@ -26,7 +28,7 @@ export async function getEvents({
   const { data } = await axios.get(
    `${process.env.API_URL}/api/ranchi/event/farm/get/${farmId}`,
    {
-    params: { page, limit },
+    params: { page, limit, caravan },
    }
   );
 

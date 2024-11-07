@@ -48,7 +48,7 @@ const Modal = ({ handleClose, children, isOpen, hideCloseBtn }: ModalProps) => {
                     animate="visible"
                     exit="exit"
                     className="fixed top-0 left-0 h-screen w-screen flex-center 
-                    backdrop-blur bg-cgray/50 dark:bg-cblack/95 z-40 px-2 overflow-hidden"
+                    backdrop-blur bg-cgray/50 dark:bg-cblack/50 backdrop-saturate-200 z-40 px-2 overflow-hidden"
                     onClick={(e) => { return e.stopPropagation() }}
                 >
                     <div className="max-h-[98vh] max-w-2xl w-full m-auto flex flex-col my-auto">

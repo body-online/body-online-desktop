@@ -27,9 +27,7 @@ export async function createCattle(cattle: CreateCattleSchema): Promise<{
   return { data: "Individuo creado correctamente" };
  } catch (err: any) {
   return {
-   error:
-    err?.response?.data?.message ??
-    "Ha ocurrido un error al crear el individuo",
+   error: "Ha ocurrido un error al crear el individuo",
   };
  }
 }

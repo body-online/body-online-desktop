@@ -20,6 +20,15 @@ import CaravansList from './caravans-list';
 import { AxiosError } from 'axios';
 import Resume from '../ui/resume';
 
+const stepInstructions = [
+    {
+        instructions: (
+            <p className="input_instructions text-lg px-4 mb-2">
+                Seleccione los <b>responsables</b> de realizar las mediciones de la tarea.
+            </p>
+        )
+    }
+]
 const CreateTaskForm = ({ handleRefresh }: { handleRefresh?: () => void }) => {
     // step of create task form
     const [step, setStep] = useState<number>(1)
@@ -67,15 +76,20 @@ const CreateTaskForm = ({ handleRefresh }: { handleRefresh?: () => void }) => {
     return (
         <>
             {/* className='h-full w-full flex flex-col max-w-2xl mx-auto overflow-hidden' */}
+            {/* <div className="mx-4 chip chip_gray mb-2">
+                <p className='input_instructions text-sm font-medium'><b className='text-base'>{step}</b> de 3</p>
+                {stepInstructions[step].instructions}
+            </div> */}
             {step === 1 ? (
                 <div className='px-4'>
                     <label htmlFor="expirationDate">
-                        <p className="input_label">Fecha de vencimiento</p>
-                        <p className="input_instructions mb-3">Seleccione la fecha de vencimiento que le desea asignar a esta tarea.</p>
+                        <p className="input_instructions mb-3">
+                            Ingrese la fecha de vencimiento de la tarea.
+                        </p>
 
                         <input
                             disabled={isSubmitting}
-                            className='input min-w-[50%] w-full'
+                            className='input w-full max-w-xs'
                             value={watch('expirationDate') as any ?? ''}
                             {...register('expirationDate')}
                             type='datetime-local'
@@ -88,26 +102,12 @@ const CreateTaskForm = ({ handleRefresh }: { handleRefresh?: () => void }) => {
                 </div>
             ) : step === 2 ? (
                 <>
-                    <div className="px-4 mb-2">
-                        <FilterInput
-                            // label={'Responsables'}
-                            instructions='Seleccione los responsables de la tarea.'
-                            placeholder={'Buscar por nombre...'}
-                            disabled={isSubmitting}
-                            // value={searchUsers}
-                            onChange={(e: any) => {
-                                setSearchUsers(e);
-                            }}
-                        />
-                    </div>
-
-                    {/* resume */}
                     <Resume
                         handleClean={() => setSelectedUsers([])}
                         disabled={!watch('assignedTo')?.length || isSubmitting}
                         amount={watch('assignedTo')?.length}
                     >
-                        {selectedUsers?.toReversed().map((user, index) => (
+                        {selectedUsers.length ? selectedUsers?.toReversed().map((user, index) => (
                             <div key={index} className='resume_chip min-w-max'>
                                 <ProfileImage user={user} height='h-6' width='w-6' />
                                 <p>
@@ -123,8 +123,22 @@ const CreateTaskForm = ({ handleRefresh }: { handleRefresh?: () => void }) => {
                                     />
                                 </button>
                             </div>
-                        ))}
+                        )) : (
+                            <p className='my-auto input_instructions'>Sin selecciones</p>
+                        )}
                     </Resume>
+                    <div className="px-4 mb-2">
+                        <FilterInput
+                            placeholder={'Ej. Juan Perez'}
+                            disabled={isSubmitting}
+                            // value={searchUsers}
+                            onChange={(e: any) => {
+                                setSearchUsers(e);
+                            }}
+                        />
+                    </div>
+
+
 
                     <UsersList
                         selectedUsers={selectedUsers}
@@ -136,17 +150,11 @@ const CreateTaskForm = ({ handleRefresh }: { handleRefresh?: () => void }) => {
             ) : (
                 <>
                     <div className='px-4'>
-                        <FilterInput
-                            label={'Caravanas'}
-                            instructions='Seleccione las caravanas que desea asignar la tarea.'
-                            placeholder={'Buscar por caravana...'}
-                            disabled={isSubmitting}
-                            onChange={(e: any) => {
-                                setSearchCattles(e);
-                            }}
-                        />
 
                         {/* resume */}
+                        <p className="input_instructions">
+                            Seleccione las caravanas que deben ser medidas.
+                        </p>
                         <div className='flex gap-2 items-center h-14'>
                             <CleanButton
                                 onClick={() => setSelectedCattles([])}
@@ -171,6 +179,14 @@ const CreateTaskForm = ({ handleRefresh }: { handleRefresh?: () => void }) => {
                                 </div>
                             </div>
                         </div>
+
+                        <FilterInput
+                            placeholder={'Buscar por caravana...'}
+                            disabled={isSubmitting}
+                            onChange={(e: any) => {
+                                setSearchCattles(e);
+                            }}
+                        />
                     </div>
 
                     {/* list of users availables */}
@@ -193,8 +209,6 @@ const CreateTaskForm = ({ handleRefresh }: { handleRefresh?: () => void }) => {
                 >
                     <p className='dark:text-slate-400 text-slate-500'>Anterior</p>
                 </button>
-
-                <p className='input_instructions text-sm font-medium'><b className='text-base'>{step}</b> de 3</p>
 
                 {step == 3 ? (
                     <button

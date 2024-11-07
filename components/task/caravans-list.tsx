@@ -84,7 +84,7 @@ const CaravansList = ({
                 </div>
             ) : (
                 <>
-                    <div className="w-full overflow-auto divide-y custom-divide">
+                    <div className="custom_list">
                         {cattlesList.map((cattle, index) => {
                             const selected = Boolean(selectedCattles?.find(i => i._id === cattle._id));
 
@@ -97,7 +97,7 @@ const CaravansList = ({
                                     selected={selected}
                                     disabled={disabled}
                                 >
-                                    <CattleResume cattle={cattle} withoutClasses={true} />
+                                    <CattleResume withoutHeader={true} cattle={cattle} withoutClasses={true} />
                                 </CheckButton>
                             )
                         })}

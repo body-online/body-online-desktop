@@ -51,7 +51,7 @@ function GeneticsTablePage() {
             </div>
 
             <div className="px-4 mb-2 space-y-2">
-                <div className="flex input gap-3 items-center w-full px-4">
+                <div className="flex input gap-3 items-center w-full md:max-w-sm px-4">
                     <div className={`${isLoading ? "opacity-50" : ""}`}>
                         <SearchIcon />
                     </div>

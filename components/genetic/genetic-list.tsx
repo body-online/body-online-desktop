@@ -58,7 +58,7 @@ const GeneticsList = (
                     </p>
                 </div>
 
-                <div className="flex input gap-3 items-center w-full px-4">
+                <div className="flex input gap-3 items-center w-full md:max-w-sm px-4">
                     <div className={`${disabled ? "opacity-50" : ""}`}>
                         <SearchIcon />
                     </div>

@@ -86,7 +86,7 @@ export default function Navbar({ user }: { user?: ExtendedUser }) {
                 </div>
             </div>
 
-            {user.farmId && (
+            {user.farmId && user.type === "owner" ? (
                 <>
                     {/* navigation */}
                     {(pathname?.match(/\//g) || []).length <= 1 && (
@@ -115,7 +115,7 @@ export default function Navbar({ user }: { user?: ExtendedUser }) {
                         </div>
                     )}
                 </>
-            )}
+            ) : null}
 
             {/* config modal */}
             <AnimatePresence

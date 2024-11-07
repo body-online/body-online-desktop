@@ -25,6 +25,7 @@ export enum CattleState {
  PREGNANT = "PREGNANT",
  EMPTY = "EMPTY",
  MATERNITY = "MATERNITY",
+ DEAD = "DEAD",
 }
 
 export type CreateCattleSchema = z.infer<typeof createCattleSchema>;

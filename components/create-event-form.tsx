@@ -16,9 +16,9 @@ import FilterInput from './ui/filter-input';
 import CheckButton from './ui/check-button';
 import CaliperMeasure from './event/caliper-measure';
 import CattleResume from './ui/cattle-resume';
-import ChipState from './cattles/chip-state';
 import { eventTypesList } from '@/lib/constants';
 import CloseBtn from './ui/close-btn';
+import ChipBodyCondition from './cattles/chip-body-condition';
 
 const CreateEventForm = (
     { handleRefresh, handleByCattle, handleClose }: {
@@ -27,7 +27,7 @@ const CreateEventForm = (
         handleClose?: () => void;
     }
 ) => {
-    const { register, resetField, setValue, unregister, handleSubmit, watch, setError, clearErrors, formState: { errors, isSubmitting }, reset } =
+    const { register, setValue, unregister, handleSubmit, watch, setError, clearErrors, formState: { errors, isSubmitting }, reset } =
         useForm<z.infer<typeof eventSchema>>({
             resolver: zodResolver(eventSchema),
             defaultValues: {
@@ -93,12 +93,13 @@ const CreateEventForm = (
                 (eventDate < new Date(selectedCattleLastBodyDate as string)) ||
                 (eventDate < new Date(selectedCattleLastStateDate as string))
             ) {
-                return setError('eventDate', { type: 'custom', message: 'La fecha debe ser posterior a la del último evento creado.' })
+                return setError('eventDate', { type: 'custom', message: 'La fecha debe ser posterior a la del último evento asignado al individuo.' })
             }
             clearErrors('eventDate')
         }
 
     }, [selectedEventDate])
+
 
     useEffect(() => {
         if (handleByCattle)
@@ -112,24 +113,60 @@ const CreateEventForm = (
             className='flex flex-col overflow-hidden h-full'
         >
             <div className="header_container">
-                <p className="semititle">
-                    Crear evento
-                </p>
+                <div className="overflow-x-auto w-full">
+                    <div className="flex items-center gap-1 w-max py-1 px-2">
+                        <div>
+                            <p className="text-base font-medium">
+                                Nuevo evento
+                            </p>
+                        </div>
+                        {selectedCattleCaravan &&
+                            <>
+                                <ArrowsIcon direction='-rotate-90' />
+                                <p className=''>
+                                    {selectedCattleCaravan}
+                                </p>
+                            </>
+                        }
+                        {selectedEventType &&
+                            <>
+                                <ArrowsIcon direction='-rotate-90' />
+                                <p className=''>
+                                    {eventTypesList.find((i) => i.value === selectedEventType)?.label}
+                                </p>
+                            </>
+                        }
+                        {selectedEventDetail &&
+                            <>
+                                <ArrowsIcon direction='-rotate-90' />
+
+                                {selectedEventType != 'body_measure' ?
+                                    <p className=''>
+                                        {selectedEventDetail}
+                                    </p>
+                                    :
+                                    <ChipBodyCondition bodyRanges={bodyRanges} measure={watch('measure')} />
+                                }
+                            </>
+                        }
+                    </div>
+                </div>
                 {handleClose &&
                     <CloseBtn handleClose={handleClose} />
                 }
             </div>
 
-            {selectedCattles?.[0] && step > 1 &&
+            {selectedCattles?.[0] && step == 2 &&
                 <div className='flex flex-col h-full px-4 gap-4 mb-4'>
-                    {/* cattleResume */}
-                    <CattleResume cattle={selectedCattles?.[0]} />
+                    <CattleResume customHeader={'Caravana seleccionada'} cattle={selectedCattles?.[0]} />
                 </div>
             }
             {isSubmitting ? (
                 <div className="flex-center h-[30vh] gap-2 py-default ">
                     <LoadingIcon />
-                    <p className='text-lg font-medium'>Creando evento...</p>
+                    <p className='input_instructions text-base font-medium'>
+                        Creando evento...
+                    </p>
                 </div>
             ) : step == 1 ? (
                 // STEP 1
@@ -137,6 +174,10 @@ const CreateEventForm = (
                 // PS: this will be disabled if handleByCattle is passed by props
                 <>
                     <div className='px-4 mb-2'>
+                        <p className="input_instructions mb-2">
+                            Seleccionar caravana
+                        </p>
+
                         <FilterInput
                             placeholder={'Buscar por caravana...'}
                             disabled={isSubmitting}
@@ -166,7 +207,7 @@ const CreateEventForm = (
                             </p>
                             <input
                                 disabled={isSubmitting}
-                                className='input min-w-[50%] w-full'
+                                className='input w-full max-w-xs'
                                 {...register('eventDate')}
                                 type='datetime-local'
                             />
@@ -178,30 +219,29 @@ const CreateEventForm = (
 
                         <p className="input_instructions">Tipo de evento</p>
                     </div>
+
                     <div className="custom_list">
-                        {eventTypesList?.map((event, index) => {
+                        {eventTypesList?.filter((i) => !i.disabledStates.includes(selectedCattleState)).map((event, index) => {
                             const selected = event.value === selectedEventType;
                             // The cattle will be PREGNANT, EMPTY, MATERNITY
-                            if (event.value === 'weaning' && !selectedCattleLastBodyDate) return null
-                            if (!event.disabledStates.includes(selectedCattleState)) {
-                                // if the event is allowed to the selected cattle state show it
-                                return (
-                                    <CheckButton
-                                        key={index}
-                                        value={event.value}
-                                        label={event.label}
-                                        onClick={() => setValue('eventType', event.value)}
-                                        selected={selected}
-                                        disabled={isSubmitting}
-                                    >
-                                        <p
-                                            className={`font-medium text-xl text-gray-600 dark:text-gray-300 
+                            // if (event.value === 'weaning' && !selectedCattleLastBodyDate) return null
+
+                            return (
+                                <CheckButton
+                                    key={index}
+                                    value={event.value}
+                                    label={event.label}
+                                    onClick={() => setValue('eventType', event.value)}
+                                    selected={selected}
+                                    disabled={isSubmitting}
+                                >
+                                    <p
+                                        className={`font-medium text-xl text-gray-600 dark:text-gray-300 text-start
                                         ${selected ? 'text-opacity-100' : 'dark:text-opacity-50 text-opacity-50 enabled:md:hover:text-opacity-100'}`}>
-                                            {event.label}
-                                        </p>
-                                    </CheckButton>
-                                )
-                            }
+                                        {event.label}
+                                    </p>
+                                </CheckButton>
+                            )
                         })}
                     </div>
 
@@ -213,10 +253,9 @@ const CreateEventForm = (
                 <>
                     {/* event details */}
                     {selectedEventType == "body_measure" ? (
-
-                        <div className='px-4 space-y-3'>
-                            <p className='input_instructions mb-2'>
-                                Se modificará el estado corporal de <b>{selectedCattleCaravan}</b>.
+                        <div className='px-4 space-y-3 flex flex-col overflow-auto'>
+                            <p className="input_instructions text-base">
+                                Indique la medida del caliper
                             </p>
 
                             <CaliperMeasure
@@ -232,38 +271,32 @@ const CreateEventForm = (
                         </div>
                     ) : ["pregnant", "death", "cattle_birth", "not_pregnant", "weaning"].includes(selectedEventType) ? (
                         <>
-                            <p className="input_instructions mb-2 px-4">
-                                {selectedEventType == 'death' ? "Motivo de la muerte" :
-                                    selectedEventType == 'not_pregnant' ? "Motivo del aborto" :
-                                        selectedEventType == 'weaning' ? "Cantidad de destetados" :
-                                            selectedEventType == 'cattle_birth' ? "Cantidad de nacidos" : null
-                                }
-                            </p>
-
                             {selectedEventType === 'pregnant' ? (
-                                <div className='px-4 space-y-3 mb-12'>
-                                    <p className='input_instructions mb-2'>
-                                        Se modificará el estado del individuo <b>{selectedCattleCaravan}</b>.
-                                    </p>
-                                    <div className='flex-center max-w-max gap-3'>
-                                        <ChipState state={selectedCattleState as CattleState} />
-                                        <ArrowsIcon direction='-rotate-90 flex-center' />
-                                        <ArrowsIcon direction='-rotate-90 flex-center' />
-                                        <ArrowsIcon direction='-rotate-90 flex-center' />
-                                        <ChipState state={'PREGNANT' as CattleState} />
-                                    </div>
-
+                                <div className="px-4 space-y-3 flex flex-col overflow-auto">
+                                    <CattleResume
+                                        withoutHeader={true}
+                                        cattle={{
+                                            ...selectedCattles?.[0],
+                                            state: 'PREGNANT' as CattleState,
+                                            stateDate: new Date(selectedEventDate).toISOString()
+                                        }}
+                                    />
                                 </div>
                             ) : selectedEventType === 'cattle_birth' ? (
-                                <div className='px-4 mb-2'>
-                                    <div className="grid grid-cols-4 gap-y-2 gap-x-2 place-items-center">
+                                <div className='px-4 space-y-3 flex flex-col overflow-auto'>
+
+                                    <p className="input_instructions text-base">
+                                        Cantidad de nacidos
+                                    </p>
+
+                                    <div className="grid grid-cols-4 gap-y-2 gap-x-2 place-items-center overflow-auto">
                                         {eventTypesList?.[2]?.eventDetails?.map((i, index) => {
                                             const selected = i.value === selectedEventDetail
 
                                             return (
                                                 <button
                                                     disabled={isSubmitting}
-                                                    className={`option_button flex-center ${selected ? `ring-2 dark:ring-clime` : `opacity-70 hover:opacity-100`}`}
+                                                    className={`option_button bg-slate-100 dark:bg-clightgray flex-center ${selected ? `ring-2 dark:ring-clime` : `opacity-40 hover:opacity-100`}`}
                                                     key={index}
                                                     type='button'
                                                     onClick={() => setValue('eventDetail', i.label)}
@@ -277,15 +310,20 @@ const CreateEventForm = (
                                     </div>
                                 </div>
                             ) : selectedEventType === 'weaning' ? (
-                                <div className='px-4 mb-2'>
+                                <div className='px-4 space-y-3 flex flex-col overflow-auto'>
+
+                                    <p className="input_instructions text-base">
+                                        Cantidad de destetados
+                                    </p>
+
                                     <div className="grid grid-cols-4 gap-y-2 gap-x-2 place-items-center">
-                                        {eventTypesList?.[2]?.eventDetails?.map((i, index) => {
+                                        {eventTypesList?.[1]?.eventDetails?.map((i, index) => {
                                             const selected = i.value === selectedEventDetail
 
                                             return (
                                                 <button
                                                     disabled={isSubmitting}
-                                                    className={`option_button flex-center ${selected ? `ring-2 dark:ring-clime` : `opacity-70 hover:opacity-100`}`}
+                                                    className={`option_button flex-center bg-slate-100 dark:bg-clightgray ${selected ? `ring-2 dark:ring-clime` : `opacity-70 hover:opacity-100`}`}
                                                     key={index}
                                                     type='button'
                                                     onClick={() => setValue('eventDetail', i.label)}
@@ -299,29 +337,36 @@ const CreateEventForm = (
                                     </div>
                                 </div>
                             ) : (
-                                <div className="custom_list">
-                                    {eventTypesList?.[selectedEventType == 'death' ? 4 : selectedEventType == 'not_pregnant' ? 3 : selectedEventType == 'cattle_birth' ? 2 : 0]?.eventDetails?.map((i, index) => {
-                                        const selected = i.value === selectedEventDetail
+                                <>
+                                    <div className='px-4 space-y-3 mb-3 flex flex-col overflow-auto'>
+                                        <p className="input_instructions text-base">
+                                            Motivo de la muerte
+                                        </p>
+                                    </div>
+                                    <div className="custom_list">
+                                        {eventTypesList?.[selectedEventType == 'death' ? 5 : selectedEventType == 'not_pregnant' ? 4 : selectedEventType == 'cattle_birth' ? 3 : 0]?.eventDetails?.map((i, index) => {
+                                            const selected = i.value === selectedEventDetail
 
-                                        return (
-                                            <CheckButton
-                                                key={index}
-                                                value={i.value}
-                                                label={i.label}
-                                                onClick={() => setValue('eventDetail', i.value)}
-                                                selected={selected}
-                                                disabled={isSubmitting}
-                                            >
-                                                <p
-                                                    className={`font-medium text-xl text-gray-600 dark:text-gray-300 
+                                            return (
+                                                <CheckButton
+                                                    key={index}
+                                                    value={i.value}
+                                                    label={i.label}
+                                                    onClick={() => setValue('eventDetail', i.value)}
+                                                    selected={selected}
+                                                    disabled={isSubmitting}
+                                                >
+                                                    <p
+                                                        className={`font-medium text-xl text-gray-600 dark:text-gray-300 text-start
                                             ${selected ? 'text-opacity-100' : 'dark:text-opacity-50 text-opacity-50 enabled:md:hover:text-opacity-100'}`}>
-                                                    {i.label}
-                                                </p>
-                                            </CheckButton>
-                                        )
+                                                        {i.label}
+                                                    </p>
+                                                </CheckButton>
+                                            )
 
-                                    })}
-                                </div>
+                                        })}
+                                    </div>
+                                </>
                             )}
                         </>
                     ) : null
@@ -329,18 +374,23 @@ const CreateEventForm = (
                 </>
             ) : step === 4 ? (
                 <div className='px-4'>
-                    {/* <p className="input_label">
-                        Detalle del evento
-                    </p> */}
-                    {/* <p className="input_instructions mb-3">
 
-                    </p> */}
+                    {/* <CattleResume
+                        customHeader='Vista previa'
+                        cattle={{
+                            ...selectedCattles?.[0],
+                            state: eventTypesList.find((i) => i.value === selectedEventType)?.finalState?.toUpperCase() as CattleState ?? selectedCattleState,
+                            bodyCondition: String(watch('measure') ?? selectedCattleLastBodyCondition),
+                            bodyConditionDate: selectedEventDate ? new Date(selectedEventDate).toISOString() : selectedCattleLastBodyDate
+                        }}
+                    /> */}
+
                     <div className="label w-full">
                         <textarea
-                            placeholder='Ingrese detalle de ser necesario...'
+                            placeholder='Ingrese un detalle de ser necesario...'
                             {...register('observations')}
                             name="description"
-                            className="textarea"
+                            className="textarea placeholder:text-base min-h-20"
                         />
                     </div>
                 </div>
@@ -348,9 +398,9 @@ const CreateEventForm = (
             }
 
             {/* send and control buttons */}
-            <div className="buttons_container">
+            <div className="buttons_container mt-auto">
                 <button
-                    disabled={step == 1 || isSubmitting}
+                    disabled={step == 1 || isSubmitting || (handleByCattle && step == 2)}
                     className='rounded_btn bg-white dark:bg-clightgray'
                     type='button'
                     onClick={() => setStep(step - 1)}
@@ -368,7 +418,7 @@ const CreateEventForm = (
                         onClick={handleSubmit(onSubmit)}
                     >
                         <p className='text-white dark:text-cgray'>
-                            Crear evento
+                            Finalizar
                         </p>
                     </button>
                 ) : (

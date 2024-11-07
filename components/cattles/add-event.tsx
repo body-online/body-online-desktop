@@ -20,12 +20,7 @@ export function AddEventBtn({ defaultCattle, handleRefresh }: { defaultCattle?: 
     return (
         <>
             <Modal isOpen={isOpen} handleClose={handleClose}>
-                <div className='card_modal'>
-                    {/* <div className="header_container">
-                        <h2 className='semititle'></h2>
-                        <CloseBtn handleClose={handleClose} />
-                    </div> */}
-
+                <div className='card_modal w-full max-w-2xl mx-auto'>
                     <CreateEventForm
                         handleByCattle={defaultCattle}
                         handleClose={handleClose}
@@ -41,9 +36,12 @@ export function AddEventBtn({ defaultCattle, handleRefresh }: { defaultCattle?: 
             <button
                 type='button'
                 onClick={handleOpen}
+                disabled={defaultCattle?.state.toUpperCase() === 'DEAD'}
                 className='h-max w-max rounded_btn bg-csemigreen dark:bg-clime flex-center px-3 gap-1'
             >
-                <p className={`text-white dark:text-cblack font-medium`}>Evento</p>
+                <p className={`text-white dark:text-cblack font-medium`}>
+                    Evento
+                </p>
                 <EventIcon stroke='stroke-clime dark:stroke-cblack' />
             </button>
 

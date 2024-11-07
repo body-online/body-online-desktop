@@ -5,7 +5,6 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FarmSchema, farmSchema } from '@/lib/types';
 import { LoadingIcon } from './ui/icons';
-import { countries, provinces } from '@/lib/constants';
 import { createFarm } from '@/actions/farm';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
@@ -13,13 +12,19 @@ import Card from './ui/card';
 import SelectInputSearch from './ui/select-input-search';
 import { SelectOptionProps } from './ui/select-input';
 import { useSession } from 'next-auth/react';
+import { COUNTRIES } from '@/lib/countries';
+import { useEffect, useState } from 'react';
+import { searchCities } from '@/data/cities';
+
 
 export function FarmForm() {
     const router = useRouter()
     const { update, data: session } = useSession()
     const { register, watch, setValue, handleSubmit, formState: { errors, isSubmitting },
     } = useForm<FarmSchema>({ resolver: zodResolver(farmSchema) })
-
+    const [isLoadingCities, setIsLoadingCities] = useState<boolean>(false)
+    const [cities, setCities] = useState<SelectOptionProps[]>([])
+    const country = watch('country')
 
     const onSubmit: SubmitHandler<FarmSchema> = async (data: FarmSchema) => {
         try {
@@ -38,6 +43,29 @@ export function FarmForm() {
         }
     }
 
+    async function handleSearchCities() {
+        try {
+            setIsLoadingCities(true)
+            const cities = await searchCities({ country })
+
+            if (!cities?.length) {
+                setCities([])
+                return toast.error('Error al buscar las ciudades')
+            }
+
+            setCities(cities.map((i) => { return { "value": i.toLowerCase(), "label": i } }))
+        } catch (error) {
+            setCities([])
+        } finally {
+            setIsLoadingCities(false)
+        }
+    }
+
+    useEffect(() => {
+        if (country)
+            handleSearchCities();
+    }, [country])
+
     return (
         <motion.div
             initial={{ opacity: 0 }}
@@ -46,6 +74,7 @@ export function FarmForm() {
             key='register-form'
         >
             <Card headerLabel="Mi organización">
+                <p className='text-base mt-1 mb-6 opacity-80 font-normal'>Necesitamos que por favor nos brindes algunos datos antes de comenzar.</p>
                 {isSubmitting ? (
                     <motion.div
                         initial={{ opacity: 0 }}
@@ -104,11 +133,11 @@ export function FarmForm() {
                             <SelectInputSearch
                                 label=''
                                 placeholder='Seleccione una opción'
-                                value={watch('country') ? countries.find((o) => o.value == watch('country')) : null}
-                                options={countries}
+                                value={watch('country') ? COUNTRIES.find((o) => o.label.toLowerCase() == watch('country')) : null}
+                                options={COUNTRIES}
                                 isDisabled={isSubmitting}
                                 handleChange={(objSelected: SelectOptionProps) => {
-                                    return setValue("country", objSelected.value);
+                                    return setValue("country", objSelected.label.toLowerCase());
                                 }}
                                 error={errors?.country?.message}
                             />
@@ -116,11 +145,11 @@ export function FarmForm() {
                             <SelectInputSearch
                                 label=''
                                 placeholder='Seleccione una opción'
-                                value={watch('city') ? provinces.find((o) => o.value == watch('city')) : null}
-                                options={provinces}
-                                isDisabled={isSubmitting}
+                                value={watch('city') ? cities.find((o) => o.label.toLowerCase() == watch('city')) : null}
+                                options={cities}
+                                isDisabled={isSubmitting || isLoadingCities}
                                 handleChange={(objSelected: SelectOptionProps) => {
-                                    return setValue("city", objSelected.value);
+                                    return setValue("city", objSelected.label.toLowerCase());
                                 }}
                                 error={errors?.city?.message}
                             />

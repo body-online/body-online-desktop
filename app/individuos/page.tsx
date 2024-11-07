@@ -6,6 +6,7 @@ import React from 'react'
 export default async function Page() {
     const user = await currentUser()
 
+    if (!user?.farmId) return redirect('/')
     if (user?.type != 'owner') return redirect('/tareas')
 
     return (
