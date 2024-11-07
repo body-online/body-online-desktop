@@ -14,8 +14,6 @@ export async function createEvent(event: UpdateEventProps): Promise<{
  try {
   const user = await currentUser();
 
-  if (event?.eventType != "body_measure") return { error: "Error de permisos" };
-
   if (!user?.farmId) return { error: "No hemos encontrado organización" };
 
   const { data } = await axios({
