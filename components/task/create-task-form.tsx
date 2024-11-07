@@ -102,6 +102,10 @@ const CreateTaskForm = ({ handleRefresh }: { handleRefresh?: () => void }) => {
                 </div>
             ) : step === 2 ? (
                 <>
+                    <p className="input_instructions px-4 my-2">
+                        Seleccione los responsables de realizar las medidas.
+                    </p>
+
                     <Resume
                         handleClean={() => setSelectedUsers([])}
                         disabled={!watch('assignedTo')?.length || isSubmitting}
@@ -127,7 +131,8 @@ const CreateTaskForm = ({ handleRefresh }: { handleRefresh?: () => void }) => {
                             <p className='my-auto input_instructions'>Sin selecciones</p>
                         )}
                     </Resume>
-                    <div className="px-4 mb-2">
+
+                    <div className="px-4 my-2">
                         <FilterInput
                             placeholder={'Ej. Juan Perez'}
                             disabled={isSubmitting}
@@ -149,37 +154,38 @@ const CreateTaskForm = ({ handleRefresh }: { handleRefresh?: () => void }) => {
                 </>
             ) : (
                 <>
-                    <div className='px-4'>
+                    <p className="input_instructions px-4 my-2">
+                        Seleccione las caravanas que deben ser medidas.
+                    </p>
 
-                        {/* resume */}
-                        <p className="input_instructions">
-                            Seleccione las caravanas que deben ser medidas.
-                        </p>
-                        <div className='flex gap-2 items-center h-14'>
-                            <CleanButton
-                                onClick={() => setSelectedCattles([])}
-                                disabled={!watch('caravan')?.length || isSubmitting}
-                                amount={watch('caravan')?.length}
-                            />
 
-                            <div className="w-full overflow-x-auto">
-                                <div className='flex gap-2 w-max'>
-                                    {selectedCattles?.toReversed().map((cattle, index) => (
-                                        <div key={index} className='resume_chip'>
-                                            <p className='text-base font-semibold'>{cattle.caravan}</p>
-                                            <button
-                                                type='button'
-                                                onClick={() => setSelectedCattles(selectedCattles.filter(i => i._id != cattle._id))}
-                                                disabled={isSubmitting}
-                                            >
-                                                <CloseIcon sizes='h-4 w-4' fill='fill-slate-500 dark:fill-slate-400 hover:fill-slate-600 dark:hover:fill-slate-300' />
-                                            </button>
-                                        </div>
-                                    ))}
-                                </div>
+                    <Resume
+                        handleClean={() => setSelectedCattles([])}
+                        disabled={!watch('caravan')?.length || isSubmitting}
+                        amount={watch('caravan')?.length}
+                    >
+                        {selectedCattles.length ? selectedCattles?.toReversed().map((cattle, index) => (
+                            <div key={index} className='resume_chip min-w-max'>
+                                <p>
+                                    {cattle.caravan}
+                                </p>
+                                <button
+                                    type='button'
+                                    onClick={() => setSelectedCattles(selectedCattles.filter(i => i._id != cattle._id))}
+                                >
+                                    <CloseIcon
+                                        sizes='h-4 w-4'
+                                        fill='fill-slate-500 dark:fill-slate-400 hover:fill-slate-600 dark:hover:fill-slate-300'
+                                    />
+                                </button>
                             </div>
-                        </div>
+                        )) : (
+                            <p className='my-auto input_instructions'>Sin selecciones</p>
+                        )}
+                    </Resume>
 
+
+                    <div className='px-4 my-2'>
                         <FilterInput
                             placeholder={'Buscar por caravana...'}
                             disabled={isSubmitting}

@@ -71,6 +71,8 @@ const UpdateTaskButton = (
                 measuredCattles: [...task.measuredCattles, measuredCattle?.caravan],
                 completed: !leftCaravans.length
             })
+            reset()
+            setSelectedCattle(undefined)
             setPendingMeasures(leftMeasures)
 
             if (!leftCaravans?.length) {
@@ -119,7 +121,8 @@ const UpdateTaskButton = (
                                         Nueva medición
                                     </p>
                                 </div>
-                                {selectedCattle &&
+
+                                {selectedCattle?.caravan &&
                                     <>
                                         <ArrowsIcon direction='-rotate-90' />
                                         <p className=''>
@@ -127,7 +130,8 @@ const UpdateTaskButton = (
                                         </p>
                                     </>
                                 }
-                                {watch('measure') && selectedCattle?.geneticId?.bodyRanges &&
+
+                                {watch('measure') && selectedCattle?.geneticId?.bodyRanges.length == 2 &&
                                     <>
                                         <ArrowsIcon direction='-rotate-90' />
 
@@ -144,11 +148,9 @@ const UpdateTaskButton = (
                     <div className="h-full overflow-auto flex flex-col">
                         {step == 1 ? (
                             <>
-                                <div className='px-4 flex flex-col'>
-                                    <p className="input_instructions text-base mb-2">
-                                        Seleccione la caravana a medir
-                                    </p>
-                                </div>
+                                <p className="input_instructions px-4 my-2">
+                                    Seleccione la caravana que desea medir.
+                                </p>
 
                                 <div
                                     className="custom_list"

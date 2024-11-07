@@ -25,12 +25,11 @@ export async function getEvents({
 
   if (!farmId) return { error: "No hemos encontrado su organización" };
 
-  const { data } = await axios.get(
-   `${process.env.API_URL}/api/ranchi/event/farm/get/${farmId}`,
-   {
-    params: { page, limit, caravan },
-   }
-  );
+  const { data } = await axios({
+   url: `${process.env.API_URL}/api/ranchi/event/farm/get/${farmId}`,
+   method: "get",
+   params: { page, limit, caravan },
+  });
 
   return { data };
  } catch (error: any) {
