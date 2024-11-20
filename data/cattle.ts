@@ -31,10 +31,12 @@ export async function getCattles({
  name,
  page,
  limit,
+ state,
 }: {
  name?: string;
  page?: number;
  limit?: number;
+ state?: string[];
 }): Promise<{
  error?: string;
  data?: {
@@ -51,7 +53,7 @@ export async function getCattles({
    method: "GET",
    url: `${process.env.API_URL}/api/ranchi/cattle/${farmId}`,
    params: { page, limit },
-   data: { caravan: name },
+   data: { caravan: name, state },
   });
 
   const cattless = {

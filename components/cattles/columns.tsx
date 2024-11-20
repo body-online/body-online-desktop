@@ -27,7 +27,7 @@ export const columnsCattle: ColumnDef<CattleProps>[] = [
         accessorKey: "caravan",
         cell: ({ row }) => {
             return (
-                <div className='text-base font-medium'>
+                <div className='text-xl font-medium'>
                     {row.getValue("caravan")}
                 </div>
             );

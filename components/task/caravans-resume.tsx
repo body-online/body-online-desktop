@@ -19,20 +19,20 @@ const CaravansResume = ({ cattles, truncateAt }: { cattles: CattleProps[]; trunc
                                 className='flex'
                                 key={index}
                             >
-                                <p className='font-medium text-base'>
+                                <p className='font-medium text-lg'>
                                     {caravan.caravan}
                                     {showOnly.length != (index + 1) ? ',' : ''}
                                 </p>
                             </div>
                         )
                     })}
-                    {
-                        leftAssigned >= 1 ?
-                            <p className='ml-1 text-xs opacity-50'>
-                                {leftAssigned} más...
-                            </p> : null
-                    }
                 </div>
+                {
+                    leftAssigned >= 1 ?
+                        <p className='ml-1 font-medium text-sm text-slate-500 dark:text-slate-400'>
+                            {leftAssigned} más
+                        </p> : null
+                }
             </div>
         </div>
     )

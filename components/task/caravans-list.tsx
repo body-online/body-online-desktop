@@ -9,8 +9,6 @@ import StatePagination from '../ui/state-pagination'
 import CheckButton from '../ui/check-button'
 import InfoMessage from '../ui/info'
 import { getCattles } from '@/data/cattle'
-import ChipState from '../cattles/chip-state'
-import ChipBodyCondition from '../cattles/chip-body-condition'
 import CattleResume from '../ui/cattle-resume'
 
 const CaravansList = ({
@@ -33,7 +31,9 @@ const CaravansList = ({
 
     const handleGetCattles = async () => {
         setIsLoading(true);
-        const { data, error } = await getCattles({ name: search, page, limit })
+        const { data, error } = await getCattles({
+            name: search, page, limit, state: ["PREGNANT", "EMPTY", "MATERNITY"]
+        })
 
         if (data?.cattles) {
             setCattlesList(data.cattles)

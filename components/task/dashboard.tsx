@@ -1,10 +1,8 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import LoadingRowsSkeleton from '../ui/loading-rows-skeleton'
 import { TaskProps } from '@/lib/types'
 import { getTasks } from '@/data/tasks'
-import Card from '../ui/card'
 import { CloseIcon, FilterIcon, LoadingIcon, MiniAddIcon } from '../ui/icons'
 import { ExtendedUser } from '@/next-auth'
 import Modal from '../ui/modal'
@@ -16,56 +14,68 @@ import StatePagination from '../ui/state-pagination'
 import FilterInput from '../ui/filter-input'
 import CloseBtn from '../ui/close-btn'
 import LoadingTableSkeleton from '../ui/loading-table-skeleton'
+import UsersResume from './users-resume'
+import { useSession } from 'next-auth/react'
+import useLoadTasksOnline from '@/hooks/useLoadTasksOnline'
 
-const TasksDashboard = ({ user }: { user?: ExtendedUser }) => {
-    const userType = user?.type ?? 'operator'
+const TasksDashboard = () => {
+    const offlineTasks = useLoadTasksOnline();
+    const { data: session } = useSession();
+
+
     // task filters and status
     const [tasks, setTasks] = useState<TaskProps[]>()
     const [page, setPage] = useState<number>(1)
-    const [limit, setLimit] = useState<number>(10)
+    const [limit, setLimit] = useState<number>(50)
     const [totalTasks, setTotalTasks] = useState<number>(0)
     const [totalPages, setTotalPages] = useState<number>(0)
     const [isLoading, setIsLoading] = useState<boolean>(true)
     const [assignedTo, setAssignedTo] = useState<ExtendedUser[]>([])
-
     // new task modal
     const [isOpenNewTaskModal, setIsOpenNewTaskModal] = useState<boolean>(false)
-
     // status of assignedTo tasks filter
     const [isOpenUsersList, setIsOpenUsersList] = useState<boolean>(false)
     const [searchUsers, setSearchUsers] = useState<string>('')
 
 
+
     const searchTasks = async () => {
         setIsLoading(true);
+
+        if (!session?.user?.id || !session) return null
+
+        let userType = session.user.type ?? 'operator'
 
         const { data, error } = await getTasks({
             page,
             limit,
-            assignedTo: userType == 'operator' ? user?.id : assignedTo?.[0]?.id,
-            dueSoon: true,
+            assignedTo:
+                userType == 'operator' ? [session.user.id] :
+                    !assignedTo.length ?
+                        [session.user.id] :
+                        assignedTo?.map((i) => i.id),
             completed: userType != 'operator'
-            // search
         })
 
+
         if (data && !error) {
-            setTasks(data.tasks)
-            setTotalTasks(data.totalTask)
-            setTotalPages(data.totalPages)
+            const { tasks, totalTask, totalPages } = data;
+
+            // save in state (online mode)
+            setTasks(tasks)
+            setTotalTasks(totalTask)
+            setTotalPages(totalPages)
         }
         setIsLoading(false);
     }
 
-    // search when a parameter chagnes
     useEffect(() => {
         searchTasks();
-        return setIsOpenUsersList(false);
     }, [page, limit, assignedTo])
-    // search,
+
 
     return (
         <>
-            {/* dashboard taks */}
             <div className='card'>
                 <div className="header_container">
                     <h2 className='semititle'>Tareas</h2>
@@ -77,7 +87,7 @@ const TasksDashboard = ({ user }: { user?: ExtendedUser }) => {
                                 {totalTasks} {totalTasks != 1 ? 'registros' : 'registro'}
                             </p>
                         }
-                        {userType == 'owner' &&
+                        {session?.user.type == 'owner' &&
                             <button
                                 className="rounded_btn bg-cgreen dark:bg-clime"
                                 type='button'
@@ -92,48 +102,42 @@ const TasksDashboard = ({ user }: { user?: ExtendedUser }) => {
                     </div>
                 </div>
 
+                {/* filters */}
                 <div className="mx-4">
-
-                    {userType === 'owner' && (
-                        <div className='rounded-lg bg-slate-100 dark:bg-clightgray max-w-max h-9 px-3 flex-center relative'>
+                    {session?.user?.type === 'owner' && (
+                        <div className='rounded-lg bg-slate-100 dark:bg-clightgray max-w-max h-9 px-3 flex-center relative gap-2 flex'>
                             <button
                                 className='flex-center gap-2 w-max disabled:opacity-50'
-                                onClick={() => {
-                                    if (!assignedTo?.length) setIsOpenUsersList(true)
-                                    else setAssignedTo([])
-                                }}
+                                onClick={() => setIsOpenUsersList(true)}
                             >
-                                {assignedTo?.length ? (
-                                    <>
-                                        <CloseIcon
-                                            fill='fill-slate-700 dark:fill-slate-300'
-                                            sizes='w-4 h-4'
-                                        />
-                                        <div className="h-4 w-4 absolute -right-1 -top-1 rounded-full flex-center bg-clime">
-                                            <p className="text-cgray dark:text-cgray text-xs font-black">
-                                                {assignedTo.length ? 1 : 0}
-                                            </p>
-                                        </div>
-                                    </>
-                                ) : null}
-
-                                <>
-                                    <FilterIcon fill='fill-slate-700 dark:fill-slate-300'
-                                        sizes='w-4 h-4'
-                                    />
-                                    <p className='font-medium text-slate-700 dark:text-slate-300 text-sm'>
-                                        Usuarios
-                                    </p>
-                                </>
+                                <FilterIcon fill={`${assignedTo.length ? 'fill-cgreen dark:fill-clime' : 'fill-slate-700 dark:fill-slate-300'}`}
+                                    sizes='w-4 h-4'
+                                />
+                                {!assignedTo.length ?
+                                    <p className='font-medium text-slate-700 dark:text-slate-300 text-sm'>Responsables</p>
+                                    :
+                                    <UsersResume assignedTo={assignedTo} />
+                                }
                             </button>
 
+
+                            {assignedTo?.length ? (
+                                <button onClick={() => setAssignedTo([])}>
+                                    <CloseIcon
+                                        fill='fill-slate-700 dark:fill-slate-300 hover:opacity-70'
+                                        sizes='w-4 h-4'
+                                    />
+                                </button>
+                            ) : null}
+
+                            {/* dropdown */}
                             {isOpenUsersList ?
                                 <div
-                                    className="z-20 card border custom-border shadow-md absolute top-0 -left-3 flex flex-col w-[350px] md:w-[450px]">
+                                    className="z-20 card border custom-border shadow-md absolute top-0 -left-3 flex flex-col w-[98vw] md:w-[450px]">
                                     <div className="p-4">
                                         <div className="flex-between">
                                             <p className='font-medium text-slate-700 dark:text-slate-300 text-sm'>
-                                                Filtrar por responsable
+                                                Seleccione los responsables que desea visualizar
                                             </p>
                                             <CloseBtn handleClose={() => setIsOpenUsersList(false)} />
                                         </div>
@@ -148,7 +152,7 @@ const TasksDashboard = ({ user }: { user?: ExtendedUser }) => {
                                     </div>
 
                                     {/* list of users availables */}
-                                    <div className="flex flex-col max-h-96 w-full">
+                                    <div className="flex flex-col max-h-[30vh] w-full">
                                         <UsersList
                                             selectedUsers={assignedTo ?? []}
                                             setSelectedUsers={setAssignedTo}
@@ -163,7 +167,6 @@ const TasksDashboard = ({ user }: { user?: ExtendedUser }) => {
                     )}
                 </div>
 
-
                 {isLoading ?
                     <LoadingTableSkeleton />
                     : !tasks?.length ? (
@@ -174,7 +177,7 @@ const TasksDashboard = ({ user }: { user?: ExtendedUser }) => {
                                 subtitle={`No encontramos tareas registradas por el momento.`}
                             />
                         </div>
-                    ) :
+                    ) : (
                         <>
                             <div className="w-full overflow-auto">
                                 <TaskTable
@@ -193,24 +196,17 @@ const TasksDashboard = ({ user }: { user?: ExtendedUser }) => {
                                 />
                             </div>
                         </>
+                    )
                 }
             </div>
 
             {/* new task modal */}
             <Modal isOpen={isOpenNewTaskModal} handleClose={() => setIsOpenNewTaskModal(false)}>
                 <div className='card_modal'>
-                    <div className="header_container">
-                        <h2 className="semititle">
-                            Crear tarea
-                        </h2>
-
-                        <CloseBtn handleClose={() => setIsOpenNewTaskModal(false)} />
-                    </div>
-
-                    <CreateTaskForm handleRefresh={() => { return searchTasks() }} />
+                    <CreateTaskForm handleRefresh={() => { return searchTasks() }} handleClose={() => setIsOpenNewTaskModal(false)} />
                 </div>
             </Modal >
-        </ >
+        </>
     )
 }
 

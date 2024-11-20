@@ -10,8 +10,10 @@ import InfoMessage from '../ui/info'
 import { getGenetics } from '@/data/genetic'
 import AddGeneticBtn from './add-genetic'
 import GeneticsTable from './table'
+import useOnlineStatus from '@/hooks/useOnlineStatus'
 
 function GeneticsTablePage() {
+    const isOnline = useOnlineStatus()
     const [genetics, setGenetics] = useState<GeneticProps[]>()
     const [search, setSearch] = useState<string>('')
 
@@ -30,14 +32,15 @@ function GeneticsTablePage() {
 
     // search when a parameter chagnes
     useEffect(() => {
-        fetchGenetics();
+        if (isOnline)
+            fetchGenetics();
     }, [])
 
 
     const filteredGenetics = (!searchTerm || searchTerm == '') ? genetics : genetics?.filter((g) => g.name.toLowerCase().includes(searchTerm.toLowerCase()))
 
     return (
-        <div className='card pb-6 h-min'>
+        <div className='card h-min'>
             <div className="header_container">
                 <h2 className='font-semibold text-xl'>Genéticas</h2>
 

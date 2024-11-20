@@ -19,7 +19,7 @@ const StatePagination = ({ totalPages, page, changePage, limit, changeLimit, dis
                     <select
                         name='rowsPerPage'
                         disabled={!totalPages || disabled}
-                        className='dark:bg-cgray dark:text-white text-sm outline-0 ring-0'
+                        className='bg-transparent dark:text-white text-sm outline-0 ring-0'
                         value={limit}
                         onChange={({ target }) => { changePage(1); changeLimit(Number(target.value)) }}
                     >

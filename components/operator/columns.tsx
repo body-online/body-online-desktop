@@ -27,34 +27,39 @@ export const columnsUser: ColumnDef<ExtendedUser>[] = [
             return (
                 <div>
                     <div className="flex items-center gap-2">
-                        <ProfileImage user={row.original} width='w-6' height='h-6' />
-                        <p className='text-sm font-medium'>
-                            {row.getValue("name")}
-                        </p>
+                        <ProfileImage user={row.original} width='w-10' height='h-10' />
+                        <div>
+                            <p className='text-base font-medium'>
+                                {row.getValue("name")}
+                            </p>
+                            <p className='text-sm opacity-50 z-0'>
+                                {row.original.email}
+                            </p>
+                        </div>
                     </div>
                 </div>
             )
                 ;
         },
     },
-    {
-        header: ({ column }) => {
-            return (
-                <button
-                    type="button"
-                    onClick={() => column.toggleSorting(column.getIsSorted() == "asc")}
-                    className="flex-center"
-                >
-                    <p>Email</p>
-                    <ArrowsIcon direction={column.getIsSorted() == "asc" ? 'rotate-180' : column.getIsSorted() == "desc" ? '' : 'hidden'} />
-                </button>
-            );
-        },
-        accessorKey: "email",
-        cell: ({ row }) => {
-            return <div className='text-sm font-medium'>{row.getValue("email")}</div>;
-        },
-    },
+    // {
+    //     header: ({ column }) => {
+    //         return (
+    //             <button
+    //                 type="button"
+    //                 onClick={() => column.toggleSorting(column.getIsSorted() == "asc")}
+    //                 className="flex-center"
+    //             >
+    //                 <p>Email</p>
+    //                 <ArrowsIcon direction={column.getIsSorted() == "asc" ? 'rotate-180' : column.getIsSorted() == "desc" ? '' : 'hidden'} />
+    //             </button>
+    //         );
+    //     },
+    //     accessorKey: "email",
+    //     cell: ({ row }) => {
+    //         return <div className='text-sm font-medium'></div>;
+    //     },
+    // },
     // Actions
     // {
     //     header: () => {

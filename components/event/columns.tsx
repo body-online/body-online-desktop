@@ -44,6 +44,31 @@ export const columnsEvent: ColumnDef<EventProps>[] = [
                     onClick={() => column.toggleSorting(column.getIsSorted() == "asc")}
                     className="flex-center"
                 >
+                    <p>Fecha de creación</p>
+                    <ArrowsIcon direction={column.getIsSorted() == "asc" ? 'rotate-180' : column.getIsSorted() == "desc" ? '' : 'hidden'} />
+                </button>
+            );
+        },
+
+        accessorKey: "eventDate",
+        cell: ({ row }) => {
+            const createdAt = row.getValue("eventDate");
+            if (!createdAt)
+                return <p>-</p>;
+
+            const formatted = new Date(createdAt as string).toLocaleDateString("es-AR", { day: 'numeric', month: 'short', hour: 'numeric', minute: 'numeric', year: '2-digit' });
+
+            return <p>{formatted}</p>;
+        },
+    },
+    {
+        header: ({ column }) => {
+            return (
+                <button
+                    type="button"
+                    onClick={() => column.toggleSorting(column.getIsSorted() == "asc")}
+                    className="flex-center"
+                >
                     <p>Evento</p>
                     <ArrowsIcon direction={column.getIsSorted() == "asc" ? 'rotate-180' : column.getIsSorted() == "desc" ? '' : 'hidden'} />
                 </button>
@@ -135,31 +160,6 @@ export const columnsEvent: ColumnDef<EventProps>[] = [
                 default:
                     return '';
             }
-        },
-    },
-    {
-        header: ({ column }) => {
-            return (
-                <button
-                    type="button"
-                    onClick={() => column.toggleSorting(column.getIsSorted() == "asc")}
-                    className="flex-center"
-                >
-                    <p>Fecha de creación</p>
-                    <ArrowsIcon direction={column.getIsSorted() == "asc" ? 'rotate-180' : column.getIsSorted() == "desc" ? '' : 'hidden'} />
-                </button>
-            );
-        },
-
-        accessorKey: "eventDate",
-        cell: ({ row }) => {
-            const createdAt = row.getValue("eventDate");
-            if (!createdAt)
-                return <p>-</p>;
-
-            const formatted = new Date(createdAt as string).toLocaleDateString("es-AR", { day: 'numeric', month: 'short', hour: 'numeric', minute: 'numeric', year: '2-digit' });
-
-            return <p>{formatted}</p>;
         },
     },
 

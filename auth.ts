@@ -28,7 +28,6 @@ export const {
    if (trigger == "update") {
     const existingUser = await getUserByEmail(token.email);
     if (!existingUser) return null;
-    console.log(existingUser);
 
     token.id = existingUser?.id;
     token.farmId = existingUser?.farmId;

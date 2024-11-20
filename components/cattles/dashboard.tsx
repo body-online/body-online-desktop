@@ -1,5 +1,6 @@
 'use client'
 
+import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
 import { getCattles } from '@/data/cattle'
@@ -10,11 +11,9 @@ import { LoadingIcon, MiniAddIcon } from '../ui/icons'
 import StatePagination from '../ui/state-pagination'
 import CreateCattleForm from './create-cattle-form'
 import FilterInput from '../ui/filter-input'
-import CloseBtn from '../ui/close-btn'
 import InfoMessage from '../ui/info'
 import CattlesTable from './table'
 import Modal from '../ui/modal'
-import { useRouter } from 'next/navigation'
 
 function CattlesDashboard() {
     const router = useRouter()
@@ -24,9 +23,7 @@ function CattlesDashboard() {
     const [search, setSearch] = useState<string>('')
     const [totalCattles, setTotalCattles] = useState<number>(0)
     const [totalPages, setTotalPages] = useState<number>(0)
-
     const [isLoading, setIsLoading] = useState<boolean>(true)
-
     // new cattle modal
     const [isOpenNewCattleModal, setIsOpenNewCattleModal] = useState<boolean>(false)
 
@@ -124,15 +121,7 @@ function CattlesDashboard() {
             {/* new task modal */}
             <Modal isOpen={isOpenNewCattleModal} handleClose={handleClose}>
                 <div className='card_modal'>
-                    <div className="header_container">
-                        <h2 className="semititle">
-                            Crear individuo
-                        </h2>
-
-                        <CloseBtn handleClose={handleClose} />
-                    </div>
-
-                    <CreateCattleForm handleRefresh={() => { return searchCattles() }} />
+                    <CreateCattleForm handleRefresh={() => { return searchCattles() }} handleClose={handleClose} />
                 </div>
             </Modal >
         </>

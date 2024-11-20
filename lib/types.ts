@@ -33,15 +33,21 @@ export interface CattleProps {
  _id: string;
  creator: string;
  caravan: string;
- geneticName: string;
  geneticId: {
+  _id: string;
   name: string;
   description: string;
   farmId: string;
   bodyRanges: number[];
   deletedAt: string;
  };
- locationName: string;
+ locationId: {
+  _id: string;
+  name: string;
+  description: string;
+  deletedAt: string;
+  farmId: string;
+ };
  createdAt: string;
  state: CattleState;
  stateDate?: string;
@@ -198,5 +204,14 @@ export type TaskProps = {
  taskType: EventTypeEnum;
  measuredCattles: string[]; // Animales ya medidos
  completed: boolean; // Indica si la tarea ha sido completada
- message?: string; // Mensaje asociado a la tarea (opcional)
 };
+export interface OfflineTaskProps extends TaskProps {
+ _id: string;
+ expirationDate: Date;
+ caravan: string[]; // Animales asociados a la tarea
+ cattleIds: CattleProps[]; // Animales asociados a la tarea
+ assignedTo: ExtendedUser[]; // IDs de usuarios asignados a la tarea
+ taskType: EventTypeEnum;
+ measuredCattles: string[]; // Animales ya medidos
+ completed: boolean;
+}

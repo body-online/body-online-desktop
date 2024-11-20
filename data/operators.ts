@@ -34,7 +34,6 @@ export async function getOperators({
    data: search,
   });
 
-  // console.log(data?.users?.length);
   data.users = data.users.map((user: any) => {
    return {
     ...user,

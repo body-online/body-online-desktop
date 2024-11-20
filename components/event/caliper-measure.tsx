@@ -22,7 +22,7 @@ const CaliperMeasure = ({ min, max, measure, setMeasure, disabled }:
     }
 
     return (
-        <div className="grid grid-cols-4 gap-1 place-items-center place-content-center w-full">
+        <div className="grid grid-cols-4 gap-2 place-items-center w-full max-w-sm mx-auto place-content-stretch min-h-[450px] max-h-[450px]">
             {eventTypesList?.[1]?.eventDetails?.map((measureObj, index) => {
                 const measureValue = Number(measureObj.value);
                 const selected = (measure && measureValue === Number(measure))

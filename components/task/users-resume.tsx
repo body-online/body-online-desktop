@@ -3,15 +3,15 @@
 import { ExtendedUser } from '@/next-auth'
 import { ProfileImage } from '../ui/navbar'
 
-const UsersResume = ({ assignedTo }: { assignedTo: ExtendedUser[] }) => {
-    const leftAssigned = (assignedTo?.length ?? 0) - 5
+const UsersResume = ({ assignedTo, maxLong }: { assignedTo: ExtendedUser[]; maxLong?: number }) => {
+    const leftAssigned = (assignedTo?.length ?? 0) - (maxLong ?? 5)
 
     if (!assignedTo) return <p className='input_instructions'>-</p>
     return (
         <div>
             <div className="w-max flex items-center">
                 <div className="flex rounded-full bg-white dark:bg-clightgray bordercustom-border">
-                    {assignedTo.slice(0, 5).map((assignedTo, index) => {
+                    {assignedTo.slice(0, maxLong ?? 5).map((assignedTo, index) => {
                         return (
                             <div
                                 className='w-max border-[3px] rounded-full border-white dark:border-clightgray first:m-0 -ml-2 select-none'

@@ -33,8 +33,10 @@ import StatePagination from '../ui/state-pagination';
 import DeleteLocationBtn from './delete-button';
 import AddLocationBtn from './add-location';
 import FilterInput from '../ui/filter-input';
+import useOnlineStatus from '@/hooks/useOnlineStatus';
 
 export function LocationsDataTable({ totalLocations }: { totalLocations?: number }) {
+    const isOnline = useOnlineStatus()
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
     const [sorting, setSorting] = React.useState<SortingState>([]);
     const [isLoading, setIsLoading] = useState<boolean>(true)
@@ -77,7 +79,8 @@ export function LocationsDataTable({ totalLocations }: { totalLocations?: number
     }
 
     useEffect(() => {
-        searchLocations();
+        if (isOnline)
+            searchLocations();
     }, [page, limit, totalLocations, searchTerm])
 
     return (
@@ -103,7 +106,7 @@ export function LocationsDataTable({ totalLocations }: { totalLocations?: number
                 <FilterInput
                     placeholder='Buscar por nombre...'
                     onChange={(e) => setSearchTerm(e)}
-                    disabled={!locations.length && !searchTerm}
+                    disabled={!locations?.length && !searchTerm}
                 />
 
                 <AddLocationBtn customText='Nueva' searchLocations={searchLocations} />
@@ -118,15 +121,15 @@ export function LocationsDataTable({ totalLocations }: { totalLocations?: number
                         type='info'
                         title='Sin resultados'
                         subtitle={
-                            searchTerm ? `No hemos encontrado resultados con "${searchTerm}".` : 'Crea un individuo para visualizarlo en la tabla.'}
+                            searchTerm ? `No hemos encontrado resultados con "${searchTerm}".` : 'Crea una ubicación para visualizarla en la tabla.'}
                     />
                 </div>
             ) : (
                 <>
-                    <div className='overflow-auto relative w-full flex flex-col max-h-[70vh]'>
+                    <div className='overflow-auto relative w-full flex flex-col max-h-[58vh] md:max-h-[65vh] '>
                         <Table>
                             <TableHeader className='sticky top-0'>
-                                {table.getHeaderGroups().map((headerGroup) => {
+                                {table?.getHeaderGroups().map((headerGroup) => {
                                     return (
                                         <TableRow key={headerGroup.id}>
                                             <th>

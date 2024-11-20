@@ -1,5 +1,5 @@
 
-const ChipBodyCondition = ({ bodyRanges, measure }: { bodyRanges: number[]; measure?: number; }) => {
+const ChipBodyCondition = ({ bodyRanges = [0, 0], measure }: { bodyRanges: number[]; measure?: number; }) => {
 
     const minRange = Number(bodyRanges[0])
     const maxRange = Number(bodyRanges[1])
@@ -13,7 +13,7 @@ const ChipBodyCondition = ({ bodyRanges, measure }: { bodyRanges: number[]; meas
     if (fat) return <p className='chip chip_orange'>Gorda {`(${measure})`}</p>
 
 
-    if (skinny) return <p className='chip chip_yellow text-black dark:text-black'>Flaca {`(${measure})`}</p>
+    if (skinny) return <p className='chip chip_yellow'>Flaca {`(${measure})`}</p>
 
 
     if (ideal) return <p className='chip chip_green'>Ideal {`(${measure})`}</p>

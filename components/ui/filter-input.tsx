@@ -3,11 +3,11 @@
 import React, { useEffect, useState } from 'react'
 import { SearchIcon } from './icons';
 
-const FilterInput = ({ label, instructions, placeholder, onChange, disabled }: {
+const FilterInput = ({ label, instructions, placeholder, onChange, disabled, key }: {
     label?: string;
     instructions?: string;
     placeholder: string;
-    // value: string;
+    key?: string;
     disabled?: boolean;
     onChange: (e: any) => void
 }) => {
@@ -19,10 +19,10 @@ const FilterInput = ({ label, instructions, placeholder, onChange, disabled }: {
                 onChange(searchTerm)
             }, 300);
         return () => clearTimeout(delayInputTimeoutId);
-    }, [searchTerm]);
+    }, [searchTerm, onChange]);
 
     return (
-        <label className="w-full" htmlFor={label?.replaceAll(' ', '')}>
+        <label className="w-full" htmlFor={label?.replaceAll(' ', '')} key={key}>
             {label &&
                 <p className="input_label">{label}</p>
             }
@@ -36,6 +36,7 @@ const FilterInput = ({ label, instructions, placeholder, onChange, disabled }: {
                     <SearchIcon />
                 </div>
                 <input
+                    key={`${placeholder}.${label}`}
                     disabled={disabled}
                     className={`bg-transparent border-0 focus:ring-0 outline-0 focus:outline-0`}
                     type="text"

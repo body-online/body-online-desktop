@@ -1,6 +1,5 @@
 'use client'
 
-import Card from '@/components/ui/card'
 import InfoMessage from '@/components/ui/info'
 import { useRouter } from 'next/navigation'
 import React from 'react'
@@ -14,7 +13,7 @@ const AuthErrorPage = () => {
             <button
                 type='button'
                 className='max-w-max group'
-                onClick={() => router.replace('/auth/login')}
+                onClick={() => router.push('/auth/login')}
             >
                 <p className="text-center group-hover:underline underline-offset-2">Volver a intentar</p>
             </button>

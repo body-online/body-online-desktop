@@ -9,6 +9,7 @@ const CattleResume = ({ cattle, withoutClasses, withoutHeader, customHeader }: {
     withoutClasses?: boolean;
     withoutHeader?: boolean;
 }) => {
+
     const lastMeditionHour = cattle?.bodyConditionDate ? new Date(cattle.bodyConditionDate)
         .toLocaleTimeString("es-AR", { hour: 'numeric', minute: 'numeric' }) : ''
 
@@ -17,20 +18,20 @@ const CattleResume = ({ cattle, withoutClasses, withoutHeader, customHeader }: {
 
 
     const lastMedition = cattle?.bodyConditionDate ?
-        new Date(cattle.bodyConditionDate).toLocaleDateString("es-AR", { day: 'numeric', month: 'short', year: 'numeric' }) : '-'
+        new Date(cattle.bodyConditionDate).toLocaleDateString("es-AR", { day: 'numeric', month: 'short', year: 'numeric' }) : ''
 
     const lastState = cattle?.stateDate ?
-        new Date(cattle.stateDate).toLocaleDateString("es-AR", { day: 'numeric', month: 'short', year: 'numeric' }) : '-'
+        new Date(cattle.stateDate).toLocaleDateString("es-AR", { day: 'numeric', month: 'short', year: 'numeric' }) : ''
 
     return (
-        <div className={withoutClasses ? '' : 'py-2 w-full border custom-border rounded-xl dark:bg-clightgray/50 bg-gray-50/50 overflow-x-auto min-h-max'}>
+        <div className={withoutClasses ? 'w-full overflow-x-auto pb-1' : 'py-2 w-full border custom-border rounded-xl dark:bg-clightgray/50 bg-gray-50/50 overflow-x-auto min-h-max'}>
             {withoutHeader ? null :
                 <p className="font-medium sticky left-0 pb-2 w-full border-b custom-border px-2 mb-2 text-gray-600 dark:text-gray-400">
                     {customHeader ?? `Resumen`}
                 </p>
             }
 
-            <div className="flex gap-5 w-full min-w-max px-4">
+            <div className="flex gap-5 px-2 w-max">
                 <div className='min-w-[50px] text-start'>
                     <p className='text-gray-600 dark:text-gray-400 text-start mb-1 text-[11px] tracking-wide font-medium uppercase'>Caravana</p>
                     <p className='font-bold text-2xl'>
@@ -38,23 +39,12 @@ const CattleResume = ({ cattle, withoutClasses, withoutHeader, customHeader }: {
                     </p>
                 </div>
 
-                <div className='min-w-[50px] text-start'>
-                    <p className='text-gray-600 dark:text-gray-400 text-start mb-1 text-[11px] tracking-wide font-medium uppercase'>Estado</p>
-
-                    <div className="flex gap-2">
-                        <ChipState state={cattle.state} />
-                        <div className='-space-y-1.5'>
-                            <p className="input_instructions text-start text-sm">
-                                {lastState}
-                            </p>
-                            <p className="input_instructions text-start text-xs">
-                                {lastStateHour}
-                            </p>
-                        </div>
-                    </div>
+                <div className='min-w-[50px] text-start h-[53px] flex flex-col justify-between'>
+                    <p className='text-gray-600 dark:text-gray-400 text-start mb-1 text-[11px] tracking-wide font-medium uppercase'>Ubicación</p>
+                    <p className='font-normal text-base md:text-lg flex items-end'>
+                        {cattle?.locationId?.name}
+                    </p>
                 </div>
-
-
 
                 <div className='min-w-[50px] text-start'>
                     <p className='text-gray-600 dark:text-gray-400 text-start mb-1 text-[11px] tracking-wide font-medium uppercase'>Condición Corporal</p>
@@ -71,8 +61,23 @@ const CattleResume = ({ cattle, withoutClasses, withoutHeader, customHeader }: {
                             </p>
                         </div>
                     </div>
-
                 </div >
+
+                <div className='min-w-[105px] text-start'>
+                    <p className='text-gray-600 dark:text-gray-400 text-start mb-1 text-[11px] tracking-wide font-medium uppercase'>Estado</p>
+
+                    <div className="flex gap-2">
+                        <ChipState state={cattle.state} />
+                        <div className='-space-y-1.5'>
+                            <p className="input_instructions text-start text-sm">
+                                {lastState}
+                            </p>
+                            <p className="input_instructions text-start text-xs">
+                                {lastStateHour}
+                            </p>
+                        </div>
+                    </div>
+                </div>
             </div >
         </div >
     )

@@ -6,20 +6,26 @@ function getInitials(name?: string) {
 }
 
 import { AnimatePresence, motion } from 'framer-motion'
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { ExtendedUser } from '@/next-auth';
 import { signOut } from 'next-auth/react';
+import toast from 'react-hot-toast';
 import Link from 'next/link';
 
 import { modalBackground, navigationItems } from '@/lib/constants';
 import { CloseIcon, LogoutIcon, MenuIcon } from './icons';
 import ThemeSwitch from './theme-switch';
+import ChipIsOnline from './chip-online';
+import useOnlineStatus from '@/hooks/useOnlineStatus';
 
 
 
 export default function Navbar({ user }: { user?: ExtendedUser }) {
+    const isOnline = useOnlineStatus();
+    const [mounted, setMounted] = useState<boolean>(false);
     const [isOpen, setIsOpen] = useState(false);
+    const router = useRouter()
     const pathname = usePathname();
 
     const handleEsc = (event: KeyboardEvent) => {
@@ -39,6 +45,17 @@ export default function Navbar({ user }: { user?: ExtendedUser }) {
         }
     }, [isOpen])
 
+    useEffect(() => {
+        if (mounted && isOnline === false && pathname != '/') {
+            router.push('/')
+        }
+    }, [isOnline])
+
+    useEffect(() => {
+        setMounted(true)
+    }, [])
+
+
     if (!user) return null
 
     return (
@@ -47,11 +64,7 @@ export default function Navbar({ user }: { user?: ExtendedUser }) {
                 <div className='flex-between px-default'>
                     <div className='flex items-center gap-2 h-8 overflow-hidden'>
                         <ProfileImage user={user} height='h-8' width='w-8' />
-
-                        <div>
-                            <p className='text-sm dark:text-white font-semibold'>{user?.name}</p>
-                            <p className='text-xs dark:text-white opacity-70 font-medium'>{user?.farmName}</p>
-                        </div>
+                        <ChipIsOnline isOnline={isOnline} />
                     </div>
 
 
@@ -86,7 +99,7 @@ export default function Navbar({ user }: { user?: ExtendedUser }) {
                 </div>
             </div>
 
-            {user.farmId && user.type === "owner" ? (
+            {user.farmId && user.type === "owner" && isOnline ? (
                 <>
                     {/* navigation */}
                     {(pathname?.match(/\//g) || []).length <= 1 && (
@@ -101,7 +114,7 @@ export default function Navbar({ user }: { user?: ExtendedUser }) {
                                             <div key={index} className={`${selected ? ' border-caqua dark:border-clime' : 'border-transparent'} h-12 flex items-center border-b-2`}>
                                                 <Link href={i.href} onClick={() => setIsOpen(false)}>
                                                     <p
-                                                        className={`font-semibold text-sm rounded-md px-3 py-1.5 transition-all
+                                                        className={`font-medium text-base rounded-md px-3 py-1.5 transition-all
                                             ${selected ? 'dark:text-clime text-cblack' : 'text-cgray dark:text-white opacity-50 active:opacity-80 md:hover:opacity-100'}`}
                                                     >
                                                         {i.title}
@@ -120,7 +133,6 @@ export default function Navbar({ user }: { user?: ExtendedUser }) {
             {/* config modal */}
             <AnimatePresence
                 initial={false}
-                onExitComplete={() => null}
             >
                 {isOpen ? (
                     <motion.div onClick={(e) => e.stopPropagation()}
@@ -128,17 +140,13 @@ export default function Navbar({ user }: { user?: ExtendedUser }) {
                         initial="hidden"
                         animate="visible"
                         exit="exit"
-                        className='fixed right-2 md:right-8 top-14 z-30 overflow-y-auto h-max 
+                        className='fixed right-2 md:right-8 top-14 z-50 overflow-y-auto h-max 
                         rounded-2xl w-full max-w-xs
                         bg-white dark:bg-cgray custom-border border'
                     >
-                        <div className="container h-full flex flex-col">
+                        <div className="h-max flex flex-col">
 
                             <div className="h-full py-3">
-                                <div className="flex items-center justify-between mb-2 mx-3">
-                                    <p className="text-lg font-semibold">Menú</p>
-                                </div>
-
                                 <div
                                     className='flex flex-col items-center gap-2 px-3 border custom-border dark:bg-clightgray rounded-xl py-4 mx-3 md:mx-4'
                                 >
@@ -150,7 +158,15 @@ export default function Navbar({ user }: { user?: ExtendedUser }) {
                                 </div>
                             </div>
 
-                            <button type='button' className='px-6 py-5 border-t custom-border md:hover:bg-slate-80 dark:md:hover:bg-cblack w-full transition-all group' onClick={() => signOut()}>
+                            <button
+                                type='button'
+                                className='px-6 py-5 border-t custom-border md:hover:bg-slate-80 dark:md:hover:bg-clightgray w-full transition-all group' onClick={() => {
+                                    if (isOnline)
+                                        return signOut()
+                                    else
+                                        toast('No puedes cerrar sesión estando offline')
+                                }}
+                            >
                                 <div className="flex items-center justify-between">
                                     <p className='text-sm text-start font-medium transition-all'>
                                         Cerrar sesión

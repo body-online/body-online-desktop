@@ -1,4 +1,6 @@
 import { eventTypesList } from "./constants";
+import Dexie, { Table } from "dexie";
+import { CattleProps, EventSchema, TaskProps } from "./types";
 
 export function dateDiffInDays(a: any, b: any) {
  const _MS_PER_DAY = 1000 * 60 * 60 * 24;
@@ -12,3 +14,19 @@ export function dateDiffInDays(a: any, b: any) {
 export function serializeEventName(eventType: string) {
  return eventTypesList.find((value) => value.value === eventType)?.label ?? "-";
 }
+
+export interface OfflineEventProps {}
+class AppDatabase extends Dexie {
+ tasks!: Table<TaskProps, string>;
+ events!: Table<EventSchema, string>;
+
+ constructor() {
+  super("AppDatabase");
+  this.version(3).stores({
+   tasks: "_id", // Ajusta los índices que necesites
+   events: "cattleId", // Ajusta los índices que necesites
+  });
+ }
+}
+
+export const db = new AppDatabase();

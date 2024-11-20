@@ -501,7 +501,7 @@ export const eventTypesList = [
  {
   label: "Destete",
   value: "weaning",
-  disabledStates: ["dead", "pregnant"],
+  disabledStates: ["dead", "pregnant", "empty"],
   eventDetails: [
    { label: "1", value: "1" },
    { label: "2", value: "2" },

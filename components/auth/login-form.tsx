@@ -16,6 +16,7 @@ import Card from '../ui/card';
 
 const LoginForm = () => {
     const router = useRouter();
+
     const {
         register, handleSubmit, reset, formState: { errors, isSubmitting }
     } = useForm<z.infer<typeof LoginSchema>>({
@@ -92,7 +93,7 @@ const LoginForm = () => {
                         <button
                             type='button'
                             className='max-w-max group'
-                            onClick={() => router.replace('/auth/register')}
+                            onClick={() => router.push('/auth/register')}
                         >
                             <p className="text-center group-hover:underline underline-offset-2">¿Aún no tienes una cuenta?</p>
                         </button>

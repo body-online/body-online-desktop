@@ -49,7 +49,7 @@ export function GeneticsTable({ genetics, pagination, searchGenetics }: {
     });
 
     return (
-        <div className='overflow-auto relative w-full flex flex-col max-h-[70vh]'>
+        <div className='overflow-auto relative w-full flex flex-col max-h-[58vh] md:max-h-[65vh] '>
             <table className='w-full'>
                 <thead>
                     {table.getHeaderGroups().map((headerGroup) => {

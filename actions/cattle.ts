@@ -13,7 +13,8 @@ export async function createCattle(cattle: CreateCattleSchema): Promise<{
 
   if (user?.type != "owner") return { error: "Error de permisos" };
   if (!user?.farmId) return { error: "No hemos encontrado organización" };
-  await axios({
+
+  const { data } = await axios({
    method: "post",
    url: `${process.env.API_URL}/api/ranchi/cattle`,
    data: {
@@ -26,6 +27,7 @@ export async function createCattle(cattle: CreateCattleSchema): Promise<{
 
   return { data: "Individuo creado correctamente" };
  } catch (err: any) {
+  console.log(err);
   return {
    error: "Ha ocurrido un error al crear el individuo",
   };
@@ -41,9 +43,6 @@ export async function deleteCattle(cattleId: string): Promise<{
    method: "patch",
    url: `${process.env.API_URL}/api/ranchi/cattle/delete/${cattleId}`,
   });
-
-  console.log(`delete: ${cattleId}`);
-  console.log(data);
 
   return data;
  } catch (err: any) {

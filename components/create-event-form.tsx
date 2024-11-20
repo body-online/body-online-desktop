@@ -1,6 +1,6 @@
 "use client";
 
-import { DefaultValues, SubmitHandler, useForm } from 'react-hook-form';
+import { SubmitHandler, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useEffect, useState } from "react";
 import toast from 'react-hot-toast';
@@ -37,20 +37,18 @@ const CreateEventForm = (
 
     const [step, setStep] = useState<number>(handleByCattle ? 2 : 1)
     // step 1 states: cattle list (is an array but only uses 1 value)
-    const [selectedCattles, setSelectedCattles] =
-        useState<CattleProps[]>(handleByCattle ? [handleByCattle] : [])
+    const [selectedCattles, setSelectedCattles] = useState<CattleProps[]>(handleByCattle ? [handleByCattle] : [])
     const [searchCattles, setSearchCattles] = useState<string>('')
 
     // functions
     const onSubmit: SubmitHandler<EventSchema> = async (data: EventSchema) => {
         try {
-            console.log(data)
             const { error } = await createEvent(data);
+
             if (error) return toast.error(error)
             setStep(1)
             reset();
         } catch (error: AxiosError | any) {
-            console.log(error)
             toast.error(error?.response?.data?.message ?? 'Ha ocurrido un error al crear el evento.')
         } finally {
             if (handleRefresh) handleRefresh()
@@ -93,7 +91,9 @@ const CreateEventForm = (
                 (eventDate < new Date(selectedCattleLastBodyDate as string)) ||
                 (eventDate < new Date(selectedCattleLastStateDate as string))
             ) {
-                return setError('eventDate', { type: 'custom', message: 'La fecha debe ser posterior a la del último evento asignado al individuo.' })
+                return setError('eventDate', {
+                    type: 'custom', message: `La fecha debe ser posterior a ${new Date(selectedCattleLastStateDate as string) < new Date(selectedCattleLastBodyDate as string) ? new Date(selectedCattleLastBodyDate as string).toLocaleDateString() : new Date(selectedCattleLastStateDate as string).toLocaleDateString()}`
+                })
             }
             clearErrors('eventDate')
         }
@@ -158,9 +158,15 @@ const CreateEventForm = (
 
             {selectedCattles?.[0] && step == 2 &&
                 <div className='flex flex-col h-full px-4 gap-4 mb-4'>
-                    <CattleResume customHeader={'Caravana seleccionada'} cattle={selectedCattles?.[0]} />
+                    <div>
+                        <p className="dark:text-gray-300 text-lg font-medium mb-2">
+                            Caravana seleccionada
+                        </p>
+                        <CattleResume withoutHeader={true} cattle={selectedCattles?.[0]} />
+                    </div>
                 </div>
             }
+
             {isSubmitting ? (
                 <div className="flex-center h-[30vh] gap-2 py-default ">
                     <LoadingIcon />
@@ -174,7 +180,7 @@ const CreateEventForm = (
                 // PS: this will be disabled if handleByCattle is passed by props
                 <>
                     <div className='px-4 mb-2'>
-                        <p className="input_instructions mb-2">
+                        <p className="dark:text-gray-300 text-lg font-medium mb-2">
                             Seleccionar caravana
                         </p>
 
@@ -201,10 +207,11 @@ const CreateEventForm = (
                 // PS: this will be render the allowed options by the selectedCattleState
                 <>
                     <div className='flex flex-col h-full px-4 gap-4 mb-4'>
-                        <label htmlFor="eventDate">
-                            <p className="input_instructions mb-2">
+                        <label htmlFor="eventDate mb-2">
+                            <p className="dark:text-gray-300 text-lg font-medium mb-2">
                                 Fecha del evento
                             </p>
+
                             <input
                                 disabled={isSubmitting}
                                 className='input w-full max-w-xs'
@@ -217,9 +224,11 @@ const CreateEventForm = (
                             </div>
                         </label>
 
-                        <p className="input_instructions">Tipo de evento</p>
                     </div>
 
+                    <div className="px-4 mb-2">
+                        <p className="dark:text-gray-300 text-lg font-medium">Tipo de evento</p>
+                    </div>
                     <div className="custom_list">
                         {eventTypesList?.filter((i) => !i.disabledStates.includes(selectedCattleState)).map((event, index) => {
                             const selected = event.value === selectedEventType;
@@ -254,7 +263,7 @@ const CreateEventForm = (
                     {/* event details */}
                     {selectedEventType == "body_measure" ? (
                         <div className='px-4 space-y-3 flex flex-col overflow-auto'>
-                            <p className="input_instructions text-base">
+                            <p className="dark:text-gray-300 text-lg font-medium">
                                 Indique la medida del caliper
                             </p>
 
@@ -284,12 +293,11 @@ const CreateEventForm = (
                                 </div>
                             ) : selectedEventType === 'cattle_birth' ? (
                                 <div className='px-4 space-y-3 flex flex-col overflow-auto'>
-
-                                    <p className="input_instructions text-base">
+                                    <p className="dark:text-gray-300 text-lg font-medium">
                                         Cantidad de nacidos
                                     </p>
 
-                                    <div className="grid grid-cols-4 gap-y-2 gap-x-2 place-items-center overflow-auto">
+                                    <div className="grid grid-cols-4 gap-2 place-items-center w-full max-w-sm mx-auto place-content-stretch min-h-[450px] max-h-[450px]">
                                         {eventTypesList?.[2]?.eventDetails?.map((i, index) => {
                                             const selected = i.value === selectedEventDetail
 
@@ -316,7 +324,7 @@ const CreateEventForm = (
                                         Cantidad de destetados
                                     </p>
 
-                                    <div className="grid grid-cols-4 gap-y-2 gap-x-2 place-items-center">
+                                    <div className="grid grid-cols-4 gap-2 place-items-center w-full max-w-sm mx-auto place-content-stretch min-h-[450px] max-h-[450px]">
                                         {eventTypesList?.[1]?.eventDetails?.map((i, index) => {
                                             const selected = i.value === selectedEventDetail
 
@@ -338,9 +346,9 @@ const CreateEventForm = (
                                 </div>
                             ) : (
                                 <>
-                                    <div className='px-4 space-y-3 mb-3 flex flex-col overflow-auto'>
-                                        <p className="input_instructions text-base">
-                                            Motivo de la muerte
+                                    <div className='px-4 mb-2'>
+                                        <p className="dark:text-gray-300 text-lg font-medium">
+                                            Motivo de la {selectedEventType == 'death' ? 'muerte' : 'no preñez'}
                                         </p>
                                     </div>
                                     <div className="custom_list">
@@ -390,7 +398,7 @@ const CreateEventForm = (
                             placeholder='Ingrese un detalle de ser necesario...'
                             {...register('observations')}
                             name="description"
-                            className="textarea placeholder:text-base min-h-20"
+                            className="textarea placeholder:text-base !min-h-48"
                         />
                     </div>
                 </div>

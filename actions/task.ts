@@ -11,12 +11,6 @@ export const createTask = async (data: CreateTaskSchema) => {
   if (user?.type != "owner") return { error: "Error de permisos" };
   if (!user?.farmId) return { error: "No hemos encontrado organización" };
 
-  console.log("creatiing task");
-  console.log({
-   ...data,
-   taskType: "body_measure",
-   farmId: user.farmId,
-  });
   const { data: response } = await axios({
    method: "POST",
    url: `${process.env.API_URL}/ranchi/task`,
@@ -29,7 +23,6 @@ export const createTask = async (data: CreateTaskSchema) => {
 
   return { data: response };
  } catch (err: any) {
-  console.log("err at task creation");
   return {
    error:
     err?.response?.data?.message ?? "Ha ocurrido un error al crear la tarea",

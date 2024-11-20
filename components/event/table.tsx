@@ -21,7 +21,7 @@ import {
     TableRow,
 } from "@/components/ui/table";
 
-import { ArrowsIcon, LoadingIcon, SearchIcon } from '../ui/icons';
+import { LoadingIcon } from '../ui/icons';
 import React, { useEffect, useState } from "react";
 
 import toast from 'react-hot-toast';
@@ -33,8 +33,10 @@ import LoadingRowsSkeleton from '../ui/loading-rows-skeleton';
 import AddEventBtn from '../cattles/add-event';
 import StatePagination from '../ui/state-pagination';
 import FilterInput from '../ui/filter-input';
+import useOnlineStatus from '@/hooks/useOnlineStatus';
 
 export function EventsDataTable({ totalAmount, totalEvents }: { totalAmount?: number; totalEvents?: number }) {
+    const isOnline = useOnlineStatus()
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
     const [sorting, setSorting] = React.useState<SortingState>([]);
     const [isLoading, setIsLoading] = useState<boolean>(true)
@@ -56,6 +58,9 @@ export function EventsDataTable({ totalAmount, totalEvents }: { totalAmount?: nu
         onSortingChange: setSorting,
         onColumnFiltersChange: setColumnFilters,
 
+        initialState: {
+            pagination: { pageSize: 50 }
+        },
         state: {
             sorting,
             columnFilters,
@@ -78,7 +83,8 @@ export function EventsDataTable({ totalAmount, totalEvents }: { totalAmount?: nu
     }
 
     useEffect(() => {
-        searchEvents();
+        if (isOnline)
+            searchEvents();
     }, [page, totalAmount, limit, totalEvents])
 
     useEffect(() => {
@@ -99,7 +105,6 @@ export function EventsDataTable({ totalAmount, totalEvents }: { totalAmount?: nu
 
                     <h2 className='font-semibold text-xl'>Eventos</h2>
 
-
                     <div className="flex gap-2 items-center">
                         {isLoading ? <LoadingIcon /> :
                             <p className='text-sm font-medium text-slate-500 dark:text-slate-400'>
@@ -118,8 +123,6 @@ export function EventsDataTable({ totalAmount, totalEvents }: { totalAmount?: nu
                     onChange={(e) => setSearchTerm(e)}
                     disabled={!events.length && !searchTerm}
                 />
-
-
             </div>
 
             {isLoading ? (
@@ -127,7 +130,7 @@ export function EventsDataTable({ totalAmount, totalEvents }: { totalAmount?: nu
             ) : (
                 <>
                     {events.length > 0 ?
-                        <div className='overflow-auto relative w-full flex flex-col max-h-[70vh]'>
+                        <div className='overflow-auto relative w-full flex flex-col max-h-[58vh] md:max-h-[65vh]'>
                             <table>
                                 <thead>
                                     {table.getHeaderGroups().map((headerGroup) => {

@@ -24,6 +24,26 @@ export const columnsGenetic: ColumnDef<GeneticProps>[] = [
             return <div className='text-base font-medium'>{row.getValue("name")}</div>;
         },
     },
+
+    {
+        header: ({ column }) => {
+            return (
+                <button
+                    type="button"
+                    onClick={() => column.toggleSorting(column.getIsSorted() == "asc")}
+                    className="flex-center"
+                >
+                    <p>Rango Ideal</p>
+                    <ArrowsIcon direction={column.getIsSorted() == "asc" ? 'dark:rotate-180' : column.getIsSorted() == "desc" ? '' : 'hidden'} />
+                </button>
+            );
+        },
+        accessorKey: "bodyRanges",
+        cell: ({ row }) => {
+            const bodyRange: any = row.getValue("bodyRanges");
+            return <div className='text-base font-medium w-20 chip chip_green'>{bodyRange?.[0]} - {bodyRange?.[1]}</div>;
+        },
+    },
     {
         header: ({ column }) => {
             return (
@@ -45,26 +65,6 @@ export const columnsGenetic: ColumnDef<GeneticProps>[] = [
                 return <p>-</p>;
             const formatted = new Date(createdAt as string).toLocaleDateString("es-AR", { day: 'numeric', month: 'short', year: 'numeric' });
             return <p>{formatted}</p>;
-        },
-    },
-
-    {
-        header: ({ column }) => {
-            return (
-                <button
-                    type="button"
-                    onClick={() => column.toggleSorting(column.getIsSorted() == "asc")}
-                    className="flex-center"
-                >
-                    <p>Rango Ideal</p>
-                    <ArrowsIcon direction={column.getIsSorted() == "asc" ? 'dark:rotate-180' : column.getIsSorted() == "desc" ? '' : 'hidden'} />
-                </button>
-            );
-        },
-        accessorKey: "bodyRanges",
-        cell: ({ row }) => {
-            const bodyRange: any = row.getValue("bodyRanges");
-            return <div className='text-base font-medium w-20 chip chip_green'>{bodyRange?.[0]} - {bodyRange?.[1]}</div>;
         },
     },
 

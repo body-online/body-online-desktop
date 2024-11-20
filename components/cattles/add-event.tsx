@@ -32,7 +32,6 @@ export function AddEventBtn({ defaultCattle, handleRefresh }: { defaultCattle?: 
                 </div>
             </Modal>
 
-
             <button
                 type='button'
                 onClick={handleOpen}

@@ -18,7 +18,7 @@ const ErrorCard = () => {
                 <button
                     type='button'
                     className='max-w-max group'
-                    onClick={() => router.replace('/auth/login')}
+                    onClick={() => router.push('/auth/login')}
                 >
                     <p className="text-center group-hover:underline underline-offset-2">Volver a intentar</p>
                 </button>

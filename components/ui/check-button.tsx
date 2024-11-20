@@ -9,7 +9,7 @@ const CheckButton = ({ value, onClick, selected, disabled, children }: { value: 
             value={value}
             type='button'
             onClick={onClick}
-            className={`relative flex items-center transition-all px-6 py-3 w-full gap-2
+            className={`relative flex items-center transition-all pl-4 md:pl-6 py-3 w-full gap-2
                         md:hover:bg-slate-100 md:dark:hover:bg-clightgray ${disabled ? 'opacity-50' : ''}`}
         >
             <div className='min-h-6 min-w-6 max-h-6 max-w-6'>
@@ -21,7 +21,7 @@ const CheckButton = ({ value, onClick, selected, disabled, children }: { value: 
                 }
             </div>
 
-            <div className='flex items-center gap-2 w-full'>
+            <div className="overflow-hidden">
                 {children}
             </div>
         </button>

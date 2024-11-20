@@ -15,7 +15,7 @@ export async function getTasks({
 }: {
  page: number;
  limit: number;
- assignedTo?: string;
+ assignedTo?: string[];
  dueSoon?: boolean;
  completed?: boolean;
  search?: string;
@@ -45,8 +45,6 @@ export async function getTasks({
     // completed,
    },
   });
-
-  console.log(data);
 
   return { data };
  } catch (error) {

@@ -14,7 +14,7 @@ export async function getUserById(id: string): Promise<{
   const { data } = await axios.get(
    `${process.env.API_URL}/api/ranchi/user/${id}`
   );
-  //   console.log(data);
+
   if (!data)
    return {
     error: "No hemos encontrado usuarios registrados con ese correo.",

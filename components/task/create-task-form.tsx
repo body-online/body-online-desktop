@@ -10,7 +10,7 @@ import { z } from 'zod';
 import { CattleProps, createTaskSchema, CreateTaskSchema } from '@/lib/types';
 
 import UsersList from './users-list'
-import { CloseIcon, LoadingIcon, } from '../ui/icons';
+import { ArrowsIcon, CloseIcon, LoadingIcon, } from '../ui/icons';
 import { ExtendedUser } from '@/next-auth';
 import CleanButton from '../ui/clean-button';
 import { createTask } from '@/actions/task';
@@ -19,17 +19,11 @@ import { ProfileImage } from '../ui/navbar';
 import CaravansList from './caravans-list';
 import { AxiosError } from 'axios';
 import Resume from '../ui/resume';
+import UsersResume from './users-resume';
+import CloseBtn from '../ui/close-btn';
+import CaravansResume from './caravans-resume';
 
-const stepInstructions = [
-    {
-        instructions: (
-            <p className="input_instructions text-lg px-4 mb-2">
-                Seleccione los <b>responsables</b> de realizar las mediciones de la tarea.
-            </p>
-        )
-    }
-]
-const CreateTaskForm = ({ handleRefresh }: { handleRefresh?: () => void }) => {
+const CreateTaskForm = ({ handleRefresh, handleClose }: { handleRefresh?: () => void; handleClose?: () => void }) => {
     // step of create task form
     const [step, setStep] = useState<number>(1)
 
@@ -44,12 +38,7 @@ const CreateTaskForm = ({ handleRefresh }: { handleRefresh?: () => void }) => {
     const { register, setValue, handleSubmit, watch, reset, formState: { errors, isSubmitting } } =
         useForm<z.infer<typeof createTaskSchema>>({ resolver: zodResolver(createTaskSchema), })
 
-    function handleClose() {
-        setSelectedCattles([])
-        setSelectedUsers([])
-        setStep(1)
-        reset();
-    }
+
 
     const onSubmit: SubmitHandler<CreateTaskSchema> = async (data: CreateTaskSchema) => {
         try {
@@ -57,7 +46,13 @@ const CreateTaskForm = ({ handleRefresh }: { handleRefresh?: () => void }) => {
             if (error) return toast.error(error)
 
             toast.success('Tarea registrada')
-            handleClose()
+            if (handleClose) {
+                setSelectedCattles([])
+                setSelectedUsers([])
+                setStep(1)
+                reset();
+                handleClose()
+            }
         } catch (error: AxiosError | any) {
             console.log(error)
             toast.error(error?.response?.data?.message ?? 'Ha ocurrido un error al crear la tarea.')
@@ -73,18 +68,70 @@ const CreateTaskForm = ({ handleRefresh }: { handleRefresh?: () => void }) => {
         setValue('cattleIds', selectedCattles?.map(i => i._id as string) ?? [])
     }, [selectedCattles])
 
+    var expirationDate = watch('expirationDate') ? new Date(watch('expirationDate')) : undefined
+
+    if (expirationDate) {
+
+    }
+    const expirationHour = expirationDate ? new Date(expirationDate)
+        .toLocaleTimeString("es-AR", { hour: 'numeric', minute: 'numeric' }) : undefined
+
+    const expiration = expirationDate ?
+        new Date(expirationDate).toLocaleDateString("es-AR", { day: 'numeric', month: 'short', year: 'numeric' }) : undefined
+
     return (
         <>
-            {/* className='h-full w-full flex flex-col max-w-2xl mx-auto overflow-hidden' */}
-            {/* <div className="mx-4 chip chip_gray mb-2">
-                <p className='input_instructions text-sm font-medium'><b className='text-base'>{step}</b> de 3</p>
-                {stepInstructions[step].instructions}
-            </div> */}
+            <div className="header_container">
+                <div className="overflow-x-auto w-full">
+                    <div className="flex items-center gap-1 w-max py-1 px-2">
+                        <div>
+                            <p className="text-base font-medium">
+                                Nueva tarea
+                            </p>
+                        </div>
+                        {Boolean(expiration && expirationHour) &&
+                            <>
+                                <ArrowsIcon direction='-rotate-90' />
+                                <div className='-space-y-1.5'>
+                                    <p className="input_instructions text-start text-sm">
+                                        {expiration}
+                                    </p>
+                                    <p className="input_instructions text-start text-xs">
+                                        {expirationHour}
+                                    </p>
+                                </div>
+                            </>
+                        }
+                        {selectedUsers?.length > 0 &&
+                            <>
+                                <ArrowsIcon direction='-rotate-90' />
+                                <UsersResume
+                                    assignedTo={selectedUsers}
+                                    maxLong={3}
+                                />
+                            </>
+                        }
+                        {selectedCattles?.length > 0 &&
+                            <>
+                                <ArrowsIcon direction='-rotate-90' />
+                                <CaravansResume
+                                    cattles={selectedCattles}
+                                    truncateAt={3}
+                                />
+                            </>
+                        }
+
+                    </div>
+                </div>
+                {handleClose &&
+                    <CloseBtn handleClose={handleClose} />
+                }
+            </div>
             {step === 1 ? (
                 <div className='px-4'>
                     <label htmlFor="expirationDate">
-                        <p className="input_instructions mb-3">
-                            Ingrese la fecha de vencimiento de la tarea.
+                        <p className="dark:text-gray-300 text-lg font-medium mb-2">
+                            Vencimiento de la tarea
                         </p>
 
                         <input
@@ -102,9 +149,11 @@ const CreateTaskForm = ({ handleRefresh }: { handleRefresh?: () => void }) => {
                 </div>
             ) : step === 2 ? (
                 <>
-                    <p className="input_instructions px-4 my-2">
-                        Seleccione los responsables de realizar las medidas.
-                    </p>
+                    <div className="px-4">
+                        <p className="dark:text-gray-300 text-lg font-medium mb-2">
+                            Responsables de las medidas
+                        </p>
+                    </div>
 
                     <Resume
                         handleClean={() => setSelectedUsers([])}
@@ -128,15 +177,14 @@ const CreateTaskForm = ({ handleRefresh }: { handleRefresh?: () => void }) => {
                                 </button>
                             </div>
                         )) : (
-                            <p className='my-auto input_instructions'>Sin selecciones</p>
+                            <p className='my-auto opacity-50'>Sin selecciones</p>
                         )}
                     </Resume>
 
                     <div className="px-4 my-2">
                         <FilterInput
-                            placeholder={'Ej. Juan Perez'}
+                            placeholder={'Buscar por nombre...'}
                             disabled={isSubmitting}
-                            // value={searchUsers}
                             onChange={(e: any) => {
                                 setSearchUsers(e);
                             }}
@@ -154,9 +202,11 @@ const CreateTaskForm = ({ handleRefresh }: { handleRefresh?: () => void }) => {
                 </>
             ) : (
                 <>
-                    <p className="input_instructions px-4 my-2">
-                        Seleccione las caravanas que deben ser medidas.
-                    </p>
+                    <div className="px-4">
+                        <p className="dark:text-gray-300 text-lg font-medium mb-2">
+                            Individuos a medir
+                        </p>
+                    </div>
 
 
                     <Resume
@@ -164,8 +214,11 @@ const CreateTaskForm = ({ handleRefresh }: { handleRefresh?: () => void }) => {
                         disabled={!watch('caravan')?.length || isSubmitting}
                         amount={watch('caravan')?.length}
                     >
-                        {selectedCattles.length ? selectedCattles?.toReversed().map((cattle, index) => (
-                            <div key={index} className='resume_chip min-w-max'>
+                        {selectedCattles.length ? selectedCattles?.toReversed().map((cattle, cattleIndex) => (
+                            <div
+                                key={`cattle-${cattleIndex}`}
+                                className='resume_chip min-w-max'
+                            >
                                 <p>
                                     {cattle.caravan}
                                 </p>
@@ -180,7 +233,7 @@ const CreateTaskForm = ({ handleRefresh }: { handleRefresh?: () => void }) => {
                                 </button>
                             </div>
                         )) : (
-                            <p className='my-auto input_instructions'>Sin selecciones</p>
+                            <p className='my-auto  opacity-50'>Sin selecciones</p>
                         )}
                     </Resume>
 
@@ -189,6 +242,7 @@ const CreateTaskForm = ({ handleRefresh }: { handleRefresh?: () => void }) => {
                         <FilterInput
                             placeholder={'Buscar por caravana...'}
                             disabled={isSubmitting}
+                            key='caravan'
                             onChange={(e: any) => {
                                 setSearchCattles(e);
                             }}
@@ -215,7 +269,7 @@ const CreateTaskForm = ({ handleRefresh }: { handleRefresh?: () => void }) => {
                 >
                     <p className='dark:text-slate-400 text-slate-500'>Anterior</p>
                 </button>
-
+                <p className='input_instructions text-sm font-medium'>{step} de 3</p>
                 {step == 3 ? (
                     <button
                         className='rounded_btn bg-cgreen dark:bg-clime'

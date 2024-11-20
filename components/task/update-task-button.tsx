@@ -23,10 +23,11 @@ const UpdateTaskButton = (
     { task, setTask, defaultValues }: { task: TaskProps; setTask: Dispatch<SetStateAction<TaskProps>>; defaultValues: DefaultValues<EventSchema> }
 ) => {
     const { data: session } = useSession()
+
     const [pendingMeasures, setPendingMeasures] = useState<CattleProps[]>([...task?.cattleIds])
-    const [step, setStep] = useState<number>(1)
-    const [isOpen, setIsOpen] = useState<boolean>(false)
     const [selectedCattle, setSelectedCattle] = useState<CattleProps | any>()
+    const [isOpen, setIsOpen] = useState<boolean>(false)
+    const [step, setStep] = useState<number>(1)
 
     function handleOpen() {
         setSelectedCattle(task?.cattleIds?.[0]);
@@ -112,7 +113,7 @@ const UpdateTaskButton = (
             </button>
 
             <Modal isOpen={isOpen} handleClose={handleClose}>
-                <div className='card max-w-2xl mx-auto w-full'>
+                <div className='card_modal max-w-2xl mx-auto w-full'>
                     <div className="header_container">
                         <div className="overflow-x-auto w-full">
                             <div className="flex items-center gap-1 w-max py-1 px-2">
@@ -140,58 +141,60 @@ const UpdateTaskButton = (
                                 }
                             </div>
                         </div>
+
                         {handleClose &&
                             <CloseBtn handleClose={handleClose} />
                         }
                     </div>
 
-                    <div className="h-full overflow-auto flex flex-col">
-                        {step == 1 ? (
-                            <>
-                                <p className="input_instructions px-4 my-2">
-                                    Seleccione la caravana que desea medir.
-                                </p>
+                    <>
+                        {
+                            step == 1 ? (
+                                <>
+                                    <div className="px-4 mb-2">
+                                        <p className="dark:text-gray-300 text-lg font-medium">
+                                            Individuo a medir
+                                        </p>
+                                    </div>
 
-                                <div
-                                    className="custom_list"
-                                >
-                                    {pendingMeasures.map((cattle, index) => {
-                                        const selected = cattle._id === selectedCattle?._id;
-                                        return (
-                                            <CheckButton
-                                                key={index}
-                                                value={cattle._id}
-                                                label={cattle.caravan}
-                                                onClick={() => setSelectedCattle(cattle)}
-                                                selected={selected}
-                                                disabled={isSubmitting}
-                                            >
-                                                <CattleResume withoutHeader={true} cattle={{ ...cattle, bodyRanges: cattle.geneticId.bodyRanges }} withoutClasses={true} />
-                                            </CheckButton>
-                                        )
-                                    })}
+                                    <div className="custom_list gap-3">
+                                        {pendingMeasures.map((cattle, index) => {
+
+                                            const selected = cattle._id === selectedCattle?._id;
+                                            return (
+                                                <CheckButton
+                                                    key={index}
+                                                    value={cattle._id}
+                                                    label={cattle.caravan}
+                                                    onClick={() => setSelectedCattle(cattle)}
+                                                    selected={selected}
+                                                    disabled={isSubmitting}
+                                                >
+                                                    <CattleResume withoutHeader={true} cattle={{ ...cattle, bodyRanges: cattle.geneticId.bodyRanges }} withoutClasses={true} />
+                                                </CheckButton>
+                                            )
+                                        })}
+                                    </div>
+                                </>
+                            ) : step == 2 && selectedCattle && selectedCattle?.geneticId ? (
+                                <div className='px-4 flex flex-col gap-2'>
+                                    <p className="dark:text-gray-300 text-lg font-medium">
+                                        Indique la medida del caliper
+                                    </p>
+
+                                    <CaliperMeasure
+                                        min={Number(selectedCattle?.geneticId?.bodyRanges?.[0])}
+                                        max={Number(selectedCattle?.geneticId?.bodyRanges?.[1])}
+                                        disabled={isSubmitting}
+                                        measure={watch('measure')}
+                                        setMeasure={({ measure, eventDetail }) => {
+                                            setValue('eventDetail', eventDetail);
+                                            setValue('measure', measure);
+                                        }}
+                                    />
                                 </div>
-                            </>
-                        ) : (step == 2 && selectedCattle && selectedCattle?.geneticId) ? (
-                            <div className='px-4 flex flex-col'>
-                                <p className="input_instructions text-base mb-2">
-                                    Indique la medida del caliper
-                                </p>
-
-
-                                <CaliperMeasure
-                                    min={Number(selectedCattle?.geneticId?.bodyRanges?.[0])}
-                                    max={Number(selectedCattle?.geneticId?.bodyRanges?.[1])}
-                                    disabled={isSubmitting}
-                                    measure={watch('measure')}
-                                    setMeasure={({ measure, eventDetail }) => {
-                                        setValue('eventDetail', eventDetail);
-                                        setValue('measure', measure);
-                                    }}
-                                />
-                            </div>
-                        ) : null}
-                    </div>
+                            ) : null}
+                    </>
 
                     <div className="buttons_container">
                         <button

@@ -2,7 +2,7 @@
 import React from 'react'
 import { motion } from 'framer-motion'
 
-const BodyOnlineLogo = () => {
+const BodyOnlineLogo = ({ isOffline }: { isOffline?: boolean }) => {
     return (
         <div className='max-w-xs flex flex-col justify-center items-center m-auto'>
             <motion.div
@@ -13,7 +13,7 @@ const BodyOnlineLogo = () => {
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 512 512"
-                    className='w-16 md:w-[100px] h-min -mb-5'
+                    className='w-16 md:w-[100px] h-min max-h-[100px] -mb-5'
                 >
                     <path
                         className='w-full h-full fill-cgreen dark:fill-white'
@@ -21,14 +21,15 @@ const BodyOnlineLogo = () => {
                     />
                 </svg>
             </motion.div>
+
             <motion.div
                 initial={{ opacity: 0 }}
-                animate={{ opacity: 1, transition: { delay: 0.2 } }}
+                animate={{ opacity: 1, transition: { delay: 0.5 } }}
                 exit={{ opacity: 0 }}
             >
-                <h1 className="text-cgreen dark:text-white text-2xl font-bold">
+                <h1 className="text-cgreen dark:text-white text-xl md:text-2xl font-bold">
                     Body
-                    <span className='text-caqua dark:text-clime font-bold'>Online</span>
+                    <span className='text-caqua dark:text-clime font-bold'>{isOffline ? 'Offline' : 'Online'}</span>
                 </h1>
             </motion.div>
         </div>

@@ -1,7 +1,7 @@
 
 const LoadingRowsSkeleton = () => {
     return (
-        <div className='w-full h-max'>
+        <div className='overflow-auto relative w-full flex flex-col max-h-[58vh] md:max-h-[65vh] h-full'>
             <div className='overflow-hidden w-full flex flex-col gap-y-1'>
                 <div className="min-h-11 md:min-h-12 w-full animate-pulse bg-slate-200 dark:bg-clightgray border dark:border-0"></div>
                 <div className="min-h-11 md:min-h-12 w-full animate-pulse bg-slate-200 dark:bg-clightgray border dark:border-0"></div>

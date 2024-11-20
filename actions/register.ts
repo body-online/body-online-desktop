@@ -21,9 +21,6 @@ export async function registerUser(values: z.infer<typeof RegisterSchema>) {
   password: hashedPassword,
  };
 
- //  console.log(`creating new ${newUser?.type}`);
- //  console.log(newUser);
-
  try {
   // insert and send the verification token via email
   const { data } = await axios({

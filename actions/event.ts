@@ -1,8 +1,9 @@
 "use server";
 
-import { currentFarm, currentUser } from "@/lib/auth";
-import { EventSchema } from "../lib/types";
 import axios from "axios";
+
+import { EventSchema } from "@/lib/types";
+import { currentUser } from "@/lib/auth";
 
 interface UpdateEventProps extends EventSchema {
  caravan?: string;
@@ -26,7 +27,6 @@ export async function createEvent(event: UpdateEventProps): Promise<{
     userType: user.type,
    },
   });
-  console.log(data);
 
   return { data };
  } catch (err: any) {
@@ -44,11 +44,6 @@ export async function deleteEvent(eventId: string): Promise<string> {
     method: "patch",
     url: `${process.env.API_URL}/api/ranchi/event/delete/${eventId}`,
    });
-   //  console.log(data);
-   // if (!data?.success) {
-   //   const errorMessage = data?.message ?? "Error al eliminar el individuo";
-   //   return rej(errorMessage);
-   // }
 
    res("Individuo eliminado correctamente");
   } catch (err: any) {

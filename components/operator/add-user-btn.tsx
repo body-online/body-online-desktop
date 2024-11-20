@@ -22,7 +22,10 @@ export function AddUserBtn({ customText, handleRefresh }: { customText?: string;
         setValue,
         formState: { errors, isSubmitting },
         reset,
-    } = useForm<z.infer<typeof RegisterSchema>>({ resolver: zodResolver(RegisterSchema), defaultValues: { type: 'operator' } })
+    } = useForm<z.infer<typeof RegisterSchema>>({
+        resolver: zodResolver(RegisterSchema),
+        defaultValues: { type: 'operator' }
+    })
 
     const onSubmit = async (values: z.infer<typeof RegisterSchema>) => {
         try {
@@ -52,7 +55,10 @@ export function AddUserBtn({ customText, handleRefresh }: { customText?: string;
                     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
                         <div>
                             <label htmlFor='type' className='w-full'>
-                                <p className="input_label mb-3">Nuevo usuario</p>
+                                <p className="input_label mb-3">
+                                    Nuevo usuario
+                                </p>
+
                                 <div className="flex gap-2 mt-2">
                                     <HorizontalSelector
                                         options={[

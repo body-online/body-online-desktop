@@ -16,7 +16,7 @@ const satoshi = localFont({
 
 export const metadata: Metadata = {
   title: "BodyOnline",
-  description: "",
+  description: "Aplicación Web Progresiva para realizar mediciones corporales, seguimientos de estado corporal, actualizar el estado de los individuos, gestionar ubicaciones, genéticas y operarios de su organización.",
 };
 
 export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode; }>) {
@@ -26,6 +26,9 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
     <SessionProvider session={session}>
       <html lang="en" className={`${satoshi.className}`} suppressHydrationWarning>
         <head>
+          <link rel="icon" href="/favicon.ico" />
+          <link rel="manifest" href="/manifest.json" />
+
           {/* no scrolling on mobile */}
           <meta
             name="viewport"
@@ -51,6 +54,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
             }}
           ></script>
         </head>
+
         <body className={`body`}>
           <Providers>
             <Navbar user={session?.user} />

@@ -27,7 +27,7 @@ export async function createGenetic(genetic: GeneticSchema): Promise<{
     farmId: user.farmId,
    },
   });
-  console.log(data);
+
   return { data };
  } catch (err: any) {
   console.log(err?.response?.data);

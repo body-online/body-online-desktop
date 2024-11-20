@@ -20,7 +20,7 @@ const TableBody = React.forwardRef<
   HTMLTableSectionElement,
   React.HTMLAttributes<HTMLTableSectionElement>
 >(({ className, ...props }, ref) => (
-  <tbody ref={ref} className="" {...props} />
+  <tbody ref={ref} {...props} />
 ));
 TableBody.displayName = "TableBody";
 
@@ -28,33 +28,33 @@ const TableFooter = React.forwardRef<
   HTMLTableSectionElement,
   React.HTMLAttributes<HTMLTableSectionElement>
 >(({ className, ...props }, ref) => (
-  <tfoot ref={ref} className="" {...props} />
+  <tfoot ref={ref} {...props} />
 ));
 TableFooter.displayName = "TableFooter";
 
 const TableRow = React.forwardRef<
   HTMLTableRowElement,
   React.HTMLAttributes<HTMLTableRowElement>
->(({ className, ...props }, ref) => <tr ref={ref} className="" {...props} />);
+>(({ className, ...props }, ref) => <tr ref={ref} {...props} />);
 TableRow.displayName = "TableRow";
 
 const TableHead = React.forwardRef<
   HTMLTableCellElement,
   React.ThHTMLAttributes<HTMLTableCellElement>
->(({ className, ...props }, ref) => <th ref={ref} className={`${className}`} {...props} />);
+>(({ className, ...props }, ref) => <th ref={ref} {...props} />);
 TableHead.displayName = "TableHead";
 
 const TableCell = React.forwardRef<
   HTMLTableCellElement,
   React.TdHTMLAttributes<HTMLTableCellElement>
->(({ className, ...props }, ref) => <td ref={ref} className="" {...props} />);
+>(({ className, ...props }, ref) => <td ref={ref} {...props} />);
 TableCell.displayName = "TableCell";
 
 const TableCaption = React.forwardRef<
   HTMLTableCaptionElement,
   React.HTMLAttributes<HTMLTableCaptionElement>
 >(({ className, ...props }, ref) => (
-  <caption ref={ref} className="" {...props} />
+  <caption ref={ref} {...props} />
 ));
 TableCaption.displayName = "TableCaption";
 
