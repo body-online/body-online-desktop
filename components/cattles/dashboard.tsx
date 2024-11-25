@@ -8,12 +8,14 @@ import { CattleProps } from '@/lib/types'
 
 import LoadingTableSkeleton from '../ui/loading-table-skeleton'
 import { LoadingIcon, MiniAddIcon } from '../ui/icons'
+import useOnlineStatus from '@/hooks/useOnlineStatus'
 import StatePagination from '../ui/state-pagination'
 import CreateCattleForm from './create-cattle-form'
 import FilterInput from '../ui/filter-input'
 import InfoMessage from '../ui/info'
 import CattlesTable from './table'
 import Modal from '../ui/modal'
+import OfflinePage from '../offline'
 
 function CattlesDashboard() {
     const router = useRouter()
@@ -29,12 +31,14 @@ function CattlesDashboard() {
 
     const searchCattles = async () => {
         setIsLoading(true)
+
         var { data, error } = await getCattles({ page, limit, name: search })
 
         if (data && !error) {
             setCattles(data.cattles)
             setTotalCattles(data.totalCattles)
             setTotalPages(data.totalPages)
+
         }
         setIsLoading(false)
     }
@@ -55,13 +59,13 @@ function CattlesDashboard() {
             <div className='card overflow-hidden max-h-max w-full'>
 
                 <div className="header_container">
-                    <h2 className='semititle'>Individuos</h2>
+                    <h2 className='text-xl md:text-2xl font-semibold mb-[20px]'>Individuos</h2>
 
                     {/* new task & counter */}
                     <div className="flex gap-2 items-center">
 
                         {isLoading ? <LoadingIcon /> :
-                            <p className='text-sm font-medium text-slate-500 dark:text-slate-400'>
+                            <p className='text-sm md:text-base font-normaltext-slate-600 dark:text-slate-400'>
                                 {totalCattles} {totalCattles != 1 ? 'registros' : 'registro'}
                             </p>
                         }
@@ -120,7 +124,7 @@ function CattlesDashboard() {
 
             {/* new task modal */}
             <Modal isOpen={isOpenNewCattleModal} handleClose={handleClose}>
-                <div className='card_modal'>
+                <div className='card_modal max-w-lg mx-auto w-full'>
                     <CreateCattleForm handleRefresh={() => { return searchCattles() }} handleClose={handleClose} />
                 </div>
             </Modal >

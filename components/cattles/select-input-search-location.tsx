@@ -3,7 +3,6 @@
 import { LocationProps } from '@/lib/types'
 import React, { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
-import axios from 'axios'
 import BlackOutModal from '../ui/blackout-modal'
 import { LoadingIcon, SearchIcon } from '../ui/icons'
 import InfoMessage from '../ui/info'
@@ -11,6 +10,7 @@ import { enterModal } from '@/lib/constants'
 import { motion } from 'framer-motion'
 import Card from '../ui/card'
 import { getLocations } from '@/data/location'
+import useOnlineStatus from '@/hooks/useOnlineStatus'
 
 const SelectInputSearchLocation = ({ handleSelectLocation, isOpen, setIsOpen, error, isSubmitting }:
     { handleSelectLocation: Function; isOpen: boolean; setIsOpen: Function; error?: string; isSubmitting?: boolean }) => {

@@ -1,6 +1,11 @@
 import { eventTypesList } from "./constants";
 import Dexie, { Table } from "dexie";
-import { CattleProps, EventSchema, TaskProps } from "./types";
+import {
+ CattleProps,
+ EventSchema,
+ PendingMeasureProps,
+ TaskProps,
+} from "./types";
 
 export function dateDiffInDays(a: any, b: any) {
  const _MS_PER_DAY = 1000 * 60 * 60 * 24;
@@ -15,16 +20,18 @@ export function serializeEventName(eventType: string) {
  return eventTypesList.find((value) => value.value === eventType)?.label ?? "-";
 }
 
-export interface OfflineEventProps {}
+export interface OfflineEvent extends EventSchema {
+ _id: string;
+}
 class AppDatabase extends Dexie {
- tasks!: Table<TaskProps, string>;
- events!: Table<EventSchema, string>;
+ pendingMeasures!: Table<PendingMeasureProps, string>;
+ events!: Table<OfflineEvent, string>;
 
  constructor() {
   super("AppDatabase");
-  this.version(3).stores({
-   tasks: "_id", // Ajusta los índices que necesites
-   events: "cattleId", // Ajusta los índices que necesites
+  this.version(1).stores({
+   pendingMeasures: "_id", // Ajusta los índices que necesites
+   events: "_id", // Ajusta los índices que necesites
   });
  }
 }

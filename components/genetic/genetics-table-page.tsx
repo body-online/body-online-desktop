@@ -13,7 +13,6 @@ import GeneticsTable from './table'
 import useOnlineStatus from '@/hooks/useOnlineStatus'
 
 function GeneticsTablePage() {
-    const isOnline = useOnlineStatus()
     const [genetics, setGenetics] = useState<GeneticProps[]>()
     const [search, setSearch] = useState<string>('')
 
@@ -32,8 +31,7 @@ function GeneticsTablePage() {
 
     // search when a parameter chagnes
     useEffect(() => {
-        if (isOnline)
-            fetchGenetics();
+        fetchGenetics();
     }, [])
 
 
@@ -42,11 +40,11 @@ function GeneticsTablePage() {
     return (
         <div className='card h-min'>
             <div className="header_container">
-                <h2 className='font-semibold text-xl'>Genéticas</h2>
+                <h2 className='text-xl md:text-2xl font-semibold mb-[20px]'>Genéticas</h2>
 
                 <div className="flex gap-2 items-center">
                     {isLoading ? <LoadingIcon /> :
-                        <p className='text-sm font-medium text-slate-500 dark:text-slate-400'>
+                        <p className='text-sm md:text-base font-normaltext-slate-600 dark:text-slate-400'>
                             {genetics?.length} {(genetics?.length ?? 0) != 1 ? 'registros' : 'registro'}
                         </p>
                     }

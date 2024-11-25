@@ -16,12 +16,9 @@ import CloseBtn from '../ui/close-btn'
 import LoadingTableSkeleton from '../ui/loading-table-skeleton'
 import UsersResume from './users-resume'
 import { useSession } from 'next-auth/react'
-import useLoadTasksOnline from '@/hooks/useLoadTasksOnline'
 
 const TasksDashboard = () => {
-    const offlineTasks = useLoadTasksOnline();
     const { data: session } = useSession();
-
 
     // task filters and status
     const [tasks, setTasks] = useState<TaskProps[]>()
@@ -36,8 +33,6 @@ const TasksDashboard = () => {
     // status of assignedTo tasks filter
     const [isOpenUsersList, setIsOpenUsersList] = useState<boolean>(false)
     const [searchUsers, setSearchUsers] = useState<string>('')
-
-
 
     const searchTasks = async () => {
         setIsLoading(true);
@@ -75,15 +70,16 @@ const TasksDashboard = () => {
 
 
     return (
-        <>
+        <div className='px-default py-default'>
+
             <div className='card'>
                 <div className="header_container">
-                    <h2 className='semititle'>Tareas</h2>
+                    <h2 className='text-xl md:text-2xl font-semibold mb-[20px]'>Tareas</h2>
 
                     {/* new task & counter */}
                     <div className="flex gap-2 items-center">
                         {isLoading ? <LoadingIcon /> :
-                            <p className='text-sm font-medium text-slate-500 dark:text-slate-400'>
+                            <p className='text-sm md:text-base font-normaltext-slate-600 dark:text-slate-400'>
                                 {totalTasks} {totalTasks != 1 ? 'registros' : 'registro'}
                             </p>
                         }
@@ -133,26 +129,26 @@ const TasksDashboard = () => {
                             {/* dropdown */}
                             {isOpenUsersList ?
                                 <div
-                                    className="z-20 card border custom-border shadow-md absolute top-0 -left-3 flex flex-col w-[98vw] md:w-[450px]">
+                                    className="z-20 card border custom-border shadow-md absolute top-0 -left-3 flex flex-col w-[90vw] md:w-[450px]">
                                     <div className="p-4">
                                         <div className="flex-between">
-                                            <p className='font-medium text-slate-700 dark:text-slate-300 text-sm'>
-                                                Seleccione los responsables que desea visualizar
-                                            </p>
+                                            {/* <p className='font-medium text-slate-700 dark:text-slate-300 text-sm'>
+                                            </p> */}
+                                            <FilterInput
+                                                placeholder={'Filtrar por responsable...'}
+                                                disabled={isLoading}
+                                                onChange={(e: any) => {
+                                                    setSearchUsers(e);
+                                                }}
+                                            />
                                             <CloseBtn handleClose={() => setIsOpenUsersList(false)} />
                                         </div>
 
-                                        <FilterInput
-                                            placeholder={'Buscar por nombre...'}
-                                            disabled={isLoading}
-                                            onChange={(e: any) => {
-                                                setSearchUsers(e);
-                                            }}
-                                        />
+
                                     </div>
 
                                     {/* list of users availables */}
-                                    <div className="flex flex-col max-h-[30vh] w-full">
+                                    <div className="flex flex-col max-h-[46vh] md:max-h-[50vh] w-full">
                                         <UsersList
                                             selectedUsers={assignedTo ?? []}
                                             setSelectedUsers={setAssignedTo}
@@ -203,10 +199,13 @@ const TasksDashboard = () => {
             {/* new task modal */}
             <Modal isOpen={isOpenNewTaskModal} handleClose={() => setIsOpenNewTaskModal(false)}>
                 <div className='card_modal'>
-                    <CreateTaskForm handleRefresh={() => { return searchTasks() }} handleClose={() => setIsOpenNewTaskModal(false)} />
+                    <CreateTaskForm
+                        handleRefresh={() => searchTasks()}
+                        handleClose={() => setIsOpenNewTaskModal(false)}
+                    />
                 </div>
             </Modal >
-        </>
+        </div>
     )
 }
 

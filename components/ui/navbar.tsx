@@ -1,31 +1,34 @@
 "use client";
 
-function getInitials(name?: string) {
-    if (!name) return "";
-    return name.match(/(\b\S)?/g)?.join("");
-}
-
 import { AnimatePresence, motion } from 'framer-motion'
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { ExtendedUser } from '@/next-auth';
-import { signOut } from 'next-auth/react';
+import { signOut, useSession } from 'next-auth/react';
 import toast from 'react-hot-toast';
 import Link from 'next/link';
 
-import { modalBackground, navigationItems } from '@/lib/constants';
-import { CloseIcon, LogoutIcon, MenuIcon } from './icons';
-import ThemeSwitch from './theme-switch';
-import ChipIsOnline from './chip-online';
 import useOnlineStatus from '@/hooks/useOnlineStatus';
 
+import { modalBackground, navigationItems } from '@/lib/constants';
+import { CloseIcon, LoadingIcon, LogoutIcon, MenuIcon } from './icons';
+import ThemeSwitch from './theme-switch';
+import ChipIsOnline from './chip-online';
+
+function eliminarDiacriticos(texto: string) {
+    return texto.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+}
+
+function getInitials(name?: string) {
+    if (!name) return "";
+    return eliminarDiacriticos(name).match(/(\b\S)?/g)?.join("");
+}
 
 
-export default function Navbar({ user }: { user?: ExtendedUser }) {
-    const isOnline = useOnlineStatus();
-    const [mounted, setMounted] = useState<boolean>(false);
+export default function Navbar() {
+    const { data: session } = useSession()
+    const { isOnline, isLoading, pendingTasks } = useOnlineStatus();
     const [isOpen, setIsOpen] = useState(false);
-    const router = useRouter()
     const pathname = usePathname();
 
     const handleEsc = (event: KeyboardEvent) => {
@@ -45,26 +48,27 @@ export default function Navbar({ user }: { user?: ExtendedUser }) {
         }
     }, [isOpen])
 
-    useEffect(() => {
-        if (mounted && isOnline === false && pathname != '/') {
-            router.push('/')
-        }
-    }, [isOnline])
-
-    useEffect(() => {
-        setMounted(true)
-    }, [])
-
-
-    if (!user) return null
+    if (!session?.user) return null
 
     return (
         <>
             <div className="py-3 h-[60px] bg-white dark:bg-cgray border-b custom-border">
                 <div className='flex-between px-default'>
-                    <div className='flex items-center gap-2 h-8 overflow-hidden'>
-                        <ProfileImage user={user} height='h-8' width='w-8' />
+                    <div className='flex items-center gap-2 max-h-8 h-8'>
+                        <ProfileImage user={session.user} height='h-8' width='w-8' />
                         <ChipIsOnline isOnline={isOnline} />
+                        {isOnline && (
+                            <div className="custom-toast flex-center">
+                                {isLoading ?
+                                    <LoadingIcon fill='dark:fill-clime fill-caqua' /> :
+                                    <span className='text-sm font-medium'>{pendingTasks.length}</span>
+                                }
+                                <p className="input_instructions text-sm">
+                                    pendientes (offline)
+                                </p>
+                            </div>
+                        )}
+
                     </div>
 
 
@@ -99,7 +103,7 @@ export default function Navbar({ user }: { user?: ExtendedUser }) {
                 </div>
             </div>
 
-            {user.farmId && user.type === "owner" && isOnline ? (
+            {isOnline && session.user.farmId && session.user.type === "owner" ? (
                 <>
                     {/* navigation */}
                     {(pathname?.match(/\//g) || []).length <= 1 && (
@@ -107,12 +111,14 @@ export default function Navbar({ user }: { user?: ExtendedUser }) {
                             <div className="overflow-x-scroll no-scrollbar flex gap-1 items-center">
                                 <div className="flex items-center px-default first:-ml-3">
                                     {navigationItems.map((i, index) => {
-                                        if (user?.type == 'operator' && i.href != '/tareas') return null
+
                                         var selected: boolean = Boolean((i.title === 'Inicio' && pathname === '/') || (i.title != 'Inicio' && pathname.includes(i.href)));
 
                                         return (
                                             <div key={index} className={`${selected ? ' border-caqua dark:border-clime' : 'border-transparent'} h-12 flex items-center border-b-2`}>
-                                                <Link href={i.href} onClick={() => setIsOpen(false)}>
+                                                <Link href={i.href} onClick={() => {
+                                                    setIsOpen(false)
+                                                }}>
                                                     <p
                                                         className={`font-medium text-base rounded-md px-3 py-1.5 transition-all
                                             ${selected ? 'dark:text-clime text-cblack' : 'text-cgray dark:text-white opacity-50 active:opacity-80 md:hover:opacity-100'}`}
@@ -150,10 +156,10 @@ export default function Navbar({ user }: { user?: ExtendedUser }) {
                                 <div
                                     className='flex flex-col items-center gap-2 px-3 border custom-border dark:bg-clightgray rounded-xl py-4 mx-3 md:mx-4'
                                 >
-                                    <ProfileImage user={user} width='w-8' height='h-8' />
+                                    <ProfileImage user={session.user} width='w-8' height='h-8' />
                                     <div className='text-center'>
-                                        <p className='font-semibold'>{user?.name}</p>
-                                        <p className='opacity-40 font-medium'>{user?.email}</p>
+                                        <p className='font-semibold'>{session.user?.name}</p>
+                                        <p className='opacity-40 font-medium'>{session.user?.email}</p>
                                     </div>
                                 </div>
                             </div>

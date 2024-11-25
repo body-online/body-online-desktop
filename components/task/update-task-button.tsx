@@ -2,22 +2,21 @@
 
 import { DefaultValues, SubmitHandler, useForm } from 'react-hook-form';
 import { Dispatch, SetStateAction, useEffect, useState } from 'react'
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useSession } from 'next-auth/react';
 import toast from 'react-hot-toast';
 import { z } from 'zod';
 
 import { CattleProps, EventSchema, eventSchema, TaskProps } from '@/lib/types'
 import { createEvent } from '@/actions/event';
-import { zodResolver } from '@hookform/resolvers/zod';
 
-import CaliperMeasure from '../event/caliper-measure';
 import { ArrowsIcon, EventIcon, LoadingIcon } from '../ui/icons';
+import ChipBodyCondition from '../cattles/chip-body-condition';
+import CaliperMeasure from '../event/caliper-measure';
+import CattleResume from '../ui/cattle-resume';
 import CheckButton from '../ui/check-button';
 import CloseBtn from '../ui/close-btn';
 import Modal from '../ui/modal'
-import { useSession } from 'next-auth/react';
-import ChipState from '../cattles/chip-state';
-import ChipBodyCondition from '../cattles/chip-body-condition';
-import CattleResume from '../ui/cattle-resume';
 
 const UpdateTaskButton = (
     { task, setTask, defaultValues }: { task: TaskProps; setTask: Dispatch<SetStateAction<TaskProps>>; defaultValues: DefaultValues<EventSchema> }

@@ -1,7 +1,7 @@
 "use server";
 
 import { currentFarm, currentUser } from "@/lib/auth";
-import { TaskProps } from "@/lib/types";
+import { PendingMeasureProps, TaskProps } from "@/lib/types";
 import { ExtendedUser } from "@/next-auth";
 import axios from "axios";
 
@@ -50,5 +50,59 @@ export async function getTasks({
  } catch (error) {
   console.log(error);
   return { error: "No hemos podido obtener las tareas" };
+ }
+}
+
+// fetch the user pending uncompleted taskss to save in oflline mode...
+export async function getPendingMeasures() {
+ try {
+  const user = await currentUser();
+  if (!user) return null;
+
+  const { data: userTasks } = await getTasks({
+   page: 1,
+   limit: 50,
+   assignedTo: [user.id],
+   completed: false,
+  });
+  if (!userTasks) {
+   return;
+  }
+
+  // parse the tasks as "pending measures"
+  const formattedTasks: PendingMeasureProps[] = [];
+  userTasks?.tasks?.map((task, indexTask) => {
+   const {
+    _id: taskId,
+    cattleIds: cattlesAssignedToThisTask,
+    expirationDate,
+    measuredCattles,
+   } = task;
+   // (cattlesIds is an array of the cattles assigned to this task)
+
+   const notMeasuredCattles = cattlesAssignedToThisTask?.filter(
+    (cattle) => !measuredCattles.includes(cattle.caravan)
+   );
+
+   // only not measured cattles are required to create pending measures
+   return notMeasuredCattles?.map((cattle, indexCattle) => {
+    const pendingMeasure: PendingMeasureProps = {
+     _id: `PM-${taskId}-${cattle._id}-${indexTask}-${indexCattle}`,
+     // id of the new pending measure as object of IndexDB (offline purpouses)
+     expirationDate,
+     taskId: taskId,
+     cattle,
+    };
+
+    // # 3
+    return formattedTasks.push(pendingMeasure);
+   });
+  });
+
+  return formattedTasks;
+ } catch (error) {
+  console.log("Error: fetching pending measures");
+  console.log(error);
+  return null;
  }
 }

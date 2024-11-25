@@ -35,14 +35,14 @@ import StatePagination from '../ui/state-pagination';
 import FilterInput from '../ui/filter-input';
 import useOnlineStatus from '@/hooks/useOnlineStatus';
 
-export function EventsDataTable({ totalAmount, totalEvents }: { totalAmount?: number; totalEvents?: number }) {
-    const isOnline = useOnlineStatus()
+export function EventsDataTable() {
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
     const [sorting, setSorting] = React.useState<SortingState>([]);
     const [isLoading, setIsLoading] = useState<boolean>(true)
     const [searchTerm, setSearchTerm] = useState("")
 
     const [events, setEvents] = useState<EventProps[]>([])
+    const [totalAmount, setTotalAmount] = useState<number>()
     const [totalPages, setTotalPages] = useState<number>()
     const [limit, setLimit] = useState<number>(10)
     const [page, setPage] = useState<number>(1)
@@ -72,6 +72,7 @@ export function EventsDataTable({ totalAmount, totalEvents }: { totalAmount?: nu
         try {
             const { data } = await getEvents({ page, limit, caravan: searchTerm })
             if (data) {
+                setTotalAmount(Number(data?.totalEvents ?? 0))
                 setTotalPages(Number(data.totalPages) > 0 ? Number(data.totalPages) : 1)
                 setEvents(data.events)
             }
@@ -83,9 +84,8 @@ export function EventsDataTable({ totalAmount, totalEvents }: { totalAmount?: nu
     }
 
     useEffect(() => {
-        if (isOnline)
-            searchEvents();
-    }, [page, totalAmount, limit, totalEvents])
+        searchEvents();
+    }, [page, totalAmount, limit])
 
     useEffect(() => {
         const handler = setTimeout(() => {
@@ -99,20 +99,19 @@ export function EventsDataTable({ totalAmount, totalEvents }: { totalAmount?: nu
     }, [searchTerm])
 
     return (
-        <div className='card max-h-max w-full'>
-            <div className="pt-4 px-4">
-                <div className="flex-between mb-2">
+        <div className='card overflow-hidden'>
 
-                    <h2 className='font-semibold text-xl'>Eventos</h2>
+            <div className="flex-between mb-2 pt-4 px-4">
 
-                    <div className="flex gap-2 items-center">
-                        {isLoading ? <LoadingIcon /> :
-                            <p className='text-sm font-medium text-slate-500 dark:text-slate-400'>
-                                {events?.length} {(events?.length ?? 0) != 1 ? 'registros' : 'registro'}
-                            </p>
-                        }
-                        <AddEventBtn handleRefresh={searchEvents} />
-                    </div>
+                <h2 className='text-xl md:text-2xl font-semibold mb-[20px]'>Eventos</h2>
+
+                <div className="flex gap-2 items-center">
+                    {isLoading ? <LoadingIcon /> :
+                        <p className='text-sm md:text-base font-normaltext-slate-600 dark:text-slate-400'>
+                            {events?.length} {(events?.length ?? 0) != 1 ? 'registros' : 'registro'}
+                        </p>
+                    }
+                    <AddEventBtn handleRefresh={searchEvents} />
                 </div>
             </div>
 

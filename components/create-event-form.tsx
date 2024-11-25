@@ -45,7 +45,7 @@ const CreateEventForm = (
         try {
             const { error } = await createEvent(data);
 
-            if (error) return toast.error(error)
+            if (error) return toast.error(error);
             setStep(1)
             reset();
         } catch (error: AxiosError | any) {

@@ -2,7 +2,7 @@
 
 import axios from "axios";
 
-import { EventSchema } from "@/lib/types";
+import { EventProps, EventSchema } from "@/lib/types";
 import { currentUser } from "@/lib/auth";
 
 interface UpdateEventProps extends EventSchema {
@@ -37,6 +37,54 @@ export async function createEvent(event: UpdateEventProps): Promise<{
   };
  }
 }
+
+export async function uploadEventList({
+ events,
+}: {
+ events: EventSchema[];
+}): Promise<{
+ uploadResults?: { events: EventProps[]; errors: EventProps[] };
+ error?: string;
+}> {
+ try {
+  if (!events.length) return { uploadResults: { events: [], errors: [] } };
+
+  const user = await currentUser();
+
+  if (!user?.farmId) return { error: "No hemos encontrado organización" };
+  const formattedEvents = events?.map((i) => {
+   return {
+    cattleId: i.cattleId,
+    eventDate: i.eventDate,
+    eventType: i.eventType,
+    eventDetail: i.eventDetail,
+    measure: i.measure,
+    taskId: i.taskId,
+    userId: user.id,
+    farmId: user.farmId,
+   };
+  });
+
+  console.log("updating events");
+  console.log(formattedEvents);
+
+  const { data }: any = await axios({
+   method: "post",
+   url: `${process.env.API_URL}/api/ranchi/event/massive`,
+   data: formattedEvents,
+  });
+
+  console.log(data);
+
+  return { uploadResults: data };
+ } catch (err: any) {
+  console.log(err);
+  return {
+   error: "Ha ocurrido un error al cargar los eventos",
+  };
+ }
+}
+
 export async function deleteEvent(eventId: string): Promise<string> {
  return new Promise(async (res, rej) => {
   try {

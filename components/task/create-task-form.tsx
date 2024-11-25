@@ -151,7 +151,7 @@ const CreateTaskForm = ({ handleRefresh, handleClose }: { handleRefresh?: () => 
                 <>
                     <div className="px-4">
                         <p className="dark:text-gray-300 text-lg font-medium mb-2">
-                            Responsables de las medidas
+                            Responsables de la tarea
                         </p>
                     </div>
 
@@ -242,7 +242,6 @@ const CreateTaskForm = ({ handleRefresh, handleClose }: { handleRefresh?: () => 
                         <FilterInput
                             placeholder={'Buscar por caravana...'}
                             disabled={isSubmitting}
-                            key='caravan'
                             onChange={(e: any) => {
                                 setSearchCattles(e);
                             }}

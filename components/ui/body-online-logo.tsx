@@ -7,13 +7,13 @@ const BodyOnlineLogo = ({ isOffline }: { isOffline?: boolean }) => {
         <div className='max-w-xs flex flex-col justify-center items-center m-auto'>
             <motion.div
                 initial={{ opacity: 0 }}
-                animate={{ opacity: 1, transition: { delay: 0.3 } }}
+                animate={{ opacity: 1, transition: { delay: 0.6 } }}
                 exit={{ opacity: 0 }}
             >
                 <svg
                     xmlns="http://www.w3.org/2000/svg"
                     viewBox="0 0 512 512"
-                    className='w-16 md:w-[100px] h-min max-h-[100px] -mb-5'
+                    className='w-[100px] h-[100px] -mb-5'
                 >
                     <path
                         className='w-full h-full fill-cgreen dark:fill-white'

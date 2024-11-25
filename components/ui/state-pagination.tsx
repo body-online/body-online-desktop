@@ -14,10 +14,10 @@ const StatePagination = ({ totalPages, page, changePage, limit, changeLimit, dis
     return (
         <div className="flex-end gap-3">
             {limit && changeLimit ? (
-                <label htmlFor='rowsPerPage' className='pagination'>
+                <div className='pagination'>
                     <p className='text-sm pl-2 m-auto pointer-events-none'>Filas</p>
                     <select
-                        name='rowsPerPage'
+                        name='page'
                         disabled={!totalPages || disabled}
                         className='bg-transparent dark:text-white text-sm outline-0 ring-0'
                         value={limit}
@@ -29,7 +29,7 @@ const StatePagination = ({ totalPages, page, changePage, limit, changeLimit, dis
                         <option value="40">40</option>
                         <option value="50">50</option>
                     </select>
-                </label>
+                </div>
             ) : null
             }
             {totalPages ?

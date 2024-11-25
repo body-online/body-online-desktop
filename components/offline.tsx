@@ -1,188 +1,181 @@
-// 'use client'
+'use client'
 
-// import { db } from '@/lib/utils';
-// import { useEffect, useState } from 'react';
-// import CattleResume from './ui/cattle-resume';
-// import CaliperMeasure from './event/caliper-measure';
-// import { ArrowsIcon, CheckIcon, } from './ui/icons';
-// import Modal from './ui/modal';
-// import toast from 'react-hot-toast';
-// import InfoMessage from './ui/info';
-// import { CattleProps, eventSchema, EventSchema, TaskProps } from '@/lib/types';
+import { useEffect, useState } from 'react';
 
-// const OfflinePage = () => {
-//     const [pendingTasks, setPendingTasks] = useState<TaskProps[]>([]);
-//     const [pendingEvents, setPendingEvents] = useState<EventSchema[]>([]);
+import { PendingMeasureProps } from '@/lib/types';
+import { db, OfflineEvent } from '@/lib/utils';
+import { ArrowsIcon } from '@/components/ui/icons';
+import CaliperMeasure from '@/components/event/caliper-measure';
+import Modal from '@/components/ui/modal';
+import toast from 'react-hot-toast';
+import InfoMessage from './ui/info';
 
-//     const [isLoading, setIsLoading] = useState<boolean>(false)
+const OfflinePage = () => {
+    const [isLoading, setIsLoading] = useState<boolean>(false)
 
-//     const [selectedTask, setSelectedTask] = useState<TaskProps>()
-//     const [selectedCattle, setSelectedCattle] = useState<CattleProps>()
-//     const [caliperMeasure, setCaliperMeasure] = useState<number>();
-//     const [caliperDetail, setCaliperDetail] = useState<string>();
+    const [pendingMeasures, setPendingMeasures] = useState<PendingMeasureProps[]>([]);
+    const [selectedPendingMeasure, setSelectedPendingMeasure] = useState<PendingMeasureProps>()
 
-//     async function handleSaveEventInIndexDB() {
-//         setIsLoading(true)
-//         try {
-//             if (!selectedCattle) return toast.error('No hemos encontrado individuo seleccionado')
-//             if (!selectedTask) return toast.error('No hemos encontrado tarea seleccionada')
-//             const { _id: cattleId, caravan } = selectedCattle;
-//             const { _id: taskId, expirationDate } = selectedTask;
-//             const newEvent: EventSchema = {
-//                 cattleId,
-//                 taskId,
-//                 measure: caliperMeasure,
-//                 eventDate: expirationDate,
-//                 eventDetail: caliperDetail,
-//                 eventType: 'body_measure',
-//             }
+    const [caliperMeasure, setCaliperMeasure] = useState<number>();
+    const [caliperDetail, setCaliperDetail] = useState<string>();
 
-//             if (eventSchema.safeParse(newEvent)) { // validation
-//                 // save the event as medition
-//                 let newPendingEventsList = pendingEvents;
-//                 newPendingEventsList.push(newEvent);
+    async function handleComplete() {
+        if (!selectedPendingMeasure) return null
 
-//                 await db.events.clear()
-//                 await db.events.bulkAdd(newPendingEventsList)
-//                 setPendingEvents(newPendingEventsList)
+        try {
+            setIsLoading(true)
 
-//                 handleClose()
-//                 return toast.success(`${selectedCattle?.caravan} medida registrada: ${caliperMeasure}`, { position: 'top-left' })
-//             }
-//         } catch (error) {
-//             toast.error('Ha ocurrido un error')
-//         } finally {
-//             setIsLoading(false)
-//         }
-//     }
+            const newEvent: OfflineEvent = {
+                _id: selectedPendingMeasure._id,
+                cattleId: selectedPendingMeasure.cattle._id,
+                eventDate: selectedPendingMeasure.expirationDate,
+                eventType: 'body_measure',
+                eventDetail: caliperDetail,
+                measure: caliperMeasure,
+                taskId: selectedPendingMeasure.taskId
+            }
 
-//     function handleSelectCattle({ cattle, task }: { cattle: CattleProps; task: TaskProps }) {
-//         setSelectedCattle(cattle)
-//         setSelectedTask(task)
-//     }
-
-//     function handleClose() {
-//         setCaliperDetail(undefined)
-//         setCaliperMeasure(undefined)
-//         return setSelectedCattle(undefined)
-//     }
-
-//     useEffect(() => {
-//         const loadOfflineData = async () => {
-//             const indexDBTasks = await db.tasks.toArray();
-//             setPendingTasks(indexDBTasks);
-
-//             const indexDBEvents = await db.events.toArray();
-//             setPendingEvents(indexDBEvents);
-//         };
-//         loadOfflineData();
-//     }, []);
-
-//     return (
-//         <>
-//             <div className='py-default'>
-//                 <h1 className="semititle">
-//                     Tareas
-//                 </h1>
-
-//                 {pendingTasks.length >= 1 ? (
-//                     <ul className='flex flex-col gap-2'>
-//                         {pendingTasks.map((task) => {
-//                             const { _id: taskId, cattleIds, expirationDate, measuredCattles } = task;
-//                             const pendingToMeasureCattles = cattleIds?.filter((cattle) => !measuredCattles.includes(cattle.caravan));
-//                             return pendingToMeasureCattles?.map((cattle, cattleIndex) => {
-//                                 const alreadyChargedAsPendingEvent = pendingEvents.find((event) => (event.cattleId === cattle._id && task._id === event.taskId && event.eventDate === task.expirationDate))?.measure
-
-//                                 return (
-//                                     <li key={`${taskId}-${cattleIndex}`}>
-//                                         <div className="space-y-2 py-3 card px-3">
-//                                             <CattleResume withoutHeader={true} cattle={cattle} withoutClasses={true} />
+            // save the event
+            await db.events.put(newEvent);
+            // delete the pending measure
+            await db.pendingMeasures.delete(selectedPendingMeasure._id);
 
 
-//                                             <div className="flex-between">
-//                                                 <div className="flex gap-2">
-//                                                     <p className='text-sm'>
-//                                                         Vencimiento
-//                                                     </p>
-//                                                     <p className='input_instructions'>
-//                                                         {new Date(expirationDate).toLocaleDateString()}
-//                                                     </p>
-//                                                 </div>
+            setPendingMeasures(pendingMeasures.filter((i) => i._id != selectedPendingMeasure._id))
 
-//                                                 <button
-//                                                     type='button'
-//                                                     onClick={() => handleSelectCattle({ cattle, task })}>
-//                                                     {alreadyChargedAsPendingEvent ?
-//                                                         <CheckIcon className='fill-cgreen dark:fill-clime !w-8 !h-8' />
-//                                                         :
-//                                                         <div className={`!w-8 !h-8 rounded-full bg-white dark:bg-clightgray border-2 border-slate-300 dark:border-cgray/50 overflow-hidden flex items-center justify-start opacity-100`}>
-//                                                             <ArrowsIcon direction='!w-8 !h-8 -rotate-90' />
-//                                                         </div>
-//                                                     }
-//                                                 </button>
-//                                             </div>
-//                                         </div>
-//                                     </li>
-//                                 )
-//                             })
-//                         })}
-//                     </ul>
-//                 ) : (
-//                     <InfoMessage
-//                         type='info'
-//                         title='Sin resultados'
-//                         subtitle='No hemos encontrado mediciones pre-cargadas.'
-//                     />
-//                 )}
-//             </div>
+            toast.success(`${selectedPendingMeasure?.cattle.caravan} medida registrada: ${caliperMeasure}`, { id: 'event-presave-offline', position: 'top-left' })
 
-//             <Modal isOpen={Boolean(selectedCattle && selectedTask)} handleClose={handleClose}>
-//                 <div className='card_modal flex flex-col max-w-sm mx-auto w-full'>
-//                     <div className="header_container">
-//                         <p className="dark:text-gray-300 text-2xl font-medium">
-//                             {selectedCattle?.caravan}
-//                         </p>
-//                     </div>
+            handleClose()
+        } catch (error) {
+            console.log(error)
+            return toast.error(`Error al registrar medida: ${selectedPendingMeasure?.cattle.caravan}`, { id: 'event-err-offline', position: 'top-left' })
+        } finally {
+            setIsLoading(true)
+        }
+    }
 
-//                     <div className='flex flex-col overflow-auto px-3'>
-//                         {selectedCattle &&
-//                             <CaliperMeasure
-//                                 setMeasure={({ measure: measureValue, eventDetail }) => {
-//                                     setCaliperDetail(eventDetail)
-//                                     setCaliperMeasure(measureValue)
-//                                 }}
-//                                 measure={caliperMeasure}
-//                                 disabled={isLoading}
-//                                 min={Number(selectedCattle?.geneticId.bodyRanges?.[0])}
-//                                 max={Number(selectedCattle?.geneticId.bodyRanges?.[1])}
-//                             />
-//                         }
-//                     </div>
+    function handleClose() {
+        setCaliperDetail(undefined)
+        setCaliperMeasure(undefined)
+        return setSelectedPendingMeasure(undefined)
+    }
 
-//                     <div className="buttons_container">
-//                         <button
-//                             className='rounded_btn bg-white dark:bg-clightgray'
-//                             type='button'
-//                             onClick={() => handleClose()}
-//                         >
-//                             <p>Cancelar</p>
-//                         </button>
+    // load pending events from IndexDB
+    useEffect(() => {
+        const loadOfflineData = async () => {
+            const indexDBPendingMeasures = await db.pendingMeasures.toArray();
+            setPendingMeasures(indexDBPendingMeasures);
+        };
+        loadOfflineData();
+    }, []);
 
-//                         <button
-//                             className='rounded_btn bg-cgreen dark:bg-clime'
-//                             disabled={isLoading || !caliperMeasure}
-//                             type={'button'}
-//                             onClick={() => handleSaveEventInIndexDB()}
-//                         >
-//                             <p className='text-white dark:text-cgray'>
-//                                 Pre-guardar
-//                             </p>
-//                         </button>
-//                     </div>
-//                 </div>
-//             </Modal >
-//         </>
-//     );
-// };
+    return (
+        <div className='py-default max-w-md w-full mx-auto'>
+            <div className="flex-between mb-3 px-default">
+                <h1 className="text-xl md:text-2xl font-semibold mb-[20px]">
+                    Mediciones
+                </h1>
+                <p className='font-medium opacity-50'>{pendingMeasures.length ?? 0} pendientes</p>
+            </div>
 
-// export default OfflinePage;
+            {pendingMeasures ? (
+                <ul className='flex flex-col gap-2 px-default'>
+                    {pendingMeasures?.map((pendingMeasure) => {
+                        const { _id, cattle, expirationDate } = pendingMeasure
+
+                        return (
+                            <li key={`${_id}`} className='list-none'>
+                                <div className="card p-3 md:px-4 !-rounded-r-full">
+                                    <div className="flex-between">
+                                        <div>
+                                            <p className='font-bold text-2xl'>
+                                                {cattle?.caravan}
+                                            </p>
+                                            <p>
+                                                {new Date(expirationDate).toLocaleDateString()}
+                                            </p>
+                                        </div>
+
+                                        <button
+                                            type='button'
+                                            className='flex-center bg-cgreen dark:bg-clime flex-center rounded-full px-6 py-3'
+                                            onClick={() => setSelectedPendingMeasure(pendingMeasure)}
+                                        >
+                                            <p className='text-xs uppercase tracking-widest font-semibold text-white dark:text-cblack'>Medir</p>
+                                            <ArrowsIcon direction='!w-6 !h-6 -rotate-90' fill='dark:fill-cblack fill-clime' />
+                                        </button>
+                                    </div>
+                                </div>
+                                <div className="flex items-end w-full mt-1">
+                                    <p className="input_instructions text-xs">{_id}</p>
+                                </div>
+                            </li>
+                        )
+                    })}
+                </ul>
+            ) : (
+                <div className="px-4">
+                    <InfoMessage
+                        type='censored'
+                        title='Sin resultados'
+                        subtitle="Al parecer no tienes mediciones por realizar, ya estas al día!"
+                    />
+                </div>
+            )
+            }
+
+
+            <Modal isOpen={Boolean(selectedPendingMeasure)} handleClose={handleClose}>
+                <div className='card_modal flex flex-col max-w-sm mx-auto w-full'>
+                    <div className="header_container">
+                        <p className="dark:text-gray-300 text-2xl font-medium">
+                            {selectedPendingMeasure?.cattle.caravan}
+                        </p>
+                    </div>
+
+                    <div className='flex flex-col overflow-auto px-3'>
+                        {selectedPendingMeasure &&
+                            <CaliperMeasure
+                                setMeasure={({ measure: measureValue, eventDetail }) => {
+                                    setCaliperDetail(eventDetail)
+                                    setCaliperMeasure(measureValue)
+                                }}
+                                measure={caliperMeasure}
+                                disabled={isLoading}
+                                min={Number(selectedPendingMeasure.cattle?.geneticId.bodyRanges?.[0])}
+                                max={Number(selectedPendingMeasure.cattle?.geneticId.bodyRanges?.[1])}
+                            />
+                        }
+                    </div>
+
+                    <div className="buttons_container">
+                        <button
+                            className='rounded_btn bg-white dark:bg-clightgray'
+                            type='button'
+                            disabled={isLoading}
+                            onClick={() => handleClose()}
+                        >
+                            <p>Cancelar</p>
+                        </button>
+
+                        <button
+                            className='rounded_btn bg-cgreen dark:bg-clime'
+                            disabled={isLoading || !caliperMeasure || !selectedPendingMeasure || !caliperDetail}
+                            type={'button'}
+                            onClick={() => {
+                                if (!selectedPendingMeasure) return null
+                                handleComplete().then(() => setIsLoading(false))
+                            }}
+                        >
+                            <p className='text-white dark:text-cgray'>
+                                Guardar
+                            </p>
+                        </button>
+                    </div>
+                </div>
+            </Modal >
+        </div>
+    );
+};
+
+export default OfflinePage;

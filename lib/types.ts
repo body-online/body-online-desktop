@@ -109,6 +109,14 @@ export const eventSchema = z.object({
 });
 export type EventSchema = z.infer<typeof eventSchema>;
 
+export interface EventProps extends EventSchema {
+ _id: string;
+ caravan: string;
+ user: string;
+ userType: string;
+ bodyRanges: number[];
+}
+
 // task
 export const createTaskSchema = z.object({
  expirationDate: z.string().transform((str) => new Date(str)),
@@ -119,30 +127,6 @@ export const createTaskSchema = z.object({
 });
 
 export type CreateTaskSchema = z.infer<typeof createTaskSchema>;
-
-export interface EventProps extends EventSchema {
- _id: string;
- caravan: string;
- user: string;
- userType: string;
- bodyRanges: number[];
-}
-
-// pending measures
-export type PendingMeasureProps = {
- _id: string;
- expiresAt: string;
- cattleId: string;
- caravan: string;
- eventId: string;
- farmId: string;
- month: number;
- maxRange: number;
- minRange: number;
- isExpired: boolean;
- createdAt: string;
- updatedAt: string;
-};
 
 // farm
 export const farmSchema = z.object({
@@ -205,13 +189,9 @@ export type TaskProps = {
  measuredCattles: string[]; // Animales ya medidos
  completed: boolean; // Indica si la tarea ha sido completada
 };
-export interface OfflineTaskProps extends TaskProps {
+export type PendingMeasureProps = {
  _id: string;
+ taskId: string;
  expirationDate: Date;
- caravan: string[]; // Animales asociados a la tarea
- cattleIds: CattleProps[]; // Animales asociados a la tarea
- assignedTo: ExtendedUser[]; // IDs de usuarios asignados a la tarea
- taskType: EventTypeEnum;
- measuredCattles: string[]; // Animales ya medidos
- completed: boolean;
-}
+ cattle: CattleProps;
+};

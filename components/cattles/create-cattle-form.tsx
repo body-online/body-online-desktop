@@ -127,7 +127,8 @@ const CreateCattleForm = (
                                     }}
                                     value={watch('caravan') ?? ""}
                                     disabled={isSubmitting}
-                                    className={`input !text-2xl !bg-transparent placeholder:text-base placeholder:font-normal font-semibold ${errors.caravan ? 'border-red-500' : ''}`}
+                                    placeholder='0001'
+                                    className={`input !placeholder:text-2xl !text-2xl !placeholder:text-opacity-80 font-semibold ${errors.caravan ? 'border-red-500' : ''}`}
                                     type="text"
                                     name='caravan'
                                 />

@@ -6,7 +6,6 @@ import { Providers } from '@/components/ui/providers';
 import { auth } from '@/auth';
 
 import "./globals.css";
-import Navbar from '@/components/ui/navbar';
 
 const satoshi = localFont({
   src: '../public/fonts/Satoshi-Variable.ttf',
@@ -17,6 +16,7 @@ const satoshi = localFont({
 export const metadata: Metadata = {
   title: "BodyOnline",
   description: "Aplicación Web Progresiva para realizar mediciones corporales, seguimientos de estado corporal, actualizar el estado de los individuos, gestionar ubicaciones, genéticas y operarios de su organización.",
+  manifest: "/manifest.json",
 };
 
 export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode; }>) {
@@ -26,8 +26,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
     <SessionProvider session={session}>
       <html lang="en" className={`${satoshi.className}`} suppressHydrationWarning>
         <head>
-          <link rel="icon" href="/favicon.ico" />
-          <link rel="manifest" href="/manifest.json" />
+          <link rel="icon" href="/favicon.ico" as="favicon" />
 
           {/* no scrolling on mobile */}
           <meta
@@ -57,7 +56,6 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
 
         <body className={`body`}>
           <Providers>
-            <Navbar user={session?.user} />
             {children}
           </Providers>
         </body>

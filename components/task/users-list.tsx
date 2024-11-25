@@ -99,7 +99,7 @@ const UsersList = ({
                                     disabled={disabled}
                                 >
                                     <div className="w-full flex items-center gap-3">
-                                        <ProfileImage user={user} width='min-w-7 max-w-7 w-7' height='min-h-7 max-h-7 h-7' />
+                                        <ProfileImage user={user} width='min-w-9 max-w-9 w-9' height='min-h-9 max-h-9 h-9' />
                                         <div className='text-start truncate'>
                                             <p className={`font-medium text-base text-gray-600 dark:text-gray-300 ${selected ? 'text-opacity-100' : 'dark:text-opacity-50 text-opacity-50 enabled:md:hover:text-opacity-100'}`}>
                                                 {user.name}

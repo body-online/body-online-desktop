@@ -17,9 +17,13 @@ export const authRoutes = ["/auth/login", "/auth/register", "/auth/error"];
  */
 export const apiAuthPrefix = "/api/auth";
 
-//
 /**
  * the default redirect path after logging in
  * @type {string}
  */
 export const DEFAULT_LOGIN_REDIRECT = "/";
+/**
+ * the default redirect path after is offline
+ * @type {string}
+ */
+export const DEFAULT_OFFLINE_REDIRECT = "/offline";

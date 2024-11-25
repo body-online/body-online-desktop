@@ -328,7 +328,7 @@ input[type="checkbox"] {
 }
 
 .title {
- @apply text-xl md:text-3xl font-semibold tracking-tight;
+ @apply text-2xl md:text-3xl font-semibold tracking-tight;
 }
 
 .semititle {
@@ -336,7 +336,7 @@ input[type="checkbox"] {
 }
 
 .subtitle {
- @apply text-sm md:text-base font-semibold tracking-tight;
+ @apply text-base md:text-lg font-semibold tracking-tight;
 }
 
 .list {
@@ -409,7 +409,7 @@ input[type="checkbox"] {
  @apply card flex flex-col overflow-hidden w-full;
 }
 .header_container {
- @apply flex-between px-4 py-3;
+ @apply flex-between px-4 py-3 gap-6;
 }
 .buttons_container {
  @apply flex-between gap-2 py-3 px-4;
@@ -521,4 +521,7 @@ input[type="checkbox"] {
 }
 .resume_chip > p {
  @apply select-none text-sm font-medium text-slate-500 dark:text-slate-100;
+}
+.custom-toast {
+ @apply rounded-full border custom-border bg-white/60 dark:bg-clightgray/50 backdrop-blur-md py-1 md:py-2 px-4 flex gap-3 w-max z-30;
 }

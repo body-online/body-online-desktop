@@ -51,17 +51,18 @@ function OperatorsTablePage() {
     }, [searchTerm]);
 
     return (
-        <div className='card overflow-hidden max-h-max w-full'>
+        <div className='card w-full min-w-max'>
             <div className="header_container">
-                <h2 className='font-semibold text-xl'>Usuarios</h2>
+                <h2 className='text-xl md:text-2xl font-semibold mb-[20px]'>Usuarios</h2>
 
                 <div className="flex gap-2 items-center">
                     {isLoading ? <LoadingIcon /> :
-                        <p className='text-sm font-medium text-slate-500 dark:text-slate-400'>
+                        <p className='text-sm md:text-base font-normaltext-slate-600 dark:text-slate-400'>
                             {totalUsers} {totalUsers > 1 ? 'registros' : 'registro'}
                         </p>
                     }
                 </div>
+                <AddUserBtn customText='Nuevo' handleRefresh={() => getUsers()} />
             </div>
 
             <div className="px-4 mb-2 space-y-2">
@@ -71,8 +72,6 @@ function OperatorsTablePage() {
                     disabled={(!search && !users?.length) || (!search && isLoading)}
                 // searchTerm={searchTerm ?? ''}
                 />
-
-                <AddUserBtn customText='Nuevo' handleRefresh={() => getUsers()} />
             </div>
 
 

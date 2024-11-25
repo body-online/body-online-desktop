@@ -36,7 +36,6 @@ import FilterInput from '../ui/filter-input';
 import useOnlineStatus from '@/hooks/useOnlineStatus';
 
 export function LocationsDataTable({ totalLocations }: { totalLocations?: number }) {
-    const isOnline = useOnlineStatus()
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
     const [sorting, setSorting] = React.useState<SortingState>([]);
     const [isLoading, setIsLoading] = useState<boolean>(true)
@@ -79,8 +78,7 @@ export function LocationsDataTable({ totalLocations }: { totalLocations?: number
     }
 
     useEffect(() => {
-        if (isOnline)
-            searchLocations();
+        searchLocations();
     }, [page, limit, totalLocations, searchTerm])
 
     return (
@@ -88,12 +86,12 @@ export function LocationsDataTable({ totalLocations }: { totalLocations?: number
             <div className="pt-4 px-4">
                 <div className="flex-between mb-2">
 
-                    <h2 className='font-semibold text-xl'>Ubicaciones</h2>
+                    <h2 className='text-xl md:text-2xl font-semibold mb-[20px]'>Ubicaciones</h2>
 
 
                     <div className="flex gap-2 items-center">
                         {isLoading ? <LoadingIcon /> :
-                            <p className='text-sm font-medium text-slate-500 dark:text-slate-400'>
+                            <p className='text-sm md:text-base font-normaltext-slate-600 dark:text-slate-400'>
                                 {locations?.length} {(locations?.length ?? 0) != 1 ? 'registros' : 'registro'}
                             </p>
                         }

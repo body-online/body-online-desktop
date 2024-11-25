@@ -21,7 +21,7 @@ const InfoMessage = ({ title, subtitle, type }: InfoMessageProps) => {
             <div>
                 <h3 className="dark:text-gray-300 text-lg font-semibold">{title}</h3>
                 {subtitle && (
-                    <p className="text-sm font-medium text-slate-500 dark:text-slate-400">
+                    <p className="text-sm md:text-base font-normaltext-slate-600 dark:text-slate-400">
                         {subtitle}
                     </p>
                 )}
