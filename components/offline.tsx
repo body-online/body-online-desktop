@@ -1,29 +1,59 @@
-'use client'
+'use client';
 
 import { useEffect, useState } from 'react';
-
 import { PendingMeasureProps } from '@/lib/types';
 import { db, OfflineEvent } from '@/lib/utils';
 import { ArrowsIcon } from '@/components/ui/icons';
-import CaliperMeasure from '@/components/event/caliper-measure';
 import Modal from '@/components/ui/modal';
 import toast from 'react-hot-toast';
 import InfoMessage from './ui/info';
+import { format } from 'date-fns';
+import CaliperMeasure from './event/caliper-measure';
 
 const OfflinePage = () => {
-    const [isLoading, setIsLoading] = useState<boolean>(false)
-
     const [pendingMeasures, setPendingMeasures] = useState<PendingMeasureProps[]>([]);
-    const [selectedPendingMeasure, setSelectedPendingMeasure] = useState<PendingMeasureProps>()
+    const [uniqueDates, setUniqueDates] = useState<string[]>([]);
+    const [selectedDate, setSelectedDate] = useState<string>();
 
+    const [selectedPendingMeasure, setSelectedPendingMeasure] = useState<PendingMeasureProps>();
     const [caliperMeasure, setCaliperMeasure] = useState<number>();
     const [caliperDetail, setCaliperDetail] = useState<string>();
+    const [isLoading, setIsLoading] = useState<boolean>(false);
 
-    async function handleComplete() {
-        if (!selectedPendingMeasure) return null
+    // Cargar mediciones pendientes desde IndexedDB
+    useEffect(() => {
+        const loadOfflineData = async () => {
+            const indexDBPendingMeasures = await db.pendingMeasures.toArray();
+            setPendingMeasures(indexDBPendingMeasures);
+
+            // Calcula fechas únicas
+            const dates = Array.from(
+                new Set(indexDBPendingMeasures.map((measure) => format(measure.expirationDate, 'yyyy-MM-dd')))
+            );
+
+            setUniqueDates(dates)
+
+
+            // Selecciona la primera fecha única como predeterminada
+            if (dates.length > 0) {
+                setSelectedDate(dates[0]);
+            }
+        };
+
+        loadOfflineData();
+    }, []);
+
+    // Manejar la selección de fecha
+    const handleDateChange = (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+        setSelectedDate(event.currentTarget.value);
+    };
+
+    // Guardar la medida y actualizar el estado
+    const handleComplete = async () => {
+        if (!selectedPendingMeasure || caliperMeasure === null || !caliperDetail) return;
 
         try {
-            setIsLoading(true)
+            setIsLoading(true);
 
             const newEvent: OfflineEvent = {
                 _id: selectedPendingMeasure._id,
@@ -32,97 +62,98 @@ const OfflinePage = () => {
                 eventType: 'body_measure',
                 eventDetail: caliperDetail,
                 measure: caliperMeasure,
-                taskId: selectedPendingMeasure.taskId
-            }
+                taskId: selectedPendingMeasure.taskId,
+            };
 
-            // save the event
             await db.events.put(newEvent);
-            // delete the pending measure
             await db.pendingMeasures.delete(selectedPendingMeasure._id);
 
-
-            setPendingMeasures(pendingMeasures.filter((i) => i._id != selectedPendingMeasure._id))
-
-            toast.success(`${selectedPendingMeasure?.cattle.caravan} medida registrada: ${caliperMeasure}`, { id: 'event-presave-offline', position: 'top-left' })
-
-            handleClose()
+            setPendingMeasures((prev) => prev.filter((i) => i._id !== selectedPendingMeasure._id));
+            toast.success(`Medida registrada para ${selectedPendingMeasure.cattle.caravan}: ${caliperMeasure}`);
+            handleClose();
         } catch (error) {
-            console.log(error)
-            return toast.error(`Error al registrar medida: ${selectedPendingMeasure?.cattle.caravan}`, { id: 'event-err-offline', position: 'top-left' })
+            toast.error(`Error al registrar la medida: ${selectedPendingMeasure.cattle.caravan}`);
         } finally {
-            setIsLoading(true)
+            setIsLoading(false);
         }
-    }
+    };
 
-    function handleClose() {
-        setCaliperDetail(undefined)
-        setCaliperMeasure(undefined)
-        return setSelectedPendingMeasure(undefined)
-    }
+    const handleClose = () => {
+        setCaliperDetail(undefined);
+        setCaliperMeasure(undefined);
+        setSelectedPendingMeasure(undefined);
+    };
 
-    // load pending events from IndexDB
-    useEffect(() => {
-        const loadOfflineData = async () => {
-            const indexDBPendingMeasures = await db.pendingMeasures.toArray();
-            setPendingMeasures(indexDBPendingMeasures);
-        };
-        loadOfflineData();
-    }, []);
-
+    let filteredResults = pendingMeasures?.filter((measure) => format(measure.expirationDate, 'yyyy-MM-dd') === selectedDate)
     return (
-        <div className='py-default max-w-md w-full mx-auto'>
-            <div className="flex-between mb-3 px-default">
-                <h1 className="text-xl md:text-2xl font-semibold mb-[20px]">
-                    Mediciones
+        <div className="py-default max-w-lg w-full mx-auto">
+            <div className="flex-between mb-4 px-default">
+                <h1 className="text-xl md:text-2xl font-semibold">
+                    Mediciones pendientes
                 </h1>
-                <p className='font-medium opacity-50'>{pendingMeasures.length ?? 0} pendientes</p>
             </div>
 
-            {pendingMeasures ? (
-                <ul className='flex flex-col gap-2 px-default'>
-                    {pendingMeasures?.map((pendingMeasure) => {
-                        const { _id, cattle, expirationDate } = pendingMeasure
 
-                        return (
-                            <li key={`${_id}`} className='list-none'>
-                                <div className="card p-3 md:px-4 !-rounded-r-full">
-                                    <div className="flex-between">
-                                        <div>
-                                            <p className='font-bold text-2xl'>
-                                                {cattle?.caravan}
-                                            </p>
-                                            <p>
-                                                {new Date(expirationDate).toLocaleDateString()}
-                                            </p>
-                                        </div>
+            <h1 className="font-medium input_instructions px-default">Fecha de vencimiento</h1>
+            <div className="px-default flex mb-6 overflow-x-auto pb-2 mt-2">
+                {uniqueDates.map((date) => (
+                    <button
+                        key={date}
+                        value={date}
+                        onClick={handleDateChange}
+                        className={`flex-center rounded-xl py-2 px-4 ${selectedDate === date ? 'bg-cgreen dark:bg-clime' : ''
+                            }`}
+                    >
+                        <p
+                            className={`font-medium text-lg ${selectedDate === date ? 'text-clime dark:text-cblack' : 'input_instructions  opacity-50'
+                                }`}
+                        >
+                            {format(new Date(date), 'dd/MM/yyyy')}
+                        </p>
+                    </button>
+                ))}
+            </div>
 
-                                        <button
-                                            type='button'
-                                            className='flex-center bg-cgreen dark:bg-clime flex-center rounded-full px-6 py-3'
-                                            onClick={() => setSelectedPendingMeasure(pendingMeasure)}
-                                        >
-                                            <p className='text-xs uppercase tracking-widest font-semibold text-white dark:text-cblack'>Medir</p>
-                                            <ArrowsIcon direction='!w-6 !h-6 -rotate-90' fill='dark:fill-cblack fill-clime' />
-                                        </button>
+
+            <ul className="flex flex-col gap-2">
+                {selectedDate ?
+                    <div className="gradient_card max-w-max w-full p-4">
+                        <p className='opacity-50'>Las mediciónes se crearán con fecha <b>{format(new Date(selectedDate), 'dd/MM/yyyy')}</b></p>
+                    </div>
+                    : null
+                }
+
+                {filteredResults.length > 0 ?
+                    filteredResults.map((measure) => (
+                        <li key={measure._id} className="list-none">
+                            <div className="card p-3 md:px-4 !-rounded-r-full">
+                                <div className="flex-between">
+                                    <div>
+                                        <p className="font-bold text-2xl">{measure.cattle.caravan}</p>
                                     </div>
+                                    <button
+                                        type="button"
+                                        className="flex-center bg-cgreen dark:bg-clime rounded-full px-6 py-3"
+                                        onClick={() => setSelectedPendingMeasure(measure)}
+                                    >
+                                        <p className="text-xs uppercase tracking-widest font-semibold text-white dark:text-cblack">
+                                            Medir
+                                        </p>
+                                        <ArrowsIcon direction="!w-6 !h-6 -rotate-90" fill="dark:fill-cblack fill-clime" />
+                                    </button>
                                 </div>
-                                <div className="flex items-end w-full mt-1">
-                                    <p className="input_instructions text-xs">{_id}</p>
-                                </div>
-                            </li>
-                        )
-                    })}
-                </ul>
-            ) : (
-                <div className="px-4">
-                    <InfoMessage
-                        type='censored'
-                        title='Sin resultados'
-                        subtitle="Al parecer no tienes mediciones por realizar, ya estas al día!"
-                    />
-                </div>
-            )
-            }
+                            </div>
+                        </li>
+                    )) :
+                    <li className="px-4">
+                        <InfoMessage
+                            type="censored"
+                            title="Sin resultados"
+                            subtitle="No tienes mediciones pendientes en esta fecha."
+                        />
+                    </li>
+                }
+            </ul>
 
 
             <Modal isOpen={Boolean(selectedPendingMeasure)} handleClose={handleClose}>
@@ -130,6 +161,9 @@ const OfflinePage = () => {
                     <div className="header_container">
                         <p className="dark:text-gray-300 text-2xl font-medium">
                             {selectedPendingMeasure?.cattle.caravan}
+                        </p>
+                        <p className="input_instructions text-base mb-1">
+                            Indique la medida del caliper
                         </p>
                     </div>
 
@@ -177,5 +211,4 @@ const OfflinePage = () => {
         </div>
     );
 };
-
 export default OfflinePage;

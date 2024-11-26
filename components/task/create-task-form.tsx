@@ -12,7 +12,6 @@ import { CattleProps, createTaskSchema, CreateTaskSchema } from '@/lib/types';
 import UsersList from './users-list'
 import { ArrowsIcon, CloseIcon, LoadingIcon, } from '../ui/icons';
 import { ExtendedUser } from '@/next-auth';
-import CleanButton from '../ui/clean-button';
 import { createTask } from '@/actions/task';
 import FilterInput from '../ui/filter-input';
 import { ProfileImage } from '../ui/navbar';
@@ -22,8 +21,10 @@ import Resume from '../ui/resume';
 import UsersResume from './users-resume';
 import CloseBtn from '../ui/close-btn';
 import CaravansResume from './caravans-resume';
+import { useSync } from '@/context/SyncContext';
 
 const CreateTaskForm = ({ handleRefresh, handleClose }: { handleRefresh?: () => void; handleClose?: () => void }) => {
+    const { isOnline, handleSyncOnline } = useSync();
     // step of create task form
     const [step, setStep] = useState<number>(1)
 
@@ -39,11 +40,11 @@ const CreateTaskForm = ({ handleRefresh, handleClose }: { handleRefresh?: () => 
         useForm<z.infer<typeof createTaskSchema>>({ resolver: zodResolver(createTaskSchema), })
 
 
-
     const onSubmit: SubmitHandler<CreateTaskSchema> = async (data: CreateTaskSchema) => {
         try {
             const { error } = await createTask(data);
             if (error) return toast.error(error)
+            await handleSyncOnline()
 
             toast.success('Tarea registrada')
             if (handleClose) {

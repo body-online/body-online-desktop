@@ -65,16 +65,11 @@ export async function uploadEventList({
    };
   });
 
-  console.log("updating events");
-  console.log(formattedEvents);
-
   const { data }: any = await axios({
    method: "post",
    url: `${process.env.API_URL}/api/ranchi/event/massive`,
    data: formattedEvents,
   });
-
-  console.log(data);
 
   return { uploadResults: data };
  } catch (err: any) {

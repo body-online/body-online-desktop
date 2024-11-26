@@ -17,12 +17,13 @@ import CattleResume from '../ui/cattle-resume';
 import CheckButton from '../ui/check-button';
 import CloseBtn from '../ui/close-btn';
 import Modal from '../ui/modal'
+import { useSync } from '@/context/SyncContext';
 
 const UpdateTaskButton = (
     { task, setTask, defaultValues }: { task: TaskProps; setTask: Dispatch<SetStateAction<TaskProps>>; defaultValues: DefaultValues<EventSchema> }
 ) => {
     const { data: session } = useSession()
-
+    const { refreshPendingMeasures } = useSync()
     const [pendingMeasures, setPendingMeasures] = useState<CattleProps[]>([...task?.cattleIds])
     const [selectedCattle, setSelectedCattle] = useState<CattleProps | any>()
     const [isOpen, setIsOpen] = useState<boolean>(false)
@@ -62,6 +63,7 @@ const UpdateTaskButton = (
 
             const { error, data: event } = await createEvent({ ...formValues, caravan: selectedCattle.caravan });
             if (error) return toast.error(error)
+            await refreshPendingMeasures()
 
             // update the task state if everything was ok
             if (event) toast.success(`Medida ${formValues.measure} asignada a ${selectedCattle.caravan} `)
@@ -71,15 +73,13 @@ const UpdateTaskButton = (
                 measuredCattles: [...task.measuredCattles, measuredCattle?.caravan],
                 completed: !leftCaravans.length
             })
-            reset()
-            setSelectedCattle(undefined)
-            setPendingMeasures(leftMeasures)
+
 
             if (!leftCaravans?.length) {
                 return handleClose()
             } else {
                 reset()
-                setSelectedCattle(leftCaravans[0])
+                setSelectedCattle(leftCaravans?.[0])
                 return setStep(1)
             }
 
@@ -97,6 +97,16 @@ const UpdateTaskButton = (
     }, [selectedCattle])
 
     var assignedToMe = task.assignedTo.find((user) => user.email == session?.user.email)
+
+
+    var expirationDate = new Date(task.expirationDate)
+
+    const expirationHour = expirationDate ? new Date(expirationDate)
+        .toLocaleTimeString("es-AR", { hour: 'numeric', minute: 'numeric' }) : undefined
+
+    const expiration = expirationDate ?
+        new Date(expirationDate).toLocaleDateString("es-AR", { day: 'numeric', month: 'short', year: 'numeric' }) : undefined
+
     return (
         <>
             <button
@@ -122,6 +132,20 @@ const UpdateTaskButton = (
                                     </p>
                                 </div>
 
+                                {Boolean(expiration && expirationHour) &&
+                                    <>
+                                        <ArrowsIcon direction='-rotate-90' />
+                                        <div className='-space-y-1.5'>
+                                            <p className="input_instructions text-start text-sm">
+                                                {expiration}
+                                            </p>
+                                            <p className="input_instructions text-start text-xs">
+                                                {expirationHour}
+                                            </p>
+                                        </div>
+                                    </>
+                                }
+
                                 {selectedCattle?.caravan &&
                                     <>
                                         <ArrowsIcon direction='-rotate-90' />
@@ -130,6 +154,7 @@ const UpdateTaskButton = (
                                         </p>
                                     </>
                                 }
+
 
                                 {watch('measure') && selectedCattle?.geneticId?.bodyRanges.length == 2 &&
                                     <>
@@ -156,7 +181,7 @@ const UpdateTaskButton = (
                                         </p>
                                     </div>
 
-                                    <div className="custom_list gap-3">
+                                    <div className="custom_list">
                                         {pendingMeasures.map((cattle, index) => {
 
                                             const selected = cattle._id === selectedCattle?._id;

@@ -49,7 +49,7 @@ export function OperatorsTable({ users, pageSize, pagination }: {
 
     return (
         <>
-            <div className="overflow-auto relative w-full flex flex-col max-h-[58vh] md:max-h-[65vh] ">
+            <div className="overflow-auto relative w-full flex flex-col max-h-[58vh] md:max-h-[65vh]">
                 <table>
                     <thead>
                         {table.getHeaderGroups().map((headerGroup) => {

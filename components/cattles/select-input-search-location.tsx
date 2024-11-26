@@ -10,7 +10,7 @@ import { enterModal } from '@/lib/constants'
 import { motion } from 'framer-motion'
 import Card from '../ui/card'
 import { getLocations } from '@/data/location'
-import useOnlineStatus from '@/hooks/useOnlineStatus'
+
 
 const SelectInputSearchLocation = ({ handleSelectLocation, isOpen, setIsOpen, error, isSubmitting }:
     { handleSelectLocation: Function; isOpen: boolean; setIsOpen: Function; error?: string; isSubmitting?: boolean }) => {

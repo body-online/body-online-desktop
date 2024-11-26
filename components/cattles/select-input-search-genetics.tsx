@@ -9,7 +9,7 @@ import { enterModal } from '@/lib/constants'
 import { motion } from 'framer-motion'
 import Card from '../ui/card'
 import { getGenetics } from '@/data/genetic'
-import useOnlineStatus from '@/hooks/useOnlineStatus'
+
 
 const SelectInputSearchGenetic = ({ handleSelectGenetic, isOpen, setIsOpen, error, isSubmitting }:
     { handleSelectGenetic: Function; isOpen: boolean; setIsOpen: Function; error?: string; isSubmitting?: boolean }) => {

@@ -33,7 +33,7 @@ import StatePagination from '../ui/state-pagination';
 import DeleteLocationBtn from './delete-button';
 import AddLocationBtn from './add-location';
 import FilterInput from '../ui/filter-input';
-import useOnlineStatus from '@/hooks/useOnlineStatus';
+;
 
 export function LocationsDataTable({ totalLocations }: { totalLocations?: number }) {
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
@@ -86,7 +86,7 @@ export function LocationsDataTable({ totalLocations }: { totalLocations?: number
             <div className="pt-4 px-4">
                 <div className="flex-between mb-2">
 
-                    <h2 className='text-xl md:text-2xl font-semibold mb-[20px]'>Ubicaciones</h2>
+                    <h2 className='text-xl md:text-2xl font-semibold '>Ubicaciones</h2>
 
 
                     <div className="flex gap-2 items-center">

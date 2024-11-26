@@ -33,7 +33,7 @@ import LoadingRowsSkeleton from '../ui/loading-rows-skeleton';
 import AddEventBtn from '../cattles/add-event';
 import StatePagination from '../ui/state-pagination';
 import FilterInput from '../ui/filter-input';
-import useOnlineStatus from '@/hooks/useOnlineStatus';
+;
 
 export function EventsDataTable() {
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
@@ -103,12 +103,12 @@ export function EventsDataTable() {
 
             <div className="flex-between mb-2 pt-4 px-4">
 
-                <h2 className='text-xl md:text-2xl font-semibold mb-[20px]'>Eventos</h2>
+                <h2 className='text-xl md:text-2xl font-semibold '>Eventos</h2>
 
                 <div className="flex gap-2 items-center">
                     {isLoading ? <LoadingIcon /> :
                         <p className='text-sm md:text-base font-normaltext-slate-600 dark:text-slate-400'>
-                            {events?.length} {(events?.length ?? 0) != 1 ? 'registros' : 'registro'}
+                            {totalAmount} {(totalAmount ?? 0) != 1 ? 'registros' : 'registro'}
                         </p>
                     }
                     <AddEventBtn handleRefresh={searchEvents} />

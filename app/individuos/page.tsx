@@ -9,9 +9,5 @@ export default async function Page() {
     if (!user?.farmId) return redirect('/')
     if (user?.type != 'owner') return redirect('/tareas')
 
-    return (
-        <div className="px-default py-default">
-            <CattlesDashboard />
-        </div>
-    )
+    return <CattlesDashboard />
 }

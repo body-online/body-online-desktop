@@ -19,6 +19,7 @@ import CattleResume from './ui/cattle-resume';
 import { eventTypesList } from '@/lib/constants';
 import CloseBtn from './ui/close-btn';
 import ChipBodyCondition from './cattles/chip-body-condition';
+import { useSync } from '@/context/SyncContext';
 
 const CreateEventForm = (
     { handleRefresh, handleByCattle, handleClose }: {
@@ -27,6 +28,7 @@ const CreateEventForm = (
         handleClose?: () => void;
     }
 ) => {
+    const { refreshPendingMeasures } = useSync()
     const { register, setValue, unregister, handleSubmit, watch, setError, clearErrors, formState: { errors, isSubmitting }, reset } =
         useForm<z.infer<typeof eventSchema>>({
             resolver: zodResolver(eventSchema),
@@ -44,6 +46,7 @@ const CreateEventForm = (
     const onSubmit: SubmitHandler<EventSchema> = async (data: EventSchema) => {
         try {
             const { error } = await createEvent(data);
+            await refreshPendingMeasures();
 
             if (error) return toast.error(error);
             setStep(1)

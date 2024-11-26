@@ -161,7 +161,7 @@ export const columnsCattle: ColumnDef<CattleProps>[] = [
         },
         accessorKey: "locationName",
         cell: ({ row }) => {
-            return <p>{row.getValue("locationName")}</p>;
+            return <p>{row?.original?.locationId?.name}</p>;
         },
     },
     {

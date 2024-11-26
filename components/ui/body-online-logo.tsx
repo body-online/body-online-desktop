@@ -7,7 +7,7 @@ const BodyOnlineLogo = ({ isOffline }: { isOffline?: boolean }) => {
         <div className='max-w-xs flex flex-col justify-center items-center m-auto'>
             <motion.div
                 initial={{ opacity: 0 }}
-                animate={{ opacity: 1, transition: { delay: 0.6 } }}
+                animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
             >
                 <svg

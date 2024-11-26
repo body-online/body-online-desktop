@@ -51,59 +51,64 @@ function OperatorsTablePage() {
     }, [searchTerm]);
 
     return (
-        <div className='card w-full min-w-max'>
-            <div className="header_container">
-                <h2 className='text-xl md:text-2xl font-semibold mb-[20px]'>Usuarios</h2>
+        <>
+            {/* dashboard taks */}
+            <div className='card overflow-hidden max-h-max w-full'>
 
-                <div className="flex gap-2 items-center">
-                    {isLoading ? <LoadingIcon /> :
-                        <p className='text-sm md:text-base font-normaltext-slate-600 dark:text-slate-400'>
-                            {totalUsers} {totalUsers > 1 ? 'registros' : 'registro'}
-                        </p>
-                    }
-                </div>
-                <AddUserBtn customText='Nuevo' handleRefresh={() => getUsers()} />
-            </div>
-
-            <div className="px-4 mb-2 space-y-2">
-                <FilterInput
-                    placeholder={'Buscar por nombre...'}
-                    onChange={(e) => { setSearchTerm(e); }}
-                    disabled={(!search && !users?.length) || (!search && isLoading)}
-                // searchTerm={searchTerm ?? ''}
-                />
-            </div>
+                <div className="header_container">
+                    <h2 className='text-xl md:text-2xl font-semibold'>Usuarios</h2>
 
 
-            {isLoading ? (
-                <LoadingTableSkeleton />
-            ) : search && !users?.length ? (
-                <div className='p-4'>
-                    <InfoMessage
-                        type='info'
-                        title='Sin resultados'
-                        subtitle={`No hemos encontrado resultados con "${search}"`}
-                    />
-                </div>
-            ) : (
-                <div className="w-full max-h-max">
-                    <OperatorsTable
-                        users={users ?? []}
-                        pageSize={limit}
-                    />
-                    <div className="p-2">
-                        <StatePagination
-                            changePage={(newPage) => setPage(newPage)}
-                            page={page}
-                            totalPages={totalPages}
-                            limit={limit}
-                            changeLimit={(newLimit) => setLimit(newLimit)}
-                        />
+                    <div className="flex gap-2 items-center">
+                        {isLoading ? <LoadingIcon /> :
+                            <p className='text-sm md:text-base font-normaltext-slate-600 dark:text-slate-400'>
+                                {totalUsers} {totalUsers > 1 ? 'registros' : 'registro'}
+                            </p>
+                        }
                     </div>
                 </div>
-            )}
 
-        </div>
+                <div className="px-4 mb-2 space-y-2">
+                    <FilterInput
+                        placeholder={'Buscar por nombre...'}
+                        onChange={(e) => { setSearchTerm(e); }}
+                        disabled={(!search && !users?.length) || (!search && isLoading)}
+                    // searchTerm={searchTerm ?? ''}
+                    />
+                    <AddUserBtn customText='Nuevo' handleRefresh={() => getUsers()} />
+                </div>
+
+
+                {isLoading ? (
+                    <LoadingTableSkeleton />
+                ) : search && !users?.length ? (
+                    <div className='p-4'>
+                        <InfoMessage
+                            type='info'
+                            title='Sin resultados'
+                            subtitle={`No hemos encontrado resultados con "${search}"`}
+                        />
+                    </div>
+                ) : (
+                    <div className="w-full max-h-max">
+                        <OperatorsTable
+                            users={users ?? []}
+                            pageSize={limit}
+                        />
+                        <div className="p-2">
+                            <StatePagination
+                                changePage={(newPage) => setPage(newPage)}
+                                page={page}
+                                totalPages={totalPages}
+                                limit={limit}
+                                changeLimit={(newLimit) => setLimit(newLimit)}
+                            />
+                        </div>
+                    </div>
+                )}
+
+            </div>
+        </>
     )
 }
 

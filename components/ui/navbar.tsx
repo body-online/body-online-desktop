@@ -8,12 +8,10 @@ import { signOut, useSession } from 'next-auth/react';
 import toast from 'react-hot-toast';
 import Link from 'next/link';
 
-import useOnlineStatus from '@/hooks/useOnlineStatus';
-
 import { modalBackground, navigationItems } from '@/lib/constants';
 import { CloseIcon, LoadingIcon, LogoutIcon, MenuIcon } from './icons';
+import { useSync } from '@/context/SyncContext';
 import ThemeSwitch from './theme-switch';
-import ChipIsOnline from './chip-online';
 
 function eliminarDiacriticos(texto: string) {
     return texto.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
@@ -26,9 +24,9 @@ function getInitials(name?: string) {
 
 
 export default function Navbar() {
-    const { data: session } = useSession()
-    const { isOnline, isLoading, pendingTasks } = useOnlineStatus();
+    const { isSyncing, isOnline, syncAmount } = useSync();
     const [isOpen, setIsOpen] = useState(false);
+    const { data: session } = useSession()
     const pathname = usePathname();
 
     const handleEsc = (event: KeyboardEvent) => {
@@ -56,15 +54,15 @@ export default function Navbar() {
                 <div className='flex-between px-default'>
                     <div className='flex items-center gap-2 max-h-8 h-8'>
                         <ProfileImage user={session.user} height='h-8' width='w-8' />
-                        <ChipIsOnline isOnline={isOnline} />
+
                         {isOnline && (
-                            <div className="custom-toast flex-center">
-                                {isLoading ?
+                            <div className="border custom-border rounded-full flex-center block py-2 px-4 w-max h-8 flex-center">
+                                {isSyncing ?
                                     <LoadingIcon fill='dark:fill-clime fill-caqua' /> :
-                                    <span className='text-sm font-medium'>{pendingTasks.length}</span>
+                                    <span className='text-sm font-medium'>{syncAmount}</span>
                                 }
-                                <p className="input_instructions text-sm">
-                                    pendientes (offline)
+                                <p className="input_instructions text-sm ml-1">
+                                    pendientes
                                 </p>
                             </div>
                         )}

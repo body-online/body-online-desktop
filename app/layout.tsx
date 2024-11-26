@@ -2,10 +2,12 @@ import { SessionProvider } from 'next-auth/react';
 import localFont from 'next/font/local'
 import type { Metadata } from "next";
 
-import { Providers } from '@/components/ui/providers';
 import { auth } from '@/auth';
 
 import "./globals.css";
+import Navbar from '@/components/ui/navbar';
+import { SyncProvider } from '@/context/SyncContext';
+import { ThemeProvider } from 'next-themes';
 
 const satoshi = localFont({
   src: '../public/fonts/Satoshi-Variable.ttf',
@@ -24,6 +26,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
 
   return (
     <SessionProvider session={session}>
+
       <html lang="en" className={`${satoshi.className}`} suppressHydrationWarning>
         <head>
           <link rel="icon" href="/favicon.ico" as="favicon" />
@@ -55,11 +58,15 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
         </head>
 
         <body className={`body`}>
-          <Providers>
-            {children}
-          </Providers>
+          <SyncProvider>
+            <Navbar />
+
+            <ThemeProvider attribute="class" defaultTheme="dark">
+              {children}
+            </ThemeProvider>
+          </SyncProvider>
         </body>
       </html>
-    </SessionProvider>
+    </SessionProvider >
   );
 }

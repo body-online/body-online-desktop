@@ -10,7 +10,7 @@ import InfoMessage from '../ui/info'
 import { getGenetics } from '@/data/genetic'
 import AddGeneticBtn from './add-genetic'
 import GeneticsTable from './table'
-import useOnlineStatus from '@/hooks/useOnlineStatus'
+
 
 function GeneticsTablePage() {
     const [genetics, setGenetics] = useState<GeneticProps[]>()
@@ -40,7 +40,7 @@ function GeneticsTablePage() {
     return (
         <div className='card h-min'>
             <div className="header_container">
-                <h2 className='text-xl md:text-2xl font-semibold mb-[20px]'>Genéticas</h2>
+                <h2 className='text-xl md:text-2xl font-semibold '>Genéticas</h2>
 
                 <div className="flex gap-2 items-center">
                     {isLoading ? <LoadingIcon /> :
