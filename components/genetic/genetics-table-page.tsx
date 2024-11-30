@@ -42,20 +42,21 @@ function GeneticsTablePage() {
             <div className="header_container">
                 <h2 className='text-xl md:text-2xl font-semibold '>Genéticas</h2>
 
-                <div className="flex gap-2 items-center">
+                <div className="flex w-max gap-x-2 gap-y-1 items-center flex-wrap-reverse justify-end">
                     {isLoading ? <LoadingIcon /> :
-                        <p className='text-sm md:text-base font-normaltext-slate-600 dark:text-slate-400'>
+                        <p className='text-sm md:text-base font-normal text-slate-600 dark:text-slate-400'>
                             {genetics?.length} {(genetics?.length ?? 0) != 1 ? 'registros' : 'registro'}
                         </p>
                     }
                 </div>
             </div>
 
-            <div className="px-4 mb-2 space-y-2">
+            <div className="px-4 my-2">
                 <div className="flex input gap-3 items-center w-full md:max-w-sm px-4">
                     <div className={`${isLoading ? "opacity-50" : ""}`}>
                         <SearchIcon />
                     </div>
+
                     <input
                         disabled={isLoading || (!genetics?.length && !searchTerm)}
                         className={`bg-transparent border-0 focus:ring-0 outline-0 focus:outline-0`}
@@ -65,6 +66,7 @@ function GeneticsTablePage() {
                         onChange={(e) => { return setSearchTerm(e?.target?.value ?? '') }}
                     />
                 </div>
+
                 <AddGeneticBtn customText='Nueva' handleRefresh={() => fetchGenetics()} />
             </div>
 

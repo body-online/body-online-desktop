@@ -32,7 +32,7 @@ const LocationsList = ({
     const [locations, setLocationList] = useState<LocationProps[]>([])
     // filters states
     const [page, setPage] = useState<number>(1)
-    const [limit, setLocationLimit] = useState<number>(10)
+    const [limit, setLocationLimit] = useState<number>(20)
     const [totalPages, setTotalPages] = useState<number>(1)
 
     const fetchLocations = async () => {
@@ -65,7 +65,7 @@ const LocationsList = ({
 
     return (
         <>
-            <div className="px-4 mb-2 space-y-2">
+            <div className="px-4 my-2 space-y-2">
                 <p className="input_label">
                     Asignar ubicación
                 </p>
@@ -129,6 +129,7 @@ const LocationsList = ({
 
                         <div className="px-2">
                             <StatePagination
+                                disabled={isLoading || totalPages >= 1 && !locations?.length}
                                 page={page}
                                 limit={limit}
                                 changePage={(newPage: number) => setPage(newPage)}

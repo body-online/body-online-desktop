@@ -24,7 +24,6 @@ export function OperatorsTable({ users, pageSize, pagination }: {
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
     const [sorting, setSorting] = React.useState<SortingState>([]);
 
-
     const table = useReactTable({
         data: users,
         columns: columnsUser,

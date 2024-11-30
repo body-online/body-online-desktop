@@ -1,17 +1,19 @@
 'use client'
 
 import React from 'react'
-import OfflinePage from './offline'
+
 import { useSync } from '@/context/SyncContext';
-import Modal from './ui/modal';
+import { ExtendedUser } from '@/next-auth';
+
+import UserResumeCard from './user-resume';
 import { LoadingIcon } from './ui/icons';
+import OfflinePage from './offline'
+import Modal from './ui/modal';
 
-const CustomLayout = ({ children }: { children: React.ReactNode }) => {
+const CustomLayout = ({ children, user }: { children: React.ReactNode; user: ExtendedUser }) => {
+    // "isSyncing" works only in online mode
     const { isSyncing, isOnline } = useSync();
-
-    if (!isOnline) {
-        return <OfflinePage />
-    }
+    const isOperator = user.type == 'operator'
 
     return (
         <div>
@@ -20,16 +22,30 @@ const CustomLayout = ({ children }: { children: React.ReactNode }) => {
                     isOpen={isSyncing}
                     hideCloseBtn={true}
                 >
-                    <div className="card flex py-6 px-4 gap-3 max-w-max mx-auto">
-                        <LoadingIcon />
-                        <p className="input_instructions text-sm">
-                            Sincronizando medidas offline, por favor aguarde en esta pantalla...
-                        </p>
+                    <div className="card flex items-start py-6 px-4 gap-3 max-w-max mx-auto">
+                        <div className="mt-1">
+                            <LoadingIcon />
+                        </div>
+                        <div>
+                            <p className='text-lg font-semibold tracking-tight'>
+                                Sincronizando offline
+                            </p>
+                            <p className="input_instructions text-sm">
+                                Estamos cargando sus datos para que puedas trabajar sin conexión, aguarda unos segundos por favor...
+                            </p>
+                        </div>
                     </div>
                 </Modal> :
                 null
             }
-            {children}
+
+            <div className="px-default py-default">
+                <UserResumeCard user={user} />
+
+                {!isOnline || isOperator ? (
+                    <OfflinePage />
+                ) : children}
+            </div>
         </div>
     )
 }

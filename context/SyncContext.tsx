@@ -6,32 +6,47 @@ import toast from 'react-hot-toast';
 import { getPendingMeasures } from '@/data/tasks';
 import { uploadEventList } from '@/actions/event';
 import { db } from '@/lib/utils';
+import { ThemeProvider } from 'next-themes';
+import { getAllCattles } from '@/data/cattle';
+import { MinifyCattleProps, PendingMeasureProps } from '@/lib/types';
 
 type SyncContextType = {
     isSyncing: boolean;
     isOnline: boolean;
-    syncAmount: number;
+    cattlesList: MinifyCattleProps[];
     handleSyncOnline: () => Promise<void>;
-    refreshPendingMeasures: () => Promise<void>;
+    // refreshPendingMeasures: () => Promise<void>;
 };
+
 
 const SyncContext = createContext<SyncContextType | undefined>(undefined);
 
 export const SyncProvider = ({ children }: { children: ReactNode }) => {
     const { data: session } = useSession();
-    const [isSyncing, setIsSyncing] = useState(false);
-    const [syncAmount, setSyncAmount] = useState<number>(0);
+
+    // offline 
     const [isOnline, setIsOnline] = useState(true);
+    const [isSyncing, setIsSyncing] = useState(false);
+    const [cattlesList, setCattlesList] = useState<MinifyCattleProps[]>([])
+    const [pendingMeasuresList, setPendingMeasuresList] = useState<PendingMeasureProps[]>()
 
-    async function refreshPendingMeasures() {
-        const pendingMeasuresList = await getPendingMeasures();
+    // we will save the entire cattles array so..
+    async function loadOnlineData() {
+        try {
+            let cattlesList = await getAllCattles()
+            // let pendingMeasuresList = await getPendingMeasures();
 
-        if (pendingMeasuresList?.length) {
-            setSyncAmount(pendingMeasuresList.length ?? 0)
-            await db.pendingMeasures.clear();
-            await db.pendingMeasures.bulkAdd(pendingMeasuresList);
+            setCattlesList(cattlesList)
+            // setPendingMeasuresList(pendingMeasuresList)
+
+            // sync this into indexDB
+        } catch (error) {
+            alert('error')
         }
     }
+
+    useEffect(() => {
+    }, [])
 
     async function handleSyncOnline() {
         if (!session?.user?.email) return;
@@ -39,12 +54,14 @@ export const SyncProvider = ({ children }: { children: ReactNode }) => {
         setIsSyncing(true);
         try {
             const eventsPendingToUpload = await db.events.toArray();
-            if (eventsPendingToUpload.length > 0) {
+
+            if (eventsPendingToUpload.length >= 1) {
                 await uploadEventList({ events: eventsPendingToUpload })
                     .then(() => db.events.clear())
                     .catch(() => toast.error('Error al actualizar los eventos'));
             }
-            await refreshPendingMeasures();
+
+            await loadOnlineData();
             toast.success('Sincronización completada');
         } catch (error) {
             toast.error('Error al sincronizar datos');
@@ -74,10 +91,11 @@ export const SyncProvider = ({ children }: { children: ReactNode }) => {
             handleSyncOnline()
     }, [isOnline])
 
-
     return (
-        <SyncContext.Provider value={{ isSyncing, isOnline, handleSyncOnline, syncAmount, refreshPendingMeasures }}>
-            {children}
+        <SyncContext.Provider value={{ isSyncing, isOnline, handleSyncOnline, cattlesList }}>
+            <ThemeProvider attribute='class'>
+                {children}
+            </ThemeProvider>
         </SyncContext.Provider>
     );
 };

@@ -54,7 +54,7 @@ export function AddLocationBtn({ customText, searchLocations }: { customText?: s
                 <div
                     className='flex flex-col w-full dark:bg-clightgray/50 border custom-border p-2 md:p-3 rounded-lg'
                 >
-                    <p className="input_label mb-3">Nueva ubicación</p>
+                    <p className="input_label">Nueva ubicación</p>
                     <form onSubmit={(e) => { return e.preventDefault() }} className='space-y-6'>
                         <div className="w-full flex flex-col gap-2">
                             <label htmlFor='name' className='w-full'>

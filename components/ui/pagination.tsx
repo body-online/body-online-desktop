@@ -11,7 +11,7 @@ export default function Pagination({ page, paramName, totalPages }: { page: numb
 
   function changePage(newPage: number) {
     if (paramName) {
-      const params = new URLSearchParams(searchParams);
+      const params = new URLSearchParams(searchParams as any);
       params.set(paramName, `${newPage}`);
 
       return replace(`${pathname}?${params.toString()}`);

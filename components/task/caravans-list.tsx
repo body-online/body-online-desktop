@@ -26,7 +26,7 @@ const CaravansList = ({
     const [cattlesList, setCattlesList] = useState<CattleProps[]>([])
     // filters states
     const [page, setPage] = useState<number>(1)
-    const [limit, setCattlesLimit] = useState<number>(10)
+    const [limit, setCattlesLimit] = useState<number>(20)
     const [totalPages, setTotalPages] = useState<number>(1)
 
     const handleGetCattles = async () => {

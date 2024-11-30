@@ -43,7 +43,7 @@ export function LocationsDataTable({ totalLocations }: { totalLocations?: number
 
     const [locations, setLocations] = useState<LocationProps[]>([])
     const [totalPages, setTotalPages] = useState<number>()
-    const [limit, setLimit] = useState<number>(10)
+    const [limit, setLimit] = useState<number>(20)
     const [page, setPage] = useState<number>(1)
 
     const table = useReactTable({
@@ -89,25 +89,26 @@ export function LocationsDataTable({ totalLocations }: { totalLocations?: number
                     <h2 className='text-xl md:text-2xl font-semibold '>Ubicaciones</h2>
 
 
-                    <div className="flex gap-2 items-center">
+                    <div className="flex w-max gap-x-2 gap-y-1 items-center flex-wrap-reverse justify-end">
                         {isLoading ? <LoadingIcon /> :
-                            <p className='text-sm md:text-base font-normaltext-slate-600 dark:text-slate-400'>
+                            <p className='text-sm md:text-base font-normal text-slate-600 dark:text-slate-400'>
                                 {locations?.length} {(locations?.length ?? 0) != 1 ? 'registros' : 'registro'}
                             </p>
                         }
+
+                        <AddLocationBtn customText='Nueva' searchLocations={searchLocations} />
                     </div>
                 </div>
             </div>
 
 
-            <div className="mb-2 px-4 space-y-2">
+            <div className="px-4 my-2">
                 <FilterInput
                     placeholder='Buscar por nombre...'
                     onChange={(e) => setSearchTerm(e)}
                     disabled={!locations?.length && !searchTerm}
                 />
 
-                <AddLocationBtn customText='Nueva' searchLocations={searchLocations} />
             </div>
 
 

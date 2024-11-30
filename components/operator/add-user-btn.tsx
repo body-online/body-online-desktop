@@ -11,9 +11,14 @@ import { RegisterSchema } from '@/schemas';
 
 import HorizontalSelector from '../ui/horizontal-selector';
 import { LoadingIcon, MiniAddIcon } from '../ui/icons';
+import CloseBtn from '../ui/close-btn';
+import Modal from '../ui/modal';
+import { useSession } from 'next-auth/react';
 
 export function AddUserBtn({ customText, handleRefresh }: { customText?: string; handleRefresh?: () => void }) {
+    const { data: session } = useSession()
     const [isOpen, setIsOpen] = useState(false)
+    const isNotAdmin = Boolean(session?.user.type != 'owner')
 
     const {
         register,
@@ -49,17 +54,36 @@ export function AddUserBtn({ customText, handleRefresh }: { customText?: string;
     }
 
     return (
-        <>
-            {isOpen ? (
-                <div className='flex flex-col w-full dark:bg-clightgray/50 border custom-border p-2 md:p-3 rounded-lg'>
+        <div>
+            <Modal isOpen={isOpen} handleClose={handleClose}>
+                <div className='card_modal w-full max-w-sm mx-auto'>
                     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-                        <div>
-                            <label htmlFor='type' className='w-full'>
-                                <p className="input_label mb-3">
-                                    Nuevo usuario
-                                </p>
+                        <div className='header_container'>
+                            <p className="text-base font-medium">
+                                Nuevo usuario
+                            </p>
 
-                                <div className="flex gap-2 mt-2">
+                            <CloseBtn handleClose={handleClose} />
+                        </div>
+
+                        <div className='px-4 my-2'>
+                            <div className="flex flex-wrap gap-2 mt-2">
+                                <div className='w-full min-w-[200px]'>
+                                    <input
+                                        {...register("name")}
+                                        placeholder='Nombre completo'
+                                        disabled={isSubmitting}
+                                        className={`input ${errors.name ? 'border-red-500' : ''}`}
+                                        type="text"
+                                        name='name'
+                                    />
+
+                                    <div className="input_error">
+                                        {errors.name && (<p>{`${errors.name.message}`}</p>)}
+                                    </div>
+                                </div>
+
+                                <div className="max-w-max">
                                     <HorizontalSelector
                                         options={[
                                             { label: 'Operario', value: 'operator' },
@@ -69,30 +93,16 @@ export function AddUserBtn({ customText, handleRefresh }: { customText?: string;
                                         onChange={(value) => setValue('type', value as 'operator' | 'owner')}
                                     />
                                 </div>
-                                <div className="input_error">
-                                    {errors.type && (<p>{`${errors.type.message}`}</p>)}
-                                </div>
-                            </label>
+                            </div>
+
+
+
+                            <div className="input_error">
+                                {errors.type && (<p>{`${errors.type.message}`}</p>)}
+                            </div>
                         </div>
 
-                        <div>
-                            <label htmlFor='name' className='w-full'>
-                                {/* <p className="input_label">Nombre completo*</p> */}
-                                <input
-                                    {...register("name")}
-                                    placeholder='Nombre completo'
-                                    disabled={isSubmitting}
-                                    className={`input ${errors.name ? 'border-red-500' : ''}`}
-                                    type="text"
-                                    name='name'
-                                />
-                                <div className="input_error">
-                                    {errors.name && (<p>{`${errors.name.message}`}</p>)}
-                                </div>
-                            </label>
-                        </div>
-
-                        <div>
+                        <div className='px-4 my-2'>
                             <label htmlFor='email' className='w-full'>
                                 {/* <p className="input_label">Email*</p> */}
                                 <input
@@ -109,7 +119,7 @@ export function AddUserBtn({ customText, handleRefresh }: { customText?: string;
                             </label>
                         </div>
 
-                        <div>
+                        <div className='px-4 my-2'>
                             <label htmlFor='password' className='w-full'>
                                 <p className="input_label">Contraseña*</p>
                                 <input
@@ -126,10 +136,21 @@ export function AddUserBtn({ customText, handleRefresh }: { customText?: string;
                             </label>
                         </div>
 
-                        <div className="flex-between gap-2">
+                        <div className="buttons_container">
+                            <button
+                                disabled={isSubmitting || !watch('name')}
+                                className='order-2 rounded_btn bg-cgreen dark:bg-clime'
+                                type='button'
+                                onClick={handleSubmit(onSubmit)}
+                            >
+                                {isSubmitting && <LoadingIcon fill='fill-clime dark:fill-cblack' />}
+                                <p className='text-white dark:text-cblack'>
+                                    {isSubmitting ? 'Creando' : 'Crear'}
+                                </p>
+                            </button>
                             <button
                                 disabled={isSubmitting}
-                                className='rounded_btn bg-gray-100 dark:bg-clightgray md:max-w-max px-3'
+                                className='rounded_btn bg-slate-100 dark:bg-clightgray'
                                 type='button'
                                 onClick={handleClose}
                             >
@@ -137,37 +158,24 @@ export function AddUserBtn({ customText, handleRefresh }: { customText?: string;
                                     Cancelar
                                 </p>
                             </button>
-                            <button
-                                disabled={isSubmitting || !watch('name')}
-                                className='rounded_btn bg-cgreen dark:bg-clightgray md:max-w-max px-3'
-                                type='button'
-                                onClick={handleSubmit(onSubmit)}
-                            >
-                                {isSubmitting ?
-                                    <LoadingIcon fill='fill-clime dark:fill-' /> :
-                                    <>
-                                        <p className='text-white'>Crear</p>
-                                        <MiniAddIcon fill='fill-clime' />
-                                    </>
-                                }
-                            </button>
                         </div>
                     </form >
-                </div >
-            ) : (
-                <button
-                    type='button'
-                    onClick={handleOpen}
-                    className='rounded_btn bg-cgreen  dark:bg-clightgray'
-                >
-                    <p className={`text-white dark:`}>
-                        {customText ?? "Crear usuario"}
-                    </p>
-                    <MiniAddIcon fill='dark:fill-clime fill-clime' />
-                </button>
-            )
-            }
-        </ >
+                </div>
+            </Modal >
+
+            <button
+                type='button'
+                disabled={isNotAdmin}
+                onClick={handleOpen}
+                className='rounded_btn bg-cgreen  dark:bg-clime'
+            >
+                <p className={`text-white dark:text-cblack`}>
+                    {customText ?? "Crear usuario"}
+                </p>
+                <MiniAddIcon fill='fill-clime dark:fill-cblack' />
+            </button>
+
+        </div >
     )
 }
 

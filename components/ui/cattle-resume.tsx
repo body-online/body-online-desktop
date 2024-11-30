@@ -24,7 +24,7 @@ const CattleResume = ({ cattle, withoutClasses, withoutHeader, customHeader }: {
         new Date(cattle.stateDate).toLocaleDateString("es-AR", { day: 'numeric', month: 'short', year: 'numeric' }) : ''
 
     return (
-        <div className={withoutClasses ? 'w-full overflow-x-auto pb-1' : 'py-2 w-full border custom-border rounded-xl dark:bg-clightgray/50 bg-gray-50/50 overflow-x-auto min-h-max'}>
+        <div className={withoutClasses ? 'w-full overflow-x-auto pb-1 px-2' : 'py-2 w-full border custom-border rounded-xl dark:bg-clightgray/50 bg-gray-50/50 overflow-x-auto h-max'}>
             {withoutHeader ? null :
                 <p className="font-medium sticky left-0 pb-2 w-full border-b custom-border px-2 mb-2 text-gray-600 dark:text-gray-400">
                     {customHeader ?? `Resumen`}

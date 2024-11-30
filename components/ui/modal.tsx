@@ -51,7 +51,7 @@ const Modal = ({ handleClose, children, isOpen, hideCloseBtn }: ModalProps) => {
                     backdrop-blur bg-cgray/50 dark:bg-cblack/50 backdrop-saturate-200 z-40 px-2 overflow-hidden"
                     onClick={(e) => { return e.stopPropagation() }}
                 >
-                    <div className="max-h-[98vh] max-w-2xl w-full m-auto flex flex-col my-auto">
+                    <div className="max-h-[95vh] max-w-2xl w-full m-auto flex flex-col my-auto">
                         {children}
                     </div>
                 </motion.div>

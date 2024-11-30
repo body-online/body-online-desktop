@@ -14,7 +14,7 @@ const Resume = ({
 
 }) => {
     return (
-        <div className="relative w-full h-9 mb-2">
+        <div className="relative w-full h-9 my-2">
             <div className="overflow-x-auto gap-2 flex px-4">
                 <div className="sticky left-0">
                     <CleanButton

@@ -3,7 +3,7 @@
 import { useState } from 'react';
 
 import { EventIcon } from '../ui/icons';
-import CreateEventForm from '../create-event-form';
+import CreateEventForm from '../event/create-event-form';
 import Modal from '../ui/modal';
 import { CattleProps } from '@/lib/types';
 
@@ -39,7 +39,7 @@ export function AddEventBtn({ defaultCattle, handleRefresh }: { defaultCattle?: 
                 className='h-max w-max rounded_btn bg-csemigreen dark:bg-clime flex-center px-3 gap-1'
             >
                 <p className={`text-white dark:text-cblack font-medium`}>
-                    Evento
+                    Nuevo
                 </p>
                 <EventIcon stroke='stroke-clime dark:stroke-cblack' />
             </button>

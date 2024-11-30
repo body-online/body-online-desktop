@@ -76,7 +76,6 @@ const TaskRow = ({ task }: { task: TaskProps }) => {
             <td>
                 <div className="flex gap-2">
                     <p className='font-semibold text-base'>
-                        {!measuredCount}
                         {Math.round((measuredCount / totalMeasures) * 100)}%
                     </p>
                 </div>

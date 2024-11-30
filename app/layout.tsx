@@ -60,10 +60,7 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
         <body className={`body`}>
           <SyncProvider>
             <Navbar />
-
-            <ThemeProvider attribute="class" defaultTheme="dark">
-              {children}
-            </ThemeProvider>
+            {children}
           </SyncProvider>
         </body>
       </html>

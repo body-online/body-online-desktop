@@ -71,9 +71,6 @@ const CreateTaskForm = ({ handleRefresh, handleClose }: { handleRefresh?: () => 
 
     var expirationDate = watch('expirationDate') ? new Date(watch('expirationDate')) : undefined
 
-    if (expirationDate) {
-
-    }
     const expirationHour = expirationDate ? new Date(expirationDate)
         .toLocaleTimeString("es-AR", { hour: 'numeric', minute: 'numeric' }) : undefined
 
@@ -128,10 +125,11 @@ const CreateTaskForm = ({ handleRefresh, handleClose }: { handleRefresh?: () => 
                     <CloseBtn handleClose={handleClose} />
                 }
             </div>
+
             {step === 1 ? (
-                <div className='px-4'>
+                <div className='px-4 my-2'>
                     <label htmlFor="expirationDate">
-                        <p className="dark:text-gray-300 text-lg font-medium mb-2">
+                        <p className="dark:text-gray-300 text-lg font-medium">
                             Vencimiento de la tarea
                         </p>
 
@@ -150,9 +148,9 @@ const CreateTaskForm = ({ handleRefresh, handleClose }: { handleRefresh?: () => 
                 </div>
             ) : step === 2 ? (
                 <>
-                    <div className="px-4">
-                        <p className="dark:text-gray-300 text-lg font-medium mb-2">
-                            Responsables de la tarea
+                    <div className="px-4 my-2">
+                        <p className="dark:text-gray-300 text-lg font-medium">
+                            Responsables asignados
                         </p>
                     </div>
 
@@ -203,8 +201,8 @@ const CreateTaskForm = ({ handleRefresh, handleClose }: { handleRefresh?: () => 
                 </>
             ) : (
                 <>
-                    <div className="px-4">
-                        <p className="dark:text-gray-300 text-lg font-medium mb-2">
+                    <div className="px-4 my-2">
+                        <p className="dark:text-gray-300 text-lg font-medium">
                             Individuos a medir
                         </p>
                     </div>

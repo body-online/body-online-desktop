@@ -35,7 +35,7 @@ import StatePagination from '../ui/state-pagination';
 import FilterInput from '../ui/filter-input';
 ;
 
-export function EventsDataTable() {
+export function Events() {
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([]);
     const [sorting, setSorting] = React.useState<SortingState>([]);
     const [isLoading, setIsLoading] = useState<boolean>(true)
@@ -43,8 +43,8 @@ export function EventsDataTable() {
 
     const [events, setEvents] = useState<EventProps[]>([])
     const [totalAmount, setTotalAmount] = useState<number>()
-    const [totalPages, setTotalPages] = useState<number>()
-    const [limit, setLimit] = useState<number>(10)
+    const [totalPages, setTotalPages] = useState<number>(1)
+    const [limit, setLimit] = useState<number>(20)
     const [page, setPage] = useState<number>(1)
 
     const table = useReactTable({
@@ -85,7 +85,7 @@ export function EventsDataTable() {
 
     useEffect(() => {
         searchEvents();
-    }, [page, totalAmount, limit])
+    }, [page, limit])
 
     useEffect(() => {
         const handler = setTimeout(() => {
@@ -99,15 +99,13 @@ export function EventsDataTable() {
     }, [searchTerm])
 
     return (
-        <div className='card overflow-hidden'>
+        <div className='card max-h-max'>
+            <div className="header_container">
+                <h2 className='text-xl md:text-2xl font-semibold'>Eventos</h2>
 
-            <div className="flex-between mb-2 pt-4 px-4">
-
-                <h2 className='text-xl md:text-2xl font-semibold '>Eventos</h2>
-
-                <div className="flex gap-2 items-center">
+                <div className="flex w-max gap-x-2 gap-y-1 items-center flex-wrap-reverse justify-end">
                     {isLoading ? <LoadingIcon /> :
-                        <p className='text-sm md:text-base font-normaltext-slate-600 dark:text-slate-400'>
+                        <p className='text-sm md:text-base font-normal text-slate-600 dark:text-slate-400'>
                             {totalAmount} {(totalAmount ?? 0) != 1 ? 'registros' : 'registro'}
                         </p>
                     }
@@ -116,7 +114,7 @@ export function EventsDataTable() {
             </div>
 
 
-            <div className="mb-2 px-4 space-y-2">
+            <div className="px-4 my-2">
                 <FilterInput
                     placeholder='Buscar por caravana...'
                     onChange={(e) => setSearchTerm(e)}
@@ -167,7 +165,7 @@ export function EventsDataTable() {
                             </table>
                         </div>
                         :
-                        <div className="px-4">
+                        <div className="p-4">
                             <InfoMessage
                                 type='censored'
                                 title='Sin resultados'
@@ -179,8 +177,9 @@ export function EventsDataTable() {
                 </>
             )}
 
-            <div className="p-2">
+            <div className="buttons_container">
                 <StatePagination
+                    disabled={isLoading || totalPages >= 1 && !events?.length}
                     changePage={setPage}
                     page={page}
                     totalPages={totalPages ?? 1}
@@ -193,4 +192,4 @@ export function EventsDataTable() {
 
 }
 
-export default EventsDataTable;
+export default Events;

@@ -12,10 +12,15 @@ import { login } from '@/actions/login';
 
 import { LoadingIcon, SendIcon } from '../ui/icons';
 import Card from '../ui/card';
+import { useState } from 'react';
+import Modal from '../ui/modal';
+import InfoMessage from '../ui/info';
+import CloseBtn from '../ui/close-btn';
 
 
 const LoginForm = () => {
     const router = useRouter();
+    const [error, setError] = useState<string>()
 
     const {
         register, handleSubmit, reset, formState: { errors, isSubmitting }
@@ -26,8 +31,10 @@ const LoginForm = () => {
     const onSubmit = async (values: z.infer<typeof LoginSchema>) => {
         const response = await login(values);
         if (response?.error) {
-            return toast.error(response.error ?? 'Ha ocurrido un error')
+            console.log(response.error)
+            return setError(response.error)
         }
+
         toast.success('Serás redirigido en segundos');
         reset()
     }
@@ -39,6 +46,20 @@ const LoginForm = () => {
             className="max-w-sm w-full mb-auto"
             key='login-form'
         >
+
+            <Modal isOpen={Boolean(error)} handleClose={() => setError(undefined)}>
+                <Card paddings='p-4 max-w-sm flex w-full mx-auto'>
+                    <div className="w-full">
+                        <InfoMessage
+                            type='warning'
+                            title='Error'
+                            subtitle={error ?? 'Credenciales inválidas'}
+                        />
+                    </div>
+                    <CloseBtn handleClose={() => setError(undefined)} />
+                </Card>
+            </Modal>
+
             <Card headerLabel="Iniciar sesión">
                 <form onSubmit={handleSubmit((onSubmit))}>
                     {/* classic login */}
@@ -95,7 +116,7 @@ const LoginForm = () => {
                             className='max-w-max group'
                             onClick={() => router.push('/auth/register')}
                         >
-                            <p className="text-center group-hover:underline underline-offset-2">¿Aún no tienes una cuenta?</p>
+                            <p className="text-center group-hover:underline underline-offset-2 input_instructions">¿Aún no tienes una cuenta?</p>
                         </button>
                     </div>
                 </form>

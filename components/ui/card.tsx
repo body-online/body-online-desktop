@@ -12,8 +12,8 @@ const Card = ({ children, headerLabel, paddings, rounded }: CardProps) => {
     return (
         <AnimatePresence mode='wait'>
             <motion.div
-                animate={{ opacity: 1 }}
                 initial={{ opacity: 0 }}
+                animate={{ opacity: 1, transition: { duration: 0.3 } }}
                 exit={{ opacity: 0 }}
                 className={`card ${paddings ?? `p-4`}`}
                 onClick={(e) => { return e.stopPropagation() }}

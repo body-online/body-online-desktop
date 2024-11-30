@@ -12,6 +12,7 @@ import { modalBackground, navigationItems } from '@/lib/constants';
 import { CloseIcon, LoadingIcon, LogoutIcon, MenuIcon } from './icons';
 import { useSync } from '@/context/SyncContext';
 import ThemeSwitch from './theme-switch';
+import ChipIsOnline from './chip-online';
 
 function eliminarDiacriticos(texto: string) {
     return texto.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
@@ -54,42 +55,34 @@ export default function Navbar() {
                 <div className='flex-between px-default'>
                     <div className='flex items-center gap-2 max-h-8 h-8'>
                         <ProfileImage user={session.user} height='h-8' width='w-8' />
-
-                        {isOnline && (
-                            <div className="border custom-border rounded-full flex-center block py-2 px-4 w-max h-8 flex-center">
-                                {isSyncing ?
-                                    <LoadingIcon fill='dark:fill-clime fill-caqua' /> :
-                                    <span className='text-sm font-medium'>{syncAmount}</span>
-                                }
-                                <p className="input_instructions text-sm ml-1">
-                                    pendientes
-                                </p>
-                            </div>
-                        )}
-
+                        <div>
+                            <p className="font-bold"> {session.user.farmName}</p>
+                            <ChipIsOnline isOnline={isOnline} />
+                        </div>
                     </div>
 
 
                     <div className="flex gap-2">
                         <ThemeSwitch />
-                        <button onClick={() => setIsOpen(!isOpen)} className='border custom-border rounded-full flex-center block p-2 w-8 h-8'>
-                            <AnimatePresence mode='wait'>
+
+                        <button onClick={() => setIsOpen(!isOpen)} className='action_button'>
+                            <AnimatePresence mode='wait' initial={false}>
                                 {isOpen ?
                                     <motion.div
-                                        initial={{ opacity: 0 }}
-                                        animate={{ opacity: 1 }}
-                                        exit={{ opacity: 0 }}
-                                        transition={{ duration: 0.1 }}
+                                        initial={{ opacity: 0, scale: 0, rotate: 90 }}
+                                        animate={{ opacity: 1, scale: 1, rotate: 0 }}
+                                        exit={{ opacity: 0, scale: 0.7, rotate: -90 }}
+                                        transition={{ duration: 0.08, ease: 'easeIn' }}
                                         key='close'
                                     >
                                         <CloseIcon fill="fill-cgray dark:fill-white" sizes='w-5 h-5' />
                                     </motion.div>
                                     :
                                     <motion.div
-                                        initial={{ opacity: 0 }}
-                                        animate={{ opacity: 1 }}
-                                        exit={{ opacity: 0 }}
-                                        transition={{ duration: 0.1 }}
+                                        initial={{ opacity: 0, scale: 0, rotate: 90 }}
+                                        animate={{ opacity: 1, scale: 1, rotate: 0 }}
+                                        exit={{ opacity: 0, scale: 0.7, rotate: -90 }}
+                                        transition={{ duration: 0.08, ease: 'easeIn' }}
                                         key='open'
                                     >
                                         <MenuIcon fill="fill-cgray dark:fill-white" />
@@ -148,41 +141,47 @@ export default function Navbar() {
                         rounded-2xl w-full max-w-xs
                         bg-white dark:bg-cgray custom-border border'
                     >
-                        <div className="h-max flex flex-col">
 
-                            <div className="h-full py-3">
-                                <div
-                                    className='flex flex-col items-center gap-2 px-3 border custom-border dark:bg-clightgray rounded-xl py-4 mx-3 md:mx-4'
-                                >
-                                    <ProfileImage user={session.user} width='w-8' height='h-8' />
-                                    <div className='text-center'>
+
+                        <div className="h-full py-4 space-y-2 mx-4">
+                            <div
+                                className='flex flex-col items-start gap-2 px-3 bg-slate-100 dark:bg-clightgray rounded-xl py-4'
+                            >
+                                <div className="flex-center w-max gap-3">
+                                    <ProfileImage user={session.user} width='w-9' height='h-9' />
+                                    <div className='text-start'>
                                         <p className='font-semibold'>{session.user?.name}</p>
-                                        <p className='opacity-40 font-medium'>{session.user?.email}</p>
+                                        <p className='opacity-70 text-xs font-normal'>{session.user?.email}</p>
                                     </div>
                                 </div>
                             </div>
 
-                            <button
-                                type='button'
-                                className='px-6 py-5 border-t custom-border md:hover:bg-slate-80 dark:md:hover:bg-clightgray w-full transition-all group' onClick={() => {
-                                    if (isOnline)
-                                        return signOut()
-                                    else
-                                        toast('No puedes cerrar sesión estando offline')
-                                }}
-                            >
-                                <div className="flex items-center justify-between">
-                                    <p className='text-sm text-start font-medium transition-all'>
+                            <div className="flex-end">
+                                <button
+                                    type='button'
+                                    className="rounded_btn bg-slate-100 dark:bg-clightgray"
+                                    onClick={() => {
+                                        if (isOnline)
+                                            return signOut()
+                                        else
+                                            toast('No puedes cerrar sesión estando offline')
+                                    }}
+                                >
+                                    <p className='text-sm text-start font-medium transition-all py-1'>
                                         Cerrar sesión
                                     </p>
-                                    <LogoutIcon fill='fill-cgray dark:fill-white transition-all rotate-90' />
-                                </div>
-                            </button>
+                                    <LogoutIcon fill='fill-cblack dark:fill-white transition-all rotate-90' />
+                                </button>
+                            </div>
                         </div>
+
+                        {/* <div className='px-6 py-5 border-t custom-border w-full transition-all'>
+                               
+                            </div> */}
 
                     </motion.div>
                 ) : null}
-            </AnimatePresence>
+            </AnimatePresence >
         </>
     );
 }

@@ -1,7 +1,7 @@
 "use server";
 
 import axios from "axios";
-import { CattleProps } from "@/lib/types";
+import { CattleProps, MinifyCattleProps } from "@/lib/types";
 import { currentFarm, currentUser } from "@/lib/auth";
 
 export async function getSingleCattle(id: string): Promise<{
@@ -78,5 +78,36 @@ export async function getCattles({
     error?.response?.data?.message ??
     "Ha ocurrido un error al buscar los individuos.",
   };
+ }
+}
+
+export async function getAllCattles(): Promise<MinifyCattleProps[]> {
+ try {
+  const farmId = await currentFarm();
+  if (!farmId) throw new Error("Not authenticated");
+
+  const { data } = await axios({
+   method: "GET",
+   url: `${process.env.API_URL}/api/ranchi/cattle/${farmId}`,
+   params: { page: 1, limit: 5000 },
+  });
+
+  return (
+   data?.cattles?.map((cattle: CattleProps) => {
+    return {
+     cattleId: cattle._id,
+     bodyRanges: cattle.geneticId.bodyRanges,
+     state: cattle?.state.toUpperCase() ?? "EMPTY",
+     lastMeasureDate: cattle.bodyConditionDate,
+     lastStateDate: cattle.stateDate,
+     geneticName: cattle.geneticId.name,
+     locationName: cattle.locationId.name,
+    };
+   }) ?? []
+  );
+ } catch (error: any) {
+  throw new Error(
+   error?.response?.data?.message ?? "An error occurs fetching cattles"
+  );
  }
 }

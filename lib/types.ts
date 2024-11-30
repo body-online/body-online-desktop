@@ -57,7 +57,15 @@ export interface CattleProps {
  updatedAt: string;
  deletedAt: string;
 }
-
+export type MinifyCattleProps = {
+ cattleId: string;
+ bodyRanges: string;
+ state: string;
+ lastMeasureDate?: string;
+ lastStateDate?: string;
+ geneticName: string;
+ locationName: string;
+};
 // genetic
 export const geneticSchema = z.object({
  name: z

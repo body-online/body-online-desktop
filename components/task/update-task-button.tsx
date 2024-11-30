@@ -8,6 +8,7 @@ import toast from 'react-hot-toast';
 import { z } from 'zod';
 
 import { CattleProps, EventSchema, eventSchema, TaskProps } from '@/lib/types'
+import { useSync } from '@/context/SyncContext';
 import { createEvent } from '@/actions/event';
 
 import { ArrowsIcon, EventIcon, LoadingIcon } from '../ui/icons';
@@ -17,7 +18,6 @@ import CattleResume from '../ui/cattle-resume';
 import CheckButton from '../ui/check-button';
 import CloseBtn from '../ui/close-btn';
 import Modal from '../ui/modal'
-import { useSync } from '@/context/SyncContext';
 
 const UpdateTaskButton = (
     { task, setTask, defaultValues }: { task: TaskProps; setTask: Dispatch<SetStateAction<TaskProps>>; defaultValues: DefaultValues<EventSchema> }
@@ -175,7 +175,7 @@ const UpdateTaskButton = (
                         {
                             step == 1 ? (
                                 <>
-                                    <div className="px-4 mb-2">
+                                    <div className="px-4 my-2">
                                         <p className="dark:text-gray-300 text-lg font-medium">
                                             Individuo a medir
                                         </p>

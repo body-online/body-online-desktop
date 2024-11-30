@@ -26,7 +26,7 @@ const UsersList = ({
     const [usersList, setUsersList] = useState<ExtendedUser[]>([])
     // filters states
     const [page, setPage] = useState<number>(1)
-    const [limit, setUsersLimit] = useState<number>(10)
+    const [limit, setUsersLimit] = useState<number>(20)
     const [totalPages, setTotalPages] = useState<number>(1)
 
 

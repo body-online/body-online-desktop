@@ -10,16 +10,17 @@ import { CattleProps, CattleState, EventSchema, eventSchema } from '@/lib/types'
 import { createEvent } from '@/actions/event';
 
 import { AxiosError } from 'axios';
-import { ArrowsIcon, LoadingIcon } from './ui/icons';
-import CaravansList from './task/caravans-list';
-import FilterInput from './ui/filter-input';
-import CheckButton from './ui/check-button';
-import CaliperMeasure from './event/caliper-measure';
-import CattleResume from './ui/cattle-resume';
+import { ArrowsIcon, LoadingIcon } from '../ui/icons';
+import CaravansList from '../task/caravans-list';
+import FilterInput from '../ui/filter-input';
+import CheckButton from '../ui/check-button';
+import CaliperMeasure from './caliper-measure';
+import CattleResume from '../ui/cattle-resume';
 import { eventTypesList } from '@/lib/constants';
-import CloseBtn from './ui/close-btn';
-import ChipBodyCondition from './cattles/chip-body-condition';
+import CloseBtn from '../ui/close-btn';
+import ChipBodyCondition from '../cattles/chip-body-condition';
 import { useSync } from '@/context/SyncContext';
+import CaravansResume from '../task/caravans-resume';
 
 const CreateEventForm = (
     { handleRefresh, handleByCattle, handleClose }: {
@@ -68,6 +69,13 @@ const CreateEventForm = (
     const selectedCattleLastBodyCondition = selectedCattles?.[0]?.bodyCondition;
     const selectedCattleLastStateDate = selectedCattles?.[0]?.stateDate;
     const bodyRanges: any = selectedCattles?.[0]?.bodyRanges;
+    var expirationDate = watch('eventDate') ? new Date(watch('eventDate')) : undefined
+    const expirationHour = selectedEventDate ? new Date(selectedEventDate)
+        .toLocaleTimeString("es-AR", { hour: 'numeric', minute: 'numeric' }) : undefined
+
+    const expiration = selectedEventDate ?
+        new Date(selectedEventDate).toLocaleDateString("es-AR", { day: 'numeric', month: 'short', year: 'numeric' }) : undefined
+
 
     // step 1: update the form values after any list changes
     useEffect(() => {
@@ -123,14 +131,7 @@ const CreateEventForm = (
                                 Nuevo evento
                             </p>
                         </div>
-                        {selectedCattleCaravan &&
-                            <>
-                                <ArrowsIcon direction='-rotate-90' />
-                                <p className=''>
-                                    {selectedCattleCaravan}
-                                </p>
-                            </>
-                        }
+
                         {selectedEventType &&
                             <>
                                 <ArrowsIcon direction='-rotate-90' />
@@ -152,26 +153,39 @@ const CreateEventForm = (
                                 }
                             </>
                         }
+                        {Boolean(expiration && expirationHour) &&
+                            <>
+                                <ArrowsIcon direction='-rotate-90' />
+                                <div className='-space-y-1.5'>
+                                    <p className="input_instructions text-start text-sm">
+                                        {expiration}
+                                    </p>
+                                    <p className="input_instructions text-start text-xs">
+                                        {expirationHour}
+                                    </p>
+                                </div>
+                            </>
+                        }
+                        {selectedCattleCaravan &&
+                            <>
+                                <ArrowsIcon direction='-rotate-90' />
+                                <CaravansResume cattles={selectedCattles} />
+                            </>
+                        }
                     </div>
                 </div>
-                {handleClose &&
-                    <CloseBtn handleClose={handleClose} />
-                }
+
+                {handleClose && <CloseBtn handleClose={handleClose} />}
             </div>
 
-            {selectedCattles?.[0] && step == 2 &&
-                <div className='flex flex-col h-full px-4 gap-4 mb-4'>
-                    <div>
-                        <p className="dark:text-gray-300 text-lg font-medium mb-2">
-                            Caravana seleccionada
-                        </p>
-                        <CattleResume withoutHeader={true} cattle={selectedCattles?.[0]} />
-                    </div>
+            {selectedCattles?.[0] && step == 2 && (
+                <div className="my-2 border-b custom-border pb-3">
+                    <CattleResume withoutHeader={true} cattle={selectedCattles?.[0]} withoutClasses={true} />
                 </div>
-            }
+            )}
 
             {isSubmitting ? (
-                <div className="flex-center h-[30vh] gap-2 py-default ">
+                <div className="flex-center gap-2 h-[40vh]">
                     <LoadingIcon />
                     <p className='input_instructions text-base font-medium'>
                         Creando evento...
@@ -182,7 +196,7 @@ const CreateEventForm = (
                 // cattle list for the new event
                 // PS: this will be disabled if handleByCattle is passed by props
                 <>
-                    <div className='px-4 mb-2'>
+                    <div className="px-4 my-2">
                         <p className="dark:text-gray-300 text-lg font-medium mb-2">
                             Seleccionar caravana
                         </p>
@@ -209,29 +223,25 @@ const CreateEventForm = (
                 // eventType list for the new event
                 // PS: this will be render the allowed options by the selectedCattleState
                 <>
-                    <div className='flex flex-col h-full px-4 gap-4 mb-4'>
-                        <label htmlFor="eventDate mb-2">
-                            <p className="dark:text-gray-300 text-lg font-medium mb-2">
-                                Fecha del evento
-                            </p>
 
+
+                    <p className="w-max dark:text-gray-300 text-lg font-medium">Fecha del evento</p>
+
+                    <div className="px-4 my-2">
+                        <div className="w-full max-w-xs">
                             <input
                                 disabled={isSubmitting}
-                                className='input w-full max-w-xs'
+                                className='input w-full'
                                 {...register('eventDate')}
                                 type='datetime-local'
                             />
+                        </div>
 
-                            <div className="input_error">
-                                {errors.eventDate && (<p>{`${errors.eventDate.message}`}</p>)}
-                            </div>
-                        </label>
-
+                        <div className="input_error">
+                            {errors.eventDate && (<p>{`${errors.eventDate.message}`}</p>)}
+                        </div>
                     </div>
 
-                    <div className="px-4 mb-2">
-                        <p className="dark:text-gray-300 text-lg font-medium">Tipo de evento</p>
-                    </div>
                     <div className="custom_list">
                         {eventTypesList?.filter((i) => !i.disabledStates.includes(selectedCattleState)).map((event, index) => {
                             const selected = event.value === selectedEventType;
@@ -265,9 +275,9 @@ const CreateEventForm = (
                 <>
                     {/* event details */}
                     {selectedEventType == "body_measure" ? (
-                        <div className='px-4 space-y-3 flex flex-col overflow-auto'>
+                        <div className='px-4 my-2 w-full overflow-auto max-w-xs mx-auto'>
                             <p className="dark:text-gray-300 text-lg font-medium">
-                                Indique la medida del caliper
+                                Ingrese la medida de {selectedCattleCaravan}
                             </p>
 
                             <CaliperMeasure
@@ -284,23 +294,22 @@ const CreateEventForm = (
                     ) : ["pregnant", "death", "cattle_birth", "not_pregnant", "weaning"].includes(selectedEventType) ? (
                         <>
                             {selectedEventType === 'pregnant' ? (
-                                <div className="px-4 space-y-3 flex flex-col overflow-auto">
-                                    <CattleResume
-                                        withoutHeader={true}
-                                        cattle={{
-                                            ...selectedCattles?.[0],
-                                            state: 'PREGNANT' as CattleState,
-                                            stateDate: new Date(selectedEventDate).toISOString()
-                                        }}
-                                    />
-                                </div>
+                                <CattleResume
+                                    withoutHeader={true}
+                                    withoutClasses={true}
+                                    cattle={{
+                                        ...selectedCattles?.[0],
+                                        state: 'PREGNANT' as CattleState,
+                                        stateDate: new Date(selectedEventDate).toISOString()
+                                    }}
+                                />
                             ) : selectedEventType === 'cattle_birth' ? (
-                                <div className='px-4 space-y-3 flex flex-col overflow-auto'>
+                                <div className='px-4 my-2 w-full overflow-auto max-w-xs mx-auto'>
                                     <p className="dark:text-gray-300 text-lg font-medium">
-                                        Cantidad de nacidos
+                                        Cantidad de nacidos en el parto
                                     </p>
 
-                                    <div className="grid grid-cols-4 gap-2 place-items-center w-full max-w-sm mx-auto place-content-stretch min-h-[450px] max-h-[450px]">
+                                    <div className="grid_buttons">
                                         {eventTypesList?.[2]?.eventDetails?.map((i, index) => {
                                             const selected = i.value === selectedEventDetail
 
@@ -321,35 +330,36 @@ const CreateEventForm = (
                                     </div>
                                 </div>
                             ) : selectedEventType === 'weaning' ? (
-                                <div className='px-4 space-y-3 flex flex-col overflow-auto'>
+                                <div className='flex-center gap-2 px-4'>
+                                    <div className="w-max">
+                                        <p className="dark:text-gray-300 text-lg font-medium">
+                                            Cantidad de destetados
+                                        </p>
 
-                                    <p className="input_instructions text-base">
-                                        Cantidad de destetados
-                                    </p>
+                                        <div className="grid_buttons">
+                                            {eventTypesList?.[1]?.eventDetails?.map((i, index) => {
+                                                const selected = i.value === selectedEventDetail
 
-                                    <div className="grid grid-cols-4 gap-2 place-items-center w-full max-w-sm mx-auto place-content-stretch min-h-[450px] max-h-[450px]">
-                                        {eventTypesList?.[1]?.eventDetails?.map((i, index) => {
-                                            const selected = i.value === selectedEventDetail
-
-                                            return (
-                                                <button
-                                                    disabled={isSubmitting}
-                                                    className={`option_button flex-center bg-slate-100 dark:bg-clightgray ${selected ? `ring-2 dark:ring-clime` : `opacity-70 hover:opacity-100`}`}
-                                                    key={index}
-                                                    type='button'
-                                                    onClick={() => setValue('eventDetail', i.label)}
-                                                >
-                                                    <p className='text-2xl font-semibold'>
-                                                        {i.label}
-                                                    </p>
-                                                </button>
-                                            )
-                                        })}
+                                                return (
+                                                    <button
+                                                        disabled={isSubmitting}
+                                                        className={`option_button flex-center bg-slate-100 dark:bg-clightgray ${selected ? `ring-2 dark:ring-clime` : `opacity-70 hover:opacity-100`}`}
+                                                        key={index}
+                                                        type='button'
+                                                        onClick={() => setValue('eventDetail', i.label)}
+                                                    >
+                                                        <p className='text-2xl font-semibold'>
+                                                            {i.label}
+                                                        </p>
+                                                    </button>
+                                                )
+                                            })}
+                                        </div>
                                     </div>
                                 </div>
                             ) : (
                                 <>
-                                    <div className='px-4 mb-2'>
+                                    <div className='px-4 my-2'>
                                         <p className="dark:text-gray-300 text-lg font-medium">
                                             Motivo de la {selectedEventType == 'death' ? 'muerte' : 'no preñez'}
                                         </p>
@@ -384,18 +394,10 @@ const CreateEventForm = (
                     }
                 </>
             ) : step === 4 ? (
-                <div className='px-4'>
-
-                    {/* <CattleResume
-                        customHeader='Vista previa'
-                        cattle={{
-                            ...selectedCattles?.[0],
-                            state: eventTypesList.find((i) => i.value === selectedEventType)?.finalState?.toUpperCase() as CattleState ?? selectedCattleState,
-                            bodyCondition: String(watch('measure') ?? selectedCattleLastBodyCondition),
-                            bodyConditionDate: selectedEventDate ? new Date(selectedEventDate).toISOString() : selectedCattleLastBodyDate
-                        }}
-                    /> */}
-
+                <div className='px-4 my-2 w-full overflow-auto'>
+                    <p className="dark:text-gray-300 text-lg font-medium mb-2">
+                        Detalle del evento
+                    </p>
                     <div className="label w-full">
                         <textarea
                             placeholder='Ingrese un detalle de ser necesario...'
@@ -412,14 +414,14 @@ const CreateEventForm = (
             <div className="buttons_container mt-auto">
                 <button
                     disabled={step == 1 || isSubmitting || (handleByCattle && step == 2)}
-                    className='rounded_btn bg-white dark:bg-clightgray'
+                    className='rounded_btn bg-slate-100 dark:bg-clightgray'
                     type='button'
                     onClick={() => setStep(step - 1)}
                 >
                     <p className='dark:text-slate-400 text-slate-500'>Anterior</p>
                 </button>
 
-                {/* <p className='input_instructions text-sm font-medium'><b className='text-base'>{step}</b> de 4</p> */}
+                <p className='input_instructions text-sm font-medium'><b>{step}</b> de 4</p>
 
                 {step == 4 ? (
                     <button

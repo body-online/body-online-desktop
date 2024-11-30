@@ -29,6 +29,7 @@ const RegisterForm = () => {
     const onSubmit = async (values: z.infer<typeof RegisterSchema>) => {
 
         const { error } = await registerUser({ ...values, type: 'owner' });
+
         if (error)
             return toast.error(error ?? 'Ha ocurrido un error')
 
@@ -129,7 +130,9 @@ const RegisterForm = () => {
 
                         <div className="flex justify-center py-2">
                             <Link href={'/auth/login'}>
-                                <p className="text-center group-hover:underline underline-offset-2">¿Ya tienes una cuenta?</p>
+                                <p className="text-center group-hover:underline underline-offset-2 input_instructions">
+                                    ¿Ya tienes una cuenta?
+                                </p>
                             </Link>
                         </div>
                     </motion.form>

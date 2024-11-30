@@ -57,7 +57,7 @@ export async function getTasks({
 export async function getPendingMeasures() {
  try {
   const user = await currentUser();
-  if (!user) return null;
+  if (!user) throw new Error("Unauthorized");
 
   const { data: userTasks } = await getTasks({
    page: 1,
@@ -65,9 +65,7 @@ export async function getPendingMeasures() {
    assignedTo: [user.id],
    completed: false,
   });
-  if (!userTasks) {
-   return;
-  }
+  if (!userTasks) return [];
 
   // parse the tasks as "pending measures"
   const formattedTasks: PendingMeasureProps[] = [];
@@ -100,9 +98,10 @@ export async function getPendingMeasures() {
   });
 
   return formattedTasks;
- } catch (error) {
+ } catch (error: any) {
   console.log("Error: fetching pending measures");
   console.log(error);
-  return null;
+
+  throw new Error(error?.response?.data?.message ?? "Unauthorized");
  }
 }

@@ -51,7 +51,7 @@ const GeneticsList = (
 
     return (
         <>
-            <div className="px-4 mb-2">
+            <div className="px-4 my-2">
                 <div className='mb-2'>
                     <p className="input_label">
                         Asignar genética

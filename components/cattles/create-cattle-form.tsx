@@ -115,7 +115,7 @@ const CreateCattleForm = (
                     <p>Creando individuo...</p>
                 </div>
             ) : step == 1 ? (
-                <div className="px-4 mb-2 w-full">
+                <div className="px-4 my-2 w-full">
                     <div className="flex gap-4">
                         <div className="w-full">
                             <label htmlFor='caravan'>

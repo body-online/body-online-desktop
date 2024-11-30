@@ -117,7 +117,7 @@
 .rounded_btn {
  @apply enabled:active:opacity-50 enabled:active:scale-95 enabled:md:hover:opacity-70
   disabled:opacity-40
-  focus:ring-1 focus:ring-slate-300 dark:ring-clightgray 
+  focus:ring-1 focus:ring-slate-300 dark:ring-slate-500 
   rounded-full h-9 px-4 md:px-5 transition-all outline-none border-0 flex-center gap-1;
 }
 
@@ -221,7 +221,7 @@ table {
 }
 
 table > thead {
- @apply backdrop-blur-md backdrop-saturate-150 bg-white/70 dark:bg-cgray/70 sticky top-0;
+ @apply backdrop-blur-md backdrop-saturate-150 bg-white/70 dark:bg-cgray/70 sticky top-0 z-30;
 }
 
 table > thead > tr > th {
@@ -233,7 +233,7 @@ th {
 }
 
 table > tbody > tr {
- @apply custom-border border-b md:hover:bg-slate-100 dark:md:hover:bg-white/5 transition-all;
+ @apply custom-border border-b last:border-b-0 md:hover:bg-slate-100/40 dark:md:hover:bg-clightgray/50 transition-all;
 }
 
 table > tbody > tr > td {
@@ -241,7 +241,7 @@ table > tbody > tr > td {
 }
 
 .custom_list {
- @apply w-full overflow-auto divide-y custom-divide flex flex-col border-y custom-border;
+ @apply w-full overflow-auto divide-y custom-divide border-t custom-border flex flex-col h-full;
 }
 /* table > tbody > tr > td, table > tbody > tr > td > p {
   @apply truncate w-max max-w-[350px] text-sm font-medium;
@@ -396,23 +396,23 @@ input[type="checkbox"] {
 }
 
 .card {
- @apply rounded-2xl bg-white dark:bg-cgray;
+ @apply rounded-2xl bg-white dark:bg-cgray border custom-border;
 }
 .gradient_card {
- @apply bg-gradient-to-r from-white dark:from-clightgray via-white/50 dark:via-clightgray/50 to-transparent transition-all border custom-border p-6 rounded-2xl;
+ @apply bg-gradient-to-r from-white dark:from-clightgray via-white/50 dark:via-clightgray/50 to-white dark:to-cgray transition-all border custom-border p-6 rounded-2xl;
 }
 .dropdown {
  @apply rounded-xl z-40 bg-white dark:bg-slate-950 w-full min-w-[260px] border shadow-lg overflow-hidden absolute;
 }
 
 .card_modal {
- @apply card flex flex-col overflow-hidden w-full;
+ @apply card border custom-border flex flex-col overflow-hidden w-full;
 }
 .header_container {
- @apply flex-between px-4 py-3 gap-6;
+ @apply flex-between px-4 py-2 md:p-4 gap-3 border-b custom-border;
 }
 .buttons_container {
- @apply flex-between gap-2 py-3 px-4;
+ @apply flex-between gap-2 py-2 md:py-3 border-t custom-border px-4;
 }
 
 .menu_navigation_item {
@@ -524,4 +524,12 @@ input[type="checkbox"] {
 }
 .custom-toast {
  @apply rounded-full border custom-border bg-white/60 dark:bg-clightgray/50 backdrop-blur-md py-1 md:py-2 px-4 w-max z-30;
+}
+
+.action_button {
+ @apply md:hover:bg-opacity-50 bg-slate-100 dark:bg-clightgray rounded-full transition-all disabled:opacity-30 h-8 w-8 flex-center;
+}
+
+.grid_buttons {
+  @apply grid grid-cols-4 gap-2 place-items-center w-full max-w-sm mx-auto place-content-stretch min-h-[450px] max-h-[450px] mb-4;
 }

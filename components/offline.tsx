@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import CaliperMeasure from './event/caliper-measure';
 import { PendingMeasureProps } from '@/lib/types';
 import { db, OfflineEvent } from '@/lib/utils';
 import { ArrowsIcon } from '@/components/ui/icons';
@@ -8,7 +9,6 @@ import Modal from '@/components/ui/modal';
 import toast from 'react-hot-toast';
 import InfoMessage from './ui/info';
 import { format } from 'date-fns';
-import CaliperMeasure from './event/caliper-measure';
 
 const OfflinePage = () => {
     const [pendingMeasures, setPendingMeasures] = useState<PendingMeasureProps[]>([]);
@@ -91,10 +91,18 @@ const OfflinePage = () => {
                 <h1 className="text-xl md:text-2xl font-semibold">
                     Mediciones pendientes
                 </h1>
+
+                {selectedDate ?
+                    <div className="gradient_card max-w-max w-full p-4">
+                        <p className='opacity-50'>Las mediciónes se crearán con fecha <b>{format(new Date(selectedDate), 'dd/MM/yyyy')}</b></p>
+                    </div>
+                    : null
+                }
             </div>
 
 
             <h1 className="font-medium input_instructions px-default">Fecha de vencimiento</h1>
+
             <div className="px-default flex mb-6 overflow-x-auto pb-2 mt-2">
                 {uniqueDates.map((date) => (
                     <button
@@ -115,25 +123,20 @@ const OfflinePage = () => {
             </div>
 
 
-            <ul className="flex flex-col gap-2">
-                {selectedDate ?
-                    <div className="gradient_card max-w-max w-full p-4">
-                        <p className='opacity-50'>Las mediciónes se crearán con fecha <b>{format(new Date(selectedDate), 'dd/MM/yyyy')}</b></p>
-                    </div>
-                    : null
-                }
-
+            <ul className="flex flex-col gap-2 px-default py-default">
                 {filteredResults.length > 0 ?
-                    filteredResults.map((measure) => (
-                        <li key={measure._id} className="list-none">
+                    filteredResults?.map((measure) => (
+                        <li key={measure._id}>
                             <div className="card p-3 md:px-4 !-rounded-r-full">
                                 <div className="flex-between">
+
                                     <div>
                                         <p className="font-bold text-2xl">{measure.cattle.caravan}</p>
                                     </div>
+
                                     <button
                                         type="button"
-                                        className="flex-center bg-cgreen dark:bg-clime rounded-full px-6 py-3"
+                                        className="flex-center bg-cgreen dark:bg-clime rounded-full px-4 py-2"
                                         onClick={() => setSelectedPendingMeasure(measure)}
                                     >
                                         <p className="text-xs uppercase tracking-widest font-semibold text-white dark:text-cblack">
@@ -144,14 +147,15 @@ const OfflinePage = () => {
                                 </div>
                             </div>
                         </li>
-                    )) :
-                    <li className="px-4">
-                        <InfoMessage
-                            type="censored"
-                            title="Sin resultados"
-                            subtitle="No tienes mediciones pendientes en esta fecha."
-                        />
-                    </li>
+                    )) : (
+                        <li>
+                            <InfoMessage
+                                type="censored"
+                                title="Sin resultados"
+                                subtitle="No tienes mediciones pendientes en esta fecha."
+                            />
+                        </li>
+                    )
                 }
             </ul>
 
