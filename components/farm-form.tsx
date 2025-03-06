@@ -15,16 +15,22 @@ import { useSession } from 'next-auth/react';
 import { COUNTRIES } from '@/lib/countries';
 import { useEffect, useState } from 'react';
 import { searchCities } from '@/data/cities';
+import BodyOnlineLogo from './ui/body-online-logo';
 
 
 export function FarmForm() {
     const router = useRouter()
     const { update, data: session } = useSession()
-    const { register, watch, setValue, handleSubmit, formState: { errors, isSubmitting },
-    } = useForm<FarmSchema>({ resolver: zodResolver(farmSchema) })
+    const { register, watch, setValue, handleSubmit, formState: { errors, isSubmitting } } = useForm<FarmSchema>({
+        resolver: zodResolver(farmSchema),
+        defaultValues: {
+            cattleAmount: '0'
+        }
+    })
     const [isLoadingCities, setIsLoadingCities] = useState<boolean>(false)
     const [cities, setCities] = useState<SelectOptionProps[]>([])
     const country = watch('country')
+    const user = session?.user
 
     const onSubmit: SubmitHandler<FarmSchema> = async (data: FarmSchema) => {
         try {
@@ -68,115 +74,97 @@ export function FarmForm() {
 
     return (
         <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1, transition: { duration: 0.3 } }}
-            className="max-w-lg w-full my-auto"
+            initial={{ opacity: 0, filter: 'blur(30px)' }}
+            animate={{ opacity: 1, filter: 'blur(0px)', transition: { duration: 0.3, ease: 'easeInOut', delay: 0.3 } }}
+            className="max-w-lg w-full m-auto flex flex-col items-center h-full"
             key='register-form'
         >
-            <Card headerLabel="Mi organización">
-                <p className='text-base mt-1 mb-6 opacity-80 font-normal'>Necesitamos que por favor nos brindes algunos datos antes de comenzar.</p>
-                {isSubmitting ? (
-                    <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        className="h-[30vh] w-full max-w-lg px-4 flex-center"
-                        key='loading-session'
-                    >
-                        <div className="flex flex-col items-center gap-2">
-                            <LoadingIcon />
-                            <p className='text-center'>Guardando datos...</p>
-                        </div>
-                    </motion.div>
-                ) : (
-                    <motion.form
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1, transition: { duration: 0.3 } }}
-                        onSubmit={handleSubmit((onSubmit))}
-                        key='register-form'
-                    >
-                        <div className='flex flex-col w-full space-y-4 mt-3'>
-                            <div className="grid w-full grid-cols-6 gap-2">
-                                <div className="col-span-4">
-                                    <label htmlFor='name'>
-                                        <input
-                                            {...register("name")}
-                                            name='name'
-                                            type="text"
-                                            placeholder='Nombre de la organización'
-                                            disabled={isSubmitting}
-                                            className={`input ${errors.name ? 'border-red-500' : ''}`}
-                                        />
-                                        <div className="input_error">
-                                            {errors.name && (<p>{`${errors.name.message}`}</p>)}
-                                        </div>
-                                    </label>
-                                </div>
+            {/* <BodyOnlineLogo /> */}
 
-                                <div className="col-span-2">
-                                    <label htmlFor='cattleAmount'>
-                                        <input
-                                            {...register("cattleAmount")}
-                                            name='cattleAmount'
-                                            type="text"
-                                            placeholder='Cant. madres'
-                                            disabled={isSubmitting}
-                                            className={`input ${errors.cattleAmount ? 'border-red-500' : ''}`}
-                                        />
-                                        <div className="input_error">
-                                            {errors.cattleAmount && (<p>{`${errors.cattleAmount.message}`}</p>)}
-                                        </div>
-                                    </label>
-                                </div>
-                            </div>
+            <h2 className='text-lg font-medium mt-12 mb-6 text-center dark:text-white text-cblack'>
+                Bienvenido {user?.name}
+            </h2>
 
-                            <SelectInputSearch
-                                label=''
-                                placeholder='Seleccione una opción'
-                                value={watch('country') ? COUNTRIES.find((o) => o.label.toLowerCase() == watch('country')) : null}
-                                options={COUNTRIES}
-                                isDisabled={isSubmitting}
-                                handleChange={(objSelected: SelectOptionProps) => {
-                                    return setValue("country", objSelected.label.toLowerCase());
-                                }}
-                                error={errors?.country?.message}
-                            />
-
-                            <SelectInputSearch
-                                label=''
-                                placeholder='Seleccione una opción'
-                                value={watch('city') ? cities.find((o) => o.label.toLowerCase() == watch('city')) : null}
-                                options={cities}
-                                isDisabled={isSubmitting || isLoadingCities}
-                                handleChange={(objSelected: SelectOptionProps) => {
-                                    return setValue("city", objSelected.label.toLowerCase());
-                                }}
-                                error={errors?.city?.message}
-                            />
-
-                        </div>
-
-                        <div className="flex-center py-4">
-                            <button
+            {isSubmitting ? (
+                <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    className="h-[30vh] w-full max-w-lg px-4 flex-center"
+                    key='loading-session'
+                >
+                    <div className="flex flex-col items-center gap-2">
+                        <LoadingIcon />
+                        <p className='text-center'>Guardando datos...</p>
+                    </div>
+                </motion.div>
+            ) : (
+                <motion.form
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1, transition: { duration: 0.3 } }}
+                    onSubmit={handleSubmit((onSubmit))}
+                    key='register-form'
+                    className='w-full'
+                >
+                    <div className='bg-white dark:bg-cgray rounded-3xl p-6 w-full mx-auto flex flex-col gap-y-2'>
+                        <label htmlFor='name'>
+                            <input
+                                {...register("name")}
+                                name='name'
+                                type="text"
+                                placeholder='Nombre de la organización'
                                 disabled={isSubmitting}
-                                type="submit"
-                                className='primary-btn '
-                            >
-                                <p className={`text-white dark:text-cblack font-medium`}>
-                                    {isSubmitting ? "Guardando..." : "Completar datos"}
-                                </p>
+                                className={`input ${errors.name ? 'border-red-500' : ''}`}
+                            />
+                            <div className="input_error">
+                                {errors.name && (<p>{`${errors.name.message}`}</p>)}
+                            </div>
+                        </label>
 
-                                {isSubmitting ?
-                                    <LoadingIcon fill='fill-clime dark:fill-cblack' />
-                                    :
-                                    null
-                                }
+                        <SelectInputSearch
+                            label=''
+                            placeholder='Seleccione una opción'
+                            value={watch('country') ? COUNTRIES.find((o) => o.label.toLowerCase() == watch('country')) : null}
+                            options={COUNTRIES}
+                            isDisabled={isSubmitting}
+                            handleChange={(objSelected: SelectOptionProps) => {
+                                return setValue("country", objSelected.label.toLowerCase());
+                            }}
+                            error={errors?.country?.message}
+                        />
 
-                            </button>
-                        </div>
-                    </motion.form >
-                )}
-            </Card >
+                        <SelectInputSearch
+                            label=''
+                            placeholder='Seleccione una opción'
+                            value={watch('city') ? cities.find((o) => o.label.toLowerCase() == watch('city')) : null}
+                            options={cities}
+                            isDisabled={isSubmitting || isLoadingCities}
+                            handleChange={(objSelected: SelectOptionProps) => {
+                                return setValue("city", objSelected.label.toLowerCase());
+                            }}
+                            error={errors?.city?.message}
+                        />
+
+                        <button
+                            disabled={isSubmitting}
+                            type="submit"
+                            className='primary-btn mx-auto mt-3'
+                        >
+                            <p className={`text-white dark:text-cblack font-medium`}>
+                                {isSubmitting ? "Guardando..." : "Completar datos"}
+                            </p>
+
+                            {isSubmitting ?
+                                <LoadingIcon fill='fill-clime dark:fill-cblack' />
+                                :
+                                null
+                            }
+
+                        </button>
+                    </div >
+                </motion.form >
+            )
+            }
         </motion.div >
     )
 }

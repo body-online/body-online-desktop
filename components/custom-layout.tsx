@@ -12,12 +12,12 @@ import Modal from './ui/modal';
 
 const CustomLayout = ({ children, user }: { children: React.ReactNode; user: ExtendedUser }) => {
     // "isSyncing" works only in online mode
-    const { isSyncing, isOnline } = useSync();
+    // const { isSyncing, isOnline } = useSync();
     const isOperator = user.type == 'operator'
 
     return (
         <div>
-            {isSyncing ?
+            {/* {isSyncing ?
                 <Modal
                     isOpen={isSyncing}
                     hideCloseBtn={true}
@@ -37,14 +37,15 @@ const CustomLayout = ({ children, user }: { children: React.ReactNode; user: Ext
                     </div>
                 </Modal> :
                 null
-            }
+            } */}
 
             <div className="px-default py-default">
-                <UserResumeCard user={user} />
-
-                {!isOnline || isOperator ? (
+                {/* {!isOnline || isOperator ? (
                     <OfflinePage />
-                ) : children}
+                ) :
+                    children
+                } */}
+                {children}
             </div>
         </div>
     )

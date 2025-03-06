@@ -11,7 +11,10 @@
   },
   "dependencies": {
     "@ducanh2912/next-pwa": "^10.2.9",
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
     "@hookform/resolvers": "^3.3.4",
+    "@mui/material": "^6.4.7",
     "@tanstack/react-table": "^8.16.0",
     "@types/bcryptjs": "^2.4.6",
     "@uidotdev/usehooks": "^2.4.1",

@@ -27,7 +27,7 @@ import React, { useEffect, useState } from "react";
 import toast from 'react-hot-toast';
 import InfoMessage from '../ui/info';
 import { getEvents } from '@/data/events';
-import { EventProps } from '@/lib/types';
+import { EventInterface } from '@/lib/types';
 import { columnsEvent } from './columns';
 import LoadingRowsSkeleton from '../ui/loading-rows-skeleton';
 import AddEventBtn from '../cattles/add-event';
@@ -41,7 +41,7 @@ export function Events() {
     const [isLoading, setIsLoading] = useState<boolean>(true)
     const [searchTerm, setSearchTerm] = useState("")
 
-    const [events, setEvents] = useState<EventProps[]>([])
+    const [events, setEvents] = useState<EventInterface[]>([])
     const [totalAmount, setTotalAmount] = useState<number>()
     const [totalPages, setTotalPages] = useState<number>(1)
     const [limit, setLimit] = useState<number>(20)

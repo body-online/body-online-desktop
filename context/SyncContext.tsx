@@ -41,7 +41,7 @@ export const SyncProvider = ({ children }: { children: ReactNode }) => {
 
             // sync this into indexDB
         } catch (error) {
-            alert('error')
+            console.log('error')
         }
     }
 

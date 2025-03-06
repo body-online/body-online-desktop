@@ -6,7 +6,7 @@ import { currentUser } from '@/lib/auth';
 import CattlesDashboard from '@/components/cattles/dashboard';
 import Operators from '@/components/operator/operators';
 import CustomLayout from '@/components/custom-layout';
-import Events from '@/components/event/table';
+import EventTable from '@/components/event/EventTable';
 import FarmForm from '@/components/farm-form';
 
 export default async function Home() {
@@ -19,22 +19,19 @@ export default async function Home() {
   return (
     <CustomLayout user={user}>
       {onboardingCompleted ? (
-        <div>
-          <div className="lg:grid lg:grid-cols-3 gap-4 w-full py-default flex flex-col">
-            <div className="lg:col-span-2 w-full">
-              <Events />
-            </div>
-            <Operators />
-          </div>
+        <EventTable />
+        // <div>
+        //   <div className="lg:grid lg:grid-cols-3 gap-4 w-full py-default flex flex-col">
+        //     <div className="lg:col-span-2 w-full">
+        //       <Events />
+        //     </div>
+        //     <Operators />
+        //   </div>
 
-          <CattlesDashboard />
-        </div>
+        //   <CattlesDashboard />
+        // </div>
       ) : (
-        <div className="w-screen h-[calc(100vh-60px)] overflow-hidden flex-center px-default">
-          <div className="-mt-12 w-full flex-center">
-            <FarmForm />
-          </div>
-        </div>
+        <FarmForm />
       )}
     </CustomLayout>
   )

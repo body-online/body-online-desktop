@@ -43,11 +43,11 @@
 }
 
 .py-default {
- @apply py-3 sm:py-8 md:py-12;
+ @apply py-2 sm:py-4 md:py-8;
 }
 
 .px-default {
- @apply px-6 sm:px-8 md:px-12;
+ @apply px-4 sm:px-6 md:px-8;
 }
 
 .flex-center {
@@ -90,15 +90,15 @@
 }
 
 .primary-btn {
- @apply btn bg-csemigreen dark:bg-clime max-w-max;
+ @apply btn bg-csemigreen dark:bg-clime md:max-w-max font-bold;
 }
 .primary-btn > p {
- @apply text-white dark:text-cblack font-bold dark:font-bold;
+ @apply text-white dark:text-cblack;
 }
 .btn {
  @apply h-max w-full px-4 md:px-5 py-3
   flex-center gap-1 md:gap-2
-  rounded-2xl disabled:opacity-50 active:opacity-50
+  rounded-xl disabled:opacity-50 active:opacity-50
   ring-slate-300 dark:ring-clightgray md:min-w-[100px] focus:outline-0 focus:ring-[2px] transition-all;
 }
 
@@ -268,7 +268,7 @@ table > tbody > tr > td {
 .input-colors {
  @apply w-full bg-white dark:bg-clightgray 
   text-sm md:text-base 
-  rounded-lg border border-slate-200 dark:border-clightgray
+  rounded-xl border border-slate-200 dark:border-clightgray
   focus:outline-0 
   focus:ring-[2px] ring-slate-100 dark:ring-clightgray/60 
   placeholder:text-slate-400 dark:placeholder:text-slate-400 
@@ -276,7 +276,7 @@ table > tbody > tr > td {
   transition;
 }
 .input {
- @apply input-colors h-11 sm:h-12 py-2 px-4 sm:p-3;
+ @apply input-colors h-12 sm:h-14 py-2 px-4 sm:p-3;
 }
 
 input[type="checkbox"] {

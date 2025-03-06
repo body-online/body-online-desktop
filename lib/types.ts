@@ -117,7 +117,7 @@ export const eventSchema = z.object({
 });
 export type EventSchema = z.infer<typeof eventSchema>;
 
-export interface EventProps extends EventSchema {
+export interface EventInterface extends EventSchema {
  _id: string;
  caravan: string;
  user: string;
