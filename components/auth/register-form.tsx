@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
-import toast from 'react-hot-toast';
+import toast, { Toaster } from 'react-hot-toast';
 import { useState } from 'react';
 import * as z from "zod";
 
@@ -18,6 +18,7 @@ import Link from 'next/link';
 
 
 const RegisterForm = () => {
+    const router = useRouter()
     const [isLogginIn, setisLogginIn] = useState<boolean>(false)
 
     const {
@@ -28,14 +29,16 @@ const RegisterForm = () => {
 
     const onSubmit = async (values: z.infer<typeof RegisterSchema>) => {
 
-        const { error } = await registerUser({ ...values, type: 'owner' });
+        const response = await registerUser({ ...values, type: 'owner' });
 
-        if (error)
-            return toast.error(error ?? 'Ha ocurrido un error')
+        if (response?.error)
+            return toast.error(response?.error ?? 'Ha ocurrido un error')
+        else {
+            reset()
+            setisLogginIn(true)
+            return await login({ email: values.email, password: values.password })
+        }
 
-        setisLogginIn(true)
-        reset()
-        return await login({ email: values.email, password: values.password })
     }
 
     return (
@@ -45,6 +48,7 @@ const RegisterForm = () => {
             className="max-w-sm w-full my-auto"
             key='register-form'
         >
+            <Toaster />
             <Card headerLabel="Registrarme">
                 {isLogginIn ? (
                     <motion.div
@@ -129,11 +133,14 @@ const RegisterForm = () => {
 
 
                         <div className="flex justify-center py-2">
-                            <Link href={'/auth/login'}>
-                                <p className="text-center group-hover:underline underline-offset-2 input_instructions">
-                                    ¿Ya tienes una cuenta?
-                                </p>
-                            </Link>
+                            <button
+                                type='button'
+                                className='max-w-max group'
+                                onClick={() => router.push('/auth/login')}
+                            >
+                                <p className="text-center group-hover:underline underline-offset-2 input_instructions">¿Ya tienes una cuenta?</p>
+                            </button>
+
                         </div>
                     </motion.form>
                 )

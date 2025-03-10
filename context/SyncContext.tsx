@@ -28,21 +28,18 @@ export const SyncProvider = ({ children }: { children: ReactNode }) => {
     const [isOnline, setIsOnline] = useState(true);
     const [isSyncing, setIsSyncing] = useState(false);
     const [cattlesList, setCattlesList] = useState<MinifyCattleProps[]>([])
-    const [pendingMeasuresList, setPendingMeasuresList] = useState<PendingMeasureProps[]>()
 
     // we will save the entire cattles array so..
     async function loadOnlineData() {
+        let cattlesList
         try {
-            let cattlesList = await getAllCattles()
-            // let pendingMeasuresList = await getPendingMeasures();
-
-            setCattlesList(cattlesList)
-            // setPendingMeasuresList(pendingMeasuresList)
-
-            // sync this into indexDB
+            const cattles = await getAllCattles()
+            cattlesList = cattles
         } catch (error) {
-            console.log('error')
+            console.log(error)
+            alert('error')
         }
+        setCattlesList(cattlesList ?? [])
     }
 
     useEffect(() => {

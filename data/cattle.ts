@@ -84,7 +84,7 @@ export async function getCattles({
 export async function getAllCattles(): Promise<MinifyCattleProps[]> {
  try {
   const farmId = await currentFarm();
-  if (!farmId) throw new Error("Not authenticated");
+  if (!farmId) return [];
 
   const { data } = await axios({
    method: "GET",
@@ -106,6 +106,7 @@ export async function getAllCattles(): Promise<MinifyCattleProps[]> {
    }) ?? []
   );
  } catch (error: any) {
+  console.log(error);
   throw new Error(
    error?.response?.data?.message ?? "An error occurs fetching cattles"
   );

@@ -14,7 +14,7 @@ const config: Config = {
     cgreen: "#093631",
     csemigreen: "#09433c",
     clightgreen: "#0d4d4675",
-    clightgray: "#202C33",
+    clightgray: "#1a242b",
     cgray: "#111B21",
     cblack: "#0c0f14",
    },

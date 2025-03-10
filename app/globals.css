@@ -81,14 +81,6 @@
  @apply divide-slate-200 dark:divide-clightgray;
 }
 
-.remove_file_btn {
- @apply top-0 right-0 py-2 px-4 bg-red-100 cursor-pointer disabled:cursor-pointer hover:bg-red-200 rounded-full z-10 flex gap-2 items-center w-max disabled:bg-slate-100;
-}
-
-.remove_file_btn p {
- @apply text-red-500 font-semibold text-sm;
-}
-
 .primary-btn {
  @apply btn bg-csemigreen dark:bg-clime md:max-w-max font-bold;
 }
@@ -221,7 +213,7 @@ table {
 }
 
 table > thead {
- @apply backdrop-blur-md backdrop-saturate-150 bg-white/70 dark:bg-cgray/70 sticky top-0 z-30;
+ @apply backdrop-blur-md backdrop-saturate-150 bg-white/70 dark:bg-cgray/70 sticky top-0 z-10;
 }
 
 table > thead > tr > th {

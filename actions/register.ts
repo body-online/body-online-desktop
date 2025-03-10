@@ -23,24 +23,17 @@ export async function registerUser(values: z.infer<typeof RegisterSchema>) {
 
  try {
   // insert and send the verification token via email
-  const { data } = await axios({
+  await axios({
    method: "post",
    url: `${process.env.API_URL}/api/ranchi/user`,
    data: newUser,
   });
-
-  if (data?.error)
-   return { error: "Ha ocurrido un error al registar el usuario" };
-
-  return { data };
  } catch (error: any) {
-  console.log(error);
+  console.log("error al registrar");
   return {
    error:
     error?.response?.data?.message ??
     "Ha ocurrido un error al registar el usuario",
   };
  }
-
- return { success: "Usuario registrado con éxito" };
 }

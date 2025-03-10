@@ -40,7 +40,12 @@ const CustomLayout = ({ children, user }: { children: React.ReactNode; user: Ext
             } */}
 
             <div className="px-default py-default">
+                {user.farmId &&
+                    <UserResumeCard user={user} />
+                }
+
                 {/* {!isOnline || isOperator ? (
+                    {/* {!isOnline || isOperator ? (
                     <OfflinePage />
                 ) :
                     children

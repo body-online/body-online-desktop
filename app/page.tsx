@@ -3,8 +3,6 @@ import { redirect } from 'next/navigation';
 import { getCattles } from '@/data/cattle';
 import { currentUser } from '@/lib/auth';
 
-import CattlesDashboard from '@/components/cattles/dashboard';
-import Operators from '@/components/operator/operators';
 import CustomLayout from '@/components/custom-layout';
 import EventTable from '@/components/event/EventTable';
 import FarmForm from '@/components/farm-form';
@@ -31,7 +29,9 @@ export default async function Home() {
         //   <CattlesDashboard />
         // </div>
       ) : (
-        <FarmForm />
+        <div className="h-[80vh] w-full flex-center">
+          <FarmForm />
+        </div>
       )}
     </CustomLayout>
   )
