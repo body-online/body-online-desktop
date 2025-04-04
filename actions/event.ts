@@ -2,13 +2,13 @@
 
 import axios from "axios";
 
-import { EventInterface, EventSchema } from "@/lib/types";
+import { EventProps, EventSchema } from "@/lib/types";
 import { currentUser } from "@/lib/auth";
 
-interface UpdateEventInterface extends EventSchema {
+interface UpdateEventProps extends EventSchema {
  caravan?: string;
 }
-export async function createEvent(event: UpdateEventInterface): Promise<{
+export async function createEvent(event: UpdateEventProps): Promise<{
  data?: string;
  error?: string;
 }> {
@@ -43,7 +43,7 @@ export async function uploadEventList({
 }: {
  events: EventSchema[];
 }): Promise<{
- uploadResults?: { events: EventInterface[]; errors: EventInterface[] };
+ uploadResults?: { events: EventProps[]; errors: EventProps[] };
  error?: string;
 }> {
  try {

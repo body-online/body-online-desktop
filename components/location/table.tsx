@@ -31,7 +31,7 @@ import { columnsLocation } from './columns';
 import LoadingTableSkeleton from '../ui/loading-table-skeleton';
 import StatePagination from '../ui/state-pagination';
 import DeleteLocationBtn from './delete-button';
-import AddLocationBtn from './add-location';
+import AddLocationBtn from './location-form';
 import FilterInput from '../ui/filter-input';
 ;
 

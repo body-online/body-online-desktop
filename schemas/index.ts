@@ -17,3 +17,18 @@ export const RegisterSchema = z.object({
  }),
  type: z.string().optional(),
 });
+
+export const GeneticSchema = z.object({
+ name: z.string().min(1, {
+  message: "El nombre es requerido",
+ }),
+ description: z.string().optional(),
+ minRange: z.string().min(1, {
+  message: "El rango mínimo es requerido",
+ }),
+ maxRange: z.string().min(1, {
+  message: "El rango máximo es requerido",
+ }),
+});
+
+export type GeneticSchema = z.infer<typeof GeneticSchema>;

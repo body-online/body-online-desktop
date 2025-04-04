@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 
 import { getHistoricalEvents } from "@/data/events";
-import { EventInterface } from "@/lib/types";
+import { EventProps } from "@/lib/types";
 
 import { BodyMeasureIcon, CalendarIcon, CattleBirthIcon, ClockMiniIcon, CloseIcon, DeathIcon, ListIcon, LoadingIcon, NotPregnantIcon, PregnantIcon } from "../ui/icons";
 import { LayoutBody, LayoutHeader } from "../ui/default-layout";
@@ -13,7 +13,7 @@ import Card from '../ui/card';
 
 
 export function HistoricalBtn({ cattleId, cattleCaravan }: { cattleId: string; cattleCaravan: string; }) {
-    const [historical, setHistorical] = useState<EventInterface[]>();
+    const [historical, setHistorical] = useState<EventProps[]>();
     const [isLoading, setIsLoading] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
     const [error, setError] = useState<string>();

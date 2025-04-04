@@ -25,7 +25,7 @@ function getInitials(name?: string) {
 
 
 export default function Navbar() {
-    const { isSyncing, isOnline, syncAmount } = useSync();
+    // const { isSyncing, isOnline, syncAmount } = useSync();
     const [isOpen, setIsOpen] = useState(false);
     const { data: session } = useSession()
     const pathname = usePathname();
@@ -51,13 +51,19 @@ export default function Navbar() {
 
     return (
         <>
-            <div className="py-3 h-[60px] bg-white dark:bg-cgray border-b custom-border">
+            <div className="py-3 h-[60px] bg-white dark:bg-cgray">
                 <div className='flex-between px-default'>
                     <div className='flex items-center gap-2 max-h-8 h-8'>
                         <ProfileImage user={session.user} height='h-8' width='w-8' />
+
                         <div>
-                            <p className="font-bold"> {session.user.farmName}</p>
-                            <ChipIsOnline isOnline={isOnline} />
+                            <p className='text-xs text-gray-500 dark:text-gray-500'>
+                                {session.user.type === 'owner' ? 'Administrador' : 'Operador'}
+                            </p>
+                            {/* <ChipIsOnline isOnline={isOnline} /> */}
+                            <p className="font-medium text-sm">
+                                {session.user.name}
+                            </p>
                         </div>
                     </div>
 
@@ -94,11 +100,11 @@ export default function Navbar() {
                 </div>
             </div>
 
-            {isOnline && session.user.farmId && session.user.type === "owner" ? (
-                <>
+            {session.user.farmId && session.user.type === "owner" ? (
+                <div className='bg-white dark:bg-cgray'>
                     {/* navigation */}
                     {(pathname?.match(/\//g) || []).length <= 1 && (
-                        <div className="w-full backdrop-blur-lg z-30 sticky top-0 bg-white/90 dark:bg-cgray/90 border-b custom-border">
+                        <div className="w-full backdrop-blur-lg z-30 sticky top-0 bg-transparent border-b custom-border">
                             <div className="overflow-x-scroll no-scrollbar flex gap-1 items-center">
                                 <div className="flex items-center px-default first:-ml-3">
                                     {navigationItems.map((i, index) => {
@@ -110,9 +116,12 @@ export default function Navbar() {
                                                 <Link href={i.href} onClick={() => {
                                                     setIsOpen(false)
                                                 }}>
+                                                    {/* <div>
+                                                        {i.icon}
+                                                    </div> */}
                                                     <p
-                                                        className={`font-medium text-base rounded-md px-3 py-1.5 transition-all
-                                            ${selected ? 'dark:text-clime text-cblack' : 'text-cgray dark:text-white opacity-50 active:opacity-80 md:hover:opacity-100'}`}
+                                                        className={`font-normal text-base rounded-md px-3 py-1.5 transition-all
+                                            ${selected ? 'dark:text-clime text-cblack' : 'text-cgray dark:text-white opacity-70 active:opacity-80 md:hover:opacity-100'}`}
                                                     >
                                                         {i.title}
                                                     </p>
@@ -124,62 +133,66 @@ export default function Navbar() {
                             </div>
                         </div>
                     )}
-                </>
+                </div>
             ) : null}
 
             {/* config modal */}
             <AnimatePresence
                 initial={false}
+                mode='wait'
             >
                 {isOpen ? (
-                    <motion.div onClick={(e) => e.stopPropagation()}
-                        variants={modalBackground}
-                        initial="hidden"
-                        animate="visible"
-                        exit="exit"
-                        className='fixed right-2 md:right-8 top-14 z-50 overflow-y-auto h-max 
+                    <div className="h-screen w-screen fixed top-0 left-0 z-50" onClick={() => setIsOpen(false)}>
+
+                        <motion.div onClick={(e) => e.stopPropagation()}
+                            variants={modalBackground}
+                            initial="hidden"
+                            animate="visible"
+                            exit="exit"
+                            className='fixed right-2 md:right-8 top-14 z-50 overflow-y-auto h-max 
                         rounded-2xl w-full max-w-xs
                         bg-white dark:bg-cgray custom-border border'
-                    >
+                        >
 
 
-                        <div className="h-full py-4 space-y-2 mx-4">
-                            <div
-                                className='flex flex-col items-start gap-2 px-3 bg-slate-100 dark:bg-clightgray rounded-xl py-4'
-                            >
-                                <div className="flex-center w-max gap-3">
-                                    <ProfileImage user={session.user} width='w-9' height='h-9' />
-                                    <div className='text-start'>
-                                        <p className='font-semibold'>{session.user?.name}</p>
-                                        <p className='opacity-70 text-xs font-normal'>{session.user?.email}</p>
+                            <div className="h-full py-4 space-y-2 mx-4">
+                                <div
+                                    className='flex flex-col items-start gap-2 px-3 bg-slate-100 dark:bg-clightgray rounded-xl py-4'
+                                >
+                                    <div className="flex-center w-max gap-3">
+                                        <ProfileImage user={session.user} width='w-9' height='h-9' />
+                                        <div className='text-start'>
+                                            <p className='font-semibold'>{session.user?.name}</p>
+                                            <p className='opacity-70 text-xs font-normal'>{session.user?.email}</p>
+                                        </div>
                                     </div>
+                                </div>
+
+                                <div className="flex-end">
+                                    <button
+                                        type='button'
+                                        className="rounded_btn bg-slate-100 dark:bg-clightgray"
+                                        onClick={() => {
+                                            // if (isOnline)
+                                            return signOut()
+                                            // else
+                                            //     toast('No puedes cerrar sesión estando offline')
+                                        }}
+                                    >
+                                        <p className='text-sm text-start font-medium transition-all py-1'>
+                                            Cerrar sesión
+                                        </p>
+                                        <LogoutIcon fill='fill-cblack dark:fill-white transition-all rotate-90' />
+                                    </button>
                                 </div>
                             </div>
 
-                            <div className="flex-end">
-                                <button
-                                    type='button'
-                                    className="rounded_btn bg-slate-100 dark:bg-clightgray"
-                                    onClick={() => {
-                                        if (isOnline)
-                                            return signOut()
-                                        else
-                                            toast('No puedes cerrar sesión estando offline')
-                                    }}
-                                >
-                                    <p className='text-sm text-start font-medium transition-all py-1'>
-                                        Cerrar sesión
-                                    </p>
-                                    <LogoutIcon fill='fill-cblack dark:fill-white transition-all rotate-90' />
-                                </button>
-                            </div>
-                        </div>
-
-                        {/* <div className='px-6 py-5 border-t custom-border w-full transition-all'>
+                            {/* <div className='px-6 py-5 border-t custom-border w-full transition-all'>
                                
                             </div> */}
 
-                    </motion.div>
+                        </motion.div>
+                    </div>
                 ) : null}
             </AnimatePresence >
         </>

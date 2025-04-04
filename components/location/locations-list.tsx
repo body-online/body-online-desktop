@@ -10,7 +10,7 @@ import CheckButton from '../ui/check-button'
 import { ProfileImage } from '../ui/navbar'
 import { LocationProps } from '@/lib/types'
 import InfoMessage from '../ui/info'
-import AddLocationBtn from './add-location'
+import AddLocationBtn from './location-form'
 import FilterInput from '../ui/filter-input'
 
 const LocationsList = ({

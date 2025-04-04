@@ -51,7 +51,16 @@ const BlackOutModal = ({ handleClose, children, isOpen }: ModalProps) => {
                     className='fixed top-0 left-0 z-10 w-screen h-screen flex flex-col bg-slate-100 dark:bg-cblack'
                     onClick={(e) => { return e.stopPropagation() }}
                 >
-                    {children}
+                    <motion.div
+                        variants={swipeCard}
+                        initial="hidden"
+                        animate="visible"
+                        exit="exit"
+                        className='bg-white dark:bg-cgray rounded-3xl p-6 w-full mx-auto flex flex-col gap-y-2'
+                        onClick={(e) => { return e.stopPropagation() }}
+                    >
+                        {children}
+                    </motion.div>
                 </motion.div>
             ) : null
             }

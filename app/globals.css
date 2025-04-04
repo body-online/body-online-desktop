@@ -82,14 +82,14 @@
 }
 
 .primary-btn {
- @apply btn bg-csemigreen dark:bg-clime md:max-w-max font-bold;
+ @apply btn bg-csemigreen dark:bg-slate-50 md:max-w-max font-bold;
 }
 .primary-btn > p {
  @apply text-white dark:text-cblack;
 }
 .btn {
- @apply h-max w-full px-4 md:px-5 py-3
-  flex-center gap-1 md:gap-2
+ @apply h-max w-full px-4 py-2.5
+  flex-center gap-1
   rounded-xl disabled:opacity-50 active:opacity-50
   ring-slate-300 dark:ring-clightgray md:min-w-[100px] focus:outline-0 focus:ring-[2px] transition-all;
 }

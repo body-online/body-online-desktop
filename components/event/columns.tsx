@@ -1,6 +1,6 @@
 "use client";
 
-import { EventInterface } from '@/lib/types';
+import { EventProps } from '@/lib/types';
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowsIcon, CalendarIcon } from '../ui/icons';
 import ChipBodyCondition from '../cattles/chip-body-condition';
@@ -10,7 +10,7 @@ import { serializeEventName } from '@/lib/utils';
 
 
 
-export const columnsEvent: ColumnDef<EventInterface>[] = [
+export const columnsEvent: ColumnDef<EventProps>[] = [
     {
         header: ({ column }) => {
             return (

@@ -3,11 +3,10 @@
 
 import React, { useState, useEffect } from 'react';
 import { useForm, Controller } from 'react-hook-form';
-import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Select, MenuItem, InputLabel, FormControl } from '@mui/material'; // O usa react-select si prefieres
+import { EventProps } from '@/lib/types';
 import toast from 'react-hot-toast';
-import { EventInterface } from '@/lib/types';
+import { z } from 'zod';
 
 // Definir el esquema de validación para los filtros con Zod
 const filterSchema = z.object({
@@ -23,11 +22,26 @@ const filterSchema = z.object({
 type FilterForm = z.infer<typeof filterSchema>;
 
 export default function EventTable() {
-    const [events, setEvents] = useState<EventInterface[]>([]);
+    const [events, setEvents] = useState<EventProps[]>([]);
     const [totalPages, setTotalPages] = useState(1);
     const [currentPage, setCurrentPage] = useState(1);
+    // _id
+    // caravan
+    // user
+    // userType
+    // bodyRanges
+    // eventType: string;
+    //     cattleId: string;
+    //     eventDate: Date;
+    //     eventDetail?: string | undefined;
+    //     observations?: string | undefined;
+    //     measure?: number | undefined;
+    //     taskId?: string | undefined;
+    // }
 
-    const { control, handleSubmit, reset } = useForm<FilterForm>({
+
+    // filtros
+    const { register, handleSubmit, reset } = useForm<FilterForm>({
         resolver: zodResolver(filterSchema),
         defaultValues: {
             farmId: '',
@@ -80,122 +94,27 @@ export default function EventTable() {
     }, []);
 
     // Agrupar eventos por día para el diseño de la imagen
-    const eventsByDay = events.reduce((acc, event) => {
-        const date = new Date(event.eventDate).toLocaleDateString('es-AR', { day: 'numeric', month: 'long', weekday: 'short' });
-        if (!acc[date]) acc[date] = [];
-        acc[date].push(event);
-        return acc;
-    }, {} as { [key: string]: EventInterface[] });
+    // const eventsByDay = events.reduce((acc, event) => {
+    //     const date = new Date(event.eventDate).toLocaleDateString('es-AR', { day: 'numeric', month: 'long', weekday: 'short' });
+    //     if (!acc[date]) acc[date] = [];
+    //     acc[date].push(event);
+    //     return acc;
+    // }, {} as { [key: string]: EventProps[] });
 
     return (
-        <div className='bg-white dark:bg-cgray rounded-3xl p-6 w-full mx-auto flex flex-col gap-y-2'>
-            <h1 className="text-2xl font-bold mb-4">Eventos</h1>
-            <p className="text-gray-600 mb-4">Visualiza los eventos programados para las chanchas.</p>
+        <div className='bg-white dark:bg-cgray rounded-3xl p-4 w-full mx-auto flex flex-col gap-y-2'>
+            <div>
+                <h1 className="text-xl font-semibold">Eventos</h1>
+                <p className="text-gray-500 dark:text-gray-600">Visualiza los eventos programados para las chanchas.</p>
+            </div>
 
             {/* Filtros */}
             <form onSubmit={handleSubmit(onSubmit)} className="mb-6 space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <Controller
-                        name="farmId"
-                        control={control}
-                        render={({ field, fieldState }) => (
-                            <input
-                                {...field}
-                                type="text"
-                                placeholder="ID de la granja"
-                                className={`border p-2 rounded ${fieldState.error ? 'border-red-500' : 'border-gray-300'}`}
-                            />
-                        )}
-                    />
-                    <Controller
-                        name="eventType"
-                        control={control}
-                        render={({ field }) => (
-                            <FormControl fullWidth>
-                                <InputLabel>Tipo de Evento</InputLabel>
-                                <Select {...field} label="Tipo de Evento">
-                                    <MenuItem value="">Todos</MenuItem>
-                                    {Object.values(['body_measure', 'not_pregnant', 'cattle_birth', 'pregnant', 'death', 'weaning']).map((type) => (
-                                        <MenuItem key={type} value={type}>{type}</MenuItem>
-                                    ))}
-                                </Select>
-                            </FormControl>
-                        )}
-                    />
-                    <Controller
-                        name="creator"
-                        control={control}
-                        render={({ field, fieldState }) => (
-                            <input
-                                {...field}
-                                type="text"
-                                placeholder="Creador"
-                                className={`border p-2 rounded ${fieldState.error ? 'border-red-500' : 'border-gray-300'}`}
-                            />
-                        )}
-                    />
-                    <Controller
-                        name="startDate"
-                        control={control}
-                        render={({ field, fieldState }) => (
-                            <input
-                                {...field}
-                                type="date"
-                                placeholder="Fecha de inicio"
-                                className={`border p-2 rounded ${fieldState.error ? 'border-red-500' : 'border-gray-300'}`}
-                            />
-                        )}
-                    />
-                    <Controller
-                        name="endDate"
-                        control={control}
-                        render={({ field, fieldState }) => (
-                            <input
-                                {...field}
-                                type="date"
-                                placeholder="Fecha de fin"
-                                className={`border p-2 rounded ${fieldState.error ? 'border-red-500' : 'border-gray-300'}`}
-                            />
-                        )}
-                    />
-                </div>
-                <button type="submit" className="bg-blue-500 text-white p-2 rounded hover:bg-blue-600">
-                    Filtrar
-                </button>
             </form>
 
             {/* Tabla de eventos (inspirada en la imagen) */}
             <div className="space-y-4">
-                {Object.entries(eventsByDay).map(([day, dayEvents]) => (
-                    <div key={day} className="bg-white p-4 rounded-lg shadow">
-                        <h2 className="text-lg font-semibold mb-2">{day}</h2>
-                        {dayEvents.map((event) => (
-                            <div key={event._id} className="border-b py-2">
-                                <div className="flex justify-between items-center">
-                                    <div>
-                                        <p className="text-gray-600">{new Date(event.eventDate).toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' })}</p>
-                                        <p className="font-medium">{event.eventType} - Caravana: {event.caravan}</p>
-                                        <p className="text-sm text-gray-500">Creado por: {event.user} ({event.userType})</p>
-                                    </div>
-                                    {/* Por ahora, no incluimos el botón de edición según tu indicación */}
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                ))}
-            </div>
 
-            {/* Paginación */}
-            <div className="mt-4 flex justify-center space-x-2">
-                {Array.from({ length: totalPages }, (_, i) => (
-                    <button
-                        key={i + 1}
-                        onClick={() => handlePageChange(i + 1)}
-                        className={`px-3 py-1 rounded ${currentPage === i + 1 ? 'bg-blue-500 text-white' : 'bg-gray-200'}`}
-                    >
-                        {i + 1}
-                    </button>
-                ))}
             </div>
         </div>
     );

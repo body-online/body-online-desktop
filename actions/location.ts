@@ -1,11 +1,11 @@
 "use server";
 
 import { currentUser } from "@/lib/auth";
-import { LocationSchema } from "../lib/types";
+import { LocationProps, LocationSchema } from "../lib/types";
 import axios from "axios";
 
 export async function createLocation(location: LocationSchema): Promise<{
- data?: string;
+ data?: LocationProps;
  error?: string;
 }> {
  try {
@@ -17,7 +17,7 @@ export async function createLocation(location: LocationSchema): Promise<{
     error: "Error al encontrar la organización",
    };
 
-  await axios({
+  const { data } = await axios({
    method: "post",
    url: `${process.env.API_URL}/api/ranchi/location`,
    data: {
@@ -26,8 +26,8 @@ export async function createLocation(location: LocationSchema): Promise<{
     farmId: user.farmId,
    },
   });
-
-  return { data: "Ubicación creada correctamente" };
+  console.log(data);
+  return { data: data as LocationProps };
  } catch (err: any) {
   console.log(err?.response?.data);
   return {

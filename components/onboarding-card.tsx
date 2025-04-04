@@ -1,20 +1,63 @@
 'use client'
 
 import Link from 'next/link'
-import React from 'react'
+import React, { useState, useEffect } from 'react'
+import { LocationProps, GeneticProps } from '@/lib/types'
+import { LocationForm } from './location/location-form'
+import { AddGeneticBtn } from './genetic/add-genetic'
 
-const OnboardingCard = () => {
+const OnboardingCard = ({ locations, genetics }: { locations: LocationProps[], genetics: GeneticProps[] }) => {
+    const [hasLocations, setHasLocations] = useState(locations.length > 0)
+    const [hasGenetics, setHasGenetics] = useState(genetics.length > 0)
+
+    useEffect(() => {
+        console.log(locations, genetics)
+        setHasLocations(locations.length > 0)
+        setHasGenetics(genetics.length > 0)
+    }, [locations, genetics])
+
+    const renderStep = (
+        isChecked: boolean,
+        title: string,
+        children: React.ReactNode
+    ) => (
+        <div className="flex flex-col w-full py-4 gap-y-2">
+            <div className="flex items-center gap-2">
+                <input
+                    type="checkbox"
+                    className="w-6 h-6 !cursor-not-allowed"
+                    checked={isChecked}
+                    readOnly
+                />
+                <p className="text-lg font-normal text-slate-700 dark:text-white">
+                    {title}
+                </p>
+            </div>
+            {!isChecked && children}
+        </div>
+    )
+
     return (
-        <div className='gradient_card'>
-            <h2 className='text-lg font-medium mb-5'>Bienvenido</h2>
-            <p className="text-base font-medium text-slate-600 dark:text-slate-300">
-                En esta sección podrás gestionar las <b>ubicaciones</b>, <b>genéticas</b>, <b>usuarios</b> y <b>eventos</b> de tu organización.
-            </p>
+        <div className="custom-gradient p-6 w-full max-w-md mx-auto flex flex-col gap-y-4 rounded-xl shadow-sm">
+            <h2 className="text-xl font-semibold text-slate-800 dark:text-white">
+                Para comenzar debes:
+            </h2>
 
-            <p className="text-base font-medium text-slate-600 dark:text-slate-300">
-                Podrás visualizar <b>tareas</b> y <b>eventos</b> al <span className='hover:opacity-50 transition-all underline underline-offset-2'><Link href={'/individuos'}>crear un individuo</Link></span>.
-            </p>
+            <div className="bg-white dark:bg-cgray divide-y custom-divide rounded-lg overflow-hidden">
+                {renderStep(
+                    hasLocations,
+                    `Crear una ubicación ${hasLocations ? 'completada' : ''}`,
+                    <LocationForm callback={() => setHasLocations(true)} />
+                )}
 
+                {renderStep(
+                    hasGenetics,
+                    `Crear una genética ${hasGenetics ? 'completada' : ''}`,
+                    <div className="pb-6">
+                        <AddGeneticBtn handleRefresh={() => setHasGenetics(true)} />
+                    </div>
+                )}
+            </div>
         </div>
     )
 }

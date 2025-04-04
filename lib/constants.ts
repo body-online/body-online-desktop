@@ -6,14 +6,17 @@ export const navigationItems: Array<NavigationItemProps> = [
  {
   href: "/",
   title: "Inicio",
+  //   icon: <HomeIcon />
  },
  {
   href: "/individuos",
   title: "Individuos",
+  //   icon: <UserGroupIcon />
  },
  {
   href: "/tareas",
   title: "Tareas",
+  //   icon: <CalendarIcon />
  },
 ];
 
@@ -687,6 +690,7 @@ export const modalBackground = {
  visible: {
   y: 0,
   opacity: 1,
+  scale: 1,
   transition: {
    duration: 0.2,
    type: "ease-in",
@@ -703,7 +707,8 @@ export const modalBackground = {
 };
 export const swipeCard = {
  hidden: {
-  y: "10vh",
+  y: 10,
+  scale: 0.98,
  },
  visible: {
   y: 0,
