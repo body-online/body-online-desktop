@@ -13,6 +13,8 @@
     "@ducanh2912/next-pwa": "^10.2.9",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
+    "@heroui/slider": "^2.4.14",
+    "@heroui/theme": "^2.4.13",
     "@hookform/resolvers": "^3.3.4",
     "@mui/material": "^6.4.7",
     "@tanstack/react-table": "^8.16.0",

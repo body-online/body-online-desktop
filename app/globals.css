@@ -450,64 +450,6 @@ input[type="checkbox"] {
 ::-webkit-scrollbar-thumb:hover {
  background: #555;
 }
-.slider {
- @apply [&::-webkit-slider-runnable-track]:rounded-full 
-  [&::-webkit-slider-runnable-track]:bg-cgray
-  dark:[&::-webkit-slider-runnable-track]:bg-clightgray 
-
-  [&::-webkit-slider-thumb]:appearance-none 
-  [&::-webkit-slider-thumb]:h-4
-  [&::-webkit-slider-thumb]:w-4
-  [&::-webkit-slider-thumb]:rounded-full 
-  [&::-webkit-slider-thumb]:bg-slate-50;
-}
-
-.slider {
- position: relative;
- width: 300px;
-}
-
-.slider__track,
-.slider__range,
-.slider__left-value,
-.slider__right-value {
- position: absolute;
-}
-
-.slider__track,
-.slider__range {
- border-radius: 3px;
- height: 5px;
-}
-
-.slider__track {
- @apply bg-slate-200 dark:bg-clightgray z-20 opacity-100;
-}
-
-.slider__range {
- @apply bg-green-300 dark:bg-green-400;
- z-index: 2;
-}
-
-.slider__right-value {
- @apply bg-white dark:bg-slate-950;
- font-size: 12px;
- margin-top: 20px;
-}
-.slider__left-value {
- @apply bg-white dark:bg-slate-950;
- font-size: 12px;
- margin-top: 20px;
-}
-
-.slider__left-value {
- left: 6px;
-}
-
-.slider__right-value {
- right: -4px;
-}
-
 .resume_chip {
  @apply flex-center gap-1 px-2 rounded-full bg-slate-100 dark:bg-clightgray h-9;
 }

@@ -9,7 +9,7 @@ import { getGenetics } from '@/data/genetic'
 import LoadingRowsSkeleton from '../ui/loading-rows-skeleton'
 import CheckButton from '../ui/check-button'
 import { SearchIcon } from '../ui/icons'
-import AddGeneticBtn from './add-genetic'
+import AddGeneticBtn from './genetic-form'
 import { useRouter } from 'next/navigation'
 
 const GeneticsList = (

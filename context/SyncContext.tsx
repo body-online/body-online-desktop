@@ -37,13 +37,9 @@ export const SyncProvider = ({ children }: { children: ReactNode }) => {
             cattlesList = cattles
         } catch (error) {
             console.log(error)
-            alert('error')
         }
         setCattlesList(cattlesList ?? [])
     }
-
-    useEffect(() => {
-    }, [])
 
     async function handleSyncOnline() {
         if (!session?.user?.email) return;
@@ -67,26 +63,26 @@ export const SyncProvider = ({ children }: { children: ReactNode }) => {
         }
     }
 
-    useEffect(() => {
-        const updateOnlineStatus = () => setIsOnline(navigator.onLine);
+    // useEffect(() => {
+    //     const updateOnlineStatus = () => setIsOnline(navigator.onLine);
 
-        // Actualiza el estado inicialmente
-        updateOnlineStatus();
+    //     // Actualiza el estado inicialmente
+    //     updateOnlineStatus();
 
-        // Escucha los eventos de conexión
-        window.addEventListener('online', updateOnlineStatus);
-        window.addEventListener('offline', updateOnlineStatus);
+    //     // Escucha los eventos de conexión
+    //     window.addEventListener('online', updateOnlineStatus);
+    //     window.addEventListener('offline', updateOnlineStatus);
 
-        return () => {
-            window.removeEventListener('online', updateOnlineStatus);
-            window.removeEventListener('offline', updateOnlineStatus);
-        };
-    }, []);
+    //     return () => {
+    //         window.removeEventListener('online', updateOnlineStatus);
+    //         window.removeEventListener('offline', updateOnlineStatus);
+    //     };
+    // }, []);
 
-    useEffect(() => {
-        if (isOnline)
-            handleSyncOnline()
-    }, [isOnline])
+    // useEffect(() => {
+    //     if (isOnline)
+    //         handleSyncOnline()
+    // }, [isOnline])
 
     return (
         <SyncContext.Provider value={{ isSyncing, isOnline, handleSyncOnline, cattlesList }}>
@@ -104,3 +100,9 @@ export const useSync = () => {
     }
     return context;
 };
+
+
+
+
+
+

@@ -1,6 +1,6 @@
 const withPWA = require("@ducanh2912/next-pwa").default({
- cacheOnFrontEndNav: true,
  display: "standalone",
+ cacheOnFrontEndNav: true,
  aggressiveFrontEndNavCaching: true,
  reloadOnOnline: true,
  swcMinify: true,
@@ -17,6 +17,7 @@ const withPWA = require("@ducanh2912/next-pwa").default({
  },
  // ... other options you like
 });
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
  reactStrictMode: true,

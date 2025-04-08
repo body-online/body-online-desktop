@@ -21,9 +21,9 @@ export function LocationForm({ callback }: { callback?: (location: LocationSchem
             name: '',
             description: ''
         }
-    })
+    });
 
-    const onSubmit: SubmitHandler<LocationSchema> = async (data: LocationSchema) => {
+    const onSubmit: SubmitHandler<LocationSchema> = async (data) => {
         const toastId = toast.loading('Creando ubicación...');
 
         try {
@@ -41,9 +41,10 @@ export function LocationForm({ callback }: { callback?: (location: LocationSchem
                 callback(createdLocation);
             }
         } catch (error) {
+            console.error('Error al crear la ubicación:', error);
             toast.error('Ha ocurrido un error al crear la ubicación', { id: toastId });
         }
-    }
+    };
 
     const watchedName = watch('name');
 
@@ -100,7 +101,7 @@ export function LocationForm({ callback }: { callback?: (location: LocationSchem
                 </button>
             </div>
         </form>
-    )
+    );
 }
 
-export default LocationForm
+export default LocationForm;

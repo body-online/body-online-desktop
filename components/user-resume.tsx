@@ -26,8 +26,8 @@ const UserResumeCard = async ({ user }: { user?: ExtendedUser }) => {
 
     return (
         <div>
-            <div className="bg-gradient-to-b from-white dark:from-cgray to-slate-100 dark:to-bg-cblack px-6 py-3 w-full mx-auto flex flex-col gap-y-2">
-                <h1 className="title">
+            <div className="bg-gradient-to-b from-white dark:from-cgray to-slate-100 dark:to-bg-cblack px-6 py-4 w-full mx-auto flex flex-col gap-y-2">
+                <h1 className="subtitle">
                     {user.farmName}
                 </h1>
             </div>

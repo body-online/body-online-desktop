@@ -8,7 +8,7 @@ import LoadingTableSkeleton from '../ui/loading-table-skeleton'
 import { LoadingIcon, SearchIcon } from '../ui/icons'
 import InfoMessage from '../ui/info'
 import { getGenetics } from '@/data/genetic'
-import AddGeneticBtn from './add-genetic'
+import AddGeneticBtn from './genetic-form'
 import GeneticsTable from './table'
 
 

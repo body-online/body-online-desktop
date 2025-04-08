@@ -30,7 +30,6 @@ export default async function RootLayout({ children }: Readonly<{ children: Reac
       <html lang="en" className={`${satoshi.className}`} suppressHydrationWarning>
         <head>
           <link rel="icon" href="/favicon.ico" as="favicon" />
-
           {/* no scrolling on mobile */}
           <meta
             name="viewport"
